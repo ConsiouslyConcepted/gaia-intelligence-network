@@ -1,39 +1,31 @@
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Sphere, Html } from "@react-three/drei";
-import { useRef, useState } from "react";
+import { useState } from "react";
 import * as THREE from "three";
+import { SPHERE_ARRAY } from "@/types/spheres";
+import { useNavigate } from "react-router-dom";
 
 interface SphereLayer {
   name: string;
   radius: number;
   color: string;
   opacity: number;
+  id: string;
 }
-
-const sphereLayers: SphereLayer[] = [
-  { name: "Geosphere", radius: 1, color: "#ff8800", opacity: 1 },
-  { name: "Hydrosphere", radius: 1.15, color: "#0088ff", opacity: 0.3 },
-  { name: "Atmosphere", radius: 1.3, color: "#88ccff", opacity: 0.2 },
-  { name: "Biosphere", radius: 1.45, color: "#44ff44", opacity: 0.25 },
-  { name: "Noosphere", radius: 1.6, color: "#aa44ff", opacity: 0.2 },
-  { name: "Technosphere", radius: 1.75, color: "#00ffff", opacity: 0.15 },
-  { name: "Magnetosphere", radius: 1.9, color: "#ff00ff", opacity: 0.15 },
-  { name: "Crystalsphere", radius: 2.05, color: "#ffdd00", opacity: 0.1 },
-];
 
 const InteractiveSphere = ({ 
   layer, 
-  onSelect 
+  onClick 
 }: { 
   layer: SphereLayer; 
-  onSelect: (name: string) => void;
+  onClick: (id: string) => void;
 }) => {
   const [hovered, setHovered] = useState(false);
 
   return (
     <Sphere
       args={[layer.radius, 64, 64]}
-      onClick={() => onSelect(layer.name)}
+      onClick={() => onClick(layer.id)}
       onPointerOver={() => setHovered(true)}
       onPointerOut={() => setHovered(false)}
     >
@@ -86,11 +78,21 @@ const StarField = () => {
   );
 };
 
-export const EarthVisualization = ({ 
-  onSphereSelect 
-}: { 
-  onSphereSelect: (sphere: string) => void;
-}) => {
+export const EarthVisualization = () => {
+  const navigate = useNavigate();
+  
+  const sphereLayers: SphereLayer[] = SPHERE_ARRAY.map(s => ({
+    name: s.name,
+    radius: s.radius,
+    color: s.color,
+    opacity: s.opacity,
+    id: s.id,
+  }));
+
+  const handleSphereClick = (id: string) => {
+    navigate(`/sphere/${id}`);
+  };
+
   return (
     <div className="w-full h-full relative">
       <Canvas camera={{ position: [0, 0, 6], fov: 60 }}>
@@ -104,7 +106,7 @@ export const EarthVisualization = ({
           <InteractiveSphere 
             key={layer.name} 
             layer={layer} 
-            onSelect={onSphereSelect}
+            onClick={handleSphereClick}
           />
         ))}
         

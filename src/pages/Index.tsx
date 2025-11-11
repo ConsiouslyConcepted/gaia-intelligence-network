@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { EarthVisualization } from "@/components/EarthVisualization";
-import { SphereDashboard } from "@/components/SphereDashboard";
 import { GaiaMonitor } from "@/components/GaiaMonitor";
 import { LayerToggle } from "@/components/LayerToggle";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { SPHERE_ARRAY } from "@/types/spheres";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import { useNavigate } from "react-router-dom";
 
 const Index = () => {
-  const [selectedSphere, setSelectedSphere] = useState<string | null>(null);
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
+  const navigate = useNavigate();
 
   return (
     <div className="min-h-screen w-full p-4 space-y-4">
@@ -27,58 +30,54 @@ const Index = () => {
       </div>
 
       {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-[calc(100vh-240px)]">
+      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-240px)]">
+        {/* Sphere List */}
+        <Card className="glass-panel p-4 space-y-3 overflow-auto">
+          <h3 className="font-semibold text-lg mb-3">Planetary Spheres</h3>
+          <div className="space-y-2">
+            {SPHERE_ARRAY.map((sphere) => (
+              <button
+                key={sphere.id}
+                onClick={() => navigate(`/sphere/${sphere.id}`)}
+                className="w-full glass-panel p-3 rounded-lg hover:border-primary/50 transition-all text-left group"
+              >
+                <div className="flex items-center gap-3">
+                  <div 
+                    className="w-3 h-3 rounded-full" 
+                    style={{ backgroundColor: sphere.color, boxShadow: `0 0 8px ${sphere.color}` }}
+                  />
+                  <div className="flex-1">
+                    <div className="font-semibold text-sm">{sphere.name}</div>
+                    <div className="text-xs text-muted-foreground">
+                      Coherence: {Math.floor(70 + Math.random() * 25)}%
+                    </div>
+                  </div>
+                  <Badge variant="outline" className="text-xs bg-coherence-high/20 text-coherence-high border-coherence-high/30">
+                    Active
+                  </Badge>
+                </div>
+              </button>
+            ))}
+          </div>
+        </Card>
+
         {/* Earth Visualization */}
         <div className="lg:col-span-2 glass-panel rounded-xl overflow-hidden">
           <Tabs defaultValue="holographic" className="h-full">
             <div className="p-4 border-b border-border/30">
               <TabsList className="glass-panel">
                 <TabsTrigger value="holographic">Holographic View</TabsTrigger>
-                <TabsTrigger value="data">Data Matrix</TabsTrigger>
               </TabsList>
             </div>
             <TabsContent value="holographic" className="h-[calc(100%-60px)] mt-0">
-              <EarthVisualization onSphereSelect={setSelectedSphere} />
-            </TabsContent>
-            <TabsContent value="data" className="h-[calc(100%-60px)] mt-0 p-4 overflow-auto">
-              <div className="space-y-4">
-                <h3 className="text-xl font-semibold">Multi-Sphere Data Matrix</h3>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                  {[
-                    "Geosphere",
-                    "Hydrosphere",
-                    "Atmosphere",
-                    "Biosphere",
-                    "Noosphere",
-                    "Technosphere",
-                    "Magnetosphere",
-                    "Crystalsphere",
-                  ].map((sphere) => (
-                    <button
-                      key={sphere}
-                      onClick={() => setSelectedSphere(sphere)}
-                      className="glass-panel p-4 rounded-lg hover:border-primary/50 transition-all text-left"
-                    >
-                      <div className="font-semibold">{sphere}</div>
-                      <div className="text-xs text-muted-foreground mt-1">
-                        Click to view dashboard
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
+              <EarthVisualization />
             </TabsContent>
           </Tabs>
         </div>
 
-        {/* Right Sidebar - Monitors */}
-        <div className="space-y-4 h-full overflow-hidden">
-          <div className="h-1/2">
-            <GaiaMonitor />
-          </div>
-          <div className="h-1/2">
-            <SphereDashboard sphereName={selectedSphere} />
-          </div>
+        {/* Right Sidebar - Global Monitor */}
+        <div className="h-full overflow-hidden">
+          <GaiaMonitor />
         </div>
       </div>
 
