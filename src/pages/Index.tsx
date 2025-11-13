@@ -17,7 +17,7 @@ const Index = () => {
       {/* Header */}
       <header className="glass-panel p-6 rounded-xl space-y-2">
         <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-          Cosmocentric Planetary Intelligence Dashboard
+          Planetary Intelligence Dashboard
         </h1>
         <p className="text-muted-foreground">
           Real-time holonic map of Gaia's nested spheres of consciousness
