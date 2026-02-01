@@ -7,6 +7,12 @@ import { SPHERE_ARRAY } from "@/types/spheres";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { GaiaSphereFieldView } from "@/components/hgs/GaiaSphereFieldView";
+import { HarmonicStateOverview } from "@/components/hgs/HarmonicStateOverview";
+import { ValueFlowSignals } from "@/components/hgs/ValueFlowSignals";
+import { ExchangeBoundaryConditions } from "@/components/hgs/ExchangeBoundaryConditions";
+import { CymaticPatternView } from "@/components/hgs/CymaticPatternView";
+import { HGSDisclaimer } from "@/components/hgs/HGSDisclaimer";
 
 const Index = () => {
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
@@ -79,6 +85,36 @@ const Index = () => {
         <div className="h-full overflow-hidden">
           <GaiaMonitor />
         </div>
+      </div>
+
+      {/* HGS Dashboard Panels */}
+      <div className="space-y-4">
+        <div className="flex items-center justify-between">
+          <h2 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
+            Harmonic Governance System
+          </h2>
+          <Badge variant="outline" className="bg-muted/20 text-muted-foreground">
+            Read-Only Observability
+          </Badge>
+        </div>
+
+        {/* GaiaSphere Field View */}
+        <GaiaSphereFieldView />
+
+        {/* Harmonic State Overview */}
+        <HarmonicStateOverview />
+
+        {/* Cymatic Pattern View */}
+        <CymaticPatternView />
+
+        {/* Value Flow & Coordination Signals */}
+        <ValueFlowSignals />
+
+        {/* Exchange Boundary Conditions */}
+        <ExchangeBoundaryConditions />
+
+        {/* Global Disclaimer */}
+        <HGSDisclaimer />
       </div>
 
       {/* Footer */}
