@@ -1,129 +1,130 @@
 import { useState } from "react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { EarthVisualization } from "@/components/EarthVisualization";
 import { GaiaMonitor } from "@/components/GaiaMonitor";
 import { LayerToggle } from "@/components/LayerToggle";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { GaiaSphereFieldView } from "@/components/hgs/GaiaSphereFieldView";
-import { HarmonicStateOverview } from "@/components/hgs/HarmonicStateOverview";
-import { ValueFlowSignals } from "@/components/hgs/ValueFlowSignals";
-import { ExchangeBoundaryConditions } from "@/components/hgs/ExchangeBoundaryConditions";
-import { CymaticPatternView } from "@/components/hgs/CymaticPatternView";
-import { HGSDisclaimer } from "@/components/hgs/HGSDisclaimer";
+import { Globe, Activity } from "lucide-react";
 
 const Index = () => {
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
+  const [activeView, setActiveView] = useState<"hgs" | "planetary">("hgs");
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full p-4 space-y-4">
-      {/* Header */}
-      <header className="glass-panel p-6 rounded-xl space-y-2">
-        <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
-          Planetary Intelligence Dashboard
-        </h1>
-        <p className="text-muted-foreground">
-          Real-time holonic map of Gaia's nested spheres of consciousness
-        </p>
-      </header>
-
-      {/* Layer Toggle */}
-      <div className="flex justify-center">
-        <LayerToggle activeLayer={activeLayer} onToggle={setActiveLayer} />
+    <div className="min-h-screen w-full">
+      {/* View Toggle */}
+      <div className="fixed top-4 right-4 z-50">
+        <div className="glass-panel p-1 rounded-lg flex gap-1">
+          <button
+            onClick={() => setActiveView("hgs")}
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+              activeView === "hgs"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Activity className="w-4 h-4" />
+            HGS
+          </button>
+          <button
+            onClick={() => setActiveView("planetary")}
+            className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
+              activeView === "planetary"
+                ? "bg-primary text-primary-foreground"
+                : "text-muted-foreground hover:text-foreground"
+            }`}
+          >
+            <Globe className="w-4 h-4" />
+            Planetary
+          </button>
+        </div>
       </div>
 
-      {/* Main Content */}
-      <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-240px)]">
-        {/* Sphere List */}
-        <Card className="glass-panel p-4 space-y-3 overflow-auto">
-          <h3 className="font-semibold text-lg mb-3">Planetary Spheres</h3>
-          <div className="space-y-2">
-            {SPHERE_ARRAY.map((sphere) => (
-              <button
-                key={sphere.id}
-                onClick={() => navigate(`/sphere/${sphere.id}`)}
-                className="w-full glass-panel p-3 rounded-lg hover:border-primary/50 transition-all text-left group"
-              >
-                <div className="flex items-center gap-3">
-                  <div 
-                    className="w-3 h-3 rounded-full" 
-                    style={{ backgroundColor: sphere.color, boxShadow: `0 0 8px ${sphere.color}` }}
-                  />
-                  <div className="flex-1">
-                    <div className="font-semibold text-sm">{sphere.name}</div>
-                    <div className="text-xs text-muted-foreground">
-                      Coherence: {Math.floor(70 + Math.random() * 25)}%
-                    </div>
-                  </div>
-                  <Badge variant="outline" className="text-xs bg-coherence-high/20 text-coherence-high border-coherence-high/30">
-                    Active
-                  </Badge>
-                </div>
-              </button>
-            ))}
+      {activeView === "hgs" ? (
+        <HGSDashboard />
+      ) : (
+        <div className="p-4 space-y-4">
+          {/* Header */}
+          <header className="glass-panel p-6 rounded-xl space-y-2">
+            <h1 className="text-4xl font-bold bg-gradient-to-r from-primary via-secondary to-accent bg-clip-text text-transparent">
+              Planetary Intelligence Dashboard
+            </h1>
+            <p className="text-muted-foreground">
+              Real-time holonic map of Gaia's nested spheres of consciousness
+            </p>
+          </header>
+
+          {/* Layer Toggle */}
+          <div className="flex justify-center">
+            <LayerToggle activeLayer={activeLayer} onToggle={setActiveLayer} />
           </div>
-        </Card>
 
-        {/* Earth Visualization */}
-        <div className="lg:col-span-2 glass-panel rounded-xl overflow-hidden">
-          <Tabs defaultValue="holographic" className="h-full">
-            <div className="p-4 border-b border-border/30">
-              <TabsList className="glass-panel">
-                <TabsTrigger value="holographic">Holographic View</TabsTrigger>
-              </TabsList>
+          {/* Main Content */}
+          <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-240px)]">
+            {/* Sphere List */}
+            <Card className="glass-panel p-4 space-y-3 overflow-auto">
+              <h3 className="font-semibold text-lg mb-3">Planetary Spheres</h3>
+              <div className="space-y-2">
+                {SPHERE_ARRAY.map((sphere) => (
+                  <button
+                    key={sphere.id}
+                    onClick={() => navigate(`/sphere/${sphere.id}`)}
+                    className="w-full glass-panel p-3 rounded-lg hover:border-primary/50 transition-all text-left group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div 
+                        className="w-3 h-3 rounded-full" 
+                        style={{ backgroundColor: sphere.color, boxShadow: `0 0 8px ${sphere.color}` }}
+                      />
+                      <div className="flex-1">
+                        <div className="font-semibold text-sm">{sphere.name}</div>
+                        <div className="text-xs text-muted-foreground">
+                          Coherence: {Math.floor(70 + Math.random() * 25)}%
+                        </div>
+                      </div>
+                      <Badge variant="outline" className="text-xs bg-coherence-high/20 text-coherence-high border-coherence-high/30">
+                        Active
+                      </Badge>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </Card>
+
+            {/* Earth Visualization */}
+            <div className="lg:col-span-2 glass-panel rounded-xl overflow-hidden">
+              <Tabs defaultValue="holographic" className="h-full">
+                <div className="p-4 border-b border-border/30">
+                  <TabsList className="glass-panel">
+                    <TabsTrigger value="holographic">Holographic View</TabsTrigger>
+                  </TabsList>
+                </div>
+                <TabsContent value="holographic" className="h-[calc(100%-60px)] mt-0">
+                  <EarthVisualization />
+                </TabsContent>
+              </Tabs>
             </div>
-            <TabsContent value="holographic" className="h-[calc(100%-60px)] mt-0">
-              <EarthVisualization />
-            </TabsContent>
-          </Tabs>
+
+            {/* Right Sidebar - Global Monitor */}
+            <div className="h-full overflow-hidden">
+              <GaiaMonitor />
+            </div>
+          </div>
+
+          {/* Footer */}
+          <footer className="glass-panel p-4 rounded-xl text-center text-sm text-muted-foreground">
+            <p>
+              Gaia Intelligence Network • Monitoring planetary coherence across all spheres •{" "}
+              <span className="text-primary">Online</span>
+            </p>
+          </footer>
         </div>
-
-        {/* Right Sidebar - Global Monitor */}
-        <div className="h-full overflow-hidden">
-          <GaiaMonitor />
-        </div>
-      </div>
-
-      {/* HGS Dashboard Panels */}
-      <div className="space-y-4">
-        <div className="flex items-center justify-between">
-          <h2 className="text-2xl font-bold bg-gradient-to-r from-secondary to-accent bg-clip-text text-transparent">
-            Harmonic Governance System
-          </h2>
-          <Badge variant="outline" className="bg-muted/20 text-muted-foreground">
-            Read-Only Observability
-          </Badge>
-        </div>
-
-        {/* GaiaSphere Field View */}
-        <GaiaSphereFieldView />
-
-        {/* Harmonic State Overview */}
-        <HarmonicStateOverview />
-
-        {/* Cymatic Pattern View */}
-        <CymaticPatternView />
-
-        {/* Value Flow & Coordination Signals */}
-        <ValueFlowSignals />
-
-        {/* Exchange Boundary Conditions */}
-        <ExchangeBoundaryConditions />
-
-        {/* Global Disclaimer */}
-        <HGSDisclaimer />
-      </div>
-
-      {/* Footer */}
-      <footer className="glass-panel p-4 rounded-xl text-center text-sm text-muted-foreground">
-        <p>
-          Gaia Intelligence Network • Monitoring planetary coherence across all spheres •{" "}
-          <span className="text-primary">Online</span>
-        </p>
-      </footer>
+      )}
     </div>
   );
 };
