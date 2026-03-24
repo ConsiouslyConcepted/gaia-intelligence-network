@@ -24,6 +24,18 @@ export const OrbitalResonanceField = () => {
       parseInt(hex.slice(5, 7), 16),
     ];
 
+    // Preload planet images
+    const planetImages: Record<string, HTMLImageElement> = {};
+    let imagesLoaded = 0;
+    const totalImages = SOLAR_PLANETS.length;
+
+    SOLAR_PLANETS.forEach((p) => {
+      const img = new Image();
+      img.src = p.image;
+      img.onload = () => { imagesLoaded++; };
+      planetImages[p.id] = img;
+    });
+
     const planetData = SOLAR_PLANETS.map((p) => ({
       ...p,
       rgb: hexToRgb(p.color),
