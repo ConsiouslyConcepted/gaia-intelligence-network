@@ -1,4 +1,5 @@
-import { Info, Volume2 } from "lucide-react";
+import { useState } from "react";
+import { Info, Volume2, Eye } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { Card } from "@/components/ui/card";
@@ -8,6 +9,30 @@ import { usePlanetAudio } from "@/hooks/usePlanetAudio";
 
 export const HGSDashboard = () => {
   const { play, playing } = usePlanetAudio();
+  const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
+
+  const handlePlanetClick = (planetId: string) => {
+    // Toggle selection
+    setSelectedPlanet((prev) => (prev === planetId ? null : planetId));
+  };
+
+  const handleAudioClick = (e: React.MouseEvent, planetId: string) => {
+    e.stopPropagation();
+    play(planetId);
+  };
+
+  // Filter sidebar pairs when a planet is selected
+  const visiblePairs = selectedPlanet
+    ? PLANET_RESONANCE_PAIRS.filter((pair) => {
+        const p1 = SOLAR_PLANETS[pair.i];
+        const p2 = SOLAR_PLANETS[pair.j];
+        return p1.id === selectedPlanet || p2.id === selectedPlanet;
+      })
+    : PLANET_RESONANCE_PAIRS;
+
+  const selectedName = selectedPlanet
+    ? SOLAR_PLANETS.find((p) => p.id === selectedPlanet)?.name
+    : null;
 
   return (
     <div className="min-h-screen w-full flex flex-col">
@@ -25,48 +50,75 @@ export const HGSDashboard = () => {
       <div className="flex-1 p-4 flex gap-4 min-h-0">
         {/* Orbital Resonance Field */}
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative">
-          <OrbitalResonanceField />
+          <OrbitalResonanceField selectedPlanet={selectedPlanet} />
 
-          {/* Floating planet legend with click-to-play */}
+          {/* Floating planet legend */}
           <div className="absolute bottom-3 left-3 right-3">
             <div className="glass-panel rounded-lg px-3 py-2.5 border border-border/20">
-              <div className="flex items-center gap-1 mb-2">
-                <Volume2 className="w-3 h-3 text-muted-foreground/50" />
-                <span className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-medium">
-                  Click to hear · Planetary Frequencies
-                </span>
+              <div className="flex items-center justify-between mb-2">
+                <div className="flex items-center gap-1">
+                  <Eye className="w-3 h-3 text-muted-foreground/50" />
+                  <span className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-medium">
+                    Click to isolate · Right-click for audio
+                  </span>
+                </div>
+                {selectedPlanet && (
+                  <button
+                    onClick={() => setSelectedPlanet(null)}
+                    className="text-[9px] uppercase tracking-wider text-primary/70 hover:text-primary transition-colors px-2 py-0.5 rounded border border-primary/20 hover:border-primary/40"
+                  >
+                    Show All
+                  </button>
+                )}
               </div>
               <div className="flex gap-1.5 flex-wrap">
-                {SOLAR_PLANETS.map((p) => (
-                  <button
-                    key={p.id}
-                    onClick={() => play(p.id)}
-                    className={`group flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all duration-300 ${
-                      playing === p.id
-                        ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(var(--primary),0.15)]"
-                        : "hover:bg-muted/20 border border-transparent hover:border-border/30"
-                    }`}
-                  >
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className="w-5 h-5 rounded-full object-cover transition-all duration-300"
-                      style={{
-                        boxShadow: playing === p.id
-                          ? `0 0 6px 2px ${p.color}90, 0 0 14px 4px ${p.color}30`
-                          : `0 0 4px 1px ${p.color}40`,
+                {SOLAR_PLANETS.map((p) => {
+                  const isSelected = selectedPlanet === p.id;
+                  const isDimmed = selectedPlanet && !isSelected;
+
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => handlePlanetClick(p.id)}
+                      onContextMenu={(e) => {
+                        e.preventDefault();
+                        handleAudioClick(e, p.id);
                       }}
-                    />
-                    <span className={`text-[10px] font-medium transition-colors duration-300 ${
-                      playing === p.id ? "text-foreground/90" : "text-muted-foreground group-hover:text-foreground/70"
-                    }`}>
-                      {p.name}
-                    </span>
-                    {playing === p.id && (
-                      <Volume2 className="w-3 h-3 text-primary animate-pulse" />
-                    )}
-                  </button>
-                ))}
+                      className={`group flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all duration-300 ${
+                        isSelected
+                          ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(var(--primary),0.15)]"
+                          : isDimmed
+                          ? "opacity-40 border border-transparent hover:opacity-70"
+                          : "hover:bg-muted/20 border border-transparent hover:border-border/30"
+                      }`}
+                    >
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        className={`rounded-full object-cover transition-all duration-300 ${
+                          isSelected ? "w-6 h-6" : "w-5 h-5"
+                        }`}
+                        style={{
+                          boxShadow: isSelected
+                            ? `0 0 6px 2px ${p.color}90, 0 0 14px 4px ${p.color}30`
+                            : `0 0 4px 1px ${p.color}40`,
+                        }}
+                      />
+                      <span className={`text-[10px] font-medium transition-colors duration-300 ${
+                        isSelected
+                          ? "text-foreground/90"
+                          : isDimmed
+                          ? "text-muted-foreground/50"
+                          : "text-muted-foreground group-hover:text-foreground/70"
+                      }`}>
+                        {p.name}
+                      </span>
+                      {playing === p.id && (
+                        <Volume2 className="w-3 h-3 text-primary animate-pulse" />
+                      )}
+                    </button>
+                  );
+                })}
               </div>
             </div>
           </div>
@@ -77,7 +129,9 @@ export const HGSDashboard = () => {
               variant="outline"
               className="bg-background/40 backdrop-blur-sm border-primary/30 text-primary text-xs"
             >
-              Orbital Resonance Field
+              {selectedName
+                ? `${selectedName} · Resonance Patterns`
+                : "Orbital Resonance Field"}
             </Badge>
           </div>
 
@@ -87,15 +141,19 @@ export const HGSDashboard = () => {
         <Card className="glass-panel p-4 w-[280px] flex-shrink-0 overflow-y-auto space-y-4">
           <div>
             <h2 className="text-sm font-semibold text-foreground/90">
-              Planetary Harmonics
+              {selectedName
+                ? `${selectedName} Harmonics`
+                : "Planetary Harmonics"}
             </h2>
             <p className="text-[10px] text-muted-foreground mt-0.5">
-              Pair-wise orbital resonance ratios
+              {selectedName
+                ? `Resonance pairs involving ${selectedName}`
+                : "Pair-wise orbital resonance ratios"}
             </p>
           </div>
 
           <div className="space-y-3">
-            {PLANET_RESONANCE_PAIRS.map((pair) => (
+            {visiblePairs.map((pair) => (
               <ResonancePairDiagram
                 key={pair.label}
                 label={pair.label}
