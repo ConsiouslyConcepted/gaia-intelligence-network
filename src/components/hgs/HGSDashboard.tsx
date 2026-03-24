@@ -1,11 +1,14 @@
-import { Info } from "lucide-react";
+import { Info, Volume2 } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
+import { usePlanetAudio } from "@/hooks/usePlanetAudio";
 
 export const HGSDashboard = () => {
+  const { play, playing } = usePlanetAudio();
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -24,10 +27,18 @@ export const HGSDashboard = () => {
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative">
           <OrbitalResonanceField />
 
-          {/* Floating planet legend */}
-          <div className="absolute bottom-3 left-3 flex gap-3 flex-wrap">
+          {/* Floating planet legend with click-to-play */}
+          <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
             {SOLAR_PLANETS.map((p) => (
-              <div key={p.id} className="flex items-center gap-1.5">
+              <button
+                key={p.id}
+                onClick={() => play(p.id)}
+                className={`flex items-center gap-1.5 px-2 py-1 rounded-md transition-all ${
+                  playing === p.id
+                    ? "bg-primary/20 border border-primary/40"
+                    : "hover:bg-muted/30"
+                }`}
+              >
                 <div
                   className="w-2 h-2 rounded-full"
                   style={{
@@ -36,7 +47,10 @@ export const HGSDashboard = () => {
                   }}
                 />
                 <span className="text-[10px] text-muted-foreground">{p.name}</span>
-              </div>
+                {playing === p.id && (
+                  <Volume2 className="w-2.5 h-2.5 text-primary animate-pulse" />
+                )}
+              </button>
             ))}
           </div>
 
@@ -48,6 +62,14 @@ export const HGSDashboard = () => {
             >
               Orbital Resonance Field
             </Badge>
+          </div>
+
+          {/* Audio hint */}
+          <div className="absolute top-3 left-3">
+            <span className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
+              <Volume2 className="w-3 h-3" />
+              Click a planet to hear its sound
+            </span>
           </div>
         </div>
 
@@ -74,6 +96,12 @@ export const HGSDashboard = () => {
                 size={80}
               />
             ))}
+          </div>
+
+          {/* Audio source credits */}
+          <div className="text-[9px] text-muted-foreground/50 pt-2 border-t border-border/20">
+            <p>Jupiter & Mars: NASA/JPL recordings (public domain)</p>
+            <p>Others: Orbital frequency tones based on Keplerian ratios</p>
           </div>
         </Card>
       </div>
