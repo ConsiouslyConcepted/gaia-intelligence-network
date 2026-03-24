@@ -114,7 +114,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Anomalies */}
       <Card className="glass-panel p-6 space-y-4">
         <h3 className="text-xl font-semibold flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5 text-accent" />
+          <AlertTriangle className="w-5 h-5" style={{ color: sphere.color }} />
           Detected Anomalies
         </h3>
         <div className="space-y-3">
