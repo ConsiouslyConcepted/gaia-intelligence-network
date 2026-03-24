@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { Volume2, Orbit, Waves, Radar, Zap, Signal, Activity } from "lucide-react";
+import { Volume2, Orbit, Waves, Radar, Signal, Activity } from "lucide-react";
+import harmonicsIcon from "@/assets/harmonics-icon.png";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
@@ -189,9 +190,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               {/* Header */}
               <div className="px-4 pt-4 pb-3 border-b border-border/15">
                 <div className="flex items-center gap-2 mb-2">
-                  <div className="w-7 h-7 rounded-lg flex items-center justify-center" style={{ background: "linear-gradient(135deg, hsl(var(--primary) / 0.15), hsl(var(--accent) / 0.1))" }}>
-                    <Zap className="w-3.5 h-3.5 text-primary" />
-                  </div>
+                  <img src={harmonicsIcon} alt="Harmonics" className="w-7 h-7 rounded-lg" loading="lazy" width={512} height={512} />
                   <h2 className="text-xs font-bold tracking-[0.15em] uppercase text-foreground/85">Planetary Harmonics</h2>
                 </div>
                 <p className="text-[9px] text-muted-foreground/50 leading-relaxed">
