@@ -7,13 +7,45 @@ import { SPHERE_ARRAY } from "@/types/spheres";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
+import { HGSDashboard } from "@/components/hgs/HGSDashboard";
+import { Globe, Activity } from "lucide-react";
 
 const Index = () => {
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
+  const [activeView, setActiveView] = useState<"planetary" | "hgs">("planetary");
   const navigate = useNavigate();
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full relative">
+      {/* View toggle */}
+      <div className="fixed top-4 right-4 z-50 flex gap-1 glass-panel rounded-lg p-1">
+        <button
+          onClick={() => setActiveView("planetary")}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            activeView === "planetary"
+              ? "bg-primary/20 text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Globe className="w-3.5 h-3.5" />
+          Planetary
+        </button>
+        <button
+          onClick={() => setActiveView("hgs")}
+          className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium transition-all ${
+            activeView === "hgs"
+              ? "bg-primary/20 text-primary"
+              : "text-muted-foreground hover:text-foreground"
+          }`}
+        >
+          <Activity className="w-3.5 h-3.5" />
+          HGS
+        </button>
+      </div>
+
+      {activeView === "hgs" ? (
+        <HGSDashboard />
+      ) : (
         <div className="p-4 space-y-4">
           {/* Header */}
           <header className="glass-panel p-6 rounded-xl space-y-2">
@@ -43,8 +75,8 @@ const Index = () => {
                     className="w-full glass-panel p-3 rounded-lg hover:border-primary/50 transition-all text-left group"
                   >
                     <div className="flex items-center gap-3">
-                      <div 
-                        className="w-3 h-3 rounded-full" 
+                      <div
+                        className="w-3 h-3 rounded-full"
                         style={{ backgroundColor: sphere.color, boxShadow: `0 0 8px ${sphere.color}` }}
                       />
                       <div className="flex-1">
@@ -88,8 +120,9 @@ const Index = () => {
               Gaia Intelligence Network • Monitoring planetary coherence across all spheres •{" "}
               <span className="text-primary">Online</span>
             </p>
-        </footer>
+          </footer>
         </div>
+      )}
     </div>
   );
 };
