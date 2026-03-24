@@ -150,16 +150,15 @@ const Index = () => {
         </HudPanel>
       </div>
 
-      {/* ─── LEFT HUD ─── */}
-      <div className="absolute left-4 top-[72px] bottom-14 z-10 flex flex-col gap-3 pointer-events-none w-[220px]">
-        {/* Sphere navigation */}
-        <HudPanel className="pointer-events-auto p-3" glow="#cc5533">
+      {/* ─── LEFT HUD: All Spheres ─── */}
+      <div className="absolute left-4 top-[72px] bottom-4 z-10 flex flex-col pointer-events-none w-[220px]">
+        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col" glow="#5ce0d2">
           <div className="flex items-center justify-between mb-2.5">
             <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
-            <span className="text-[7px] font-mono text-muted-foreground/25">01–03</span>
+            <span className="text-[7px] font-mono text-muted-foreground/25">01–06</span>
           </div>
-          <div className="space-y-0.5">
-            {SPHERE_ARRAY.slice(0, 3).map((sphere, i) => {
+          <div className="space-y-0.5 flex-1">
+            {SPHERE_ARRAY.map((sphere, i) => {
               const coherence = coherenceValues[i];
               return (
                 <button
@@ -188,9 +187,11 @@ const Index = () => {
             })}
           </div>
         </HudPanel>
+      </div>
 
-        {/* Live data feeds */}
-        <HudPanel className="pointer-events-auto p-3 mt-auto" glow="#4488cc">
+      {/* ─── RIGHT HUD: Live Feeds ─── */}
+      <div className="absolute right-4 top-[72px] bottom-4 z-10 flex flex-col gap-3 pointer-events-none w-[220px]">
+        <HudPanel className="pointer-events-auto p-3" glow="#4488cc">
           <div className="flex items-center gap-1.5 mb-2.5">
             <Zap className="w-3 h-3 text-accent/50" />
             <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Live Feeds</span>
@@ -209,49 +210,8 @@ const Index = () => {
             ))}
           </div>
         </HudPanel>
-      </div>
 
-      {/* ─── RIGHT HUD ─── */}
-      <div className="absolute right-4 top-[72px] bottom-14 z-10 flex flex-col gap-3 pointer-events-none w-[220px]">
-        {/* Sphere navigation continued */}
-        <HudPanel className="pointer-events-auto p-3" glow="#4466dd">
-          <div className="flex items-center justify-between mb-2.5">
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
-            <span className="text-[7px] font-mono text-muted-foreground/25">04–06</span>
-          </div>
-          <div className="space-y-0.5">
-            {SPHERE_ARRAY.slice(3).map((sphere, i) => {
-              const coherence = coherenceValues[i + 3];
-              return (
-                <button
-                  key={sphere.id}
-                  onClick={() => navigate(`/sphere/${sphere.id}`)}
-                  className="w-full flex items-center gap-2.5 px-2 py-2 rounded-md transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
-                >
-                  <div className="min-w-0 text-right flex-1">
-                    <div className="flex items-center justify-between">
-                      <ArrowRight className="w-2.5 h-2.5 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:-translate-x-0.5 rotate-180" />
-                      <span className="text-[10px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
-                    </div>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <span className="text-[9px] font-mono tabular-nums w-7 text-left" style={{ color: `${sphere.color}aa` }}>{coherence}%</span>
-                      <div className="flex-1 h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: `${sphere.color}10` }}>
-                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${coherence}%`, background: `linear-gradient(90deg, ${sphere.color}50, ${sphere.color})` }} />
-                      </div>
-                    </div>
-                  </div>
-                  <div className="relative">
-                    <WireframeSphereIcon color={sphere.color} size={26} segments={12} className="transition-transform duration-500 group-hover:scale-110" />
-                    <div className="absolute -bottom-0.5 -left-0.5 w-2 h-2 rounded-full border border-background/50" style={{ backgroundColor: coherence > 75 ? "#4ade80" : coherence > 60 ? "#fbbf24" : "#ef4444", opacity: 0.8 }} />
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </HudPanel>
-
-        {/* Right data feeds */}
-        <HudPanel className="pointer-events-auto p-3 mt-auto" glow="#7ecbcb">
+        <HudPanel className="pointer-events-auto p-3" glow="#7ecbcb">
           <div className="flex items-center gap-1.5 mb-2.5">
             <Zap className="w-3 h-3 text-accent/50" />
             <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Field Metrics</span>
@@ -271,8 +231,6 @@ const Index = () => {
           </div>
         </HudPanel>
       </div>
-
-
       {/* Corner brackets */}
       {[
         "top-3 left-3 border-l border-t rounded-tl",
