@@ -151,35 +151,35 @@ const Index = () => {
       </div>
 
       {/* ─── LEFT HUD: All Spheres ─── */}
-      <div className="absolute left-4 top-[96px] bottom-4 z-10 flex flex-col pointer-events-none w-[240px]">
-        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col" glow="#5ce0d2">
-          <div className="flex items-center justify-between mb-2.5">
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
-            <span className="text-[7px] font-mono text-muted-foreground/25">01–06</span>
+      <div className="absolute left-4 top-[96px] z-10 flex flex-col pointer-events-none w-[260px]">
+        <HudPanel className="pointer-events-auto p-4" glow="#5ce0d2">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
+            <span className="text-[8px] font-mono text-muted-foreground/25">01–06</span>
           </div>
-          <div className="space-y-0.5 flex-1">
+          <div className="space-y-1">
             {SPHERE_ARRAY.map((sphere, i) => {
               const coherence = coherenceValues[i];
               return (
                 <button
                   key={sphere.id}
                   onClick={() => navigate(`/sphere/${sphere.id}`)}
-                  className="w-full flex items-center gap-2.5 px-2 py-2 rounded-md transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
+                  className="w-full flex items-center gap-3 px-2.5 py-2.5 rounded-lg transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
                 >
                   <div className="relative">
-                    <WireframeSphereIcon color={sphere.color} size={26} segments={12} className="transition-transform duration-500 group-hover:scale-110" />
-                    <div className="absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full border border-background/50" style={{ backgroundColor: coherence > 75 ? "#4ade80" : coherence > 60 ? "#fbbf24" : "#ef4444", opacity: 0.8 }} />
+                    <WireframeSphereIcon color={sphere.color} size={32} segments={12} className="transition-transform duration-500 group-hover:scale-110" />
+                    <div className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full border border-background/50" style={{ backgroundColor: coherence > 75 ? "#4ade80" : coherence > 60 ? "#fbbf24" : "#ef4444", opacity: 0.8 }} />
                   </div>
                   <div className="min-w-0 text-left flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[10px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
-                      <ArrowRight className="w-2.5 h-2.5 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
+                      <span className="text-[11px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
+                      <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
                     </div>
-                    <div className="flex items-center gap-1.5 mt-1">
-                      <div className="flex-1 h-[2px] rounded-full overflow-hidden" style={{ backgroundColor: `${sphere.color}10` }}>
+                    <div className="flex items-center gap-2 mt-1.5">
+                      <div className="flex-1 h-[3px] rounded-full overflow-hidden" style={{ backgroundColor: `${sphere.color}10` }}>
                         <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${coherence}%`, background: `linear-gradient(90deg, ${sphere.color}50, ${sphere.color})` }} />
                       </div>
-                      <span className="text-[9px] font-mono tabular-nums w-7 text-right" style={{ color: `${sphere.color}aa` }}>{coherence}%</span>
+                      <span className="text-[10px] font-mono tabular-nums w-8 text-right" style={{ color: `${sphere.color}aa` }}>{coherence}%</span>
                     </div>
                   </div>
                 </button>
