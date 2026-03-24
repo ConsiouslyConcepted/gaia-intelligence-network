@@ -66,7 +66,7 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
             </div>
             
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">{metric.value}</span>
+              <span className="text-2xl font-bold" style={{ color: sphere.color }}>{metric.value}</span>
               <span className="text-sm text-muted-foreground">{metric.unit}</span>
             </div>
 
