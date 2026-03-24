@@ -222,14 +222,16 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       ctx.fill();
 
       // Planet bodies — hide in isolation mode, uniform size otherwise
+      const positions: Array<{ id: string; x: number; y: number; r: number }> = [];
       if (!sel) {
         for (const p of planetData) {
           const angle = time * p.speed * 6 + p.orbitRadius * 20;
           const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
           const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
-          const drawSize = 4 * 2.5; // uniform size matching Pluto
+          const drawSize = 4 * 2.5;
 
-          // Soft glow behind planet
+          positions.push({ id: p.id, x: sx, y: sy, r: drawSize + 4 });
+
           const glowGrad = ctx.createRadialGradient(sx, sy, 2, sx, sy, 14);
           glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
           glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
@@ -250,6 +252,7 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
           }
         }
       }
+      planetPositionsRef.current = positions;
 
       animationId = requestAnimationFrame(animate);
     };
