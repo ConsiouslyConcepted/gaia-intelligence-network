@@ -168,9 +168,9 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
-              <div className="px-4 pt-4 pb-3 border-b border-border/15">
-                <h2 className="text-xs font-bold tracking-[0.15em] uppercase text-foreground/85 mb-1">Planetary Harmonics</h2>
-                <p className="text-[9px] text-muted-foreground/50 leading-relaxed">
+              <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
+                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Harmonics</h2>
+                <p className="text-[8px] text-muted-foreground/50 leading-snug">
                   Tap to see planetary resonance patterns and sounds unique to each planet.
                 </p>
               </div>
