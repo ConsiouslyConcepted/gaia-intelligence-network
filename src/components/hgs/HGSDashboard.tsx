@@ -107,10 +107,10 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(135deg, hsla(38,50%,45%,0.2) 0%, hsla(38,60%,35%,0.15) 100%)",
-                  color: "#d4a56a",
-                  border: "1px solid hsla(38,50%,50%,0.35)",
-                  boxShadow: "0 0 16px hsla(38,60%,50%,0.12), inset 0 1px 0 hsla(38,50%,70%,0.1), 0 2px 8px rgba(0,0,0,0.3)",
+                  background: "linear-gradient(135deg, hsla(38,60%,50%,0.3) 0%, hsla(38,70%,40%,0.2) 100%)",
+                  color: "#e8b960",
+                  border: "1px solid hsla(38,60%,55%,0.45)",
+                  boxShadow: "0 0 20px hsla(38,65%,50%,0.2), inset 0 1px 0 hsla(38,60%,70%,0.15), 0 2px 8px rgba(0,0,0,0.3)",
                 }}
               >
                 <Activity className="w-3.5 h-3.5" />HGS
