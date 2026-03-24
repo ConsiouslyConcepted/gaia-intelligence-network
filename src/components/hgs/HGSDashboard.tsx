@@ -18,7 +18,7 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
     }}
   >
     {/* Top highlight edge */}
-    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
+    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(38,50%,55%,0.35), transparent)" }} />
     {/* Bottom subtle edge */}
     <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
     {children}
