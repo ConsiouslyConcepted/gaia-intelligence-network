@@ -143,8 +143,8 @@ export const ResonancePairDiagram = ({
       />
       <div className="min-w-0">
         <div className="text-sm font-medium text-foreground/90">{label}</div>
-        <div className="text-xs text-muted-foreground font-mono">
-          resonance {ratioA}:{ratioB}
+        <div className="text-[10px] text-muted-foreground/60 font-mono">
+          {ratioA}:{ratioB}
         </div>
       </div>
     </div>
