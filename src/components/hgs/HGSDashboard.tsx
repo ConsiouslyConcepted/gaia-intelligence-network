@@ -3,15 +3,7 @@ import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { SPHERE_ARRAY } from "@/types/spheres";
-
-const RESONANCE_PAIRS = [
-  { label: "Geo – Bio", c1: "#ff8800", c2: "#44ff44", a: 3, b: 2 },
-  { label: "Bio – Noo", c1: "#44ff44", c2: "#aa44ff", a: 5, b: 3 },
-  { label: "Noo – Mag", c1: "#aa44ff", c2: "#ff00ff", a: 4, b: 3 },
-  { label: "Mag – Ion", c1: "#ff00ff", c2: "#88ccff", a: 5, b: 4 },
-  { label: "Ion – Cryst", c1: "#88ccff", c2: "#ffdd00", a: 8, b: 5 },
-];
+import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 
 export const HGSDashboard = () => {
   return (
@@ -19,10 +11,10 @@ export const HGSDashboard = () => {
       {/* Header */}
       <header className="p-4 pb-0">
         <h1 className="text-2xl font-bold tracking-tight text-foreground/90">
-          Harmonic Guidance System
+          Musica Universalis
         </h1>
         <p className="text-xs text-muted-foreground mt-1">
-          Mapping inter-sphere resonance through celestial mechanics &amp; planetary harmonics
+          Harmonic ratios between planetary orbits — celestial mechanics &amp; the music of the spheres
         </p>
       </header>
 
@@ -32,38 +24,38 @@ export const HGSDashboard = () => {
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative">
           <OrbitalResonanceField />
 
-          {/* Floating sphere legend */}
-          <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
-            {SPHERE_ARRAY.map((s) => (
-              <div key={s.id} className="flex items-center gap-1.5">
+          {/* Floating planet legend */}
+          <div className="absolute bottom-3 left-3 flex gap-3 flex-wrap">
+            {SOLAR_PLANETS.map((p) => (
+              <div key={p.id} className="flex items-center gap-1.5">
                 <div
                   className="w-2 h-2 rounded-full"
                   style={{
-                    backgroundColor: s.color,
-                    boxShadow: `0 0 6px ${s.color}`,
+                    backgroundColor: p.color,
+                    boxShadow: `0 0 6px ${p.color}`,
                   }}
                 />
-                <span className="text-[10px] text-muted-foreground">{s.name}</span>
+                <span className="text-[10px] text-muted-foreground">{p.name}</span>
               </div>
             ))}
           </div>
 
-          {/* Coherence badge */}
+          {/* Badge */}
           <div className="absolute top-3 right-3">
             <Badge
               variant="outline"
               className="bg-background/40 backdrop-blur-sm border-primary/30 text-primary text-xs"
             >
-              System Coherence: 82.6%
+              Orbital Resonance Field
             </Badge>
           </div>
         </div>
 
         {/* Right sidebar: Pair-wise resonance diagrams */}
-        <Card className="glass-panel p-4 w-[260px] flex-shrink-0 overflow-y-auto space-y-4">
+        <Card className="glass-panel p-4 w-[280px] flex-shrink-0 overflow-y-auto space-y-4">
           <div>
             <h2 className="text-sm font-semibold text-foreground/90">
-              Inter-Sphere Harmonics
+              Planetary Harmonics
             </h2>
             <p className="text-[10px] text-muted-foreground mt-0.5">
               Pair-wise orbital resonance ratios
@@ -71,7 +63,7 @@ export const HGSDashboard = () => {
           </div>
 
           <div className="space-y-3">
-            {RESONANCE_PAIRS.map((pair) => (
+            {PLANET_RESONANCE_PAIRS.map((pair) => (
               <ResonancePairDiagram
                 key={pair.label}
                 label={pair.label}
