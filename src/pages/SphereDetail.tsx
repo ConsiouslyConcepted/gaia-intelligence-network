@@ -9,6 +9,7 @@ import { SphereMap } from "@/components/sphere-detail/SphereMap";
 import { SphereStellar } from "@/components/sphere-detail/SphereStellar";
 import { SphereCorrelations } from "@/components/sphere-detail/SphereCorrelations";
 import { SphereAIMReport } from "@/components/sphere-detail/SphereAIMReport";
+import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 export default function SphereDetail() {
   const { sphereId } = useParams<{ sphereId: SphereId }>();
@@ -42,29 +43,7 @@ export default function SphereDetail() {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div className="w-10 h-10 relative flex items-center justify-center">
-                <svg viewBox="0 0 44 44" className="w-10 h-10">
-                  <defs>
-                    <radialGradient id="detail-glow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor={sphere.color} stopOpacity="0.12" />
-                      <stop offset="100%" stopColor={sphere.color} stopOpacity="0" />
-                    </radialGradient>
-                  </defs>
-                  <circle cx="22" cy="22" r="17" fill="url(#detail-glow)" />
-                  <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.35" />
-                  <ellipse cx="22" cy="22" rx="16" ry="5" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
-                  <ellipse cx="22" cy="22" rx="5" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
-                  <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(45 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(-45 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(30 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-30 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(70 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-70 22 22)" />
-                  <ellipse cx="22" cy="22" rx="12" ry="3.5" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" />
-                  <ellipse cx="22" cy="22" rx="8" ry="2" fill="none" stroke={sphere.color} strokeWidth="0.2" opacity="0.1" />
-                  <circle cx="22" cy="22" r="1.5" fill={sphere.color} opacity="0.4" />
-                </svg>
-              </div>
+              <WireframeSphereIcon color={sphere.color} size={40} segments={16} />
               <div>
                 <h1 className="text-lg font-semibold tracking-wide" style={{ color: sphere.color }}>
                   {sphere.name}
