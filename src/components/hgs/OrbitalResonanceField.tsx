@@ -1,17 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 
 interface OrbitalResonanceFieldProps {
   selectedPlanet?: string | null;
+  onPlanetClick?: (planetId: string | null) => void;
 }
 
 /**
  * Cymatic orbital resonance visualization of our solar system.
  * When selectedPlanet is set, only resonance pairs involving that planet are shown.
  */
-export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldProps) => {
+export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: OrbitalResonanceFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const selectedRef = useRef<string | null>(null);
+  // Store current planet positions for hit-testing
+  const planetPositionsRef = useRef<Array<{ id: string; x: number; y: number; r: number }>>([]);
 
   // Keep ref in sync so the animation loop reads the latest value
   useEffect(() => {
