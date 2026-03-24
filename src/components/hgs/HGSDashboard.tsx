@@ -48,7 +48,7 @@ export const HGSDashboard = () => {
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
       {/* Full-screen orbital field */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-x-0 top-[92px] bottom-0 z-0">
         <OrbitalResonanceField
           selectedPlanet={selectedPlanet}
           onPlanetClick={(id) => setSelectedPlanet(id)}
