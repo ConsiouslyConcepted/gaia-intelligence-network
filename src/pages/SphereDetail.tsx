@@ -30,34 +30,52 @@ export default function SphereDetail() {
   return (
     <div className="min-h-screen w-full">
       {/* Header */}
-      <header className="glass-panel p-4 border-b border-border/30">
+      <header className="glass-panel px-4 py-3 border-b border-border/20">
         <div className="flex items-center justify-between max-w-[2000px] mx-auto">
           <div className="flex items-center gap-4">
             <Button
               variant="ghost"
               size="icon"
               onClick={() => navigate("/")}
-              className="hover:bg-primary/10"
+              className="hover:bg-muted/20"
             >
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
-              <div 
-                className="w-3 h-3 rounded-full" 
-                style={{ backgroundColor: sphere.color, boxShadow: `0 0 10px ${sphere.color}` }}
-              />
+              {/* Sphere orb matching sidebar style */}
+              <div className="w-10 h-10 rounded-full relative flex items-center justify-center">
+                <div
+                  className="absolute inset-0 rounded-full"
+                  style={{
+                    border: `1px solid ${sphere.color}18`,
+                    boxShadow: `inset 0 0 6px ${sphere.color}06`,
+                  }}
+                />
+                <div
+                  className="w-5 h-5 rounded-full relative"
+                  style={{
+                    background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
+                    boxShadow: `0 1px 6px ${sphere.color}20`,
+                  }}
+                >
+                  <div
+                    className="absolute w-1.5 h-1 rounded-full top-[5px] left-[7px]"
+                    style={{ background: `radial-gradient(ellipse, rgba(255,255,255,0.3), transparent)` }}
+                  />
+                </div>
+              </div>
               <div>
-                <h1 className="text-2xl font-bold" style={{ color: sphere.color }}>
+                <h1 className="text-lg font-semibold tracking-wide" style={{ color: sphere.color }}>
                   {sphere.name}
                 </h1>
-                <p className="text-sm text-muted-foreground">{sphere.description}</p>
+                <p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/60">{sphere.description}</p>
               </div>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="text-right">
-              <div className="text-xs text-muted-foreground">Coherence Level</div>
-              <div className="text-xl font-bold text-primary">78%</div>
+              <div className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/50">Coherence</div>
+              <div className="text-xl font-bold font-mono" style={{ color: sphere.color }}>78%</div>
             </div>
           </div>
         </div>
