@@ -90,16 +90,30 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             {selectedPlanet && (
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="text-[10px] uppercase tracking-wider text-primary/80 hover:text-primary transition-all px-3 py-1.5 rounded border border-primary/20 hover:border-primary/40 bg-primary/5"
+                className="text-[10px] uppercase tracking-wider transition-all duration-300 px-4 py-2 rounded-lg font-medium"
+                style={{
+                  color: "#5ce0d2",
+                  background: "hsla(174,60%,50%,0.08)",
+                  border: "1px solid hsla(174,60%,50%,0.25)",
+                  boxShadow: "0 0 12px hsla(174,60%,50%,0.08), inset 0 1px 0 hsla(174,60%,70%,0.08)",
+                }}
               >
                 Show All
               </button>
             )}
-            <div className="flex gap-1 rounded-lg bg-background/30 p-1">
-              <button onClick={onSwitchView} className="flex items-center gap-2 px-4 py-2 rounded-md text-[11px] font-medium tracking-wider uppercase text-muted-foreground/50 hover:text-foreground/70 transition-all">
-                <Signal className="w-3.5 h-3.5" />Planetary
+            <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
+              <button onClick={onSwitchView} className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all duration-300 hover:bg-foreground/[0.04]">
+                <Signal className="w-3.5 h-3.5" style={{ color: "#5ce0d2" }} />Planetary
               </button>
-              <button className="flex items-center gap-2 px-4 py-2 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
+              <button
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
+                style={{
+                  background: "linear-gradient(135deg, hsla(38,50%,45%,0.2) 0%, hsla(38,60%,35%,0.15) 100%)",
+                  color: "#d4a56a",
+                  border: "1px solid hsla(38,50%,50%,0.35)",
+                  boxShadow: "0 0 16px hsla(38,60%,50%,0.12), inset 0 1px 0 hsla(38,50%,70%,0.1), 0 2px 8px rgba(0,0,0,0.3)",
+                }}
+              >
                 <Activity className="w-3.5 h-3.5" />HGS
               </button>
             </div>
