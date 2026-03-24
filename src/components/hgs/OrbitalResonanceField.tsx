@@ -160,12 +160,15 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         const windowSize = totalPts * 0.7;
         const sweepPos = ((waveSweep * 0.3 + pp.a * 0.5) % 1.0) * totalPts;
 
+        // In isolation mode, normalize so pattern fills the canvas
+        const pairScale = sel ? (0.42 / pp.maxR) : scale;
+
         for (let s = 0; s < totalPts; s += skip) {
           const p = pp.points[s];
-          const x1 = cx + (p.x1 * cos - p.y1 * sin) * scale;
-          const y1 = cy + (p.x1 * sin + p.y1 * cos) * scale;
-          const x2 = cx + (p.x2 * cos - p.y2 * sin) * scale;
-          const y2 = cy + (p.x2 * sin + p.y2 * cos) * scale;
+          const x1 = cx + (p.x1 * cos - p.y1 * sin) * pairScale;
+          const y1 = cy + (p.x1 * sin + p.y1 * cos) * pairScale;
+          const x2 = cx + (p.x2 * cos - p.y2 * sin) * pairScale;
+          const y2 = cy + (p.x2 * sin + p.y2 * cos) * pairScale;
 
           // Distance from sweep position for traveling wave effect
           let dist = Math.abs(s - sweepPos);
