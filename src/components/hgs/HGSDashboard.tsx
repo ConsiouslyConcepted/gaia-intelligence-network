@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from "react"; // v2
 import { Info, Volume2, Eye } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
