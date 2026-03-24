@@ -46,18 +46,23 @@ export default function SphereDetail() {
                 <svg viewBox="0 0 44 44" className="w-10 h-10">
                   <defs>
                     <radialGradient id="detail-glow" cx="50%" cy="50%" r="50%">
-                      <stop offset="0%" stopColor={sphere.color} stopOpacity="0.15" />
+                      <stop offset="0%" stopColor={sphere.color} stopOpacity="0.12" />
                       <stop offset="100%" stopColor={sphere.color} stopOpacity="0" />
                     </radialGradient>
                   </defs>
-                  <circle cx="22" cy="22" r="18" fill="url(#detail-glow)" />
-                  <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.6" opacity="0.3" />
-                  <ellipse cx="22" cy="22" rx="16" ry="6" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
-                  <ellipse cx="22" cy="22" rx="6" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
-                  <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(60 22 22)" />
-                  <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(-60 22 22)" />
-                  <circle cx="22" cy="22" r="2.5" fill={sphere.color} opacity="0.5" />
-                  <circle cx="22" cy="22" r="1.2" fill={sphere.color} opacity="0.8" />
+                  <circle cx="22" cy="22" r="17" fill="url(#detail-glow)" />
+                  <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.35" />
+                  <ellipse cx="22" cy="22" rx="16" ry="5" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
+                  <ellipse cx="22" cy="22" rx="5" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
+                  <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(45 22 22)" />
+                  <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(-45 22 22)" />
+                  <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(30 22 22)" />
+                  <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-30 22 22)" />
+                  <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(70 22 22)" />
+                  <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-70 22 22)" />
+                  <ellipse cx="22" cy="22" rx="12" ry="3.5" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" />
+                  <ellipse cx="22" cy="22" rx="8" ry="2" fill="none" stroke={sphere.color} strokeWidth="0.2" opacity="0.1" />
+                  <circle cx="22" cy="22" r="1.5" fill={sphere.color} opacity="0.4" />
                 </svg>
               </div>
               <div>

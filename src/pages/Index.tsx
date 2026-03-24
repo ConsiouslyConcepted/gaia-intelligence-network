@@ -92,27 +92,40 @@ const Index = () => {
                           onClick={() => navigate(`/sphere/${sphere.id}`)}
                           className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
-                          {/* Wireframe sphere indicator */}
+                          {/* Wireframe sphere icon */}
                           <div className="w-11 h-11 flex-shrink-0 relative flex items-center justify-center">
                             <svg viewBox="0 0 44 44" className="w-11 h-11 transition-all duration-500 group-hover:scale-110">
                               <defs>
                                 <radialGradient id={`glow-${sphere.id}`} cx="50%" cy="50%" r="50%">
-                                  <stop offset="0%" stopColor={sphere.color} stopOpacity="0.15" />
+                                  <stop offset="0%" stopColor={sphere.color} stopOpacity="0.12" />
                                   <stop offset="100%" stopColor={sphere.color} stopOpacity="0" />
                                 </radialGradient>
                               </defs>
-                              {/* Ambient glow */}
-                              <circle cx="22" cy="22" r="18" fill={`url(#glow-${sphere.id})`} />
-                              {/* Outer ring */}
-                              <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.6" opacity="0.3" />
-                              {/* Meridian lines */}
-                              <ellipse cx="22" cy="22" rx="16" ry="6" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
-                              <ellipse cx="22" cy="22" rx="6" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
-                              <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(60 22 22)" />
-                              <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(-60 22 22)" />
-                              {/* Core dot */}
-                              <circle cx="22" cy="22" r="2.5" fill={sphere.color} opacity="0.5" />
-                              <circle cx="22" cy="22" r="1.2" fill={sphere.color} opacity="0.8" />
+                              <circle cx="22" cy="22" r="17" fill={`url(#glow-${sphere.id})`} />
+                              {/* Outer circle */}
+                              <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.35" />
+                              {/* Latitude lines */}
+                              {[-12, -6, 0, 6, 12].map(offset => (
+                                <ellipse key={`lat-${offset}`} cx="22" cy={22 + offset * 0.15} rx={Math.sqrt(Math.max(0, 16*16 - offset*offset*0.7))} ry={Math.max(1, Math.abs(16 - Math.abs(offset)) * 0.35)} fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.15" />
+                              ))}
+                              {/* Longitude lines */}
+                              {[0, 30, 60, 90, 120, 150].map(angle => (
+                                <ellipse key={`lon-${angle}`} cx="22" cy="22" rx={16 * Math.abs(Math.cos(angle * Math.PI / 180))} ry="16" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity={angle === 0 || angle === 90 ? 0.2 : 0.12} transform={angle !== 0 && angle !== 90 ? undefined : undefined} />
+                              ))}
+                              {/* Cross meridians for density */}
+                              <ellipse cx="22" cy="22" rx="16" ry="5" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
+                              <ellipse cx="22" cy="22" rx="5" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.3" opacity="0.18" />
+                              <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(45 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" transform="rotate(-45 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(30 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="13" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-30 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(70 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="8" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.1" transform="rotate(-70 22 22)" />
+                              {/* Inner latitude bands */}
+                              <ellipse cx="22" cy="22" rx="12" ry="3.5" fill="none" stroke={sphere.color} strokeWidth="0.25" opacity="0.12" />
+                              <ellipse cx="22" cy="22" rx="8" ry="2" fill="none" stroke={sphere.color} strokeWidth="0.2" opacity="0.1" />
+                              {/* Core */}
+                              <circle cx="22" cy="22" r="1.5" fill={sphere.color} opacity="0.4" />
                             </svg>
                           </div>
                           <div className="min-w-0 text-left flex-1">
