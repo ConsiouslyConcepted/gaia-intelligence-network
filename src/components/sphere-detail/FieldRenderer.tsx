@@ -1,6 +1,11 @@
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
+import { Canvas, useFrame, extend } from "@react-three/fiber";
 import { Card } from "@/components/ui/card";
+import { SphereId } from "@/types/spheres";
+import { Activity } from "lucide-react";
+import * as THREE from "three";
+
+extend({ Line_: THREE.Line });
 import { SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
 import * as THREE from "three";
