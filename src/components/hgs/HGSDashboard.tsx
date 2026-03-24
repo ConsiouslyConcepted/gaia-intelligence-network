@@ -173,15 +173,7 @@ export const HGSDashboard = () => {
         </Card>
       </div>
 
-      {/* Footer disclaimer */}
-      <footer className="px-3 py-1.5">
-        <div className="glass-panel p-1.5 rounded-lg flex items-center justify-center gap-2 text-[10px] text-muted-foreground">
-          <Info className="w-3 h-3 flex-shrink-0" />
-          <span>
-            This dashboard provides interpretive intelligence only. It does not authorize, execute, or govern action.
-          </span>
-        </div>
-      </footer>
+
     </div>
   );
 };
