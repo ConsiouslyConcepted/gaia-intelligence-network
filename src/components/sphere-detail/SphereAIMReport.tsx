@@ -146,7 +146,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Narrative Insights */}
       <Card className="glass-panel p-6 space-y-4">
         <h3 className="text-xl font-semibold flex items-center gap-2">
-          <Sparkles className="w-5 h-5 text-accent" />
+          <Sparkles className="w-5 h-5" style={{ color: sphere.color }} />
           AI Narrative Summary
         </h3>
         <div className="prose prose-invert max-w-none">
