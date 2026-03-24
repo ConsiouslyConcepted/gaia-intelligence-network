@@ -7,7 +7,6 @@ import { BiosphereLiveState } from "./live-state/BiosphereLiveState";
 import { IonosphereLiveState } from "./live-state/IonosphereLiveState";
 import { NoosphereLiveState } from "./live-state/NoosphereLiveState";
 import { CrystalsphereLiveState } from "./live-state/CrystalsphereLiveState";
-import { ImageryPanel } from "./ImageryPanel";
 
 interface Props {
   sphere: Sphere;
@@ -28,7 +27,6 @@ export function DataPanel({ sphere, accent }: Props) {
 
   return (
     <div className="space-y-4">
-      {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
           <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent}12` }}>
@@ -37,7 +35,7 @@ export function DataPanel({ sphere, accent }: Props) {
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Data — {sphere.name}</h2>
             <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
-              Metrics · Signals · Time-series feeds · Satellite imagery
+              Metrics · Signals · Time-series feeds
             </p>
           </div>
           <div className="flex items-center gap-1.5">
@@ -46,11 +44,6 @@ export function DataPanel({ sphere, accent }: Props) {
           </div>
         </div>
       </Card>
-
-      {/* Satellite Imagery */}
-      <ImageryPanel sphereId={sphere.id} accent={accent} />
-
-      {/* Sphere-specific data feeds */}
       {Component && <Component accent={accent} />}
     </div>
   );
