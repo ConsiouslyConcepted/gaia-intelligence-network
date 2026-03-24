@@ -2,7 +2,6 @@ export type SphereId =
   | "geosphere" 
   | "biosphere" 
   | "noosphere" 
-  | "technosphere" 
   | "magnetosphere" 
   | "ionosphere" 
   | "crystalsphere";
