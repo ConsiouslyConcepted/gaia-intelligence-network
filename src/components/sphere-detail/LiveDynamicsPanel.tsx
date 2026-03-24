@@ -1,6 +1,12 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
+import { GeosphereSim } from "./simulations/GeosphereSim";
+import { BiosphereSim } from "./simulations/BiosphereSim";
+import { MagnetosphereSim } from "./simulations/MagnetosphereSim";
+import { IonosphereSim } from "./simulations/IonosphereSim";
+import { NoosphereSim } from "./simulations/NoosphereSim";
+import { CrystalsphereeSim } from "./simulations/CrystalsphereeSim";
 
 interface Props {
   sphere: Sphere;
@@ -12,6 +18,15 @@ interface BehaviorPattern {
   description: string;
   timeScale: string;
 }
+
+const SIM_COMPONENTS: Record<SphereId, React.ComponentType> = {
+  geosphere: GeosphereSim,
+  biosphere: BiosphereSim,
+  magnetosphere: MagnetosphereSim,
+  ionosphere: IonosphereSim,
+  noosphere: NoosphereSim,
+  crystalsphere: CrystalsphereeSim,
+};
 
 const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPattern[] }> = {
   geosphere: {
@@ -72,6 +87,7 @@ const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPatte
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const behavior = BEHAVIOR_DATA[sphere.id];
+  const SimComponent = SIM_COMPONENTS[sphere.id];
 
   return (
     <div className="space-y-4">
@@ -84,7 +100,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Live Dynamics — {sphere.name}</h2>
             <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
-              Behavior patterns · Temporal changes · Dynamic processes
+              Real-time simulation · Behavior patterns · Dynamic processes
             </p>
           </div>
           <div className="flex items-center gap-1.5">
@@ -92,6 +108,11 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
             <span className="text-[9px] uppercase tracking-wider text-muted-foreground/40">Live</span>
           </div>
         </div>
+      </Card>
+
+      {/* Live Simulation */}
+      <Card className="glass-panel rounded-xl p-3 relative">
+        <SimComponent />
       </Card>
 
       {/* Behavior Summary */}
