@@ -38,11 +38,11 @@ export const HGSDashboard = () => {
     <div className="h-screen w-full flex flex-col overflow-hidden">
       {/* Header */}
       <header className="px-4 py-2 flex items-center gap-4">
-        <h1 className="text-lg font-semibold tracking-wide text-foreground/90" style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}>
+        <h1 className="text-lg font-semibold tracking-wide text-foreground/90 leading-none" style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}>
           Musica Universalis
         </h1>
-        <div className="h-4 w-px bg-border/30" />
-        <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60 font-medium">
+        <div className="h-4 w-px bg-border/30 self-center" />
+        <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60 font-medium leading-none">
           Harmonic ratios between planetary orbits — celestial mechanics &amp; the music of the spheres
         </p>
       </header>
