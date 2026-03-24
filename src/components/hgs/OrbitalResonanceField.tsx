@@ -1,17 +1,20 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 
 interface OrbitalResonanceFieldProps {
   selectedPlanet?: string | null;
+  onPlanetClick?: (planetId: string | null) => void;
 }
 
 /**
  * Cymatic orbital resonance visualization of our solar system.
  * When selectedPlanet is set, only resonance pairs involving that planet are shown.
  */
-export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldProps) => {
+export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: OrbitalResonanceFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const selectedRef = useRef<string | null>(null);
+  // Store current planet positions for hit-testing
+  const planetPositionsRef = useRef<Array<{ id: string; x: number; y: number; r: number }>>([]);
 
   // Keep ref in sync so the animation loop reads the latest value
   useEffect(() => {
@@ -219,14 +222,16 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
       ctx.fill();
 
       // Planet bodies — hide in isolation mode, uniform size otherwise
+      const positions: Array<{ id: string; x: number; y: number; r: number }> = [];
       if (!sel) {
         for (const p of planetData) {
           const angle = time * p.speed * 6 + p.orbitRadius * 20;
           const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
           const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
-          const drawSize = 4 * 2.5; // uniform size matching Pluto
+          const drawSize = 4 * 2.5;
 
-          // Soft glow behind planet
+          positions.push({ id: p.id, x: sx, y: sy, r: drawSize + 4 });
+
           const glowGrad = ctx.createRadialGradient(sx, sy, 2, sx, sy, 14);
           glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
           glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
@@ -247,6 +252,7 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
           }
         }
       }
+      planetPositionsRef.current = positions;
 
       animationId = requestAnimationFrame(animate);
     };
@@ -259,11 +265,33 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
     };
   }, []);
 
+  const handleCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onPlanetClick) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Check if click hit a planet
+    for (const pos of planetPositionsRef.current) {
+      const dx = x - pos.x;
+      const dy = y - pos.y;
+      if (dx * dx + dy * dy < pos.r * pos.r) {
+        onPlanetClick(pos.id);
+        return;
+      }
+    }
+    // Clicked empty space — deselect
+    onPlanetClick(null);
+  }, [onPlanetClick]);
+
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-full"
+      className="w-full h-full cursor-pointer"
       style={{ display: "block" }}
+      onClick={handleCanvasClick}
     />
   );
 };
