@@ -5,6 +5,7 @@ import { Card } from "@/components/ui/card";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { Globe, Activity } from "lucide-react";
+import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 const Index = () => {
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
