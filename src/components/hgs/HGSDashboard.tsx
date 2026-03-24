@@ -195,13 +195,13 @@ export const HGSDashboard = () => {
             </div>
           ) : (
             /* Default: clickable resonance pairs */
-            <div className="flex-1 overflow-y-auto p-3 space-y-3">
-              <div>
-                <h2 className="text-sm font-semibold text-foreground/90">
+            <div className="flex-1 overflow-y-auto p-2 space-y-1">
+              <div className="px-1">
+                <h2 className="text-xs font-semibold text-foreground/90">
                   Planetary Harmonics
                 </h2>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
-                  Click a pair to explore · Pair-wise orbital resonance ratios
+                <p className="text-[9px] text-muted-foreground mt-0.5">
+                  Click a pair to explore
                 </p>
               </div>
               {PLANET_RESONANCE_PAIRS.map((pair) => {
@@ -210,7 +210,7 @@ export const HGSDashboard = () => {
                   <button
                     key={pair.label}
                     onClick={() => handlePlanetClick(p1.id)}
-                    className="w-full text-left rounded-lg hover:bg-muted/15 transition-all duration-200 cursor-pointer"
+                    className="w-full text-left rounded-md hover:bg-muted/15 transition-all duration-200 cursor-pointer py-0.5"
                   >
                     <ResonancePairDiagram
                       label={pair.label}
@@ -218,7 +218,7 @@ export const HGSDashboard = () => {
                       color2={pair.c2}
                       ratioA={pair.a}
                       ratioB={pair.b}
-                      size={80}
+                      size={56}
                     />
                   </button>
                 );
