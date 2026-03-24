@@ -80,13 +80,6 @@ export const HGSDashboard = () => {
             </Badge>
           </div>
 
-          {/* Audio hint */}
-          <div className="absolute top-3 left-3">
-            <span className="text-[10px] text-muted-foreground/60 flex items-center gap-1">
-              <Volume2 className="w-3 h-3" />
-              Click a planet to hear its sound
-            </span>
-          </div>
         </div>
 
         {/* Right sidebar: Pair-wise resonance diagrams */}
