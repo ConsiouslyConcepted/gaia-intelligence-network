@@ -144,4 +144,24 @@ All colors MUST be HSL.
   .harmonic-glow {
     animation: coherence-wave 3s ease-in-out infinite;
   }
+
+  /* Range slider thumb styling */
+  input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: hsl(var(--foreground));
+    border: 2px solid hsl(var(--border));
+    cursor: pointer;
+    margin-top: -3px;
+  }
+  input[type="range"]::-moz-range-thumb {
+    width: 14px;
+    height: 14px;
+    border-radius: 50%;
+    background: hsl(var(--foreground));
+    border: 2px solid hsl(var(--border));
+    cursor: pointer;
+  }
 }
