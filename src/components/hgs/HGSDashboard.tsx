@@ -37,7 +37,7 @@ export const HGSDashboard = () => {
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
       {/* Header */}
-      <header className="px-4 py-2 flex items-center gap-4">
+      <header className="mx-3 mt-3 mb-0 glass-panel rounded-xl px-4 py-2.5 flex items-center gap-4">
         <h1
           className="text-lg font-semibold tracking-wide text-foreground/90 leading-none"
           style={{ fontVariant: "small-caps", letterSpacing: "0.08em" }}
@@ -52,7 +52,7 @@ export const HGSDashboard = () => {
       </header>
 
       {/* Main content */}
-      <div className="flex-1 px-3 pb-3 flex gap-3 min-h-0">
+      <div className="flex-1 px-3 py-3 flex gap-3 min-h-0">
         {/* Orbital Resonance Field */}
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative min-h-0">
           <OrbitalResonanceField
