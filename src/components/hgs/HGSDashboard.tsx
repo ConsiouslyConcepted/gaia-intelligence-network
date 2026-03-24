@@ -25,6 +25,19 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
+// Musical tones mapped to each planet's orbital frequency (scaled to audible range)
+const PLANET_TONES: Record<string, { note: string; freq: string; octave: string }> = {
+  mercury: { note: "C#", freq: "141.27 Hz", octave: "3rd" },
+  venus: { note: "A", freq: "221.23 Hz", octave: "3rd" },
+  earth: { note: "C#", freq: "136.10 Hz", octave: "3rd" },
+  mars: { note: "D", freq: "144.72 Hz", octave: "3rd" },
+  jupiter: { note: "F#", freq: "183.58 Hz", octave: "3rd" },
+  saturn: { note: "D", freq: "147.85 Hz", octave: "3rd" },
+  uranus: { note: "G#", freq: "207.36 Hz", octave: "3rd" },
+  neptune: { note: "G#", freq: "211.44 Hz", octave: "3rd" },
+  pluto: { note: "C#", freq: "140.25 Hz", octave: "3rd" },
+};
+
 export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
@@ -143,6 +156,20 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                     )}
                   </div>
 
+                  {/* Musical tone info */}
+                  {PLANET_TONES[selectedData.id] && (
+                    <div className="w-full rounded-lg px-3 py-2" style={{ background: "hsla(240,20%,15%,0.6)", border: "1px solid hsla(38,40%,50%,0.12)" }}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] text-muted-foreground/50 tracking-wider uppercase">Musical Tone</span>
+                        <span className="text-[13px] font-bold tracking-wide" style={{ color: selectedData.color }}>{PLANET_TONES[selectedData.id].note}</span>
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-[8px] text-muted-foreground/40 tracking-wider">Frequency</span>
+                        <span className="text-[10px] text-foreground/60 font-medium">{PLANET_TONES[selectedData.id].freq}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <button
                     onClick={(e) => { e.stopPropagation(); play(selectedData.id); }}
                     className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border ${
@@ -157,7 +184,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                     </span>
                   </button>
 
-                  <div className="text-[8px] text-muted-foreground/30 text-center mt-2 tracking-wider">
+                  <div className="text-[8px] text-muted-foreground/30 text-center mt-1 tracking-wider">
                     {selectedData.id === "jupiter" || selectedData.id === "mars"
                       ? "NASA/JPL electromagnetic recording (public domain)"
                       : "Orbital frequency tone based on Keplerian ratios"}
@@ -170,7 +197,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               {/* Header */}
               <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
                 <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Harmonics</h2>
-                <p className="text-[8px] text-muted-foreground/50 leading-snug">
+                <p className="text-[9px] text-muted-foreground/50 leading-snug">
                   Tap to see planetary resonance patterns and sounds unique to each planet.
                 </p>
               </div>
