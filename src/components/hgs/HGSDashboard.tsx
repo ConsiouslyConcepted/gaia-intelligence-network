@@ -36,12 +36,13 @@ export const HGSDashboard = () => {
 
   return (
     <div className="h-screen w-full flex flex-col overflow-hidden">
-      {/* Compact header */}
-      <header className="px-4 py-1.5 flex items-baseline gap-3">
-        <h1 className="text-lg font-bold tracking-tight text-foreground/90">
+      {/* Header */}
+      <header className="px-4 py-2 flex items-center gap-4">
+        <h1 className="text-lg font-semibold tracking-wide text-foreground/90" style={{ fontVariant: 'small-caps', letterSpacing: '0.08em' }}>
           Musica Universalis
         </h1>
-        <p className="text-[11px] text-muted-foreground">
+        <div className="h-4 w-px bg-border/30" />
+        <p className="text-[10px] uppercase tracking-[0.15em] text-muted-foreground/60 font-medium">
           Harmonic ratios between planetary orbits — celestial mechanics &amp; the music of the spheres
         </p>
       </header>
