@@ -93,12 +93,14 @@ const Index = () => {
                           onClick={() => navigate(`/sphere/${sphere.id}`)}
                           className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
-                          <WireframeSphereIcon
-                            color={sphere.color}
-                            size={44}
-                            segments={16}
-                            className="flex-shrink-0 transition-transform duration-500 group-hover:scale-110"
-                          />
+                          <div className="w-12 h-12 flex-shrink-0 rounded-xl bg-muted/8 border border-border/10 flex items-center justify-center group-hover:bg-muted/15 group-hover:border-border/20 transition-all duration-300">
+                            <WireframeSphereIcon
+                              color={sphere.color}
+                              size={38}
+                              segments={16}
+                              className="transition-transform duration-500 group-hover:scale-110"
+                            />
+                          </div>
                           <div className="min-w-0 text-left flex-1">
                             <div className="text-sm font-medium text-foreground/85 group-hover:text-foreground transition-colors">
                               {sphere.name}
