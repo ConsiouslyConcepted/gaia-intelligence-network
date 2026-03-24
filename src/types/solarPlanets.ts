@@ -9,6 +9,7 @@ export interface SolarPlanet {
   orbitRadius: number; // normalized 0–1
   speed: number; // relative orbital speed (inner = faster)
   size: number; // visual radius in px
+  image: string; // path to planet image
 }
 
 // Colors inspired by actual planetary appearance
