@@ -71,52 +71,6 @@ export const HGSDashboard = () => {
 
         {/* Right sidebar */}
         <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0">
-          {/* Planet list */}
-          <div className="p-3 border-b border-border/20">
-            <div className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-medium mb-2">
-              Select a planet
-            </div>
-            <div className="grid grid-cols-3 gap-1.5">
-              {SOLAR_PLANETS.map((p) => {
-                const isSelected = selectedPlanet === p.id;
-                return (
-                  <button
-                    key={p.id}
-                    onClick={() => handlePlanetClick(p.id)}
-                    className={`flex flex-col items-center gap-1 px-1 py-1.5 rounded-lg transition-all duration-300 ${
-                      isSelected
-                        ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(var(--primary),0.15)]"
-                        : "border border-transparent hover:bg-muted/20 hover:border-border/30"
-                    }`}
-                  >
-                    <img
-                      src={p.cymaticImage}
-                      alt={p.name}
-                      loading="lazy"
-                      className={`rounded-full object-cover transition-all duration-300 ${
-                        isSelected ? "w-10 h-10" : "w-8 h-8"
-                      }`}
-                      style={{
-                        boxShadow: isSelected
-                          ? `0 0 8px 2px ${p.color}90, 0 0 16px 4px ${p.color}30`
-                          : `0 0 3px 1px ${p.color}30`,
-                      }}
-                    />
-                    <span
-                      className={`text-[9px] font-medium transition-colors duration-300 ${
-                        isSelected
-                          ? "text-foreground/90"
-                          : "text-muted-foreground/70"
-                      }`}
-                    >
-                      {p.name}
-                    </span>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-
           {/* Selected planet detail area */}
           {selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
