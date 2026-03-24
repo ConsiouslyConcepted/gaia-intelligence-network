@@ -197,10 +197,10 @@ export const HGSDashboard = () => {
             /* Default: clickable resonance pairs */
             <div className="flex-1 overflow-y-auto p-2 space-y-1">
               <div className="px-1">
-                <h2 className="text-xs font-semibold text-foreground/90">
+                <h2 className="text-sm font-semibold text-foreground/90">
                   Planetary Harmonics
                 </h2>
-                <p className="text-[9px] text-muted-foreground mt-0.5">
+                <p className="text-[10px] text-muted-foreground mt-0.5">
                   Tap to view orbital patterns &amp; hear planetary tones
                 </p>
               </div>
