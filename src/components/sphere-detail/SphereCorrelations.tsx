@@ -28,14 +28,14 @@ const mockResults: CorrelationResult[] = [
 
 export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
   const [selectedMetrics, setSelectedMetrics] = useState<SelectedMetric[]>([
-    { id: "1", sphere: sphere.name, name: "Kp Index", color: sphere.color },
+    { id: "1", sphere: sphere.name, name: "Kp Index", color: "#5ce0d2" },
   ]);
 
   const addMetric = () => {
     if (selectedMetrics.length < 4) {
       setSelectedMetrics(prev => [
         ...prev,
-        { id: `${Date.now()}`, sphere: "Select Sphere", name: "Select Metric", color: sphere.color }
+        { id: `${Date.now()}`, sphere: "Select Sphere", name: "Select Metric", color: "#5ce0d2" }
       ]);
     }
   };
@@ -49,8 +49,8 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <Network className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
+            <Network className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Cross-Sphere Correlations</h2>
@@ -87,7 +87,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
           {selectedMetrics.map((metric) => (
             <div key={metric.id} className="rounded-lg bg-muted/5 border border-border/10 p-3 space-y-2.5">
               <div className="flex items-center justify-between">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: `${sphere.color}80` }} />
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: `#5ce0d280` }} />
                 <Button variant="ghost" size="icon" className="h-5 w-5 opacity-50 hover:opacity-100" onClick={() => removeMetric(metric.id)}>
                   <X className="w-3 h-3" />
                 </Button>
@@ -126,7 +126,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
         <h3 className="text-sm font-semibold">Time Series Comparison</h3>
         <div className="h-48 rounded-lg bg-muted/5 border border-border/10 flex items-center justify-center">
           <div className="text-center space-y-1.5">
-            <TrendingUp className="w-8 h-8 mx-auto" style={{ color: `${sphere.color}40` }} />
+            <TrendingUp className="w-8 h-8 mx-auto" style={{ color: `#5ce0d240` }} />
             <p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/30">
               {selectedMetrics.length} metric{selectedMetrics.length !== 1 ? 's' : ''} selected
             </p>
@@ -143,7 +143,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
               <div key={idx} className="px-3 py-2.5 rounded-lg bg-muted/5 border border-border/10">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-xs font-medium text-foreground/80">{result.pairA} ↔ {result.pairB}</span>
-                  <span className="text-xs font-bold font-mono" style={{ color: sphere.color }}>
+                  <span className="text-xs font-bold font-mono" style={{ color: "#5ce0d2" }}>
                     {result.correlation.toFixed(2)}
                   </span>
                 </div>
@@ -153,7 +153,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
                       className="h-full rounded-full transition-all duration-700"
                       style={{
                         width: `${Math.abs(result.correlation) * 100}%`,
-                        background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                        background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                       }}
                     />
                   </div>
@@ -173,7 +173,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
                   <span className="text-xs font-medium text-foreground/70">
                     {idx === 0 ? "Peak Correlation" : idx === 1 ? "Secondary" : "Tertiary"}
                   </span>
-                  <span className="text-xs font-bold font-mono" style={{ color: sphere.color }}>
+                  <span className="text-xs font-bold font-mono" style={{ color: "#5ce0d2" }}>
                     {Math.abs(result.correlation).toFixed(2)}
                   </span>
                 </div>
@@ -187,7 +187,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${sphere.color}cc`, color: '#fff' }}>
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `#5ce0d2cc`, color: '#fff' }}>
           <Download className="w-3 h-3" />
           Save as Insight
         </Button>

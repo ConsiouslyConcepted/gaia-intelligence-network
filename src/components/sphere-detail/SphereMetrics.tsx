@@ -46,8 +46,8 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <BarChart3 className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
+            <BarChart3 className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Metrics Explorer</h2>
@@ -99,7 +99,7 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
             </div>
             
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xl font-bold font-mono" style={{ color: sphere.color }}>{metric.value}</span>
+              <span className="text-xl font-bold font-mono" style={{ color: "#5ce0d2" }}>{metric.value}</span>
               <span className="text-[10px] text-muted-foreground/40 uppercase">{metric.unit}</span>
             </div>
 
@@ -108,7 +108,7 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
                 className="h-full rounded-full transition-all duration-700"
                 style={{
                   width: `${metric.health}%`,
-                  background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                  background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                 }}
               />
             </div>
@@ -116,10 +116,10 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 {metric.trend > 0 
-                  ? <TrendingUp className="w-3 h-3" style={{ color: sphere.color }} />
-                  : <TrendingDown className="w-3 h-3" style={{ color: sphere.color, opacity: 0.6 }} />
+                  ? <TrendingUp className="w-3 h-3" style={{ color: "#5ce0d2" }} />
+                  : <TrendingDown className="w-3 h-3" style={{ color: "#5ce0d2", opacity: 0.6 }} />
                 }
-                <span className="text-[10px] font-mono" style={{ color: `${sphere.color}aa` }}>
+                <span className="text-[10px] font-mono" style={{ color: `#5ce0d2aa` }}>
                   {metric.trend > 0 ? "+" : ""}{metric.trend}{metric.unit ? ` ${metric.unit}` : ""}
                 </span>
               </div>

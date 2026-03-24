@@ -56,8 +56,8 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Overall Score */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <Brain className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
+            <Brain className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">AI Coherence Report</h2>
@@ -67,7 +67,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
           </div>
           <div className="text-right">
             <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">Score</div>
-            <div className="text-3xl font-bold font-mono" style={{ color: sphere.color }}>{overallScore}%</div>
+            <div className="text-3xl font-bold font-mono" style={{ color: "#5ce0d2" }}>{overallScore}%</div>
           </div>
         </div>
       </Card>
@@ -75,7 +75,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Score Breakdown - Full Width */}
       <Card className="glass-panel rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <TrendingUp className="w-4 h-4" style={{ color: sphere.color }} />
+          <TrendingUp className="w-4 h-4" style={{ color: "#5ce0d2" }} />
           <h3 className="text-sm font-semibold">Score Breakdown</h3>
         </div>
         <div className="space-y-3">
@@ -87,7 +87,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
                   <span className="text-[9px] text-muted-foreground/30 font-mono">
                     w:{(component.weight * 100).toFixed(0)}%
                   </span>
-                  <span className="text-xs font-bold font-mono w-8 text-right" style={{ color: sphere.color }}>
+                  <span className="text-xs font-bold font-mono w-8 text-right" style={{ color: "#5ce0d2" }}>
                     {component.score}
                   </span>
                 </div>
@@ -97,7 +97,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
                   className="h-full rounded-full transition-all duration-700"
                   style={{
                     width: `${component.score}%`,
-                    background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                    background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                   }}
                 />
               </div>
@@ -109,7 +109,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Anomalies - Full Width */}
       <Card className="glass-panel rounded-xl p-5 space-y-4">
         <div className="flex items-center gap-2">
-          <AlertTriangle className="w-4 h-4" style={{ color: sphere.color }} />
+          <AlertTriangle className="w-4 h-4" style={{ color: "#5ce0d2" }} />
           <h3 className="text-sm font-semibold">Detected Anomalies</h3>
         </div>
         <div className="space-y-2">
@@ -119,7 +119,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
               className="px-3 py-2.5 rounded-lg border border-border/15 bg-muted/5"
             >
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sphere.color }} />
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#5ce0d2" }} />
                 <span className="text-xs font-medium">{anomaly.type}</span>
                 <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{anomaly.timestamp}</span>
               </div>
@@ -135,7 +135,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Narrative */}
       <Card className="glass-panel rounded-xl p-5 space-y-3">
         <div className="flex items-center gap-2">
-          <Sparkles className="w-4 h-4" style={{ color: sphere.color }} />
+          <Sparkles className="w-4 h-4" style={{ color: "#5ce0d2" }} />
           <h3 className="text-sm font-semibold">AI Narrative Summary</h3>
         </div>
         <div className="space-y-2.5">
@@ -165,7 +165,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
             <div key={idx} className="flex items-start gap-2.5 px-3 py-2 rounded-lg bg-muted/5 border border-border/10">
               <div
                 className="w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
-                style={{ backgroundColor: `${sphere.color}15`, color: sphere.color }}
+                style={{ backgroundColor: `#5ce0d215`, color: "#5ce0d2" }}
               >
                 {idx + 1}
               </div>
@@ -177,7 +177,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${sphere.color}cc`, color: '#fff' }}>
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `#5ce0d2cc`, color: '#fff' }}>
           <Download className="w-3 h-3" />
           Export PDF
         </Button>

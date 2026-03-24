@@ -56,8 +56,8 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
       {/* Status Banner */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <Activity className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
+            <Activity className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Sphere Status Overview</h2>
@@ -67,7 +67,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
           </div>
           <div className="text-right">
             <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">Status</div>
-            <span className="text-sm font-semibold font-mono" style={{ color: sphere.color }}>Active</span>
+            <span className="text-sm font-semibold font-mono" style={{ color: "#5ce0d2" }}>Active</span>
           </div>
         </div>
       </Card>
@@ -78,14 +78,14 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
           <Card key={idx} className="glass-panel rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 font-medium">{kpi.label}</span>
-              {getTrendIcon(kpi.trend, sphere.color)}
+              {getTrendIcon(kpi.trend, "#5ce0d2")}
             </div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-2xl font-bold font-mono" style={{ color: sphere.color }}>{kpi.value}</span>
+              <span className="text-2xl font-bold font-mono" style={{ color: "#5ce0d2" }}>{kpi.value}</span>
               {kpi.unit && <span className="text-[10px] text-muted-foreground/40 uppercase">{kpi.unit}</span>}
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-mono" style={{ color: `${sphere.color}aa` }}>
+              <span className="text-[10px] font-mono" style={{ color: `#5ce0d2aa` }}>
                 {kpi.change > 0 ? "+" : ""}{kpi.change}{kpi.unit ? ` ${kpi.unit}` : ""}
               </span>
               <span className="text-[9px] text-muted-foreground/30 font-mono">24h</span>
@@ -102,7 +102,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
                       className="flex-1 rounded-sm"
                       style={{
                         height: `${Math.max(15, pct)}%`,
-                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `${sphere.color}50` : `${sphere.color}20`,
+                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `#5ce0d250` : `#5ce0d220`,
                       }}
                     />
                   );
@@ -118,7 +118,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
         {/* Signal Watchlist */}
         <Card className="glass-panel rounded-xl p-5 space-y-4">
           <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: sphere.color }} />
+            <AlertTriangle className="w-4 h-4" style={{ color: "#5ce0d2" }} />
             <h3 className="text-sm font-semibold">Signal Watchlist</h3>
           </div>
           <div className="space-y-2">
@@ -128,7 +128,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
                 className="px-3 py-2.5 rounded-lg border border-border/15 bg-muted/5"
               >
                 <div className="flex items-center gap-2 mb-1">
-                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sphere.color }} />
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#5ce0d2" }} />
                   <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{alert.time}</span>
                 </div>
                 <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{alert.message}</p>
@@ -140,7 +140,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
         {/* System Health */}
         <Card className="glass-panel rounded-xl p-5 space-y-4">
           <div className="flex items-center gap-2">
-            <Signal className="w-4 h-4" style={{ color: sphere.color }} />
+            <Signal className="w-4 h-4" style={{ color: "#5ce0d2" }} />
             <h3 className="text-sm font-semibold">System Health</h3>
           </div>
           <div className="space-y-3">
@@ -153,14 +153,14 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
               <div key={idx} className="space-y-1.5">
                 <div className="flex items-center justify-between">
                   <span className="text-xs text-foreground/70">{item.name}</span>
-                  <span className="text-xs font-bold font-mono" style={{ color: sphere.color }}>{item.value}%</span>
+                  <span className="text-xs font-bold font-mono" style={{ color: "#5ce0d2" }}>{item.value}%</span>
                 </div>
                 <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
                   <div
                     className="h-full rounded-full transition-all duration-700"
                     style={{
                       width: `${item.value}%`,
-                      background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                      background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                     }}
                   />
                 </div>
@@ -172,7 +172,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
 
       {/* Quick Actions */}
       <div className="flex gap-2">
-        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${sphere.color}cc`, color: '#fff' }}>
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `#5ce0d2cc`, color: '#fff' }}>
           Open Map
           <ArrowRight className="w-3 h-3" />
         </Button>

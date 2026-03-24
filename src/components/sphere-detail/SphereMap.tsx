@@ -48,8 +48,8 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <MapPin className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
+            <MapPin className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Geospatial View</h2>
@@ -77,7 +77,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
         {/* Layers Panel */}
         <Card className="glass-panel rounded-xl p-5 space-y-4 overflow-auto lg:col-span-1">
           <div className="flex items-center gap-2">
-            <Layers className="w-4 h-4" style={{ color: sphere.color }} />
+            <Layers className="w-4 h-4" style={{ color: "#5ce0d2" }} />
             <h3 className="text-sm font-semibold">Layers</h3>
           </div>
 
@@ -90,14 +90,14 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                     onClick={() => toggleLayer(layer.id)}
                     className="w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all"
                     style={{
-                      borderColor: layer.enabled ? sphere.color : 'hsl(var(--border))',
-                      backgroundColor: layer.enabled ? `${sphere.color}20` : 'transparent',
+                      borderColor: layer.enabled ? "#5ce0d2" : 'hsl(var(--border))',
+                      backgroundColor: layer.enabled ? `#5ce0d220` : 'transparent',
                     }}
                   >
-                    {layer.enabled && <Check className="w-2.5 h-2.5" style={{ color: sphere.color }} />}
+                    {layer.enabled && <Check className="w-2.5 h-2.5" style={{ color: "#5ce0d2" }} />}
                   </button>
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `${sphere.color}${layer.enabled ? 'cc' : '40'}` }} />
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `#5ce0d2${layer.enabled ? 'cc' : '40'}` }} />
                     <span className={`text-[11px] font-medium truncate ${layer.enabled ? 'text-foreground/80' : 'text-muted-foreground/40'}`}>
                       {layer.name}
                     </span>
@@ -121,7 +121,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                         onChange={(e) => updateOpacity(layer.id, Number(e.target.value))}
                         className="w-full h-2 appearance-none rounded-full cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, ${sphere.color}cc ${layer.opacity * 100}%, hsl(var(--border) / 0.15) ${layer.opacity * 100}%)`,
+                          background: `linear-gradient(to right, #5ce0d2cc ${layer.opacity * 100}%, hsl(var(--border) / 0.15) ${layer.opacity * 100}%)`,
                           WebkitAppearance: 'none',
                         }}
                       />
@@ -148,7 +148,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
         <Card className="glass-panel rounded-xl lg:col-span-3 relative overflow-hidden">
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-background/50 to-transparent">
             <div className="text-center space-y-3">
-              <Globe2 className="w-16 h-16 mx-auto" style={{ color: `${sphere.color}30` }} />
+              <Globe2 className="w-16 h-16 mx-auto" style={{ color: `#5ce0d230` }} />
               <div>
                 <h3 className="text-sm font-semibold mb-1">
                   {sphere.name} · {viewMode.toUpperCase()} View
@@ -163,7 +163,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                     key={layer.id}
                     className="px-2 py-0.5 rounded-md text-[9px] flex items-center gap-1.5 bg-muted/8 border border-border/10"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `${sphere.color}aa` }} />
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `#5ce0d2aa` }} />
                     {layer.name}
                   </div>
                 ))}
