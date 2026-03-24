@@ -105,7 +105,7 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
     window.addEventListener("resize", resize);
 
     const animate = () => {
-      time += 0.0015;
+      time += 0.003;
       const rect = canvas.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
