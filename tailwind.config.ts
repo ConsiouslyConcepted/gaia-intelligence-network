@@ -68,7 +68,7 @@ export default {
           atmo: "hsl(var(--atmosphere))",
           bio: "hsl(var(--biosphere))",
           noo: "hsl(var(--noosphere))",
-          techno: "hsl(var(--technosphere))",
+          
           magneto: "hsl(var(--magnetosphere))",
           crystal: "hsl(var(--crystalsphere))",
         },
