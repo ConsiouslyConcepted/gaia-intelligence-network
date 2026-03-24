@@ -162,12 +162,10 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         }
       }
 
-      // Orbital rings
+      // Orbital rings — hide non-relevant when a planet is selected
       for (const p of planetData) {
-        const isRelevant = !sel || p.id === sel;
-        ctx.strokeStyle = isRelevant
-          ? "rgba(255,255,255,0.12)"
-          : "rgba(255,255,255,0.03)";
+        if (sel && p.id !== sel) continue;
+        ctx.strokeStyle = "rgba(255,255,255,0.12)";
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.arc(cx, cy, p.orbitRadius * scale, 0, Math.PI * 2);
