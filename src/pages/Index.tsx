@@ -107,8 +107,7 @@ const Index = () => {
                                 background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
                                 boxShadow: `0 1px 6px ${sphere.color}20`,
                               }}
-                            
-                            </div>
+                            />
                           </div>
                           <div className="min-w-0 text-left flex-1">
                             <div className="text-sm font-medium text-foreground/85 group-hover:text-foreground transition-colors">
