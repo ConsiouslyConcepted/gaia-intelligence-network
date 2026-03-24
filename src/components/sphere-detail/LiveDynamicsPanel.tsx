@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
-import { ImageryPanel } from "./ImageryPanel";
 
 interface Props {
   sphere: Sphere;
@@ -94,9 +93,6 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
           </div>
         </div>
       </Card>
-
-      {/* Satellite Imagery */}
-      <ImageryPanel sphereId={sphere.id} accent={accent} />
 
       {/* Behavior Summary */}
       <Card className="glass-panel rounded-xl p-5 space-y-3">
