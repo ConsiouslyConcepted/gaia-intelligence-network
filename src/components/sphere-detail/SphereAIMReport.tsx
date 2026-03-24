@@ -88,7 +88,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Score Breakdown */}
       <Card className="glass-panel p-6 space-y-4">
         <h3 className="text-xl font-semibold flex items-center gap-2">
-          <TrendingUp className="w-5 h-5 text-accent" />
+          <TrendingUp className="w-5 h-5" style={{ color: sphere.color }} />
           Coherence Score Breakdown
         </h3>
         <div className="space-y-4">
