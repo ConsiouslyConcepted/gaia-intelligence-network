@@ -26,12 +26,8 @@ export const HGSDashboard = () => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>("patterns");
-  const [time, setTime] = useState(new Date());
 
-  useEffect(() => {
-    const iv = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(iv);
-  }, []);
+
 
   const handlePlanetClick = (planetId: string) => {
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
