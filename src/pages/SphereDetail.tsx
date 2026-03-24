@@ -1,15 +1,15 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Activity, Map as MapIcon, Satellite, Network, Brain } from "lucide-react";
+import { ArrowLeft, Radio, Clock, GitBranch, Waves } from "lucide-react";
 import { SPHERES, SphereId } from "@/types/spheres";
-import { SphereOverview } from "@/components/sphere-detail/SphereOverview";
-import { SphereMetrics } from "@/components/sphere-detail/SphereMetrics";
-import { SphereMap } from "@/components/sphere-detail/SphereMap";
-import { SphereStellar } from "@/components/sphere-detail/SphereStellar";
-import { SphereCorrelations } from "@/components/sphere-detail/SphereCorrelations";
-import { SphereAIMReport } from "@/components/sphere-detail/SphereAIMReport";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
+import { LiveStatePanel } from "@/components/sphere-detail/LiveStatePanel";
+import { TemporalPanel } from "@/components/sphere-detail/TemporalPanel";
+import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
+import { ResonancePanel } from "@/components/sphere-detail/ResonancePanel";
+
+const ACCENT = "#5ce0d2";
 
 export default function SphereDetail() {
   const { sphereId } = useParams<{ sphereId: SphereId }>();
@@ -28,8 +28,6 @@ export default function SphereDetail() {
     );
   }
 
-  const accentColor = "#5ce0d2";
-
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -45,12 +43,12 @@ export default function SphereDetail() {
           </Button>
           <div className="h-4 w-px bg-border/20" />
           <div className="w-9 h-9 rounded-full bg-background/40 border border-border/20 flex items-center justify-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
-            <WireframeSphereIcon color={accentColor} size={30} segments={16} />
+            <WireframeSphereIcon color={ACCENT} size={30} segments={16} />
           </div>
           <div>
             <h1
               className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: accentColor, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              style={{ color: ACCENT, fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               {sphere.name}
             </h1>
@@ -59,25 +57,30 @@ export default function SphereDetail() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-3">
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
-            <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Coherence</div>
-            <div className="text-lg font-bold font-mono leading-none mt-0.5" style={{ color: accentColor }}>78%</div>
+            <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
+            <div className="text-xs font-semibold font-mono leading-none mt-0.5 text-foreground/80">
+              {sphere.id === "geosphere" ? "Solid Earth" :
+               sphere.id === "biosphere" ? "Living Systems" :
+               sphere.id === "magnetosphere" ? "Field Shield" :
+               sphere.id === "ionosphere" ? "Plasma Layer" :
+               sphere.id === "noosphere" ? "Collective" :
+               "Resonance"}
+            </div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
       <div className="flex-1 px-3 py-3">
-        <Tabs defaultValue="overview" className="h-full flex flex-col gap-3">
+        <Tabs defaultValue="live-state" className="h-full flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
-              { value: "overview", icon: Activity, label: "Overview" },
-              { value: "metrics", icon: Network, label: "Metrics" },
-              ...(sphere.hasMapLayers ? [{ value: "map", icon: MapIcon, label: "Map" }] : []),
-              ...(sphere.hasStellarLayers ? [{ value: "stellar", icon: Satellite, label: "Stellar" }] : []),
-              { value: "correlations", icon: Network, label: "Correlations" },
-              { value: "aim", icon: Brain, label: "AIM Report" },
+              { value: "live-state", icon: Radio, label: "Live State" },
+              { value: "temporal", icon: Clock, label: "Temporal Dynamics" },
+              { value: "coupling", icon: GitBranch, label: "Coupling" },
+              { value: "resonance", icon: Waves, label: "Resonance" },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
@@ -91,27 +94,17 @@ export default function SphereDetail() {
           </TabsList>
 
           <div className="flex-1 overflow-y-auto">
-            <TabsContent value="overview" className="mt-0">
-              <SphereOverview sphere={sphere} />
+            <TabsContent value="live-state" className="mt-0">
+              <LiveStatePanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            <TabsContent value="metrics" className="mt-0">
-              <SphereMetrics sphere={sphere} />
+            <TabsContent value="temporal" className="mt-0">
+              <TemporalPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            {sphere.hasMapLayers && (
-              <TabsContent value="map" className="mt-0">
-                <SphereMap sphere={sphere} />
-              </TabsContent>
-            )}
-            {sphere.hasStellarLayers && (
-              <TabsContent value="stellar" className="mt-0">
-                <SphereStellar sphere={sphere} />
-              </TabsContent>
-            )}
-            <TabsContent value="correlations" className="mt-0">
-              <SphereCorrelations sphere={sphere} />
+            <TabsContent value="coupling" className="mt-0">
+              <CouplingPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            <TabsContent value="aim" className="mt-0">
-              <SphereAIMReport sphere={sphere} />
+            <TabsContent value="resonance" className="mt-0">
+              <ResonancePanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
           </div>
         </Tabs>
