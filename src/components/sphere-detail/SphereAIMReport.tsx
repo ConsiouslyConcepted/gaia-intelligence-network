@@ -100,7 +100,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
                   <span className="text-xs text-muted-foreground">
                     Weight: {(component.weight * 100).toFixed(0)}%
                   </span>
-                  <span className="text-sm font-bold text-primary w-12 text-right">
+                  <span className="text-sm font-bold w-12 text-right" style={{ color: sphere.color }}>
                     {component.score}%
                   </span>
                 </div>
