@@ -265,11 +265,33 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
     };
   }, []);
 
+  const handleCanvasClick = useCallback((e: React.MouseEvent<HTMLCanvasElement>) => {
+    if (!onPlanetClick) return;
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const rect = canvas.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+
+    // Check if click hit a planet
+    for (const pos of planetPositionsRef.current) {
+      const dx = x - pos.x;
+      const dy = y - pos.y;
+      if (dx * dx + dy * dy < pos.r * pos.r) {
+        onPlanetClick(pos.id);
+        return;
+      }
+    }
+    // Clicked empty space — deselect
+    onPlanetClick(null);
+  }, [onPlanetClick]);
+
   return (
     <canvas
       ref={canvasRef}
-      className="w-full h-full"
+      className="w-full h-full cursor-pointer"
       style={{ display: "block" }}
+      onClick={handleCanvasClick}
     />
   );
 };
