@@ -9,6 +9,7 @@ const PLANET_AUDIO: Record<string, string> = {
   saturn: "/audio/saturn.mp3",
   uranus: "/audio/uranus.mp3",
   neptune: "/audio/neptune.mp3",
+  pluto: "/audio/pluto.mp3",
 };
 
 /**
