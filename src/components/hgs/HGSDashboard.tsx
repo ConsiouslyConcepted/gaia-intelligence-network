@@ -121,7 +121,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
       </div>
 
       {/* ─── RIGHT SIDEBAR ─── */}
-      <div className="absolute right-4 top-[80px] bottom-4 z-10 pointer-events-none w-[260px]">
+      <div className="absolute right-4 top-[96px] bottom-4 z-10 pointer-events-none w-[260px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
           {selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
