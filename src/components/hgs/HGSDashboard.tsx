@@ -194,13 +194,40 @@ export const HGSDashboard = () => {
               </div>
             </div>
           ) : (
-            /* Default: show all resonance pairs */
+            /* Default: planet list + all resonance pairs */
             <div className="flex-1 overflow-y-auto p-3 space-y-3">
+              {/* Clickable planet list */}
               <div>
                 <h2 className="text-sm font-semibold text-foreground/90">
                   Planetary Harmonics
                 </h2>
-                <p className="text-[10px] text-muted-foreground mt-0.5">
+                <p className="text-[10px] text-muted-foreground mt-0.5 mb-2">
+                  Select a planet to explore
+                </p>
+                <div className="grid grid-cols-3 gap-1">
+                  {SOLAR_PLANETS.map((p) => (
+                    <button
+                      key={p.id}
+                      onClick={() => handlePlanetClick(p.id)}
+                      className="flex flex-col items-center gap-1 px-1 py-1.5 rounded-lg border border-transparent hover:bg-muted/20 hover:border-border/30 transition-all"
+                    >
+                      <img
+                        src={p.image}
+                        alt={p.name}
+                        loading="lazy"
+                        className="w-7 h-7 rounded-full object-cover"
+                        style={{ boxShadow: `0 0 4px 1px ${p.color}40` }}
+                      />
+                      <span className="text-[8px] text-muted-foreground/70 font-medium">
+                        {p.name}
+                      </span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="border-t border-border/20 pt-3">
+                <p className="text-[10px] text-muted-foreground mb-2">
                   Pair-wise orbital resonance ratios
                 </p>
               </div>
