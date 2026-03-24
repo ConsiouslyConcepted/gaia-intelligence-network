@@ -162,12 +162,10 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         }
       }
 
-      // Orbital rings
+      // Orbital rings — hide non-relevant when a planet is selected
       for (const p of planetData) {
-        const isRelevant = !sel || p.id === sel;
-        ctx.strokeStyle = isRelevant
-          ? "rgba(255,255,255,0.12)"
-          : "rgba(255,255,255,0.03)";
+        if (sel && p.id !== sel) continue;
+        ctx.strokeStyle = "rgba(255,255,255,0.12)";
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.arc(cx, cy, p.orbitRadius * scale, 0, Math.PI * 2);
@@ -187,31 +185,27 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Planet bodies — real planet images
+      // Planet bodies — only show selected (or all if none selected)
       for (const p of planetData) {
+        if (sel && p.id !== sel) continue;
+
         const angle = time * p.speed * 6 + p.orbitRadius * 20;
         const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
         const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
         const r = p.size;
-
-        const isSelected = sel === p.id;
-        const dimmed = sel && !isSelected;
-        const drawSize = r * (isSelected ? 3.0 : 2.5);
-        const glowAlpha = dimmed ? 0.06 : 0.2;
+        const drawSize = r * (sel ? 3.0 : 2.5);
 
         // Soft glow behind planet
         const glowGrad = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r * 3.5);
-        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},${glowAlpha})`);
-        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},${glowAlpha * 0.25})`);
+        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
+        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
         glowGrad.addColorStop(1, "transparent");
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
         ctx.arc(sx, sy, r * 3.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Draw planet image if loaded
         const img = planetImages[p.id];
-        ctx.globalAlpha = dimmed ? 0.3 : 1.0;
         if (img && img.complete && img.naturalWidth > 0) {
           ctx.drawImage(img, sx - drawSize, sy - drawSize, drawSize * 2, drawSize * 2);
         } else {
@@ -220,7 +214,6 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
           ctx.arc(sx, sy, r, 0, Math.PI * 2);
           ctx.fill();
         }
-        ctx.globalAlpha = 1.0;
       }
 
       animationId = requestAnimationFrame(animate);
