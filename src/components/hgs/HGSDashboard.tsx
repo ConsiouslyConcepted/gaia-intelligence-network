@@ -37,24 +37,24 @@ export const HGSDashboard = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <header className="p-4 pb-0">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground/90">
+      <header className="px-4 pt-2 pb-1">
+        <h1 className="text-xl font-bold tracking-tight text-foreground/90">
           Musica Universalis
         </h1>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground">
           Harmonic ratios between planetary orbits — celestial mechanics &amp; the music of the spheres
         </p>
       </header>
 
       {/* Main content: orbital field + sidebar */}
-      <div className="flex-1 p-4 flex gap-4 min-h-0">
+      <div className="flex-1 px-4 pt-2 pb-1 flex gap-4 min-h-0">
         {/* Orbital Resonance Field */}
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative">
           <OrbitalResonanceField selectedPlanet={selectedPlanet} />
 
           {/* Floating planet legend */}
           <div className="absolute bottom-3 left-3 right-3">
-            <div className="glass-panel rounded-lg px-3 py-2.5 border border-border/20">
+            <div className="glass-panel rounded-lg px-4 py-3.5 border border-border/20">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1">
                   <Eye className="w-3 h-3 text-muted-foreground/50" />
@@ -175,7 +175,7 @@ export const HGSDashboard = () => {
       </div>
 
       {/* Footer disclaimer */}
-      <footer className="p-3">
+      <footer className="px-4 py-2">
         <div className="glass-panel p-2 rounded-lg flex items-center justify-center gap-2 text-[11px] text-muted-foreground">
           <Info className="w-3 h-3 flex-shrink-0" />
           <span>
