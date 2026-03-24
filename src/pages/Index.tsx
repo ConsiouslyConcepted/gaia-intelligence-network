@@ -1,11 +1,7 @@
 import { useState } from "react";
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { EarthVisualization } from "@/components/EarthVisualization";
-import { GaiaMonitor } from "@/components/GaiaMonitor";
-import { LayerToggle } from "@/components/LayerToggle";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { Card } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { Globe, Activity } from "lucide-react";
