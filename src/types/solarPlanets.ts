@@ -21,7 +21,8 @@ export const SOLAR_PLANETS: SolarPlanet[] = [
   { id: "jupiter", name: "Jupiter", color: "#d4a56a", orbitRadius: 0.55, speed: 0.0843, size: 12, image: "/planets/jupiter.png" },
   { id: "saturn", name: "Saturn", color: "#c8b070", orbitRadius: 0.70, speed: 0.0339, size: 10, image: "/planets/saturn.png" },
   { id: "uranus", name: "Uranus", color: "#7ecbcb", orbitRadius: 0.82, speed: 0.0119, size: 8, image: "/planets/uranus.png" },
-  { id: "neptune", name: "Neptune", color: "#4466dd", orbitRadius: 0.93, speed: 0.00607, size: 7, image: "/planets/neptune.png" },
+  { id: "neptune", name: "Neptune", color: "#4466dd", orbitRadius: 0.88, speed: 0.00607, size: 7, image: "/planets/neptune.png" },
+  { id: "pluto", name: "Pluto", color: "#c4a882", orbitRadius: 0.96, speed: 0.00404, size: 4, image: "/planets/pluto.png" },
 ];
 
 /**
