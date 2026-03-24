@@ -107,11 +107,7 @@ const Index = () => {
                                 background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
                                 boxShadow: `0 1px 6px ${sphere.color}20`,
                               }}
-                            >
-                              <div
-                                className="absolute w-1.5 h-1 rounded-full top-[5px] left-[7px]"
-                                style={{ background: `radial-gradient(ellipse, rgba(255,255,255,0.3), transparent)` }}
-                              />
+                            
                             </div>
                           </div>
                           <div className="min-w-0 text-left flex-1">
