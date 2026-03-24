@@ -49,7 +49,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${"#5ce0d2"}12` }}>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
             <Network className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
@@ -87,7 +87,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
           {selectedMetrics.map((metric) => (
             <div key={metric.id} className="rounded-lg bg-muted/5 border border-border/10 p-3 space-y-2.5">
               <div className="flex items-center justify-between">
-                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: `${"#5ce0d2"}80` }} />
+                <div className="w-3 h-3 rounded-full" style={{ backgroundColor: `#5ce0d280` }} />
                 <Button variant="ghost" size="icon" className="h-5 w-5 opacity-50 hover:opacity-100" onClick={() => removeMetric(metric.id)}>
                   <X className="w-3 h-3" />
                 </Button>
@@ -126,7 +126,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
         <h3 className="text-sm font-semibold">Time Series Comparison</h3>
         <div className="h-48 rounded-lg bg-muted/5 border border-border/10 flex items-center justify-center">
           <div className="text-center space-y-1.5">
-            <TrendingUp className="w-8 h-8 mx-auto" style={{ color: `${"#5ce0d2"}40` }} />
+            <TrendingUp className="w-8 h-8 mx-auto" style={{ color: `#5ce0d240` }} />
             <p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/30">
               {selectedMetrics.length} metric{selectedMetrics.length !== 1 ? 's' : ''} selected
             </p>
@@ -153,7 +153,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
                       className="h-full rounded-full transition-all duration-700"
                       style={{
                         width: `${Math.abs(result.correlation) * 100}%`,
-                        background: `linear-gradient(90deg, ${"#5ce0d2"}40, ${"#5ce0d2"}cc)`,
+                        background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                       }}
                     />
                   </div>
@@ -187,7 +187,7 @@ export function SphereCorrelations({ sphere }: { sphere: Sphere }) {
 
       {/* Actions */}
       <div className="flex gap-2">
-        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${"#5ce0d2"}cc`, color: '#fff' }}>
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `#5ce0d2cc`, color: '#fff' }}>
           <Download className="w-3 h-3" />
           Save as Insight
         </Button>

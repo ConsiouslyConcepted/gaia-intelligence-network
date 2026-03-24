@@ -48,7 +48,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${"#5ce0d2"}12` }}>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
             <MapPin className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
@@ -91,13 +91,13 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                     className="w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all"
                     style={{
                       borderColor: layer.enabled ? "#5ce0d2" : 'hsl(var(--border))',
-                      backgroundColor: layer.enabled ? `${"#5ce0d2"}20` : 'transparent',
+                      backgroundColor: layer.enabled ? `#5ce0d220` : 'transparent',
                     }}
                   >
                     {layer.enabled && <Check className="w-2.5 h-2.5" style={{ color: "#5ce0d2" }} />}
                   </button>
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `${"#5ce0d2"}${layer.enabled ? 'cc' : '40'}` }} />
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `#5ce0d2${layer.enabled ? 'cc' : '40'}` }} />
                     <span className={`text-[11px] font-medium truncate ${layer.enabled ? 'text-foreground/80' : 'text-muted-foreground/40'}`}>
                       {layer.name}
                     </span>
@@ -121,7 +121,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                         onChange={(e) => updateOpacity(layer.id, Number(e.target.value))}
                         className="w-full h-2 appearance-none rounded-full cursor-pointer"
                         style={{
-                          background: `linear-gradient(to right, ${"#5ce0d2"}cc ${layer.opacity * 100}%, hsl(var(--border) / 0.15) ${layer.opacity * 100}%)`,
+                          background: `linear-gradient(to right, #5ce0d2cc ${layer.opacity * 100}%, hsl(var(--border) / 0.15) ${layer.opacity * 100}%)`,
                           WebkitAppearance: 'none',
                         }}
                       />
@@ -148,7 +148,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
         <Card className="glass-panel rounded-xl lg:col-span-3 relative overflow-hidden">
           <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-background/50 to-transparent">
             <div className="text-center space-y-3">
-              <Globe2 className="w-16 h-16 mx-auto" style={{ color: `${"#5ce0d2"}30` }} />
+              <Globe2 className="w-16 h-16 mx-auto" style={{ color: `#5ce0d230` }} />
               <div>
                 <h3 className="text-sm font-semibold mb-1">
                   {sphere.name} · {viewMode.toUpperCase()} View
@@ -163,7 +163,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                     key={layer.id}
                     className="px-2 py-0.5 rounded-md text-[9px] flex items-center gap-1.5 bg-muted/8 border border-border/10"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `${"#5ce0d2"}aa` }} />
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `#5ce0d2aa` }} />
                     {layer.name}
                   </div>
                 ))}

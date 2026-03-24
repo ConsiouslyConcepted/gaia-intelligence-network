@@ -23,7 +23,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${"#5ce0d2"}12` }}>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
             <Satellite className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
@@ -58,7 +58,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
                   className="h-full rounded-full transition-all duration-700"
                   style={{
                     width: `${metric.health}%`,
-                    background: `linear-gradient(90deg, ${"#5ce0d2"}40, ${"#5ce0d2"}cc)`,
+                    background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                   }}
                 />
               </div>

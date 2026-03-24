@@ -56,7 +56,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
       {/* Status Banner */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${"#5ce0d2"}12` }}>
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `#5ce0d212` }}>
             <Activity className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
@@ -85,7 +85,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
               {kpi.unit && <span className="text-[10px] text-muted-foreground/40 uppercase">{kpi.unit}</span>}
             </div>
             <div className="flex items-center gap-1.5">
-              <span className="text-[10px] font-mono" style={{ color: `${"#5ce0d2"}aa` }}>
+              <span className="text-[10px] font-mono" style={{ color: `#5ce0d2aa` }}>
                 {kpi.change > 0 ? "+" : ""}{kpi.change}{kpi.unit ? ` ${kpi.unit}` : ""}
               </span>
               <span className="text-[9px] text-muted-foreground/30 font-mono">24h</span>
@@ -102,7 +102,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
                       className="flex-1 rounded-sm"
                       style={{
                         height: `${Math.max(15, pct)}%`,
-                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `${"#5ce0d2"}50` : `${"#5ce0d2"}20`,
+                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `#5ce0d250` : `#5ce0d220`,
                       }}
                     />
                   );
@@ -160,7 +160,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
                     className="h-full rounded-full transition-all duration-700"
                     style={{
                       width: `${item.value}%`,
-                      background: `linear-gradient(90deg, ${"#5ce0d2"}40, ${"#5ce0d2"}cc)`,
+                      background: `linear-gradient(90deg, #5ce0d240, #5ce0d2cc)`,
                     }}
                   />
                 </div>
@@ -172,7 +172,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
 
       {/* Quick Actions */}
       <div className="flex gap-2">
-        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${"#5ce0d2"}cc`, color: '#fff' }}>
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `#5ce0d2cc`, color: '#fff' }}>
           Open Map
           <ArrowRight className="w-3 h-3" />
         </Button>
