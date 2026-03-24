@@ -1,9 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox";
-import { Slider } from "@/components/ui/slider";
 import { Sphere } from "@/types/spheres";
-import { Layers, Globe2, Download, MapPin } from "lucide-react";
+import { Layers, Globe2, Download, MapPin, Check } from "lucide-react";
 import { useState } from "react";
 
 interface MapLayer {
@@ -11,24 +9,23 @@ interface MapLayer {
   name: string;
   enabled: boolean;
   opacity: number;
-  color: string;
 }
 
 const mockLayers: Record<string, MapLayer[]> = {
   magnetosphere: [
-    { id: "kp", name: "Kp Index Tiles", enabled: true, opacity: 0.7, color: "#ff00ff" },
-    { id: "auroral", name: "Auroral Oval", enabled: true, opacity: 0.6, color: "#00ff88" },
-    { id: "ground", name: "Ground Magnetometers", enabled: true, opacity: 1, color: "#ffaa00" },
-    { id: "schumann", name: "Schumann Stations", enabled: false, opacity: 0.8, color: "#88ccff" },
+    { id: "kp", name: "Kp Index Tiles", enabled: true, opacity: 0.7 },
+    { id: "auroral", name: "Auroral Oval", enabled: true, opacity: 0.6 },
+    { id: "ground", name: "Ground Magnetometers", enabled: true, opacity: 1 },
+    { id: "schumann", name: "Schumann Stations", enabled: false, opacity: 0.8 },
   ],
   geosphere: [
-    { id: "seismic", name: "Seismicity Heatmap", enabled: true, opacity: 0.7, color: "#ff4400" },
-    { id: "tectonic", name: "Tectonic Plates", enabled: true, opacity: 0.5, color: "#8844ff" },
-    { id: "volcano", name: "Volcanic Activity", enabled: true, opacity: 0.8, color: "#ff8800" },
+    { id: "seismic", name: "Seismicity Heatmap", enabled: true, opacity: 0.7 },
+    { id: "tectonic", name: "Tectonic Plates", enabled: true, opacity: 0.5 },
+    { id: "volcano", name: "Volcanic Activity", enabled: true, opacity: 0.8 },
   ],
   default: [
-    { id: "heatmap", name: "Data Density Heatmap", enabled: true, opacity: 0.7, color: "#00ffff" },
-    { id: "nodes", name: "Sensor Nodes", enabled: true, opacity: 1, color: "#ffdd00" },
+    { id: "heatmap", name: "Data Density Heatmap", enabled: true, opacity: 0.7 },
+    { id: "nodes", name: "Sensor Nodes", enabled: true, opacity: 1 },
   ],
 };
 
@@ -40,8 +37,8 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
     setLayers(prev => prev.map(l => l.id === id ? { ...l, enabled: !l.enabled } : l));
   };
 
-  const updateOpacity = (id: string, opacity: number) => {
-    setLayers(prev => prev.map(l => l.id === id ? { ...l, opacity: opacity / 100 } : l));
+  const updateOpacity = (id: string, value: number) => {
+    setLayers(prev => prev.map(l => l.id === id ? { ...l, opacity: value / 100 } : l));
   };
 
   const activeCount = layers.filter(l => l.enabled).length;
@@ -88,14 +85,22 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
             {layers.map(layer => (
               <div key={layer.id} className="rounded-lg bg-muted/5 border border-border/10 p-3 space-y-2">
                 <div className="flex items-center gap-2.5">
-                  <Checkbox
-                    checked={layer.enabled}
-                    onCheckedChange={() => toggleLayer(layer.id)}
-                    className="h-3.5 w-3.5"
-                  />
+                  {/* Custom toggle using sphere color */}
+                  <button
+                    onClick={() => toggleLayer(layer.id)}
+                    className="w-4 h-4 rounded border flex items-center justify-center shrink-0 transition-all"
+                    style={{
+                      borderColor: layer.enabled ? sphere.color : 'hsl(var(--border))',
+                      backgroundColor: layer.enabled ? `${sphere.color}20` : 'transparent',
+                    }}
+                  >
+                    {layer.enabled && <Check className="w-2.5 h-2.5" style={{ color: sphere.color }} />}
+                  </button>
                   <div className="flex items-center gap-1.5 flex-1 min-w-0">
-                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: layer.color }} />
-                    <span className="text-[11px] font-medium truncate">{layer.name}</span>
+                    <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: `${sphere.color}${layer.enabled ? 'cc' : '40'}` }} />
+                    <span className={`text-[11px] font-medium truncate ${layer.enabled ? 'text-foreground/80' : 'text-muted-foreground/40'}`}>
+                      {layer.name}
+                    </span>
                   </div>
                 </div>
                 
@@ -105,14 +110,22 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                       <span>Opacity</span>
                       <span className="font-mono">{Math.round(layer.opacity * 100)}%</span>
                     </div>
-                    <Slider
-                      value={[layer.opacity * 100]}
-                      onValueChange={([val]) => updateOpacity(layer.id, val)}
-                      min={0}
-                      max={100}
-                      step={5}
-                      className="w-full"
-                    />
+                    {/* Custom slider track using sphere color */}
+                    <div className="relative h-2 w-full">
+                      <input
+                        type="range"
+                        min={0}
+                        max={100}
+                        step={5}
+                        value={layer.opacity * 100}
+                        onChange={(e) => updateOpacity(layer.id, Number(e.target.value))}
+                        className="w-full h-2 appearance-none rounded-full cursor-pointer"
+                        style={{
+                          background: `linear-gradient(to right, ${sphere.color}cc ${layer.opacity * 100}%, hsl(var(--border) / 0.15) ${layer.opacity * 100}%)`,
+                          WebkitAppearance: 'none',
+                        }}
+                      />
+                    </div>
                   </div>
                 )}
               </div>
@@ -150,7 +163,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
                     key={layer.id}
                     className="px-2 py-0.5 rounded-md text-[9px] flex items-center gap-1.5 bg-muted/8 border border-border/10"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: layer.color }} />
+                    <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: `${sphere.color}aa` }} />
                     {layer.name}
                   </div>
                 ))}
