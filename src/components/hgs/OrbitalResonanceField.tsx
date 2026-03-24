@@ -161,7 +161,7 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         const sweepPos = ((waveSweep * 0.3 + pp.a * 0.5) % 1.0) * totalPts;
 
         // In isolation mode, normalize so pattern fills the canvas
-        const pairScale = sel ? (0.42 / pp.maxR) : scale;
+        const pairScale = sel ? (Math.min(w, h) * 0.42 / pp.maxR) : scale;
 
         for (let s = 0; s < totalPts; s += skip) {
           const p = pp.points[s];
