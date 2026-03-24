@@ -201,7 +201,7 @@ export const HGSDashboard = () => {
                   Planetary Harmonics
                 </h2>
                 <p className="text-[9px] text-muted-foreground mt-0.5">
-                  Select a pair to view patterns &amp; hear its sound
+                  Tap to view orbital patterns &amp; hear planetary tones
                 </p>
               </div>
               {PLANET_RESONANCE_PAIRS.map((pair) => {
