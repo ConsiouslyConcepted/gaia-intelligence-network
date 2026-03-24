@@ -60,23 +60,22 @@ export const HGSDashboard = () => {
             onPlanetClick={(id) => setSelectedPlanet(id)}
           />
 
-          <div className="absolute top-2 right-2 flex items-center gap-2">
+          <div className="absolute top-3 right-3 flex items-center gap-2">
             {selectedPlanet && (
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="text-[9px] uppercase tracking-wider bg-background/40 backdrop-blur-sm text-primary/70 hover:text-primary transition-colors px-2.5 py-1 rounded-full border border-primary/20 hover:border-primary/40"
+                className="text-[9px] uppercase tracking-wider glass-panel backdrop-blur-md text-primary/80 hover:text-primary transition-all px-3 py-1.5 rounded-lg border border-primary/20 hover:border-primary/40 hover:shadow-[0_0_12px_hsl(var(--primary)/0.15)]"
               >
                 Show All
               </button>
             )}
-            <Badge
-              variant="outline"
-              className="bg-background/40 backdrop-blur-sm border-primary/30 text-primary text-[10px]"
-            >
-              {selectedData
-                ? `${selectedData.name} · Resonance Patterns`
-                : "Orbital Resonance Field"}
-            </Badge>
+            <div className="glass-panel backdrop-blur-md rounded-lg px-3 py-1.5 border border-primary/20 shadow-[0_0_20px_hsl(var(--primary)/0.1)]">
+              <span className="text-[10px] uppercase tracking-[0.1em] font-medium text-primary/90">
+                {selectedData
+                  ? `${selectedData.name} · Resonance Patterns`
+                  : "Orbital Resonance Field"}
+              </span>
+            </div>
           </div>
         </div>
 
