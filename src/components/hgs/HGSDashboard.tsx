@@ -55,9 +55,20 @@ export const HGSDashboard = () => {
       <div className="flex-1 px-3 pb-3 flex gap-3 min-h-0">
         {/* Orbital Resonance Field */}
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative min-h-0">
-          <OrbitalResonanceField selectedPlanet={selectedPlanet} />
+          <OrbitalResonanceField
+            selectedPlanet={selectedPlanet}
+            onPlanetClick={(id) => setSelectedPlanet(id)}
+          />
 
-          <div className="absolute top-2 right-2">
+          <div className="absolute top-2 right-2 flex items-center gap-2">
+            {selectedPlanet && (
+              <button
+                onClick={() => setSelectedPlanet(null)}
+                className="text-[9px] uppercase tracking-wider bg-background/40 backdrop-blur-sm text-primary/70 hover:text-primary transition-colors px-2.5 py-1 rounded-full border border-primary/20 hover:border-primary/40"
+              >
+                Show All
+              </button>
+            )}
             <Badge
               variant="outline"
               className="bg-background/40 backdrop-blur-sm border-primary/30 text-primary text-[10px]"
