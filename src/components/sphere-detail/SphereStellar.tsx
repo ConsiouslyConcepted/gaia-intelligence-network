@@ -23,8 +23,8 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
       {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
-            <Satellite className="w-6 h-6" style={{ color: sphere.color }} />
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${"#5ce0d2"}12` }}>
+            <Satellite className="w-6 h-6" style={{ color: "#5ce0d2" }} />
           </div>
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Stellar Conditions</h2>
@@ -34,7 +34,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
           </div>
           <div className="text-right">
             <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">Conditions</div>
-            <span className="text-sm font-semibold font-mono" style={{ color: sphere.color }}>Elevated</span>
+            <span className="text-sm font-semibold font-mono" style={{ color: "#5ce0d2" }}>Elevated</span>
           </div>
         </div>
       </Card>
@@ -46,11 +46,11 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
           return (
             <Card key={idx} className="glass-panel rounded-xl p-4 space-y-3">
               <div className="flex items-center gap-2">
-                <Icon className="w-4 h-4" style={{ color: sphere.color }} />
+                <Icon className="w-4 h-4" style={{ color: "#5ce0d2" }} />
                 <span className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">{metric.label}</span>
               </div>
               <div className="flex items-baseline gap-1.5">
-                <span className="text-xl font-bold font-mono" style={{ color: sphere.color }}>{metric.value}</span>
+                <span className="text-xl font-bold font-mono" style={{ color: "#5ce0d2" }}>{metric.value}</span>
                 <span className="text-[10px] text-muted-foreground/40 uppercase">{metric.unit}</span>
               </div>
               <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
@@ -58,7 +58,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
                   className="h-full rounded-full transition-all duration-700"
                   style={{
                     width: `${metric.health}%`,
-                    background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                    background: `linear-gradient(90deg, ${"#5ce0d2"}40, ${"#5ce0d2"}cc)`,
                   }}
                 />
               </div>
@@ -97,7 +97,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
               className="px-3 py-2.5 rounded-lg border border-border/15 bg-muted/5"
             >
               <div className="flex items-center gap-2 mb-1">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sphere.color }} />
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: "#5ce0d2" }} />
                 <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{item.time}</span>
               </div>
               <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{item.event}</p>
