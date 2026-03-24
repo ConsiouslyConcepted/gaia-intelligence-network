@@ -42,22 +42,14 @@ export default function SphereDetail() {
               <ArrowLeft className="w-5 h-5" />
             </Button>
             <div className="flex items-center gap-3">
-              {/* Sphere orb matching sidebar style */}
-              <div className="w-10 h-10 rounded-full relative flex items-center justify-center">
-                <div
-                  className="absolute inset-0 rounded-full"
-                  style={{
-                    border: `1px solid ${sphere.color}18`,
-                    boxShadow: `inset 0 0 6px ${sphere.color}06`,
-                  }}
-                />
-                <div
-                  className="w-5 h-5 rounded-full"
-                  style={{
-                    background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
-                    boxShadow: `0 1px 6px ${sphere.color}20`,
-                  }}
-                />
+              <div className="w-10 h-10 relative flex items-center justify-center">
+                <svg viewBox="0 0 40 40" className="w-10 h-10">
+                  <circle cx="20" cy="20" r="18" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.25" />
+                  <ellipse cx="20" cy="20" rx="18" ry="7" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
+                  <ellipse cx="20" cy="20" rx="7" ry="18" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
+                  <ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.15" transform="rotate(45 20 20)" />
+                  <circle cx="20" cy="20" r="5" fill={`${sphere.color}30`} stroke={sphere.color} strokeWidth="0.5" opacity="0.6" />
+                </svg>
               </div>
               <div>
                 <h1 className="text-lg font-semibold tracking-wide" style={{ color: sphere.color }}>

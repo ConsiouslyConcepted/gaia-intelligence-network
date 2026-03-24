@@ -92,22 +92,20 @@ const Index = () => {
                           onClick={() => navigate(`/sphere/${sphere.id}`)}
                           className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
-                          {/* Sphere indicator */}
-                          <div className="w-10 h-10 flex-shrink-0 rounded-full relative flex items-center justify-center">
-                            <div
-                              className="absolute inset-0 rounded-full transition-opacity duration-300"
-                              style={{
-                                border: `1px solid ${sphere.color}18`,
-                                boxShadow: `inset 0 0 6px ${sphere.color}06`,
-                              }}
-                            />
-                            <div
-                              className="w-5 h-5 rounded-full transition-all duration-300 group-hover:scale-110"
-                              style={{
-                                background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
-                                boxShadow: `0 1px 6px ${sphere.color}20`,
-                              }}
-                            />
+                          {/* Wireframe sphere indicator */}
+                          <div className="w-10 h-10 flex-shrink-0 relative flex items-center justify-center">
+                            <svg viewBox="0 0 40 40" className="w-10 h-10 transition-all duration-300 group-hover:scale-110">
+                              {/* Outer circle */}
+                              <circle cx="20" cy="20" r="18" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.25" />
+                              {/* Horizontal ellipse */}
+                              <ellipse cx="20" cy="20" rx="18" ry="7" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
+                              {/* Vertical ellipse */}
+                              <ellipse cx="20" cy="20" rx="7" ry="18" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
+                              {/* Tilted ellipse */}
+                              <ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.15" transform="rotate(45 20 20)" />
+                              {/* Inner glow circle */}
+                              <circle cx="20" cy="20" r="5" fill={`${sphere.color}30`} stroke={sphere.color} strokeWidth="0.5" opacity="0.6" />
+                            </svg>
                           </div>
                           <div className="min-w-0 text-left flex-1">
                             <div className="text-sm font-medium text-foreground/85 group-hover:text-foreground transition-colors">
