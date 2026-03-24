@@ -24,6 +24,18 @@ export const OrbitalResonanceField = () => {
       parseInt(hex.slice(5, 7), 16),
     ];
 
+    // Preload planet images
+    const planetImages: Record<string, HTMLImageElement> = {};
+    let imagesLoaded = 0;
+    const totalImages = SOLAR_PLANETS.length;
+
+    SOLAR_PLANETS.forEach((p) => {
+      const img = new Image();
+      img.src = p.image;
+      img.onload = () => { imagesLoaded++; };
+      planetImages[p.id] = img;
+    });
+
     const planetData = SOLAR_PLANETS.map((p) => ({
       ...p,
       rgb: hexToRgb(p.color),
@@ -156,74 +168,35 @@ export const OrbitalResonanceField = () => {
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Planet bodies — natural astronomical appearance
+      // Planet bodies — real planet images
       for (const p of planetData) {
         const angle = time * p.speed * 6 + p.orbitRadius * 20;
         const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
         const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
         const r = p.size;
+        const drawSize = r * 2.5; // image draw size (slightly larger than old circle)
 
-        // Warm diffuse glow — like light scattering in space
-        const glowGrad = ctx.createRadialGradient(sx, sy, r, sx, sy, r * 3);
-        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.25)`);
-        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.06)`);
+        // Soft glow behind planet
+        const glowGrad = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r * 3.5);
+        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
+        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
         glowGrad.addColorStop(1, "transparent");
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, r * 3, 0, Math.PI * 2);
+        ctx.arc(sx, sy, r * 3.5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Lit hemisphere — light comes from the sun (center-left)
-        // Calculate light direction from sun to planet
-        const ldx = sx - cx;
-        const ldy = sy - cy;
-        const ld = Math.sqrt(ldx * ldx + ldy * ldy) || 1;
-        const lnx = -ldx / ld; // light normal points toward sun
-        const lny = -ldy / ld;
-
-        // Base body — matte, natural color
-        const bodyGrad = ctx.createRadialGradient(
-          sx + lnx * r * 0.4, sy + lny * r * 0.4, r * 0.05,
-          sx, sy, r
-        );
-        // Lit face: warm, slightly brighter than base color
-        const warmR = Math.min(255, p.rgb[0] + 30);
-        const warmG = Math.min(255, p.rgb[1] + 15);
-        const warmB = Math.min(255, p.rgb[2] + 5);
-        bodyGrad.addColorStop(0, `rgb(${warmR},${warmG},${warmB})`);
-        bodyGrad.addColorStop(0.6, `rgb(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]})`);
-        // Shadow side: cool, desaturated dark
-        const shadowR = Math.floor(p.rgb[0] * 0.18);
-        const shadowG = Math.floor(p.rgb[1] * 0.15);
-        const shadowB = Math.floor(p.rgb[2] * 0.22 + 8);
-        bodyGrad.addColorStop(1, `rgb(${shadowR},${shadowG},${shadowB})`);
-        ctx.fillStyle = bodyGrad;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Soft limb darkening — edges of sphere naturally darken
-        const limbGrad = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r);
-        limbGrad.addColorStop(0, "transparent");
-        limbGrad.addColorStop(0.7, "transparent");
-        limbGrad.addColorStop(1, "rgba(0,0,0,0.25)");
-        ctx.fillStyle = limbGrad;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
-        ctx.fill();
-
-        // Very subtle warm catchlight — not a harsh specular, just soft luminance
-        const catchGrad = ctx.createRadialGradient(
-          sx + lnx * r * 0.3, sy + lny * r * 0.3, 0,
-          sx + lnx * r * 0.3, sy + lny * r * 0.3, r * 0.45
-        );
-        catchGrad.addColorStop(0, "rgba(255,248,230,0.18)");
-        catchGrad.addColorStop(0.5, "rgba(255,248,230,0.04)");
-        catchGrad.addColorStop(1, "transparent");
-        ctx.fillStyle = catchGrad;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r, 0, Math.PI * 2);
-        ctx.fill();
+        // Draw planet image if loaded
+        const img = planetImages[p.id];
+        if (img && img.complete && img.naturalWidth > 0) {
+          ctx.drawImage(img, sx - drawSize, sy - drawSize, drawSize * 2, drawSize * 2);
+        } else {
+          // Fallback circle
+          ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.9)`;
+          ctx.beginPath();
+          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.fill();
+        }
       }
 
       animationId = requestAnimationFrame(animate);

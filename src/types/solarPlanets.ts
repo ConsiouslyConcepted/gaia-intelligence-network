@@ -9,18 +9,19 @@ export interface SolarPlanet {
   orbitRadius: number; // normalized 0–1
   speed: number; // relative orbital speed (inner = faster)
   size: number; // visual radius in px
+  image: string; // path to planet image
 }
 
 // Colors inspired by actual planetary appearance
 export const SOLAR_PLANETS: SolarPlanet[] = [
-  { id: "mercury", name: "Mercury", color: "#b0a090", orbitRadius: 0.12, speed: 4.15, size: 4 },
-  { id: "venus", name: "Venus", color: "#e8c86a", orbitRadius: 0.20, speed: 1.625, size: 6 },
-  { id: "earth", name: "Earth", color: "#4488cc", orbitRadius: 0.30, speed: 1.0, size: 7 },
-  { id: "mars", name: "Mars", color: "#cc5533", orbitRadius: 0.40, speed: 0.532, size: 5 },
-  { id: "jupiter", name: "Jupiter", color: "#d4a56a", orbitRadius: 0.55, speed: 0.0843, size: 12 },
-  { id: "saturn", name: "Saturn", color: "#c8b070", orbitRadius: 0.70, speed: 0.0339, size: 10 },
-  { id: "uranus", name: "Uranus", color: "#7ecbcb", orbitRadius: 0.82, speed: 0.0119, size: 8 },
-  { id: "neptune", name: "Neptune", color: "#4466dd", orbitRadius: 0.93, speed: 0.00607, size: 7 },
+  { id: "mercury", name: "Mercury", color: "#b0a090", orbitRadius: 0.12, speed: 4.15, size: 4, image: "/planets/mercury.png" },
+  { id: "venus", name: "Venus", color: "#e8c86a", orbitRadius: 0.20, speed: 1.625, size: 6, image: "/planets/venus.png" },
+  { id: "earth", name: "Earth", color: "#4488cc", orbitRadius: 0.30, speed: 1.0, size: 7, image: "/planets/earth.png" },
+  { id: "mars", name: "Mars", color: "#cc5533", orbitRadius: 0.40, speed: 0.532, size: 5, image: "/planets/mars.png" },
+  { id: "jupiter", name: "Jupiter", color: "#d4a56a", orbitRadius: 0.55, speed: 0.0843, size: 12, image: "/planets/jupiter.png" },
+  { id: "saturn", name: "Saturn", color: "#c8b070", orbitRadius: 0.70, speed: 0.0339, size: 10, image: "/planets/saturn.png" },
+  { id: "uranus", name: "Uranus", color: "#7ecbcb", orbitRadius: 0.82, speed: 0.0119, size: 8, image: "/planets/uranus.png" },
+  { id: "neptune", name: "Neptune", color: "#4466dd", orbitRadius: 0.93, speed: 0.00607, size: 7, image: "/planets/neptune.png" },
 ];
 
 /**
