@@ -139,8 +139,12 @@ const Index = () => {
             >
               <Signal className="w-3.5 h-3.5" />Planetary
             </button>
-            <button onClick={() => setActiveView("hgs")} className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all duration-300 hover:bg-foreground/[0.04]">
-              <Activity className="w-3.5 h-3.5" style={{ color: "#d4a56a" }} />HGS
+            <button
+              onClick={() => setActiveView("hgs")}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+              style={{ color: "hsla(38,60%,60%,0.7)" }}
+            >
+              <Activity className="w-3.5 h-3.5" style={{ color: "#e8b960" }} />HGS
             </button>
           </div>
         </HudPanel>
