@@ -167,8 +167,9 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
           const waveAlpha = waveFactor * waveFactor;
 
           // Combine static base + animated wave + breathing pulse
-          const baseAlpha = 0.04 + Math.sin(s * 0.008) * 0.015;
-          const dynamicAlpha = baseAlpha + waveAlpha * 0.12 * pulse;
+          const baseAlpha = sel ? 0.09 : 0.05;
+          const variation = Math.sin(s * 0.008) * 0.02;
+          const dynamicAlpha = baseAlpha + variation + waveAlpha * 0.08 * pulse;
           const alpha = dynamicAlpha * alphaBoost;
 
           // Shift color slightly along the wave
