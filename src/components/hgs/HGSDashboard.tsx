@@ -10,7 +10,7 @@ type SidebarMode = "patterns" | "cymatics";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
-    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
+    className={`relative rounded-xl border-[1.5px] backdrop-blur-2xl ${className}`}
     style={{
       background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
       borderColor: "hsla(38,50%,50%,0.2)",
