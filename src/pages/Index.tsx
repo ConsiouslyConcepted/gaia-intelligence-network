@@ -90,19 +90,31 @@ const Index = () => {
                         onClick={() => navigate(`/sphere/${sphere.id}`)}
                         className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted/15 transition-all duration-200 cursor-pointer group"
                       >
-                        <div
-                          className="w-8 h-8 rounded-full flex-shrink-0 border border-white/10"
-                          style={{
-                            background: `radial-gradient(circle at 35% 35%, ${sphere.color}80, ${sphere.color}20)`,
-                            boxShadow: `0 0 10px 2px ${sphere.color}30`,
-                          }}
-                        />
+                        {/* Sphere orb — matches HGS resonance diagram sizing */}
+                        <div className="w-[56px] h-[56px] flex-shrink-0 rounded-full relative flex items-center justify-center">
+                          {/* Outer ring */}
+                          <div
+                            className="absolute inset-0 rounded-full"
+                            style={{
+                              border: `1px solid ${sphere.color}40`,
+                              boxShadow: `0 0 12px 2px ${sphere.color}15, inset 0 0 8px ${sphere.color}10`,
+                            }}
+                          />
+                          {/* Inner orb */}
+                          <div
+                            className="w-7 h-7 rounded-full"
+                            style={{
+                              background: `radial-gradient(circle at 35% 35%, ${sphere.color}cc, ${sphere.color}30 70%, transparent)`,
+                              boxShadow: `0 0 10px 3px ${sphere.color}25`,
+                            }}
+                          />
+                        </div>
                         <div className="min-w-0 text-left">
                           <div className="text-sm font-medium text-foreground/90 group-hover:text-foreground transition-colors">
                             {sphere.name}
                           </div>
-                          <div className="text-[10px] text-muted-foreground/60 truncate">
-                            {sphere.description.split("—")[0].trim()}
+                          <div className="text-[10px] text-muted-foreground/60 font-mono">
+                            {sphere.description.split("—")[1]?.trim() || sphere.description.split("—")[0].trim()}
                           </div>
                         </div>
                       </button>
