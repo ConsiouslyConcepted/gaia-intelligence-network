@@ -106,9 +106,18 @@ export const HGSDashboard = () => {
                         : "hover:bg-muted/20 border border-transparent hover:border-border/30"
                     }`}
                   >
-                    <ResonanceIcon
-                      planetId={p.id}
-                      size={isSelected ? 32 : 28}
+                    <img
+                      src={p.cymaticImage}
+                      alt={`${p.name} cymatic frequency`}
+                      loading="lazy"
+                      className={`rounded-full object-cover transition-all duration-300 ${
+                        isSelected ? "w-9 h-9" : "w-8 h-8"
+                      }`}
+                      style={{
+                        boxShadow: isSelected
+                          ? `0 0 8px 2px ${p.color}90, 0 0 16px 4px ${p.color}30`
+                          : `0 0 4px 1px ${p.color}40`,
+                      }}
                     />
                     <span className={`text-[11px] font-medium transition-colors duration-300 ${
                       isSelected
