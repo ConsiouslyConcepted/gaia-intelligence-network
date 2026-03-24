@@ -85,26 +85,6 @@ export const HGSDashboard = () => {
             </div>
           </div>
 
-          {/* Center: Status */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="relative">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
-                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
-              </div>
-              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Resonance Active</span>
-            </div>
-            <div className="h-3 w-px bg-border/15" />
-            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
-              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-            </span>
-            <div className="h-3 w-px bg-border/15" />
-            <div className="flex items-center gap-1.5">
-              {SOLAR_PLANETS.slice(0, 8).map((p) => (
-                <div key={p.id} className="w-1 h-1 rounded-full" style={{ backgroundColor: `${p.color}88` }} />
-              ))}
-            </div>
-          </div>
 
           {/* Right: Controls */}
           <div className="flex items-center gap-2">
