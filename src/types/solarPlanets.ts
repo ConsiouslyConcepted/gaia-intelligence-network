@@ -37,4 +37,5 @@ export const PLANET_RESONANCE_PAIRS = [
   { label: "Jupiter – Saturn", i: 4, j: 5, a: 5, b: 2, c1: "#d4a56a", c2: "#c8b070" },
   { label: "Saturn – Uranus", i: 5, j: 6, a: 3, b: 1, c1: "#c8b070", c2: "#7ecbcb" },
   { label: "Uranus – Neptune", i: 6, j: 7, a: 2, b: 1, c1: "#7ecbcb", c2: "#4466dd" },
+  { label: "Neptune – Pluto", i: 7, j: 8, a: 3, b: 2, c1: "#4466dd", c2: "#c4a882" },
 ];
