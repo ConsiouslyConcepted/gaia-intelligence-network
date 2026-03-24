@@ -194,54 +194,35 @@ export const HGSDashboard = () => {
               </div>
             </div>
           ) : (
-            /* Default: planet list + all resonance pairs */
+            /* Default: clickable resonance pairs */
             <div className="flex-1 overflow-y-auto p-3 space-y-3">
-              {/* Clickable planet list */}
               <div>
                 <h2 className="text-sm font-semibold text-foreground/90">
                   Planetary Harmonics
                 </h2>
-                <p className="text-[10px] text-muted-foreground mt-0.5 mb-2">
-                  Select a planet to explore
-                </p>
-                <div className="grid grid-cols-3 gap-1">
-                  {SOLAR_PLANETS.map((p) => (
-                    <button
-                      key={p.id}
-                      onClick={() => handlePlanetClick(p.id)}
-                      className="flex flex-col items-center gap-1 px-1 py-1.5 rounded-lg border border-transparent hover:bg-muted/20 hover:border-border/30 transition-all"
-                    >
-                      <img
-                        src={p.image}
-                        alt={p.name}
-                        loading="lazy"
-                        className="w-7 h-7 rounded-full object-cover"
-                        style={{ boxShadow: `0 0 4px 1px ${p.color}40` }}
-                      />
-                      <span className="text-[8px] text-muted-foreground/70 font-medium">
-                        {p.name}
-                      </span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <div className="border-t border-border/20 pt-3">
-                <p className="text-[10px] text-muted-foreground mb-2">
-                  Pair-wise orbital resonance ratios
+                <p className="text-[10px] text-muted-foreground mt-0.5">
+                  Click a pair to explore · Pair-wise orbital resonance ratios
                 </p>
               </div>
-              {PLANET_RESONANCE_PAIRS.map((pair) => (
-                <ResonancePairDiagram
-                  key={pair.label}
-                  label={pair.label}
-                  color1={pair.c1}
-                  color2={pair.c2}
-                  ratioA={pair.a}
-                  ratioB={pair.b}
-                  size={80}
-                />
-              ))}
+              {PLANET_RESONANCE_PAIRS.map((pair) => {
+                const p1 = SOLAR_PLANETS[pair.i];
+                return (
+                  <button
+                    key={pair.label}
+                    onClick={() => handlePlanetClick(p1.id)}
+                    className="w-full text-left rounded-lg hover:bg-muted/15 transition-all duration-200 cursor-pointer"
+                  >
+                    <ResonancePairDiagram
+                      label={pair.label}
+                      color1={pair.c1}
+                      color2={pair.c2}
+                      ratioA={pair.a}
+                      ratioB={pair.b}
+                      size={80}
+                    />
+                  </button>
+                );
+              })}
               <div className="text-[9px] text-muted-foreground/50 pt-2 border-t border-border/20">
                 <p>Jupiter &amp; Mars: NASA/JPL recordings (public domain)</p>
                 <p>Others: Orbital frequency tones based on Keplerian ratios</p>
