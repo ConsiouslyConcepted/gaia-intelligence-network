@@ -69,15 +69,7 @@ const Index = () => {
   }), [tick]);
 
   if (activeView === "hgs") {
-    return (
-      <div className="min-h-screen w-full relative">
-        <div className="fixed top-4 right-4 z-50 flex gap-1 glass-panel rounded-lg p-1">
-          <button onClick={() => setActiveView("planetary")} className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium text-muted-foreground hover:text-foreground transition-all">Planetary</button>
-          <button className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-xs font-medium bg-primary/20 text-primary transition-all"><Activity className="w-3.5 h-3.5" />HGS</button>
-        </div>
-        <HGSDashboard />
-      </div>
-    );
+    return <HGSDashboard onSwitchView={() => setActiveView("planetary")} />;
   }
 
   return (

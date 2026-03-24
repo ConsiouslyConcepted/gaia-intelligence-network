@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Volume2, Orbit, Waves, Radar, Zap } from "lucide-react";
+import { Volume2, Orbit, Waves, Radar, Zap, Signal, Activity } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
@@ -22,7 +22,7 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
-export const HGSDashboard = () => {
+export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>("patterns");
@@ -70,19 +70,18 @@ export const HGSDashboard = () => {
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
           {/* Left: Title */}
           <div className="flex items-center gap-3">
-            <Radar className="w-4 h-4 text-primary/60" />
+            <Radar className="w-5 h-5 text-primary/70" />
             <div>
-              <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
+              <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
                 Musica Universalis
               </h1>
-              <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+              <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
                 Harmonic Guidance System · Celestial Mechanics
               </p>
             </div>
           </div>
 
-
-          {/* Right: Controls */}
+          {/* Center: Show All + Field label */}
           <div className="flex items-center gap-2">
             {selectedPlanet && (
               <button
@@ -97,6 +96,16 @@ export const HGSDashboard = () => {
                 {selectedData ? `${selectedData.name} · Resonance` : "Orbital Field"}
               </span>
             </div>
+          </div>
+
+          {/* Right: View toggle (matches Planetary dashboard) */}
+          <div className="flex gap-1 rounded-md bg-background/30 p-1">
+            <button onClick={onSwitchView} className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all">
+              <Signal className="w-3 h-3" />Planetary
+            </button>
+            <button className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
+              <Activity className="w-3 h-3" />HGS
+            </button>
           </div>
         </HudPanel>
       </div>
