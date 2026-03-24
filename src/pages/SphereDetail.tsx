@@ -9,6 +9,7 @@ import { SphereMap } from "@/components/sphere-detail/SphereMap";
 import { SphereStellar } from "@/components/sphere-detail/SphereStellar";
 import { SphereCorrelations } from "@/components/sphere-detail/SphereCorrelations";
 import { SphereAIMReport } from "@/components/sphere-detail/SphereAIMReport";
+import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 export default function SphereDetail() {
   const { sphereId } = useParams<{ sphereId: SphereId }>();
