@@ -211,13 +211,6 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 })}
               </div>
 
-              {/* Footer */}
-              <div className="px-4 py-3 border-t border-border/10">
-                <p className="text-[7px] text-muted-foreground/25 tracking-wider leading-relaxed">
-                  Jupiter &amp; Mars: NASA/JPL recordings (public domain)<br />
-                  Others: Orbital frequency tones based on Keplerian ratios
-                </p>
-              </div>
             </div>
           )}
         </HudPanel>
