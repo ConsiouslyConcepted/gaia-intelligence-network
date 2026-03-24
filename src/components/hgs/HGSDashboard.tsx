@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Volume2, Orbit, Waves, Radar, Signal, Activity } from "lucide-react";
+import { Volume2, Radar, Signal, Activity } from "lucide-react";
 import harmonicsIcon from "@/assets/harmonics-icon.png";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
