@@ -93,18 +93,26 @@ const Index = () => {
                           className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
                           {/* Wireframe sphere indicator */}
-                          <div className="w-10 h-10 flex-shrink-0 relative flex items-center justify-center">
-                            <svg viewBox="0 0 40 40" className="w-10 h-10 transition-all duration-300 group-hover:scale-110">
-                              {/* Outer circle */}
-                              <circle cx="20" cy="20" r="18" fill="none" stroke={sphere.color} strokeWidth="0.5" opacity="0.25" />
-                              {/* Horizontal ellipse */}
-                              <ellipse cx="20" cy="20" rx="18" ry="7" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
-                              {/* Vertical ellipse */}
-                              <ellipse cx="20" cy="20" rx="7" ry="18" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.2" />
-                              {/* Tilted ellipse */}
-                              <ellipse cx="20" cy="20" rx="18" ry="10" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.15" transform="rotate(45 20 20)" />
-                              {/* Inner glow circle */}
-                              <circle cx="20" cy="20" r="5" fill={`${sphere.color}30`} stroke={sphere.color} strokeWidth="0.5" opacity="0.6" />
+                          <div className="w-11 h-11 flex-shrink-0 relative flex items-center justify-center">
+                            <svg viewBox="0 0 44 44" className="w-11 h-11 transition-all duration-500 group-hover:scale-110">
+                              <defs>
+                                <radialGradient id={`glow-${sphere.id}`} cx="50%" cy="50%" r="50%">
+                                  <stop offset="0%" stopColor={sphere.color} stopOpacity="0.15" />
+                                  <stop offset="100%" stopColor={sphere.color} stopOpacity="0" />
+                                </radialGradient>
+                              </defs>
+                              {/* Ambient glow */}
+                              <circle cx="22" cy="22" r="18" fill={`url(#glow-${sphere.id})`} />
+                              {/* Outer ring */}
+                              <circle cx="22" cy="22" r="16" fill="none" stroke={sphere.color} strokeWidth="0.6" opacity="0.3" />
+                              {/* Meridian lines */}
+                              <ellipse cx="22" cy="22" rx="16" ry="6" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
+                              <ellipse cx="22" cy="22" rx="6" ry="16" fill="none" stroke={sphere.color} strokeWidth="0.4" opacity="0.18" />
+                              <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(60 22 22)" />
+                              <ellipse cx="22" cy="22" rx="16" ry="11" fill="none" stroke={sphere.color} strokeWidth="0.35" opacity="0.12" transform="rotate(-60 22 22)" />
+                              {/* Core dot */}
+                              <circle cx="22" cy="22" r="2.5" fill={sphere.color} opacity="0.5" />
+                              <circle cx="22" cy="22" r="1.2" fill={sphere.color} opacity="0.8" />
                             </svg>
                           </div>
                           <div className="min-w-0 text-left flex-1">
