@@ -220,20 +220,8 @@ export const HGSDashboard = () => {
         </HudPanel>
       </div>
 
-      {/* ─── BOTTOM BAR ─── */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-        <div className="mx-5 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--border) / 0.2) 20%, hsl(var(--primary) / 0.15) 50%, hsl(var(--border) / 0.2) 80%, transparent)" }} />
-        <div className="flex items-center justify-center px-5 py-3 gap-8">
-          {SOLAR_PLANETS.slice(0, 8).map((p) => (
-            <div key={p.id} className="text-center pointer-events-auto cursor-pointer" onClick={() => handlePlanetClick(p.id)}>
-              <div className="text-[7px] uppercase tracking-[0.15em] text-muted-foreground/25 mb-0.5">{p.name.slice(0, 4)}</div>
-              <div className="text-[13px] font-mono font-bold tabular-nums transition-colors" style={{ color: selectedPlanet === p.id ? `${p.color}` : `${p.color}55` }}>
-                {p.name.slice(0, 2).toUpperCase()}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
+
 
       {/* Corner brackets */}
       {[
