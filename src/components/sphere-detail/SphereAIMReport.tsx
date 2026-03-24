@@ -69,8 +69,8 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
       {/* Overall Score */}
       <Card className="glass-panel p-6 space-y-4">
         <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg bg-primary/20">
-            <Brain className="w-8 h-8 text-primary animate-harmonic-pulse" />
+          <div className="p-3 rounded-lg" style={{ backgroundColor: `${sphere.color}15` }}>
+            <Brain className="w-8 h-8 animate-harmonic-pulse" style={{ color: sphere.color }} />
           </div>
           <div className="flex-1">
             <h2 className="text-2xl font-bold">AI Coherence Report</h2>
