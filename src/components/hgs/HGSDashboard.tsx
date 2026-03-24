@@ -189,11 +189,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
               <div className="px-4 pt-4 pb-3 border-b border-border/15">
-                <div className="flex items-center gap-2.5 mb-2">
-                  <img src={harmonicsIcon} alt="Harmonics" className="w-8 h-8 rounded-lg object-cover" loading="lazy" width={512} height={512} style={{ boxShadow: "0 0 12px hsl(var(--primary) / 0.15)" }} />
-                  <h2 className="text-xs font-bold tracking-[0.15em] uppercase text-foreground/85">Planetary Harmonics</h2>
-                </div>
-                <p className="text-[9px] text-muted-foreground/50 leading-relaxed text-center">
+                <h2 className="text-xs font-bold tracking-[0.15em] uppercase text-foreground/85 mb-1">Planetary Harmonics</h2>
+                <p className="text-[9px] text-muted-foreground/50 leading-relaxed">
                   Tap a resonance pair to isolate its orbital pattern and hear its planetary tone
                 </p>
               </div>
