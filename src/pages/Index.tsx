@@ -98,55 +98,52 @@ const Index = () => {
       />
 
       {/* ─── TOP BAR ─── */}
-      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none">
-        <div className="flex items-start justify-between px-5 pt-4">
-          {/* Title block */}
-          <HudPanel className="pointer-events-auto px-4 py-2.5" glow="#d4a56a">
-            <div className="flex items-center gap-3">
-              <Radar className="w-4 h-4 text-primary/70" />
-              <div>
-                <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
-                  Planetary Intelligence
-                </h1>
-                <p className="text-[7px] tracking-[0.3em] uppercase text-muted-foreground/35 mt-0.5">
-                  Gaia Holonic Observatory · Digital Twin
-                </p>
-              </div>
+      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
+        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
+          {/* Left: Title */}
+          <div className="flex items-center gap-3">
+            <Radar className="w-4 h-4 text-primary/60" />
+            <div>
+              <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
+                Planetary Intelligence
+              </h1>
+              <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+                Gaia Holonic Observatory · Digital Twin
+              </p>
             </div>
-          </HudPanel>
+          </div>
 
-          {/* Center status */}
-          <div className="flex flex-col items-center gap-1 pt-1">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <div className="relative">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400/80" />
-                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400/40 animate-ping" />
-                </div>
-                <span className="text-[8px] tracking-[0.2em] uppercase text-emerald-400/70 font-mono font-medium">Active</span>
+          {/* Center: Status */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
               </div>
-              <div className="h-2.5 w-px bg-border/20" />
-              <span className="text-[9px] font-mono text-muted-foreground/40 tabular-nums">
-                {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-              </span>
+              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Active</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="h-3 w-px bg-border/15" />
+            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
+              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
+            </span>
+            <div className="h-3 w-px bg-border/15" />
+            <div className="flex items-center gap-1.5">
               {[0, 1, 2, 3, 4, 5].map((i) => (
                 <div key={i} className="w-1 h-1 rounded-full transition-colors duration-500" style={{ backgroundColor: `${SPHERE_ARRAY[i].color}${coherenceValues[i] > 70 ? "aa" : "40"}` }} />
               ))}
             </div>
           </div>
 
-          {/* View toggle */}
-          <HudPanel className="pointer-events-auto px-1.5 py-1.5 flex gap-1" glow="#d4a56a">
-            <button className="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-[10px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
+          {/* Right: View toggle */}
+          <div className="flex gap-1 rounded-md bg-background/30 p-1">
+            <button className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
               <Signal className="w-3 h-3" />Planetary
             </button>
-            <button onClick={() => setActiveView("hgs")} className="flex items-center gap-1.5 px-4 py-1.5 rounded-md text-[10px] font-medium tracking-wider uppercase text-muted-foreground/50 hover:text-foreground/70 transition-all">
+            <button onClick={() => setActiveView("hgs")} className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all">
               <Activity className="w-3 h-3" />HGS
             </button>
-          </HudPanel>
-        </div>
+          </div>
+        </HudPanel>
       </div>
 
       {/* ─── LEFT HUD ─── */}

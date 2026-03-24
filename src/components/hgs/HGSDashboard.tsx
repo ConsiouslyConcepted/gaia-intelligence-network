@@ -70,63 +70,59 @@ export const HGSDashboard = () => {
       />
 
       {/* ─── TOP BAR ─── */}
-      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none">
-        <div className="flex items-start justify-between px-5 pt-4">
-          {/* Title */}
-          <HudPanel className="pointer-events-auto px-4 py-2.5" glow="#d4a56a">
-            <div className="flex items-center gap-3">
-              <Radar className="w-4 h-4 text-primary/70" />
-              <div>
-                <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
-                  Musica Universalis
-                </h1>
-                <p className="text-[7px] tracking-[0.3em] uppercase text-muted-foreground/35 mt-0.5">
-                  Harmonic Guidance System · Celestial Mechanics
-                </p>
-              </div>
+      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
+        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
+          {/* Left: Title */}
+          <div className="flex items-center gap-3">
+            <Radar className="w-4 h-4 text-primary/60" />
+            <div>
+              <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
+                Musica Universalis
+              </h1>
+              <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+                Harmonic Guidance System · Celestial Mechanics
+              </p>
             </div>
-          </HudPanel>
+          </div>
 
-          {/* Center status */}
-          <div className="flex flex-col items-center gap-1 pt-1">
-            <div className="flex items-center gap-4">
-              <div className="flex items-center gap-1.5">
-                <div className="relative">
-                  <div className="w-2 h-2 rounded-full bg-emerald-400/80" />
-                  <div className="absolute inset-0 w-2 h-2 rounded-full bg-emerald-400/40 animate-ping" />
-                </div>
-                <span className="text-[8px] tracking-[0.2em] uppercase text-emerald-400/70 font-mono font-medium">Resonance Active</span>
+          {/* Center: Status */}
+          <div className="flex items-center gap-4">
+            <div className="flex items-center gap-1.5">
+              <div className="relative">
+                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
+                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
               </div>
-              <div className="h-2.5 w-px bg-border/20" />
-              <span className="text-[9px] font-mono text-muted-foreground/40 tabular-nums">
-                {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-              </span>
+              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Resonance Active</span>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="h-3 w-px bg-border/15" />
+            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
+              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
+            </span>
+            <div className="h-3 w-px bg-border/15" />
+            <div className="flex items-center gap-1.5">
               {SOLAR_PLANETS.slice(0, 8).map((p) => (
                 <div key={p.id} className="w-1 h-1 rounded-full" style={{ backgroundColor: `${p.color}88` }} />
               ))}
             </div>
           </div>
 
-          {/* Field label + Show All */}
-          <div className="pointer-events-auto flex items-center gap-2">
+          {/* Right: Controls */}
+          <div className="flex items-center gap-2">
             {selectedPlanet && (
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="text-[9px] uppercase tracking-wider backdrop-blur-md text-primary/80 hover:text-primary transition-all px-3 py-1.5 rounded-lg border border-primary/20 hover:border-primary/40 hover:shadow-[0_0_12px_hsl(var(--primary)/0.15)]"
-                style={{ background: "hsla(240,20%,10%,0.8)" }}
+                className="text-[9px] uppercase tracking-wider text-primary/80 hover:text-primary transition-all px-2.5 py-1 rounded border border-primary/20 hover:border-primary/40 bg-primary/5"
               >
                 Show All
               </button>
             )}
-            <HudPanel className="px-3 py-1.5" glow="#d4a56a">
-              <span className="text-[10px] uppercase tracking-[0.1em] font-medium text-primary/90">
-                {selectedData ? `${selectedData.name} · Resonance Patterns` : "Orbital Resonance Field"}
+            <div className="px-2.5 py-1 rounded bg-background/20 border border-border/10">
+              <span className="text-[9px] uppercase tracking-[0.1em] font-medium text-primary/80">
+                {selectedData ? `${selectedData.name} · Resonance` : "Orbital Field"}
               </span>
-            </HudPanel>
+            </div>
           </div>
-        </div>
+        </HudPanel>
       </div>
 
       {/* ─── RIGHT SIDEBAR ─── */}
