@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { Volume2, Orbit, Waves, Radar, Zap } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
@@ -26,12 +26,8 @@ export const HGSDashboard = () => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>("patterns");
-  const [time, setTime] = useState(new Date());
 
-  useEffect(() => {
-    const iv = setInterval(() => setTime(new Date()), 1000);
-    return () => clearInterval(iv);
-  }, []);
+
 
   const handlePlanetClick = (planetId: string) => {
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
@@ -85,26 +81,6 @@ export const HGSDashboard = () => {
             </div>
           </div>
 
-          {/* Center: Status */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="relative">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
-                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
-              </div>
-              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Resonance Active</span>
-            </div>
-            <div className="h-3 w-px bg-border/15" />
-            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
-              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-            </span>
-            <div className="h-3 w-px bg-border/15" />
-            <div className="flex items-center gap-1.5">
-              {SOLAR_PLANETS.slice(0, 8).map((p) => (
-                <div key={p.id} className="w-1 h-1 rounded-full" style={{ backgroundColor: `${p.color}88` }} />
-              ))}
-            </div>
-          </div>
 
           {/* Right: Controls */}
           <div className="flex items-center gap-2">
@@ -240,20 +216,8 @@ export const HGSDashboard = () => {
         </HudPanel>
       </div>
 
-      {/* ─── BOTTOM BAR ─── */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-        <div className="mx-5 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--border) / 0.2) 20%, hsl(var(--primary) / 0.15) 50%, hsl(var(--border) / 0.2) 80%, transparent)" }} />
-        <div className="flex items-center justify-center px-5 py-3 gap-8">
-          {SOLAR_PLANETS.slice(0, 8).map((p) => (
-            <div key={p.id} className="text-center pointer-events-auto cursor-pointer" onClick={() => handlePlanetClick(p.id)}>
-              <div className="text-[7px] uppercase tracking-[0.15em] text-muted-foreground/25 mb-0.5">{p.name.slice(0, 4)}</div>
-              <div className="text-[13px] font-mono font-bold tabular-nums transition-colors" style={{ color: selectedPlanet === p.id ? `${p.color}` : `${p.color}55` }}>
-                {p.name.slice(0, 2).toUpperCase()}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+
+
 
       {/* Corner brackets */}
       {[
