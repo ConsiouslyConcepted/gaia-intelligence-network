@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Info, Volume2, Eye } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
+import { ResonanceIcon } from "@/components/hgs/ResonanceIcon";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
