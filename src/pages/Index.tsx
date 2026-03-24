@@ -73,13 +73,13 @@ const Index = () => {
 
             {/* Right sidebar */}
             <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0">
-              <div className="flex-1 overflow-y-auto p-2 flex flex-col justify-between">
+              <div className="flex-1 overflow-y-auto p-3 flex flex-col justify-between">
                 <div>
-                  <div className="px-1 pb-2">
+                  <div className="pb-3 border-b border-border/20 mb-2">
                     <h2 className="text-sm font-semibold text-foreground/90">
                       Spheres of Intelligence
                     </h2>
-                    <p className="text-[10px] text-muted-foreground mt-0.5">
+                    <p className="text-[10px] text-muted-foreground/60 mt-0.5">
                       Tap a sphere to explore its metrics &amp; coherence
                     </p>
                   </div>
@@ -90,40 +90,40 @@ const Index = () => {
                         <button
                           key={sphere.id}
                           onClick={() => navigate(`/sphere/${sphere.id}`)}
-                          className="w-full flex items-center gap-3 px-2 py-2.5 rounded-lg hover:bg-muted/15 transition-all duration-300 cursor-pointer group"
+                          className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
-                          {/* Canvas-style orb with animated ring */}
-                          <div className="w-[48px] h-[48px] flex-shrink-0 rounded-full relative flex items-center justify-center">
+                          {/* Sphere indicator */}
+                          <div className="w-10 h-10 flex-shrink-0 rounded-full relative flex items-center justify-center">
                             <div
-                              className="absolute inset-0 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                              className="absolute inset-0 rounded-full opacity-50 group-hover:opacity-80 transition-opacity duration-300"
                               style={{
-                                border: `1px solid ${sphere.color}50`,
-                                boxShadow: `0 0 8px 1px ${sphere.color}12`,
+                                border: `1px solid ${sphere.color}35`,
+                                boxShadow: `0 0 10px 1px ${sphere.color}10`,
                               }}
                             />
                             <div
-                              className="w-6 h-6 rounded-full transition-transform duration-300 group-hover:scale-110"
+                              className="w-5 h-5 rounded-full transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg"
                               style={{
-                                background: `radial-gradient(circle at 30% 30%, ${sphere.color}dd, ${sphere.color}40 65%, transparent)`,
-                                boxShadow: `0 0 8px 2px ${sphere.color}20`,
+                                background: `radial-gradient(circle at 30% 30%, ${sphere.color}ee, ${sphere.color}50 60%, ${sphere.color}15)`,
+                                boxShadow: `0 0 6px 1px ${sphere.color}18`,
                               }}
                             />
                           </div>
                           <div className="min-w-0 text-left flex-1">
-                            <div className="text-[13px] font-medium text-foreground/85 group-hover:text-foreground transition-colors leading-tight">
+                            <div className="text-sm font-medium text-foreground/85 group-hover:text-foreground transition-colors">
                               {sphere.name}
                             </div>
                             <div className="flex items-center gap-2 mt-1">
-                              <div className="flex-1 h-[3px] rounded-full bg-muted/20 overflow-hidden">
+                              <div className="flex-1 h-[2px] rounded-full bg-border/15 overflow-hidden">
                                 <div
-                                  className="h-full rounded-full transition-all duration-500"
+                                  className="h-full rounded-full transition-all duration-700"
                                   style={{
                                     width: `${coherence}%`,
-                                    background: `linear-gradient(90deg, ${sphere.color}60, ${sphere.color})`,
+                                    background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
                                   }}
                                 />
                               </div>
-                              <span className="text-[9px] font-mono text-muted-foreground/50 w-7 text-right">
+                              <span className="text-[9px] font-mono text-muted-foreground/40 w-7 text-right">
                                 {coherence}%
                               </span>
                             </div>
@@ -134,21 +134,21 @@ const Index = () => {
                   </div>
                 </div>
 
-                {/* Coherence summary */}
-                <div className="mt-2 mx-1 pt-2 border-t border-border/20">
+                {/* Footer */}
+                <div className="mt-3 pt-2 border-t border-border/20">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-medium">
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/40 font-medium">
                       Planetary Coherence
                     </span>
-                    <span className="text-[11px] font-semibold text-primary font-mono">76%</span>
+                    <span className="text-[11px] font-semibold text-primary/80 font-mono">76%</span>
                   </div>
-                  <div className="w-full h-1 rounded-full bg-muted/15 overflow-hidden">
+                  <div className="w-full h-[2px] rounded-full bg-border/10 overflow-hidden">
                     <div
-                      className="h-full rounded-full bg-gradient-to-r from-primary/50 to-primary"
+                      className="h-full rounded-full bg-gradient-to-r from-primary/40 to-primary/80"
                       style={{ width: "76%" }}
                     />
                   </div>
-                  <p className="text-[8px] text-muted-foreground/40 mt-1.5 text-center tracking-wide">
+                  <p className="text-[8px] text-muted-foreground/30 mt-2 text-center tracking-wider">
                     Monitoring 6 spheres · Gaia Intelligence Network
                   </p>
                 </div>
