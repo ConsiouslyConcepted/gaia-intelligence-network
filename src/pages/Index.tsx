@@ -8,16 +8,16 @@ import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
-    className={`relative rounded-lg border border-border/20 backdrop-blur-xl ${className}`}
+    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
     style={{
-      background: "linear-gradient(135deg, hsla(240,20%,10%,0.85) 0%, hsla(240,25%,8%,0.75) 100%)",
+      background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
       boxShadow: glow
-        ? `0 0 30px ${glow}10, inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.5)`
-        : "inset 0 1px 0 rgba(255,255,255,0.04), 0 4px 20px rgba(0,0,0,0.5)",
+        ? `0 0 40px ${glow}15, inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`
+        : "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
     }}
   >
-    {/* Top edge accent line */}
-    <div className="absolute top-0 left-3 right-3 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}40, transparent)` : "linear-gradient(90deg, transparent, hsl(var(--border) / 0.3), transparent)" }} />
+    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
+    <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
     {children}
   </div>
 );
@@ -127,12 +127,20 @@ const Index = () => {
           </div>
 
           {/* Right: View toggle */}
-          <div className="flex gap-1 rounded-md bg-background/30 p-1">
-            <button className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
-              <Signal className="w-3 h-3" />Planetary
+          <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
+            <button
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
+              style={{
+                background: "linear-gradient(135deg, hsla(174,60%,50%,0.15) 0%, hsla(174,60%,40%,0.1) 100%)",
+                color: "#5ce0d2",
+                border: "1px solid hsla(174,60%,50%,0.3)",
+                boxShadow: "0 0 16px hsla(174,60%,50%,0.1), inset 0 1px 0 hsla(174,60%,70%,0.1), 0 2px 8px rgba(0,0,0,0.3)",
+              }}
+            >
+              <Signal className="w-3.5 h-3.5" />Planetary
             </button>
-            <button onClick={() => setActiveView("hgs")} className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all">
-              <Activity className="w-3 h-3" />HGS
+            <button onClick={() => setActiveView("hgs")} className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all duration-300 hover:bg-foreground/[0.04]">
+              <Activity className="w-3.5 h-3.5" style={{ color: "#d4a56a" }} />HGS
             </button>
           </div>
         </HudPanel>
