@@ -47,7 +47,7 @@ export const HGSDashboard = () => {
       </header>
 
       {/* Main content: orbital field + sidebar */}
-      <div className="flex-1 p-4 flex gap-4 min-h-0">
+      <div className="flex-1 px-4 pt-2 pb-1 flex gap-4 min-h-0">
         {/* Orbital Resonance Field */}
         <div className="flex-1 glass-panel rounded-xl overflow-hidden relative">
           <OrbitalResonanceField selectedPlanet={selectedPlanet} />
