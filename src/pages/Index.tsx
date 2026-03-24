@@ -272,54 +272,6 @@ const Index = () => {
         </HudPanel>
       </div>
 
-      {/* ─── BOTTOM BAR ─── */}
-      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none">
-        {/* Horizontal rule */}
-        <div className="mx-5 h-px" style={{ background: "linear-gradient(90deg, transparent, hsl(var(--border) / 0.2) 20%, hsl(var(--primary) / 0.15) 50%, hsl(var(--border) / 0.2) 80%, transparent)" }} />
-
-        <div className="flex items-end justify-between px-5 py-3">
-          {/* Sector indicators left */}
-          <div className="flex gap-4 pointer-events-auto">
-            {SPHERE_ARRAY.slice(0, 3).map((s, i) => (
-              <div key={s.id} className="text-center group cursor-pointer" onClick={() => navigate(`/sphere/${s.id}`)}>
-                <div className="text-[7px] uppercase tracking-[0.15em] text-muted-foreground/25 mb-0.5">{s.name.slice(0, 4)}</div>
-                <div className="text-[15px] font-mono font-bold tabular-nums transition-colors" style={{ color: `${s.color}88` }}>{coherenceValues[i]}</div>
-              </div>
-            ))}
-          </div>
-
-          {/* Global coherence */}
-          <div className="flex flex-col items-center gap-1">
-            <div className="text-[7px] uppercase tracking-[0.25em] text-muted-foreground/30 font-medium">Planetary Coherence Index</div>
-            <div className="flex items-center gap-3">
-              <div className="w-40 h-1 rounded-full overflow-hidden" style={{ backgroundColor: "hsl(var(--border) / 0.1)" }}>
-                <div
-                  className="h-full rounded-full transition-all duration-1000"
-                  style={{
-                    width: `${globalCoherence}%`,
-                    background: "linear-gradient(90deg, hsl(var(--primary) / 0.4), hsl(var(--primary) / 0.9))",
-                    boxShadow: "0 0 8px hsl(var(--primary) / 0.3)",
-                  }}
-                />
-              </div>
-              <span className="text-[16px] font-mono font-bold text-primary/90 tabular-nums">{globalCoherence}<span className="text-[10px] text-primary/40">%</span></span>
-            </div>
-            <p className="text-[6px] text-muted-foreground/20 tracking-[0.2em] uppercase">
-              6 Active Spheres · Gaia Intelligence Network
-            </p>
-          </div>
-
-          {/* Sector indicators right */}
-          <div className="flex gap-4 pointer-events-auto">
-            {SPHERE_ARRAY.slice(3).map((s, i) => (
-              <div key={s.id} className="text-center group cursor-pointer" onClick={() => navigate(`/sphere/${s.id}`)}>
-                <div className="text-[7px] uppercase tracking-[0.15em] text-muted-foreground/25 mb-0.5">{s.name.slice(0, 4)}</div>
-                <div className="text-[15px] font-mono font-bold tabular-nums transition-colors" style={{ color: `${s.color}88` }}>{coherenceValues[i + 3]}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
 
       {/* Corner brackets */}
       {[
