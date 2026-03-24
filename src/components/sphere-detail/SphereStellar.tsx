@@ -37,7 +37,7 @@ export function SphereStellar({ sphere }: { sphere: Sphere }) {
             return (
               <Card key={idx} className="glass-panel p-4 space-y-3">
                 <div className="flex items-center gap-2">
-                  <Icon className="w-5 h-5 text-primary" />
+                  <Icon className="w-5 h-5" style={{ color: sphere.color }} />
                   <span className="text-sm text-muted-foreground">{metric.label}</span>
                 </div>
                 <div className="flex items-baseline gap-2">
