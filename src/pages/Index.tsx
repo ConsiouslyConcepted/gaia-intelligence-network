@@ -88,9 +88,8 @@ const Index = () => {
               Gaia Intelligence Network • Monitoring planetary coherence across all spheres •{" "}
               <span className="text-primary">Online</span>
             </p>
-          </footer>
+        </footer>
         </div>
-      )}
     </div>
   );
 };
