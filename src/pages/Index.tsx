@@ -93,38 +93,15 @@ const Index = () => {
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
           {/* Left: Title */}
-          <div className="flex items-center gap-3">
-            <Radar className="w-4 h-4 text-primary/60" />
-            <div>
-              <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
-                Planetary Intelligence
-              </h1>
-              <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
-                Gaia Holonic Observatory · Digital Twin
-              </p>
-            </div>
+          <div>
+            <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
+              Planetary Intelligence
+            </h1>
+            <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+              Gaia Holonic Observatory · Digital Twin
+            </p>
           </div>
 
-          {/* Center: Status */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="relative">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
-                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
-              </div>
-              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Active</span>
-            </div>
-            <div className="h-3 w-px bg-border/15" />
-            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
-              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-            </span>
-            <div className="h-3 w-px bg-border/15" />
-            <div className="flex items-center gap-1.5">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="w-1 h-1 rounded-full transition-colors duration-500" style={{ backgroundColor: `${SPHERE_ARRAY[i].color}${coherenceValues[i] > 70 ? "aa" : "40"}` }} />
-              ))}
-            </div>
-          </div>
 
           {/* Right: View toggle */}
           <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
