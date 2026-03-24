@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { EarthVisualization } from "@/components/EarthVisualization";
 import { GaiaMonitor } from "@/components/GaiaMonitor";
 import { LayerToggle } from "@/components/LayerToggle";
@@ -8,46 +7,13 @@ import { SPHERE_ARRAY } from "@/types/spheres";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { useNavigate } from "react-router-dom";
-import { Globe, Activity } from "lucide-react";
 
 const Index = () => {
   const [activeLayer, setActiveLayer] = useState<"inner" | "outer">("inner");
-  const [activeView, setActiveView] = useState<"hgs" | "planetary">("hgs");
   const navigate = useNavigate();
 
   return (
     <div className="min-h-screen w-full">
-      {/* View Toggle */}
-      <div className="fixed top-4 right-4 z-50">
-        <div className="glass-panel p-1 rounded-lg flex gap-1">
-          <button
-            onClick={() => setActiveView("hgs")}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
-              activeView === "hgs"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Activity className="w-4 h-4" />
-            HGS
-          </button>
-          <button
-            onClick={() => setActiveView("planetary")}
-            className={`px-3 py-2 rounded-md text-sm font-medium transition-all flex items-center gap-2 ${
-              activeView === "planetary"
-                ? "bg-primary text-primary-foreground"
-                : "text-muted-foreground hover:text-foreground"
-            }`}
-          >
-            <Globe className="w-4 h-4" />
-            Planetary
-          </button>
-        </div>
-      </div>
-
-      {activeView === "hgs" ? (
-        <HGSDashboard />
-      ) : (
         <div className="p-4 space-y-4">
           {/* Header */}
           <header className="glass-panel p-6 rounded-xl space-y-2">
