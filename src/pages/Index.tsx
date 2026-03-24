@@ -102,26 +102,6 @@ const Index = () => {
             </p>
           </div>
 
-          {/* Center: Status */}
-          <div className="flex items-center gap-4">
-            <div className="flex items-center gap-1.5">
-              <div className="relative">
-                <div className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" />
-                <div className="absolute inset-0 w-1.5 h-1.5 rounded-full bg-emerald-400/40 animate-ping" />
-              </div>
-              <span className="text-[8px] tracking-[0.15em] uppercase text-emerald-400/60 font-mono font-medium">Active</span>
-            </div>
-            <div className="h-3 w-px bg-border/15" />
-            <span className="text-[9px] font-mono text-muted-foreground/35 tabular-nums">
-              {time.toISOString().replace("T", " ").slice(0, 19)} UTC
-            </span>
-            <div className="h-3 w-px bg-border/15" />
-            <div className="flex items-center gap-1.5">
-              {[0, 1, 2, 3, 4, 5].map((i) => (
-                <div key={i} className="w-1 h-1 rounded-full transition-colors duration-500" style={{ backgroundColor: `${SPHERE_ARRAY[i].color}${coherenceValues[i] > 70 ? "aa" : "40"}` }} />
-              ))}
-            </div>
-          </div>
 
           {/* Right: View toggle */}
           <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>

@@ -85,16 +85,13 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
           {/* Left: Title */}
-          <div className="flex items-center gap-3">
-            <Radar className="w-5 h-5 text-primary/70" />
-            <div>
-              <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
-                Musica Universalis
-              </h1>
-              <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-                Harmonic Guidance System · Celestial Mechanics
-              </p>
-            </div>
+          <div>
+            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
+              Musica Universalis
+            </h1>
+            <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
+              Harmonic Guidance System · Celestial Mechanics
+            </p>
           </div>
 
           {/* Right: View toggle + controls */}
