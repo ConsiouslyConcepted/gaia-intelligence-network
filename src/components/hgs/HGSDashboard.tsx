@@ -25,6 +25,19 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
+// Musical tones mapped to each planet's orbital frequency (scaled to audible range)
+const PLANET_TONES: Record<string, { note: string; freq: string; octave: string }> = {
+  mercury: { note: "C#", freq: "141.27 Hz", octave: "3rd" },
+  venus: { note: "A", freq: "221.23 Hz", octave: "3rd" },
+  earth: { note: "C#", freq: "136.10 Hz", octave: "3rd" },
+  mars: { note: "D", freq: "144.72 Hz", octave: "3rd" },
+  jupiter: { note: "F#", freq: "183.58 Hz", octave: "3rd" },
+  saturn: { note: "D", freq: "147.85 Hz", octave: "3rd" },
+  uranus: { note: "G#", freq: "207.36 Hz", octave: "3rd" },
+  neptune: { note: "G#", freq: "211.44 Hz", octave: "3rd" },
+  pluto: { note: "C#", freq: "140.25 Hz", octave: "3rd" },
+};
+
 export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
