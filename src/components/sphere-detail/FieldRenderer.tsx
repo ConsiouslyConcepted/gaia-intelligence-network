@@ -1,11 +1,6 @@
 import { useRef, useMemo } from "react";
-import { Canvas, useFrame, extend } from "@react-three/fiber";
+import { Canvas, useFrame } from "@react-three/fiber";
 import { Card } from "@/components/ui/card";
-import { SphereId } from "@/types/spheres";
-import { Activity } from "lucide-react";
-import * as THREE from "three";
-
-extend({ Line_: THREE.Line });
 import { SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
 import * as THREE from "three";
@@ -24,10 +19,17 @@ const FIELD_DESCRIPTIONS: Record<SphereId, string> = {
   crystalsphere: "Geometric lattice · Harmonic grid overlay",
 };
 
+function ThreeLine({ geometry, color, opacity = 0.5 }: { geometry: THREE.BufferGeometry; color: string; opacity?: number }) {
+  const lineRef = useRef<THREE.Line>(null);
+  const mat = useMemo(() => new THREE.LineBasicMaterial({ color, transparent: true, opacity }), [color, opacity]);
+  const line = useMemo(() => new THREE.Line(geometry, mat), [geometry, mat]);
+  return <primitive ref={lineRef} object={line} />;
+}
+
 // Geosphere - pulsing fracture network
 function GeosphereField({ accent }: { accent: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const linesRef = useRef<THREE.LineSegments>(null);
+  const groupRef = useRef<THREE.Group>(null);
 
   const lineGeometry = useMemo(() => {
     const geo = new THREE.BufferGeometry();
@@ -50,19 +52,21 @@ function GeosphereField({ accent }: { accent: string }) {
   }, []);
 
   useFrame(({ clock }) => {
-    if (meshRef.current) meshRef.current.rotation.y = clock.elapsedTime * 0.08;
-    if (linesRef.current) linesRef.current.rotation.y = clock.elapsedTime * 0.08;
+    if (groupRef.current) groupRef.current.rotation.y = clock.elapsedTime * 0.08;
   });
 
+  const linesObj = useMemo(() => {
+    const mat = new THREE.LineBasicMaterial({ color: accent, transparent: true, opacity: 0.7 });
+    return new THREE.LineSegments(lineGeometry, mat);
+  }, [lineGeometry, accent]);
+
   return (
-    <group>
+    <group ref={groupRef}>
       <mesh ref={meshRef}>
         <sphereGeometry args={[1, 32, 32]} />
-        <meshStandardMaterial color="#1a1a2e" transparent opacity={0.6} wireframe={false} />
+        <meshStandardMaterial color="#1a1a2e" transparent opacity={0.6} />
       </mesh>
-      <lineSegments ref={linesRef} geometry={lineGeometry}>
-        <lineBasicMaterial color={accent} transparent opacity={0.7} />
-      </lineSegments>
+      <primitive object={linesObj} />
     </group>
   );
 }
@@ -70,7 +74,6 @@ function GeosphereField({ accent }: { accent: string }) {
 // Biosphere - organic gradient sphere
 function BiosphereField({ accent }: { accent: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
-
   useFrame(({ clock }) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = clock.elapsedTime * 0.05;
@@ -78,7 +81,6 @@ function BiosphereField({ accent }: { accent: string }) {
       meshRef.current.scale.setScalar(scale);
     }
   });
-
   return (
     <mesh ref={meshRef}>
       <sphereGeometry args={[1, 48, 48]} />
@@ -122,9 +124,7 @@ function MagnetosphereField({ accent }: { accent: string }) {
         <meshStandardMaterial color="#1a1a2e" />
       </mesh>
       {fieldLines.map((geo, i) => (
-        <line key={i} geometry={geo}>
-          <lineBasicMaterial color={accent} transparent opacity={0.4 + (i % 3) * 0.15} />
-        </line>
+        <ThreeLine key={i} geometry={geo} color={accent} opacity={0.4 + (i % 3) * 0.15} />
       ))}
     </group>
   );
@@ -133,14 +133,12 @@ function MagnetosphereField({ accent }: { accent: string }) {
 // Ionosphere - rippling shell
 function IonosphereField({ accent }: { accent: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
-
   useFrame(({ clock }) => {
     if (meshRef.current) {
       meshRef.current.rotation.y = clock.elapsedTime * 0.06;
       meshRef.current.rotation.x = Math.sin(clock.elapsedTime * 0.3) * 0.1;
     }
   });
-
   return (
     <group>
       <mesh>
@@ -205,9 +203,7 @@ function NoosphereField({ accent }: { accent: string }) {
         </mesh>
       ))}
       {arcGeometries.map((geo, i) => (
-        <line key={`arc-${i}`} geometry={geo}>
-          <lineBasicMaterial color={accent} transparent opacity={0.3} />
-        </line>
+        <ThreeLine key={`arc-${i}`} geometry={geo} color={accent} opacity={0.3} />
       ))}
     </group>
   );
@@ -216,14 +212,12 @@ function NoosphereField({ accent }: { accent: string }) {
 // Crystalsphere - geometric lattice
 function CrystalsphereField({ accent }: { accent: string }) {
   const groupRef = useRef<THREE.Group>(null);
-
   useFrame(({ clock }) => {
     if (groupRef.current) {
       groupRef.current.rotation.y = clock.elapsedTime * 0.03;
       groupRef.current.rotation.x = clock.elapsedTime * 0.02;
     }
   });
-
   return (
     <group ref={groupRef}>
       <mesh>
