@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Radio, Clock, GitBranch, Waves } from "lucide-react";
+import { ArrowLeft, Scan, Activity, Database, GitBranch } from "lucide-react";
 import { SPHERES, SphereId } from "@/types/spheres";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
-import { LiveStatePanel } from "@/components/sphere-detail/LiveStatePanel";
-import { TemporalPanel } from "@/components/sphere-detail/TemporalPanel";
+import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
+import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel";
+import { DataPanel } from "@/components/sphere-detail/DataPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
-import { ResonancePanel } from "@/components/sphere-detail/ResonancePanel";
 
 const ACCENT = "#5ce0d2";
 
@@ -74,13 +74,13 @@ export default function SphereDetail() {
 
       {/* Main Content */}
       <div className="flex-1 px-3 py-3">
-        <Tabs defaultValue="live-state" className="h-full flex flex-col gap-3">
+        <Tabs defaultValue="anatomy" className="h-full flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
-              { value: "live-state", icon: Radio, label: "Live State" },
-              { value: "temporal", icon: Clock, label: "Temporal Dynamics" },
+              { value: "anatomy", icon: Scan, label: "Anatomy" },
+              { value: "live-dynamics", icon: Activity, label: "Live Dynamics" },
+              { value: "data", icon: Database, label: "Data" },
               { value: "coupling", icon: GitBranch, label: "Coupling" },
-              { value: "resonance", icon: Waves, label: "Resonance" },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
@@ -94,17 +94,17 @@ export default function SphereDetail() {
           </TabsList>
 
           <div className="flex-1 overflow-y-auto">
-            <TabsContent value="live-state" className="mt-0">
-              <LiveStatePanel sphere={sphere} accent={ACCENT} />
+            <TabsContent value="anatomy" className="mt-0">
+              <AnatomyPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            <TabsContent value="temporal" className="mt-0">
-              <TemporalPanel sphere={sphere} accent={ACCENT} />
+            <TabsContent value="live-dynamics" className="mt-0">
+              <LiveDynamicsPanel sphere={sphere} accent={ACCENT} />
+            </TabsContent>
+            <TabsContent value="data" className="mt-0">
+              <DataPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
             <TabsContent value="coupling" className="mt-0">
               <CouplingPanel sphere={sphere} accent={ACCENT} />
-            </TabsContent>
-            <TabsContent value="resonance" className="mt-0">
-              <ResonancePanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
           </div>
         </Tabs>
