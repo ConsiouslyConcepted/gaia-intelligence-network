@@ -156,59 +156,100 @@ export const OrbitalResonanceField = () => {
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Planet bodies — 3D spherical look
+      // Planet bodies — photorealistic sphere rendering
       for (const p of planetData) {
         const angle = time * p.speed * 6 + p.orbitRadius * 20;
         const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
         const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
+        const r = p.size;
+        const brighten = (c: number, amt: number) => Math.min(255, c + amt);
+        const darken = (c: number, f: number) => Math.floor(c * f);
 
-        // Outer atmospheric glow
-        const atmosGrad = ctx.createRadialGradient(sx, sy, p.size * 0.5, sx, sy, p.size * 4);
-        atmosGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.15)`);
-        atmosGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.04)`);
+        // Soft outer atmospheric haze
+        const atmosGrad = ctx.createRadialGradient(sx, sy, r * 0.8, sx, sy, r * 5);
+        atmosGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.12)`);
+        atmosGrad.addColorStop(0.4, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.03)`);
         atmosGrad.addColorStop(1, "transparent");
         ctx.fillStyle = atmosGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, p.size * 4, 0, Math.PI * 2);
+        ctx.arc(sx, sy, r * 5, 0, Math.PI * 2);
         ctx.fill();
 
-        // Planet body with radial gradient for 3D sphere effect
-        const bodyGrad = ctx.createRadialGradient(
-          sx - p.size * 0.3, sy - p.size * 0.3, p.size * 0.1,
-          sx, sy, p.size
+        // Base sphere — dark side first (terminator shadow)
+        const baseGrad = ctx.createRadialGradient(
+          sx - r * 0.45, sy - r * 0.45, r * 0.05,
+          sx + r * 0.15, sy + r * 0.15, r * 1.1
         );
-        const brighten = (c: number) => Math.min(255, c + 60);
-        bodyGrad.addColorStop(0, `rgba(${brighten(p.rgb[0])},${brighten(p.rgb[1])},${brighten(p.rgb[2])},1)`);
-        bodyGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.95)`);
-        bodyGrad.addColorStop(1, `rgba(${Math.floor(p.rgb[0]*0.4)},${Math.floor(p.rgb[1]*0.4)},${Math.floor(p.rgb[2]*0.4)},0.9)`);
-        ctx.fillStyle = bodyGrad;
+        baseGrad.addColorStop(0, `rgba(${brighten(p.rgb[0],80)},${brighten(p.rgb[1],80)},${brighten(p.rgb[2],80)},1)`);
+        baseGrad.addColorStop(0.35, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},1)`);
+        baseGrad.addColorStop(0.7, `rgba(${darken(p.rgb[0],0.5)},${darken(p.rgb[1],0.5)},${darken(p.rgb[2],0.5)},1)`);
+        baseGrad.addColorStop(1, `rgba(${darken(p.rgb[0],0.15)},${darken(p.rgb[1],0.15)},${darken(p.rgb[2],0.15)},1)`);
+        ctx.fillStyle = baseGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Specular highlight
+        // Surface texture — noise-like banding for gas giants / rocky texture
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.clip();
+        const bands = r > 8 ? 6 : 3; // more bands for larger planets
+        for (let b = 0; b < bands; b++) {
+          const by = sy - r + (2 * r * (b + 0.5)) / bands;
+          const bandWidth = (2 * r) / bands;
+          const variation = Math.sin(b * 2.7 + p.orbitRadius * 30) * 0.08;
+          ctx.fillStyle = `rgba(${darken(p.rgb[0], 0.7)},${darken(p.rgb[1], 0.7)},${darken(p.rgb[2], 0.7)},${0.06 + Math.abs(variation)})`;
+          ctx.fillRect(sx - r, by - bandWidth * 0.3, r * 2, bandWidth * 0.6);
+        }
+        ctx.restore();
+
+        // Primary specular highlight — crisp, off-center
         const specGrad = ctx.createRadialGradient(
-          sx - p.size * 0.25, sy - p.size * 0.3, 0,
-          sx - p.size * 0.25, sy - p.size * 0.3, p.size * 0.5
+          sx - r * 0.35, sy - r * 0.35, 0,
+          sx - r * 0.35, sy - r * 0.35, r * 0.55
         );
-        specGrad.addColorStop(0, "rgba(255,255,255,0.5)");
-        specGrad.addColorStop(0.5, "rgba(255,255,255,0.12)");
+        specGrad.addColorStop(0, "rgba(255,255,255,0.65)");
+        specGrad.addColorStop(0.3, "rgba(255,255,255,0.2)");
+        specGrad.addColorStop(0.7, "rgba(255,255,255,0.03)");
         specGrad.addColorStop(1, "transparent");
         ctx.fillStyle = specGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
         ctx.fill();
 
-        // Rim light on bottom-right
-        const rimGrad = ctx.createRadialGradient(
-          sx + p.size * 0.4, sy + p.size * 0.4, 0,
-          sx + p.size * 0.4, sy + p.size * 0.4, p.size * 0.6
+        // Secondary specular — tiny bright pinpoint
+        const pinGrad = ctx.createRadialGradient(
+          sx - r * 0.28, sy - r * 0.32, 0,
+          sx - r * 0.28, sy - r * 0.32, r * 0.18
         );
-        rimGrad.addColorStop(0, `rgba(${brighten(p.rgb[0])},${brighten(p.rgb[1])},${brighten(p.rgb[2])},0.15)`);
-        rimGrad.addColorStop(1, "transparent");
-        ctx.fillStyle = rimGrad;
+        pinGrad.addColorStop(0, "rgba(255,255,255,0.8)");
+        pinGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = pinGrad;
         ctx.beginPath();
-        ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rim/fresnel light — thin bright edge catching sunlight
+        ctx.lineWidth = r > 8 ? 1.2 : 0.8;
+        const rimArc = ctx.createLinearGradient(sx - r, sy, sx + r, sy);
+        rimArc.addColorStop(0, `rgba(${brighten(p.rgb[0],100)},${brighten(p.rgb[1],100)},${brighten(p.rgb[2],100)},0.35)`);
+        rimArc.addColorStop(0.5, "transparent");
+        rimArc.addColorStop(1, `rgba(${brighten(p.rgb[0],60)},${brighten(p.rgb[1],60)},${brighten(p.rgb[2],60)},0.12)`);
+        ctx.strokeStyle = rimArc;
+        ctx.beginPath();
+        ctx.arc(sx, sy, r - 0.5, -Math.PI * 0.7, Math.PI * 0.3);
+        ctx.stroke();
+
+        // Terminator shadow overlay — crescent darkness on right side
+        const termGrad = ctx.createLinearGradient(sx - r * 0.3, sy, sx + r * 1.2, sy);
+        termGrad.addColorStop(0, "transparent");
+        termGrad.addColorStop(0.5, "transparent");
+        termGrad.addColorStop(0.85, "rgba(0,0,0,0.3)");
+        termGrad.addColorStop(1, "rgba(0,0,0,0.55)");
+        ctx.fillStyle = termGrad;
+        ctx.beginPath();
+        ctx.arc(sx, sy, r, 0, Math.PI * 2);
         ctx.fill();
       }
 
