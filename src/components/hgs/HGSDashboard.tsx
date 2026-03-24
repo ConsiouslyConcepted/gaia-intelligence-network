@@ -48,27 +48,20 @@ export const HGSDashboard = () => {
                     }`}
                   >
                     <div
-                      className="w-4 h-4 rounded-full transition-all duration-300 relative overflow-hidden"
+                      className="w-3.5 h-3.5 rounded-full transition-all duration-300 relative overflow-hidden"
                       style={{
-                        background: `radial-gradient(circle at 30% 25%, 
-                          ${p.color}ff 0%, 
-                          ${p.color}dd 30%, 
-                          ${p.color}88 60%, 
-                          ${p.color}22 100%)`,
+                        background: `radial-gradient(circle at 40% 35%, 
+                          ${p.color} 0%, 
+                          ${p.color}aa 55%, 
+                          ${p.color}33 100%)`,
                         boxShadow: playing === p.id
-                          ? `0 0 6px 2px ${p.color}, 0 0 16px 4px ${p.color}40`
-                          : `0 0 4px 1px ${p.color}60`,
+                          ? `0 0 6px 2px ${p.color}90, 0 0 14px 4px ${p.color}30`
+                          : `0 0 5px 1px ${p.color}50`,
                       }}
                     >
-                      {/* Specular pinpoint */}
-                      <div
-                        className="absolute top-[2px] left-[3px] w-[4px] h-[3px] rounded-full"
-                        style={{ background: `radial-gradient(ellipse, rgba(255,255,255,0.7), transparent)` }}
-                      />
-                      {/* Terminator shadow */}
-                      <div
-                        className="absolute inset-0 rounded-full"
-                        style={{ background: `linear-gradient(135deg, transparent 45%, rgba(0,0,0,0.4) 100%)` }}
+                      {/* Limb darkening */}
+                      <div className="absolute inset-0 rounded-full"
+                        style={{ background: `radial-gradient(circle, transparent 40%, rgba(0,0,0,0.3) 100%)` }}
                       />
                     </div>
                     <span className={`text-[10px] font-medium transition-colors duration-300 ${
