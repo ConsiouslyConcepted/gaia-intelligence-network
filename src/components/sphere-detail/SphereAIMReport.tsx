@@ -3,7 +3,6 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sphere } from "@/types/spheres";
 import { Brain, AlertTriangle, TrendingUp, Sparkles, Download } from "lucide-react";
-import { Progress } from "@/components/ui/progress";
 
 interface CoherenceComponent {
   name: string;
@@ -31,21 +30,21 @@ const mockAnomalies: Anomaly[] = [
   {
     type: "Sudden Spike",
     severity: "high",
-    description: "Kp index increased by 2.5 units in 30 minutes - unusual rate of change",
+    description: "Kp index increased by 2.5 units in 30 minutes",
     confidence: 0.89,
     timestamp: "2h ago"
   },
   {
     type: "Pattern Deviation",
     severity: "medium",
-    description: "IMF Bz orientation shows atypical persistence in negative direction",
+    description: "IMF Bz orientation shows atypical persistence",
     confidence: 0.73,
     timestamp: "4h ago"
   },
   {
     type: "Cross-Sphere Correlation",
     severity: "low",
-    description: "Weak expected correlation between solar wind and Dst index",
+    description: "Weak expected correlation between solar wind and Dst",
     confidence: 0.65,
     timestamp: "8h ago"
   },
@@ -53,9 +52,17 @@ const mockAnomalies: Anomaly[] = [
 
 const getSeverityColor = (severity: string) => {
   switch (severity) {
-    case "high": return "bg-coherence-low/20 text-coherence-low border-coherence-low/30";
-    case "medium": return "bg-yellow-500/20 text-yellow-500 border-yellow-500/30";
-    default: return "bg-coherence-medium/20 text-coherence-medium border-coherence-medium/30";
+    case "high": return "border-coherence-low/20 bg-coherence-low/5";
+    case "medium": return "border-yellow-500/20 bg-yellow-500/5";
+    default: return "border-coherence-medium/20 bg-coherence-medium/5";
+  }
+};
+
+const getSeverityDot = (severity: string) => {
+  switch (severity) {
+    case "high": return "bg-coherence-low";
+    case "medium": return "bg-yellow-500";
+    default: return "bg-coherence-medium";
   }
 };
 
@@ -65,143 +72,142 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
   );
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       {/* Overall Score */}
-      <Card className="glass-panel p-6 space-y-4">
-        <div className="flex items-center gap-3">
-          <div className="p-3 rounded-lg" style={{ backgroundColor: `${sphere.color}15` }}>
-            <Brain className="w-8 h-8 animate-harmonic-pulse" style={{ color: sphere.color }} />
+      <Card className="glass-panel rounded-xl p-5">
+        <div className="flex items-center gap-4">
+          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${sphere.color}12` }}>
+            <Brain className="w-6 h-6" style={{ color: sphere.color }} />
           </div>
           <div className="flex-1">
-            <h2 className="text-2xl font-bold">AI Coherence Report</h2>
-            <p className="text-sm text-muted-foreground">
+            <h2 className="text-base font-semibold tracking-wide">AI Coherence Report</h2>
+            <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
               Generated: {new Date().toLocaleString()}
             </p>
           </div>
           <div className="text-right">
-            <div className="text-sm text-muted-foreground mb-1">Overall Score</div>
-            <div className="text-4xl font-bold" style={{ color: sphere.color }}>{overallScore}%</div>
+            <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">Score</div>
+            <div className="text-3xl font-bold font-mono" style={{ color: sphere.color }}>{overallScore}%</div>
           </div>
         </div>
       </Card>
 
-      {/* Score Breakdown */}
-      <Card className="glass-panel p-6 space-y-4">
-        <h3 className="text-xl font-semibold flex items-center gap-2">
-          <TrendingUp className="w-5 h-5" style={{ color: sphere.color }} />
-          Coherence Score Breakdown
-        </h3>
-        <div className="space-y-4">
-          {mockCoherenceData.map((component, idx) => (
-            <div key={idx} className="space-y-2">
-              <div className="flex items-center justify-between">
-                <span className="text-sm font-medium">{component.name}</span>
-                <div className="flex items-center gap-3">
-                  <span className="text-xs text-muted-foreground">
-                    Weight: {(component.weight * 100).toFixed(0)}%
-                  </span>
-                  <span className="text-sm font-bold w-12 text-right" style={{ color: sphere.color }}>
-                    {component.score}%
-                  </span>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        {/* Score Breakdown */}
+        <Card className="glass-panel rounded-xl p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <TrendingUp className="w-4 h-4" style={{ color: sphere.color }} />
+            <h3 className="text-sm font-semibold">Score Breakdown</h3>
+          </div>
+          <div className="space-y-3">
+            {mockCoherenceData.map((component, idx) => (
+              <div key={idx} className="space-y-1.5">
+                <div className="flex items-center justify-between">
+                  <span className="text-xs text-foreground/70">{component.name}</span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-[9px] text-muted-foreground/30 font-mono">
+                      w:{(component.weight * 100).toFixed(0)}%
+                    </span>
+                    <span className="text-xs font-bold font-mono w-8 text-right" style={{ color: sphere.color }}>
+                      {component.score}
+                    </span>
+                  </div>
+                </div>
+                <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
+                  <div
+                    className="h-full rounded-full transition-all duration-700"
+                    style={{
+                      width: `${component.score}%`,
+                      background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                    }}
+                  />
                 </div>
               </div>
-              <Progress value={component.score} className="h-2" />
-            </div>
-          ))}
-        </div>
-      </Card>
+            ))}
+          </div>
+        </Card>
 
-      {/* Anomalies */}
-      <Card className="glass-panel p-6 space-y-4">
-        <h3 className="text-xl font-semibold flex items-center gap-2">
-          <AlertTriangle className="w-5 h-5" style={{ color: sphere.color }} />
-          Detected Anomalies
-        </h3>
-        <div className="space-y-3">
-          {mockAnomalies.map((anomaly, idx) => (
-            <div
-              key={idx}
-              className={`p-4 rounded-lg border flex items-start gap-4 ${getSeverityColor(anomaly.severity)}`}
-            >
-              <div className="flex-1 space-y-2">
-                <div className="flex items-center gap-2">
-                  <Badge variant="outline" className="capitalize">
-                    {anomaly.severity}
-                  </Badge>
-                  <span className="text-sm font-semibold">{anomaly.type}</span>
+        {/* Anomalies */}
+        <Card className="glass-panel rounded-xl p-5 space-y-4">
+          <div className="flex items-center gap-2">
+            <AlertTriangle className="w-4 h-4" style={{ color: sphere.color }} />
+            <h3 className="text-sm font-semibold">Detected Anomalies</h3>
+          </div>
+          <div className="space-y-2">
+            {mockAnomalies.map((anomaly, idx) => (
+              <div
+                key={idx}
+                className={`px-3 py-2.5 rounded-lg border ${getSeverityColor(anomaly.severity)}`}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <div className={`w-1.5 h-1.5 rounded-full ${getSeverityDot(anomaly.severity)}`} />
+                  <span className="text-xs font-medium">{anomaly.type}</span>
+                  <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{anomaly.timestamp}</span>
                 </div>
-                <p className="text-sm">{anomaly.description}</p>
-                <div className="flex items-center gap-4 text-xs">
-                  <span className="text-muted-foreground">
-                    Confidence: {(anomaly.confidence * 100).toFixed(0)}%
-                  </span>
-                  <span className="text-muted-foreground">{anomaly.timestamp}</span>
+                <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{anomaly.description}</p>
+                <div className="text-[9px] text-muted-foreground/30 mt-1 font-mono">
+                  confidence: {(anomaly.confidence * 100).toFixed(0)}%
                 </div>
               </div>
-            </div>
-          ))}
-        </div>
-      </Card>
+            ))}
+          </div>
+        </Card>
+      </div>
 
-      {/* Narrative Insights */}
-      <Card className="glass-panel p-6 space-y-4">
-        <h3 className="text-xl font-semibold flex items-center gap-2">
-          <Sparkles className="w-5 h-5" style={{ color: sphere.color }} />
-          AI Narrative Summary
-        </h3>
-        <div className="prose prose-invert max-w-none">
-          <p className="text-sm leading-relaxed">
-            The {sphere.name} is currently showing <strong>elevated activity levels</strong> with 
+      {/* Narrative */}
+      <Card className="glass-panel rounded-xl p-5 space-y-3">
+        <div className="flex items-center gap-2">
+          <Sparkles className="w-4 h-4" style={{ color: sphere.color }} />
+          <h3 className="text-sm font-semibold">AI Narrative Summary</h3>
+        </div>
+        <div className="space-y-2.5">
+          <p className="text-xs text-muted-foreground/70 leading-relaxed">
+            The {sphere.name} is currently showing <span className="text-foreground/90 font-medium">elevated activity levels</span> with 
             an overall coherence score of {overallScore}%. Analysis indicates a significant correlation 
-            between rising geomagnetic flux and solar wind parameters, with a lag time of approximately 
-            3 hours.
+            between rising geomagnetic flux and solar wind parameters.
           </p>
-          <p className="text-sm leading-relaxed mt-3">
-            Recent anomalies suggest an <strong>incoming geomagnetic disturbance</strong>, likely 
-            resulting from a coronal mass ejection detected 48 hours ago. Magnetopause compression 
-            is expected within the next 12-24 hours, with potential impacts on ionospheric TEC 
-            and ground magnetometer readings.
-          </p>
-          <p className="text-sm leading-relaxed mt-3">
-            Cross-sphere correlation analysis reveals <strong>synchronization patterns</strong> between 
-            magnetospheric dynamics and noospheric indicators, suggesting collective human response 
+          <p className="text-xs text-muted-foreground/70 leading-relaxed">
+            Cross-sphere correlation analysis reveals <span className="text-foreground/90 font-medium">synchronization patterns</span> between 
+            magnetospheric dynamics and noospheric indicators, suggesting collective response 
             to geomagnetic variations may be present in the data.
           </p>
         </div>
       </Card>
 
       {/* Watch Points */}
-      <Card className="glass-panel p-6 space-y-4">
-        <h3 className="text-lg font-semibold">Recommended Watch Points</h3>
-        <div className="space-y-2">
+      <Card className="glass-panel rounded-xl p-5 space-y-3">
+        <h3 className="text-sm font-semibold">Watch Points</h3>
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
           {[
             "Monitor Kp index for sustained elevation above 4",
             "Track IMF Bz orientation for prolonged southward turning",
             "Observe auroral power indices for storm intensification",
             "Watch for secondary effects in ionospheric TEC maps",
           ].map((point, idx) => (
-            <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20">
-              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
-                style={{ backgroundColor: `${sphere.color}20`, color: sphere.color }}>
+            <div key={idx} className="flex items-start gap-2.5 px-3 py-2 rounded-lg bg-muted/8 border border-border/10">
+              <div
+                className="w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
+                style={{ backgroundColor: `${sphere.color}15`, color: sphere.color }}
+              >
                 {idx + 1}
               </div>
-              <p className="text-sm flex-1">{point}</p>
+              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{point}</p>
             </div>
           ))}
         </div>
       </Card>
 
       {/* Actions */}
-      <div className="flex gap-3">
-        <Button className="gap-2">
-          <Download className="w-4 h-4" />
-          Export PDF Report
+      <div className="flex gap-2">
+        <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${sphere.color}cc`, color: '#fff' }}>
+          <Download className="w-3 h-3" />
+          Export PDF
         </Button>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" size="sm" className="text-xs h-8 rounded-lg border-border/20 text-muted-foreground">
           Create Alert Rule
         </Button>
-        <Button variant="outline" className="gap-2">
-          Schedule Weekly Report
+        <Button variant="outline" size="sm" className="text-xs h-8 rounded-lg border-border/20 text-muted-foreground">
+          Schedule Report
         </Button>
       </div>
     </div>

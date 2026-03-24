@@ -29,99 +29,89 @@ export default function SphereDetail() {
   }
 
   return (
-    <div className="min-h-screen w-full">
+    <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <header className="glass-panel px-4 py-3 border-b border-border/20">
-        <div className="flex items-center justify-between max-w-[2000px] mx-auto">
-          <div className="flex items-center gap-4">
-            <Button
-              variant="ghost"
-              size="icon"
-              onClick={() => navigate("/")}
-              className="hover:bg-muted/20"
-            >
-              <ArrowLeft className="w-5 h-5" />
-            </Button>
-            <div className="flex items-center gap-3">
-              <WireframeSphereIcon color={sphere.color} size={40} segments={16} />
-              <div>
-                <h1 className="text-lg font-semibold tracking-wide" style={{ color: sphere.color }}>
-                  {sphere.name}
-                </h1>
-                <p className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/60">{sphere.description}</p>
-              </div>
-            </div>
+      <header className="mx-3 mt-3 glass-panel rounded-xl px-4 py-2.5 flex items-center justify-between">
+        <div className="flex items-center gap-3">
+          <Button
+            variant="ghost"
+            size="icon"
+            onClick={() => navigate("/")}
+            className="h-8 w-8 hover:bg-muted/20 rounded-lg"
+          >
+            <ArrowLeft className="w-4 h-4" />
+          </Button>
+          <div className="h-4 w-px bg-border/20" />
+          <div className="w-9 h-9 rounded-full bg-background/40 border border-border/20 flex items-center justify-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
+            <WireframeSphereIcon color={sphere.color} size={30} segments={16} />
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <div className="text-[10px] uppercase tracking-[0.1em] text-muted-foreground/50">Coherence</div>
-              <div className="text-xl font-bold font-mono" style={{ color: sphere.color }}>78%</div>
-            </div>
+          <div>
+            <h1
+              className="text-base font-semibold tracking-wide leading-none"
+              style={{ color: sphere.color, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+            >
+              {sphere.name}
+            </h1>
+            <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/50 mt-0.5 leading-none">
+              {sphere.description}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center gap-4">
+          <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
+            <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Coherence</div>
+            <div className="text-lg font-bold font-mono leading-none mt-0.5" style={{ color: sphere.color }}>78%</div>
           </div>
         </div>
       </header>
 
       {/* Main Content */}
-      <div className="max-w-[2000px] mx-auto p-4">
-        <Tabs defaultValue="overview" className="space-y-4">
-          <TabsList className="glass-panel w-full justify-start overflow-x-auto">
-            <TabsTrigger value="overview" className="gap-2">
-              <Activity className="w-4 h-4" />
-              Overview
-            </TabsTrigger>
-            <TabsTrigger value="metrics" className="gap-2">
-              <Network className="w-4 h-4" />
-              Metrics
-            </TabsTrigger>
-            {sphere.hasMapLayers && (
-              <TabsTrigger value="map" className="gap-2">
-                <MapIcon className="w-4 h-4" />
-                Map
+      <div className="flex-1 px-3 py-3">
+        <Tabs defaultValue="overview" className="h-full flex flex-col gap-3">
+          <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
+            {[
+              { value: "overview", icon: Activity, label: "Overview" },
+              { value: "metrics", icon: Network, label: "Metrics" },
+              ...(sphere.hasMapLayers ? [{ value: "map", icon: MapIcon, label: "Map" }] : []),
+              ...(sphere.hasStellarLayers ? [{ value: "stellar", icon: Satellite, label: "Stellar" }] : []),
+              { value: "correlations", icon: Network, label: "Correlations" },
+              { value: "aim", icon: Brain, label: "AIM Report" },
+            ].map(tab => (
+              <TabsTrigger
+                key={tab.value}
+                value={tab.value}
+                className="gap-1.5 text-xs px-3 py-1.5 rounded-lg data-[state=active]:bg-muted/20 data-[state=active]:shadow-none"
+              >
+                <tab.icon className="w-3.5 h-3.5" />
+                {tab.label}
               </TabsTrigger>
-            )}
-            {sphere.hasStellarLayers && (
-              <TabsTrigger value="stellar" className="gap-2">
-                <Satellite className="w-4 h-4" />
-                Stellar/Space
-              </TabsTrigger>
-            )}
-            <TabsTrigger value="correlations" className="gap-2">
-              <Network className="w-4 h-4" />
-              Correlations
-            </TabsTrigger>
-            <TabsTrigger value="aim" className="gap-2">
-              <Brain className="w-4 h-4" />
-              AIM Report
-            </TabsTrigger>
+            ))}
           </TabsList>
 
-          <TabsContent value="overview">
-            <SphereOverview sphere={sphere} />
-          </TabsContent>
-
-          <TabsContent value="metrics">
-            <SphereMetrics sphere={sphere} />
-          </TabsContent>
-
-          {sphere.hasMapLayers && (
-            <TabsContent value="map">
-              <SphereMap sphere={sphere} />
+          <div className="flex-1 overflow-y-auto">
+            <TabsContent value="overview" className="mt-0">
+              <SphereOverview sphere={sphere} />
             </TabsContent>
-          )}
-
-          {sphere.hasStellarLayers && (
-            <TabsContent value="stellar">
-              <SphereStellar sphere={sphere} />
+            <TabsContent value="metrics" className="mt-0">
+              <SphereMetrics sphere={sphere} />
             </TabsContent>
-          )}
-
-          <TabsContent value="correlations">
-            <SphereCorrelations sphere={sphere} />
-          </TabsContent>
-
-          <TabsContent value="aim">
-            <SphereAIMReport sphere={sphere} />
-          </TabsContent>
+            {sphere.hasMapLayers && (
+              <TabsContent value="map" className="mt-0">
+                <SphereMap sphere={sphere} />
+              </TabsContent>
+            )}
+            {sphere.hasStellarLayers && (
+              <TabsContent value="stellar" className="mt-0">
+                <SphereStellar sphere={sphere} />
+              </TabsContent>
+            )}
+            <TabsContent value="correlations" className="mt-0">
+              <SphereCorrelations sphere={sphere} />
+            </TabsContent>
+            <TabsContent value="aim" className="mt-0">
+              <SphereAIMReport sphere={sphere} />
+            </TabsContent>
+          </div>
         </Tabs>
       </div>
     </div>
