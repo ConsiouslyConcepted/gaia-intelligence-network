@@ -67,7 +67,7 @@ export const HGSDashboard = () => {
           </div>
 
           {/* Planet legend — below canvas */}
-          <div className="glass-panel rounded-lg px-4 py-3 border border-border/20 flex-shrink-0">
+          <Card className="glass-panel px-4 py-3 flex-shrink-0">
             <div className="flex items-center justify-between mb-2">
               <div className="flex items-center gap-1">
                 <Eye className="w-3 h-3 text-muted-foreground/50" />
@@ -133,7 +133,7 @@ export const HGSDashboard = () => {
                 );
               })}
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Right sidebar: Pair-wise resonance diagrams */}
