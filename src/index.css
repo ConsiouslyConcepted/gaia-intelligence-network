@@ -19,8 +19,8 @@ All colors MUST be HSL.
     --popover: 240 25% 8%;
     --popover-foreground: 180 100% 95%;
 
-    /* Harmonic primary - Crystalline Cyan */
-    --primary: 180 100% 50%;
+    /* Harmonic primary - Warm Celestial Gold */
+    --primary: 38 70% 58%;
     --primary-foreground: 240 30% 5%;
 
     /* Secondary - Bioluminescent Emerald */
@@ -40,9 +40,9 @@ All colors MUST be HSL.
     --destructive-foreground: 180 100% 95%;
 
     /* Borders with subtle glow */
-    --border: 180 50% 25%;
-    --input: 180 30% 20%;
-    --ring: 180 100% 50%;
+    --border: 220 20% 22%;
+    --input: 220 15% 18%;
+    --ring: 38 70% 58%;
 
     --radius: 0.75rem;
 
