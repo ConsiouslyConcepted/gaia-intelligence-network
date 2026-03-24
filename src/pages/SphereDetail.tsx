@@ -28,6 +28,8 @@ export default function SphereDetail() {
     );
   }
 
+  const accentColor = "#5ce0d2";
+
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
@@ -43,12 +45,12 @@ export default function SphereDetail() {
           </Button>
           <div className="h-4 w-px bg-border/20" />
           <div className="w-9 h-9 rounded-full bg-background/40 border border-border/20 flex items-center justify-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
-            <WireframeSphereIcon color={sphere.color} size={30} segments={16} />
+            <WireframeSphereIcon color={accentColor} size={30} segments={16} />
           </div>
           <div>
             <h1
               className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: sphere.color, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              style={{ color: accentColor, fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               {sphere.name}
             </h1>
@@ -60,7 +62,7 @@ export default function SphereDetail() {
         <div className="flex items-center gap-4">
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Coherence</div>
-            <div className="text-lg font-bold font-mono leading-none mt-0.5" style={{ color: sphere.color }}>78%</div>
+            <div className="text-lg font-bold font-mono leading-none mt-0.5" style={{ color: accentColor }}>78%</div>
           </div>
         </div>
       </header>
