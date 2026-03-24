@@ -54,7 +54,7 @@ export const HGSDashboard = () => {
 
           {/* Floating planet legend */}
           <div className="absolute bottom-3 left-3 right-3">
-            <div className="glass-panel rounded-lg px-3 py-2.5 border border-border/20">
+            <div className="glass-panel rounded-lg px-4 py-3.5 border border-border/20">
               <div className="flex items-center justify-between mb-2">
                 <div className="flex items-center gap-1">
                   <Eye className="w-3 h-3 text-muted-foreground/50" />
