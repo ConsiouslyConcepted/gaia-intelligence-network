@@ -93,16 +93,13 @@ const Index = () => {
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
           {/* Left: Title */}
-          <div className="flex items-center gap-3">
-            <Radar className="w-4 h-4 text-primary/60" />
-            <div>
-              <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
-                Planetary Intelligence
-              </h1>
-              <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
-                Gaia Holonic Observatory · Digital Twin
-              </p>
-            </div>
+          <div>
+            <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
+              Planetary Intelligence
+            </h1>
+            <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+              Gaia Holonic Observatory · Digital Twin
+            </p>
           </div>
 
           {/* Center: Status */}
