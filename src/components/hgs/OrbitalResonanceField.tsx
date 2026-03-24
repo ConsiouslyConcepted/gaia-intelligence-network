@@ -156,31 +156,59 @@ export const OrbitalResonanceField = () => {
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Planet bodies
+      // Planet bodies — 3D spherical look
       for (const p of planetData) {
         const angle = time * p.speed * 6 + p.orbitRadius * 20;
         const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
         const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
 
-        // Glow
-        for (let gr = Math.floor(p.size * 3); gr > 0; gr--) {
-          const gt = gr / (p.size * 3);
-          ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},${0.006 + (1 - gt) * 0.06})`;
-          ctx.beginPath();
-          ctx.arc(sx, sy, gr, 0, Math.PI * 2);
-          ctx.fill();
-        }
+        // Outer atmospheric glow
+        const atmosGrad = ctx.createRadialGradient(sx, sy, p.size * 0.5, sx, sy, p.size * 4);
+        atmosGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.15)`);
+        atmosGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.04)`);
+        atmosGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = atmosGrad;
+        ctx.beginPath();
+        ctx.arc(sx, sy, p.size * 4, 0, Math.PI * 2);
+        ctx.fill();
 
-        // Body
-        ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.95)`;
+        // Planet body with radial gradient for 3D sphere effect
+        const bodyGrad = ctx.createRadialGradient(
+          sx - p.size * 0.3, sy - p.size * 0.3, p.size * 0.1,
+          sx, sy, p.size
+        );
+        const brighten = (c: number) => Math.min(255, c + 60);
+        bodyGrad.addColorStop(0, `rgba(${brighten(p.rgb[0])},${brighten(p.rgb[1])},${brighten(p.rgb[2])},1)`);
+        bodyGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.95)`);
+        bodyGrad.addColorStop(1, `rgba(${Math.floor(p.rgb[0]*0.4)},${Math.floor(p.rgb[1]*0.4)},${Math.floor(p.rgb[2]*0.4)},0.9)`);
+        ctx.fillStyle = bodyGrad;
         ctx.beginPath();
         ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
         ctx.fill();
 
-        // Specular
-        ctx.fillStyle = "rgba(255,255,255,0.25)";
+        // Specular highlight
+        const specGrad = ctx.createRadialGradient(
+          sx - p.size * 0.25, sy - p.size * 0.3, 0,
+          sx - p.size * 0.25, sy - p.size * 0.3, p.size * 0.5
+        );
+        specGrad.addColorStop(0, "rgba(255,255,255,0.5)");
+        specGrad.addColorStop(0.5, "rgba(255,255,255,0.12)");
+        specGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = specGrad;
         ctx.beginPath();
-        ctx.arc(sx - p.size * 0.2, sy + p.size * 0.2, p.size * 0.25, 0, Math.PI * 2);
+        ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Rim light on bottom-right
+        const rimGrad = ctx.createRadialGradient(
+          sx + p.size * 0.4, sy + p.size * 0.4, 0,
+          sx + p.size * 0.4, sy + p.size * 0.4, p.size * 0.6
+        );
+        rimGrad.addColorStop(0, `rgba(${brighten(p.rgb[0])},${brighten(p.rgb[1])},${brighten(p.rgb[2])},0.15)`);
+        rimGrad.addColorStop(1, "transparent");
+        ctx.fillStyle = rimGrad;
+        ctx.beginPath();
+        ctx.arc(sx, sy, p.size, 0, Math.PI * 2);
         ctx.fill();
       }
 
