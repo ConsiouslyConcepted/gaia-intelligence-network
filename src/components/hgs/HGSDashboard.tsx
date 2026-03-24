@@ -81,31 +81,24 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             </div>
           </div>
 
-          {/* Center: Show All + Field label */}
-          <div className="flex items-center gap-2">
+          {/* Right: View toggle + controls */}
+          <div className="flex items-center gap-3">
             {selectedPlanet && (
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="text-[9px] uppercase tracking-wider text-primary/80 hover:text-primary transition-all px-2.5 py-1 rounded border border-primary/20 hover:border-primary/40 bg-primary/5"
+                className="text-[10px] uppercase tracking-wider text-primary/80 hover:text-primary transition-all px-3 py-1.5 rounded border border-primary/20 hover:border-primary/40 bg-primary/5"
               >
                 Show All
               </button>
             )}
-            <div className="px-2.5 py-1 rounded bg-background/20 border border-border/10">
-              <span className="text-[9px] uppercase tracking-[0.1em] font-medium text-primary/80">
-                {selectedData ? `${selectedData.name} · Resonance` : "Orbital Field"}
-              </span>
+            <div className="flex gap-1 rounded-lg bg-background/30 p-1">
+              <button onClick={onSwitchView} className="flex items-center gap-2 px-4 py-2 rounded-md text-[11px] font-medium tracking-wider uppercase text-muted-foreground/50 hover:text-foreground/70 transition-all">
+                <Signal className="w-3.5 h-3.5" />Planetary
+              </button>
+              <button className="flex items-center gap-2 px-4 py-2 rounded-md text-[11px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
+                <Activity className="w-3.5 h-3.5" />HGS
+              </button>
             </div>
-          </div>
-
-          {/* Right: View toggle (matches Planetary dashboard) */}
-          <div className="flex gap-1 rounded-md bg-background/30 p-1">
-            <button onClick={onSwitchView} className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all">
-              <Signal className="w-3 h-3" />Planetary
-            </button>
-            <button className="flex items-center gap-1.5 px-3 py-1 rounded text-[9px] font-semibold tracking-wider uppercase bg-primary/15 text-primary border border-primary/20 transition-all">
-              <Activity className="w-3 h-3" />HGS
-            </button>
           </div>
         </HudPanel>
       </div>
