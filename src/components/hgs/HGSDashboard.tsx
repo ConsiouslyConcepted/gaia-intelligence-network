@@ -81,7 +81,7 @@ export const HGSDashboard = () => {
         </div>
 
         {/* Right sidebar */}
-        <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0 mt-8">
+        <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0">
           {/* Selected planet detail area */}
           {selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
@@ -195,7 +195,7 @@ export const HGSDashboard = () => {
             </div>
           ) : (
             /* Default: clickable resonance pairs */
-            <div className="flex-1 overflow-y-auto p-2 space-y-1">
+            <div className="flex-1 overflow-y-auto p-2 flex flex-col justify-between">
               <div className="px-1">
                 <h2 className="text-sm font-semibold text-foreground/90">
                   Planetary Harmonics
