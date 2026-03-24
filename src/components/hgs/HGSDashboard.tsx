@@ -156,6 +156,20 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                     )}
                   </div>
 
+                  {/* Musical tone info */}
+                  {PLANET_TONES[selectedData.id] && (
+                    <div className="w-full rounded-lg px-3 py-2" style={{ background: "hsla(240,20%,15%,0.6)", border: "1px solid hsla(38,40%,50%,0.12)" }}>
+                      <div className="flex items-center justify-between">
+                        <span className="text-[9px] text-muted-foreground/50 tracking-wider uppercase">Musical Tone</span>
+                        <span className="text-[13px] font-bold tracking-wide" style={{ color: selectedData.color }}>{PLANET_TONES[selectedData.id].note}</span>
+                      </div>
+                      <div className="flex items-center justify-between mt-1">
+                        <span className="text-[8px] text-muted-foreground/40 tracking-wider">Frequency</span>
+                        <span className="text-[10px] text-foreground/60 font-medium">{PLANET_TONES[selectedData.id].freq}</span>
+                      </div>
+                    </div>
+                  )}
+
                   <button
                     onClick={(e) => { e.stopPropagation(); play(selectedData.id); }}
                     className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border ${
@@ -170,7 +184,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                     </span>
                   </button>
 
-                  <div className="text-[8px] text-muted-foreground/30 text-center mt-2 tracking-wider">
+                  <div className="text-[8px] text-muted-foreground/30 text-center mt-1 tracking-wider">
                     {selectedData.id === "jupiter" || selectedData.id === "mars"
                       ? "NASA/JPL electromagnetic recording (public domain)"
                       : "Orbital frequency tone based on Keplerian ratios"}
