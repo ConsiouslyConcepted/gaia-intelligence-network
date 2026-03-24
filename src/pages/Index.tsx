@@ -151,7 +151,7 @@ const Index = () => {
       </div>
 
       {/* ─── LEFT HUD: All Spheres ─── */}
-      <div className="absolute left-4 top-[72px] bottom-4 z-10 flex flex-col pointer-events-none w-[220px]">
+      <div className="absolute left-4 top-[96px] bottom-4 z-10 flex flex-col pointer-events-none w-[240px]">
         <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col" glow="#5ce0d2">
           <div className="flex items-center justify-between mb-2.5">
             <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
