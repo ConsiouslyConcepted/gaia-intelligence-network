@@ -22,7 +22,7 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
-export const HGSDashboard = () => {
+export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
   const { play, playing } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [sidebarMode, setSidebarMode] = useState<SidebarMode>("patterns");
