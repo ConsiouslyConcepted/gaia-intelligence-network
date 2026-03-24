@@ -45,38 +45,34 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
   };
 
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 h-[calc(100vh-300px)]">
-      {/* Left Sidebar - Layers */}
-      <Card className="glass-panel p-4 space-y-4 overflow-auto lg:col-span-1">
+    <div className="grid grid-cols-1 lg:grid-cols-4 gap-3 h-[calc(100vh-180px)]">
+      {/* Layers Panel */}
+      <Card className="glass-panel rounded-xl p-4 space-y-3 overflow-auto lg:col-span-1">
         <div className="flex items-center gap-2">
-          <Layers className="w-5 h-5" style={{ color: sphere.color }} />
-          <h3 className="font-semibold">Map Layers</h3>
+          <Layers className="w-4 h-4" style={{ color: sphere.color }} />
+          <h3 className="text-sm font-semibold">Layers</h3>
         </div>
 
-        <div className="space-y-4">
+        <div className="space-y-2">
           {layers.map(layer => (
-            <div key={layer.id} className="space-y-2 p-3 rounded-lg bg-muted/20">
-              <div className="flex items-center gap-3">
+            <div key={layer.id} className="rounded-lg bg-muted/5 border border-border/10 p-2.5 space-y-2">
+              <div className="flex items-center gap-2.5">
                 <Checkbox
                   checked={layer.enabled}
                   onCheckedChange={() => toggleLayer(layer.id)}
+                  className="h-3.5 w-3.5"
                 />
-                <div className="flex-1">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-3 h-3 rounded-full"
-                      style={{ backgroundColor: layer.color }}
-                    />
-                    <span className="text-sm font-medium">{layer.name}</span>
-                  </div>
+                <div className="flex items-center gap-1.5 flex-1 min-w-0">
+                  <div className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: layer.color }} />
+                  <span className="text-[11px] font-medium truncate">{layer.name}</span>
                 </div>
               </div>
               
               {layer.enabled && (
-                <div className="ml-7 space-y-1">
-                  <div className="flex items-center justify-between text-xs text-muted-foreground">
+                <div className="ml-6 space-y-1">
+                  <div className="flex items-center justify-between text-[9px] text-muted-foreground/40">
                     <span>Opacity</span>
-                    <span>{Math.round(layer.opacity * 100)}%</span>
+                    <span className="font-mono">{Math.round(layer.opacity * 100)}%</span>
                   </div>
                   <Slider
                     value={[layer.opacity * 100]}
@@ -92,57 +88,52 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
           ))}
         </div>
 
-        <div className="pt-4 border-t border-border/30 space-y-2">
-          <Button variant="outline" size="sm" className="w-full gap-2">
-            <Download className="w-4 h-4" />
-            Export Map (PNG)
+        <div className="pt-3 border-t border-border/10 space-y-1.5">
+          <Button variant="outline" size="sm" className="w-full gap-1.5 text-[10px] h-7 rounded-lg border-border/15">
+            <Download className="w-3 h-3" />
+            Export PNG
           </Button>
-          <Button variant="outline" size="sm" className="w-full gap-2">
-            <Download className="w-4 h-4" />
-            Export Data (CSV)
+          <Button variant="outline" size="sm" className="w-full gap-1.5 text-[10px] h-7 rounded-lg border-border/15">
+            <Download className="w-3 h-3" />
+            Export CSV
           </Button>
         </div>
       </Card>
 
-      {/* Center - Map View */}
-      <Card className="glass-panel lg:col-span-3 relative overflow-hidden">
-        <div className="absolute top-4 right-4 z-10 flex gap-2">
-          <Button
-            variant={viewMode === "2d" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setViewMode("2d")}
-          >
-            2D
-          </Button>
-          <Button
-            variant={viewMode === "3d" ? "default" : "outline"}
-            size="sm"
-            onClick={() => setViewMode("3d")}
-          >
-            3D
-          </Button>
+      {/* Map View */}
+      <Card className="glass-panel rounded-xl lg:col-span-3 relative overflow-hidden">
+        <div className="absolute top-3 right-3 z-10 flex gap-1">
+          {(["2d", "3d"] as const).map(mode => (
+            <Button
+              key={mode}
+              variant={viewMode === mode ? "default" : "outline"}
+              size="sm"
+              onClick={() => setViewMode(mode)}
+              className="text-[10px] h-6 px-2.5 rounded-md uppercase"
+            >
+              {mode}
+            </Button>
+          ))}
         </div>
 
-        {/* Map Placeholder */}
-        <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-space-deep via-space-medium to-space-light">
-          <div className="text-center space-y-4">
-            <Globe2 className="w-16 h-16 mx-auto animate-orbital-rotation" style={{ color: `${sphere.color}80` }} />
+        <div className="w-full h-full flex items-center justify-center bg-gradient-to-b from-background/50 to-transparent">
+          <div className="text-center space-y-3">
+            <Globe2 className="w-12 h-12 mx-auto" style={{ color: `${sphere.color}30` }} />
             <div>
-              <h3 className="text-xl font-semibold mb-2">
-                {sphere.name} Map View ({viewMode.toUpperCase()})
+              <h3 className="text-sm font-semibold mb-1">
+                {sphere.name} · {viewMode.toUpperCase()}
               </h3>
-              <p className="text-sm text-muted-foreground max-w-md">
-                Interactive map with {layers.filter(l => l.enabled).length} active layers.
-                Implement with Mapbox, Cesium, or deck.gl for production.
+              <p className="text-[10px] text-muted-foreground/30 max-w-xs mx-auto">
+                {layers.filter(l => l.enabled).length} active layers
               </p>
             </div>
-            <div className="flex gap-2 justify-center flex-wrap">
+            <div className="flex gap-1.5 justify-center flex-wrap">
               {layers.filter(l => l.enabled).map(layer => (
                 <div
                   key={layer.id}
-                  className="px-3 py-1 rounded-full text-xs flex items-center gap-2 glass-panel"
+                  className="px-2 py-0.5 rounded-md text-[9px] flex items-center gap-1.5 bg-muted/8 border border-border/10"
                 >
-                  <div className="w-2 h-2 rounded-full" style={{ backgroundColor: layer.color }} />
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: layer.color }} />
                   {layer.name}
                 </div>
               ))}
