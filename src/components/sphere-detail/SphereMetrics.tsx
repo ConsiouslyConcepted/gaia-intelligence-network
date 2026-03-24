@@ -66,7 +66,7 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
             </div>
             
             <div className="flex items-baseline gap-2">
-              <span className="text-2xl font-bold text-primary">{metric.value}</span>
+              <span className="text-2xl font-bold" style={{ color: sphere.color }}>{metric.value}</span>
               <span className="text-sm text-muted-foreground">{metric.unit}</span>
             </div>
 
@@ -83,8 +83,8 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
               {Array.from({ length: 20 }).map((_, i) => (
                 <div
                   key={i}
-                  className="flex-1 bg-primary/40 rounded-sm"
-                  style={{ height: `${Math.random() * 100}%` }}
+                  className="flex-1 rounded-sm"
+                  style={{ height: `${Math.random() * 100}%`, backgroundColor: `${sphere.color}60` }}
                 />
               ))}
             </div>

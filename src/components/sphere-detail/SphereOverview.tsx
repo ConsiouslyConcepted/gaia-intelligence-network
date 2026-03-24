@@ -69,7 +69,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
               {getTrendIcon(kpi.trend)}
             </div>
             <div className="flex items-baseline gap-2">
-              <span className="text-3xl font-bold text-primary">{kpi.value}</span>
+              <span className="text-3xl font-bold" style={{ color: sphere.color }}>{kpi.value}</span>
               {kpi.unit && <span className="text-sm text-muted-foreground">{kpi.unit}</span>}
             </div>
             <div className="text-xs">
@@ -86,7 +86,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
       <Card className="glass-panel p-6 space-y-4">
         <div className="flex items-center justify-between">
           <h3 className="text-xl font-semibold flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-accent" />
+            <AlertTriangle className="w-5 h-5" style={{ color: sphere.color }} />
             Signal Watchlist
           </h3>
           <Button variant="outline" size="sm">Configure Alerts</Button>
@@ -111,7 +111,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
 
       {/* Quick Actions */}
       <div className="flex gap-3">
-        <Button className="gap-2">
+        <Button className="gap-2" style={{ backgroundColor: sphere.color, color: '#fff' }}>
           Open Map with Preset Layers
         </Button>
         <Button variant="outline" className="gap-2">
