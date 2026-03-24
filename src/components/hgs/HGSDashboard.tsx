@@ -133,7 +133,7 @@ export const HGSDashboard = () => {
                 );
               })}
             </div>
-          </div>
+          </Card>
         </div>
 
         {/* Right sidebar: Pair-wise resonance diagrams */}
