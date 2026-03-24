@@ -181,7 +181,8 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
             "Watch for secondary effects in ionospheric TEC maps",
           ].map((point, idx) => (
             <div key={idx} className="flex items-start gap-3 p-3 rounded-lg bg-muted/20">
-              <div className="w-6 h-6 rounded-full bg-primary/20 flex items-center justify-center text-xs font-bold">
+              <div className="w-6 h-6 rounded-full flex items-center justify-center text-xs font-bold"
+                style={{ backgroundColor: `${sphere.color}20`, color: sphere.color }}>
                 {idx + 1}
               </div>
               <p className="text-sm flex-1">{point}</p>

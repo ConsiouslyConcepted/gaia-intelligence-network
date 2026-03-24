@@ -126,7 +126,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
         {/* Map Placeholder */}
         <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-space-deep via-space-medium to-space-light">
           <div className="text-center space-y-4">
-            <Globe2 className="w-16 h-16 mx-auto text-primary/50 animate-orbital-rotation" />
+            <Globe2 className="w-16 h-16 mx-auto animate-orbital-rotation" style={{ color: `${sphere.color}80` }} />
             <div>
               <h3 className="text-xl font-semibold mb-2">
                 {sphere.name} Map View ({viewMode.toUpperCase()})
