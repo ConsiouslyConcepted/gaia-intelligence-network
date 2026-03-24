@@ -49,7 +49,7 @@ export function SphereMap({ sphere }: { sphere: Sphere }) {
       {/* Left Sidebar - Layers */}
       <Card className="glass-panel p-4 space-y-4 overflow-auto lg:col-span-1">
         <div className="flex items-center gap-2">
-          <Layers className="w-5 h-5 text-primary" />
+          <Layers className="w-5 h-5" style={{ color: sphere.color }} />
           <h3 className="font-semibold">Map Layers</h3>
         </div>
 
