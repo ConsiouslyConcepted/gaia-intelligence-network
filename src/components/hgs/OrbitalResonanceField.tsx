@@ -105,7 +105,7 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
     window.addEventListener("resize", resize);
 
     const animate = () => {
-      time += 0.0015;
+      time += 0.003;
       const rect = canvas.getBoundingClientRect();
       const w = rect.width;
       const h = rect.height;
@@ -127,12 +127,15 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
       }
 
       // Draw cymatic resonance thread patterns
-      const globalRotation = time * 0.06;
+      const globalRotation = time * 0.15;
       const cos = Math.cos(globalRotation);
       const sin = Math.sin(globalRotation);
 
+      // Breathing pulse for life-like feel
+      const pulse = 0.7 + Math.sin(time * 1.2) * 0.3;
+      const waveSweep = time * 2.5;
+
       for (const pp of pairPatterns) {
-        // Filter: if a planet is selected, only show pairs involving it
         const involved = !sel || pp.planet1Id === sel || pp.planet2Id === sel;
         if (!involved) continue;
 
@@ -140,21 +143,40 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         const mg = (pp.rgb1[1] + pp.rgb2[1]) / 2;
         const mb = (pp.rgb1[2] + pp.rgb2[2]) / 2;
 
-        // When isolated, boost visibility
-        const alphaBoost = sel ? 1.8 : 1.0;
+        const alphaBoost = sel ? 2.2 : 1.0;
 
-        ctx.lineWidth = sel ? 0.5 : 0.35;
-        const skip = 3;
+        ctx.lineWidth = sel ? 0.6 : 0.35;
+        const skip = sel ? 2 : 3;
 
-        for (let s = 0; s < pp.points.length; s += skip) {
+        // Animate a visible "window" that sweeps through the pattern
+        const totalPts = pp.points.length;
+        const windowSize = totalPts * 0.7;
+        const sweepPos = ((waveSweep * 0.3 + pp.a * 0.5) % 1.0) * totalPts;
+
+        for (let s = 0; s < totalPts; s += skip) {
           const p = pp.points[s];
           const x1 = cx + (p.x1 * cos - p.y1 * sin) * scale;
           const y1 = cy + (p.x1 * sin + p.y1 * cos) * scale;
           const x2 = cx + (p.x2 * cos - p.y2 * sin) * scale;
           const y2 = cy + (p.x2 * sin + p.y2 * cos) * scale;
 
-          const alpha = (0.06 + Math.sin(s * 0.008) * 0.025) * alphaBoost;
-          ctx.strokeStyle = `rgba(${mr},${mg},${mb},${alpha})`;
+          // Distance from sweep position for traveling wave effect
+          let dist = Math.abs(s - sweepPos);
+          if (dist > totalPts / 2) dist = totalPts - dist;
+          const waveFactor = Math.max(0, 1 - dist / (windowSize * 0.5));
+          const waveAlpha = waveFactor * waveFactor;
+
+          // Combine static base + animated wave + breathing pulse
+          const baseAlpha = 0.04 + Math.sin(s * 0.008) * 0.015;
+          const dynamicAlpha = baseAlpha + waveAlpha * 0.12 * pulse;
+          const alpha = dynamicAlpha * alphaBoost;
+
+          // Shift color slightly along the wave
+          const colorShift = waveAlpha * 40;
+          const cr = Math.min(255, mr + colorShift);
+          const cg = Math.min(255, mg + colorShift * 0.5);
+
+          ctx.strokeStyle = `rgba(${cr},${cg},${mb},${alpha})`;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
           ctx.lineTo(x2, y2);
