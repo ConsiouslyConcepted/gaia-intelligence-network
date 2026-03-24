@@ -2,7 +2,6 @@ export type SphereId =
   | "geosphere" 
   | "biosphere" 
   | "noosphere" 
-  | "technosphere" 
   | "magnetosphere" 
   | "ionosphere" 
   | "crystalsphere";
@@ -50,17 +49,6 @@ export const SPHERES: Record<SphereId, Sphere> = {
     radius: 1.3,
     opacity: 0.2,
     orderIndex: 3,
-    hasMapLayers: true,
-    hasStellarLayers: false,
-  },
-  technosphere: {
-    id: "technosphere",
-    name: "Technosphere",
-    description: "Synthetic cognition — digital networks, AI, technological infrastructure",
-    color: "#00ffff",
-    radius: 1.45,
-    opacity: 0.15,
-    orderIndex: 4,
     hasMapLayers: true,
     hasStellarLayers: false,
   },

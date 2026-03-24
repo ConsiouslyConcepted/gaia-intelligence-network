@@ -8,8 +8,7 @@ import { SPHERE_ARRAY } from "@/types/spheres";
 const RESONANCE_PAIRS = [
   { label: "Geo – Bio", c1: "#ff8800", c2: "#44ff44", a: 3, b: 2 },
   { label: "Bio – Noo", c1: "#44ff44", c2: "#aa44ff", a: 5, b: 3 },
-  { label: "Noo – Tech", c1: "#aa44ff", c2: "#00ffff", a: 4, b: 3 },
-  { label: "Tech – Mag", c1: "#00ffff", c2: "#ff00ff", a: 3, b: 2 },
+  { label: "Noo – Mag", c1: "#aa44ff", c2: "#ff00ff", a: 4, b: 3 },
   { label: "Mag – Ion", c1: "#ff00ff", c2: "#88ccff", a: 5, b: 4 },
   { label: "Ion – Cryst", c1: "#88ccff", c2: "#ffdd00", a: 8, b: 5 },
 ];
