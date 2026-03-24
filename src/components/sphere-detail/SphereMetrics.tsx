@@ -39,7 +39,6 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
   const metrics = mockMetrics[sphere.id] || mockMetrics.default;
   const [activeFilter, setActiveFilter] = useState("All");
   const categories = ["All", ...Array.from(new Set(metrics.map(m => m.category)))];
-
   const filtered = activeFilter === "All" ? metrics : metrics.filter(m => m.category === activeFilter);
 
   return (
@@ -94,7 +93,6 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
                 variant="ghost"
                 size="icon"
                 className="h-6 w-6 opacity-0 group-hover:opacity-60 hover:!opacity-100 transition-opacity"
-                title="Pin to correlations"
               >
                 <Pin className="w-3 h-3" />
               </Button>
@@ -105,26 +103,23 @@ export function SphereMetrics({ sphere }: { sphere: Sphere }) {
               <span className="text-[10px] text-muted-foreground/40 uppercase">{metric.unit}</span>
             </div>
 
-            {/* Health bar */}
-            <div className="space-y-1">
-              <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
-                <div
-                  className="h-full rounded-full transition-all duration-700"
-                  style={{
-                    width: `${metric.health}%`,
-                    background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
-                  }}
-                />
-              </div>
+            <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
+              <div
+                className="h-full rounded-full transition-all duration-700"
+                style={{
+                  width: `${metric.health}%`,
+                  background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                }}
+              />
             </div>
 
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-1.5">
                 {metric.trend > 0 
-                  ? <TrendingUp className="w-3 h-3 text-coherence-high" />
-                  : <TrendingDown className="w-3 h-3 text-coherence-low" />
+                  ? <TrendingUp className="w-3 h-3" style={{ color: sphere.color }} />
+                  : <TrendingDown className="w-3 h-3" style={{ color: sphere.color, opacity: 0.6 }} />
                 }
-                <span className={`text-[10px] font-mono ${metric.trend > 0 ? "text-coherence-high" : "text-coherence-low"}`}>
+                <span className="text-[10px] font-mono" style={{ color: `${sphere.color}aa` }}>
                   {metric.trend > 0 ? "+" : ""}{metric.trend}{metric.unit ? ` ${metric.unit}` : ""}
                 </span>
               </div>

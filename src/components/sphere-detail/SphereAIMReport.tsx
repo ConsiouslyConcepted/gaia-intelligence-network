@@ -20,7 +20,6 @@ const mockCoherenceData: CoherenceComponent[] = [
 
 interface Anomaly {
   type: string;
-  severity: "low" | "medium" | "high";
   description: string;
   confidence: number;
   timestamp: string;
@@ -29,42 +28,23 @@ interface Anomaly {
 const mockAnomalies: Anomaly[] = [
   {
     type: "Sudden Spike",
-    severity: "high",
     description: "Kp index increased by 2.5 units in 30 minutes",
     confidence: 0.89,
     timestamp: "2h ago"
   },
   {
     type: "Pattern Deviation",
-    severity: "medium",
     description: "IMF Bz orientation shows atypical persistence",
     confidence: 0.73,
     timestamp: "4h ago"
   },
   {
     type: "Cross-Sphere Correlation",
-    severity: "low",
     description: "Weak expected correlation between solar wind and Dst",
     confidence: 0.65,
     timestamp: "8h ago"
   },
 ];
-
-const getSeverityColor = (severity: string) => {
-  switch (severity) {
-    case "high": return "border-coherence-low/20 bg-coherence-low/5";
-    case "medium": return "border-yellow-500/20 bg-yellow-500/5";
-    default: return "border-coherence-medium/20 bg-coherence-medium/5";
-  }
-};
-
-const getSeverityDot = (severity: string) => {
-  switch (severity) {
-    case "high": return "bg-coherence-low";
-    case "medium": return "bg-yellow-500";
-    default: return "bg-coherence-medium";
-  }
-};
 
 export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
   const overallScore = Math.round(
@@ -92,67 +72,65 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* Score Breakdown */}
-        <Card className="glass-panel rounded-xl p-5 space-y-4">
-          <div className="flex items-center gap-2">
-            <TrendingUp className="w-4 h-4" style={{ color: sphere.color }} />
-            <h3 className="text-sm font-semibold">Score Breakdown</h3>
-          </div>
-          <div className="space-y-3">
-            {mockCoherenceData.map((component, idx) => (
-              <div key={idx} className="space-y-1.5">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-foreground/70">{component.name}</span>
-                  <div className="flex items-center gap-2">
-                    <span className="text-[9px] text-muted-foreground/30 font-mono">
-                      w:{(component.weight * 100).toFixed(0)}%
-                    </span>
-                    <span className="text-xs font-bold font-mono w-8 text-right" style={{ color: sphere.color }}>
-                      {component.score}
-                    </span>
-                  </div>
-                </div>
-                <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
-                  <div
-                    className="h-full rounded-full transition-all duration-700"
-                    style={{
-                      width: `${component.score}%`,
-                      background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
-                    }}
-                  />
+      {/* Score Breakdown - Full Width */}
+      <Card className="glass-panel rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <TrendingUp className="w-4 h-4" style={{ color: sphere.color }} />
+          <h3 className="text-sm font-semibold">Score Breakdown</h3>
+        </div>
+        <div className="space-y-3">
+          {mockCoherenceData.map((component, idx) => (
+            <div key={idx} className="space-y-1.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs text-foreground/70">{component.name}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-[9px] text-muted-foreground/30 font-mono">
+                    w:{(component.weight * 100).toFixed(0)}%
+                  </span>
+                  <span className="text-xs font-bold font-mono w-8 text-right" style={{ color: sphere.color }}>
+                    {component.score}
+                  </span>
                 </div>
               </div>
-            ))}
-          </div>
-        </Card>
+              <div className="h-[3px] rounded-full bg-border/10 overflow-hidden">
+                <div
+                  className="h-full rounded-full transition-all duration-700"
+                  style={{
+                    width: `${component.score}%`,
+                    background: `linear-gradient(90deg, ${sphere.color}40, ${sphere.color}cc)`,
+                  }}
+                />
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
 
-        {/* Anomalies */}
-        <Card className="glass-panel rounded-xl p-5 space-y-4">
-          <div className="flex items-center gap-2">
-            <AlertTriangle className="w-4 h-4" style={{ color: sphere.color }} />
-            <h3 className="text-sm font-semibold">Detected Anomalies</h3>
-          </div>
-          <div className="space-y-2">
-            {mockAnomalies.map((anomaly, idx) => (
-              <div
-                key={idx}
-                className={`px-3 py-2.5 rounded-lg border ${getSeverityColor(anomaly.severity)}`}
-              >
-                <div className="flex items-center gap-2 mb-1">
-                  <div className={`w-1.5 h-1.5 rounded-full ${getSeverityDot(anomaly.severity)}`} />
-                  <span className="text-xs font-medium">{anomaly.type}</span>
-                  <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{anomaly.timestamp}</span>
-                </div>
-                <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{anomaly.description}</p>
-                <div className="text-[9px] text-muted-foreground/30 mt-1 font-mono">
-                  confidence: {(anomaly.confidence * 100).toFixed(0)}%
-                </div>
+      {/* Anomalies - Full Width */}
+      <Card className="glass-panel rounded-xl p-5 space-y-4">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4" style={{ color: sphere.color }} />
+          <h3 className="text-sm font-semibold">Detected Anomalies</h3>
+        </div>
+        <div className="space-y-2">
+          {mockAnomalies.map((anomaly, idx) => (
+            <div
+              key={idx}
+              className="px-3 py-2.5 rounded-lg border border-border/15 bg-muted/5"
+            >
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sphere.color }} />
+                <span className="text-xs font-medium">{anomaly.type}</span>
+                <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{anomaly.timestamp}</span>
               </div>
-            ))}
-          </div>
-        </Card>
-      </div>
+              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{anomaly.description}</p>
+              <div className="text-[9px] text-muted-foreground/30 mt-1 font-mono">
+                confidence: {(anomaly.confidence * 100).toFixed(0)}%
+              </div>
+            </div>
+          ))}
+        </div>
+      </Card>
 
       {/* Narrative */}
       <Card className="glass-panel rounded-xl p-5 space-y-3">
@@ -184,7 +162,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
             "Observe auroral power indices for storm intensification",
             "Watch for secondary effects in ionospheric TEC maps",
           ].map((point, idx) => (
-            <div key={idx} className="flex items-start gap-2.5 px-3 py-2 rounded-lg bg-muted/8 border border-border/10">
+            <div key={idx} className="flex items-start gap-2.5 px-3 py-2 rounded-lg bg-muted/5 border border-border/10">
               <div
                 className="w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
                 style={{ backgroundColor: `${sphere.color}15`, color: sphere.color }}

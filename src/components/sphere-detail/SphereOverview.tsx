@@ -2,7 +2,7 @@ import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Sphere } from "@/types/spheres";
-import { Activity, TrendingUp, TrendingDown, Minus, AlertTriangle, ArrowRight, Zap, Signal, BarChart3 } from "lucide-react";
+import { Activity, TrendingUp, TrendingDown, Minus, AlertTriangle, ArrowRight, Signal, BarChart3 } from "lucide-react";
 
 interface KPI {
   label: string;
@@ -30,30 +30,21 @@ const mockKPIs: Record<string, KPI[]> = {
 };
 
 interface Alert {
-  severity: "info" | "warning" | "critical";
   message: string;
   time: string;
 }
 
 const mockAlerts: Alert[] = [
-  { severity: "warning", message: "Elevated geomagnetic activity detected — Kp trending above threshold", time: "12 min ago" },
-  { severity: "info", message: "Data stream reconnected: Ground magnetometer network (48 stations)", time: "1 hour ago" },
-  { severity: "critical", message: "CME impact window approaching — estimated arrival in 18 hours", time: "3 hours ago" },
+  { message: "Elevated geomagnetic activity detected — Kp trending above threshold", time: "12 min ago" },
+  { message: "Data stream reconnected: Ground magnetometer network (48 stations)", time: "1 hour ago" },
+  { message: "CME impact window approaching — estimated arrival in 18 hours", time: "3 hours ago" },
 ];
 
-const getTrendIcon = (trend: string) => {
+const getTrendIcon = (trend: string, color: string) => {
   switch (trend) {
-    case "up": return <TrendingUp className="w-3.5 h-3.5 text-coherence-high" />;
-    case "down": return <TrendingDown className="w-3.5 h-3.5 text-coherence-low" />;
+    case "up": return <TrendingUp className="w-3.5 h-3.5" style={{ color }} />;
+    case "down": return <TrendingDown className="w-3.5 h-3.5" style={{ color, opacity: 0.6 }} />;
     default: return <Minus className="w-3.5 h-3.5 text-muted-foreground/40" />;
-  }
-};
-
-const getSeverityStyles = (severity: string) => {
-  switch (severity) {
-    case "critical": return { bg: "border-coherence-low/20 bg-coherence-low/5", dot: "bg-coherence-low" };
-    case "warning": return { bg: "border-yellow-500/20 bg-yellow-500/5", dot: "bg-yellow-500" };
-    default: return { bg: "border-coherence-medium/20 bg-coherence-medium/5", dot: "bg-coherence-medium" };
   }
 };
 
@@ -76,12 +67,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
           </div>
           <div className="text-right">
             <div className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">Status</div>
-            <Badge 
-              variant="outline" 
-              className="text-xs px-2 py-0.5 mt-0.5 border-coherence-high/20 bg-coherence-high/8 text-coherence-high"
-            >
-              Active
-            </Badge>
+            <span className="text-sm font-semibold font-mono" style={{ color: sphere.color }}>Active</span>
           </div>
         </div>
       </Card>
@@ -92,19 +78,18 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
           <Card key={idx} className="glass-panel rounded-xl p-4 space-y-3">
             <div className="flex items-center justify-between">
               <span className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 font-medium">{kpi.label}</span>
-              {getTrendIcon(kpi.trend)}
+              {getTrendIcon(kpi.trend, sphere.color)}
             </div>
             <div className="flex items-baseline gap-1.5">
               <span className="text-2xl font-bold font-mono" style={{ color: sphere.color }}>{kpi.value}</span>
               {kpi.unit && <span className="text-[10px] text-muted-foreground/40 uppercase">{kpi.unit}</span>}
             </div>
             <div className="flex items-center gap-1.5">
-              <span className={`text-[10px] font-mono ${kpi.change > 0 ? "text-coherence-high" : kpi.change < 0 ? "text-coherence-low" : "text-muted-foreground/40"}`}>
+              <span className="text-[10px] font-mono" style={{ color: `${sphere.color}aa` }}>
                 {kpi.change > 0 ? "+" : ""}{kpi.change}{kpi.unit ? ` ${kpi.unit}` : ""}
               </span>
               <span className="text-[9px] text-muted-foreground/30 font-mono">24h</span>
             </div>
-            {/* Mini sparkline */}
             {kpi.sparkline && (
               <div className="h-6 flex items-end gap-[2px]">
                 {kpi.sparkline.map((v, i) => {
@@ -117,7 +102,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
                       className="flex-1 rounded-sm"
                       style={{
                         height: `${Math.max(15, pct)}%`,
-                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `${sphere.color}60` : `${sphere.color}25`,
+                        backgroundColor: i >= kpi.sparkline!.length - 3 ? `${sphere.color}50` : `${sphere.color}20`,
                       }}
                     />
                   );
@@ -128,7 +113,7 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
         ))}
       </div>
 
-      {/* Two-column: Signal Watchlist + System Health */}
+      {/* Two-column */}
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
         {/* Signal Watchlist */}
         <Card className="glass-panel rounded-xl p-5 space-y-4">
@@ -137,22 +122,18 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
             <h3 className="text-sm font-semibold">Signal Watchlist</h3>
           </div>
           <div className="space-y-2">
-            {mockAlerts.map((alert, idx) => {
-              const styles = getSeverityStyles(alert.severity);
-              return (
-                <div
-                  key={idx}
-                  className={`px-3 py-2.5 rounded-lg border ${styles.bg}`}
-                >
-                  <div className="flex items-center gap-2 mb-1">
-                    <div className={`w-1.5 h-1.5 rounded-full ${styles.dot}`} />
-                    <span className="text-xs font-medium capitalize">{alert.severity}</span>
-                    <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{alert.time}</span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{alert.message}</p>
+            {mockAlerts.map((alert, idx) => (
+              <div
+                key={idx}
+                className="px-3 py-2.5 rounded-lg border border-border/15 bg-muted/5"
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: sphere.color }} />
+                  <span className="text-[9px] text-muted-foreground/30 ml-auto font-mono">{alert.time}</span>
                 </div>
-              );
-            })}
+                <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{alert.message}</p>
+              </div>
+            ))}
           </div>
         </Card>
 
@@ -192,7 +173,6 @@ export function SphereOverview({ sphere }: { sphere: Sphere }) {
       {/* Quick Actions */}
       <div className="flex gap-2">
         <Button size="sm" className="gap-1.5 text-xs h-8 rounded-lg" style={{ backgroundColor: `${sphere.color}cc`, color: '#fff' }}>
-          <Zap className="w-3 h-3" />
           Open Map
           <ArrowRight className="w-3 h-3" />
         </Button>
