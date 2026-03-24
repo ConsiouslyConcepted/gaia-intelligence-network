@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Volume2, Orbit, Waves, Radar, Zap } from "lucide-react";
+import { Volume2, Orbit, Waves, Radar, Zap, Signal, Activity } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
