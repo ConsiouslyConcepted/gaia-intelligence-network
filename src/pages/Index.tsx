@@ -83,55 +83,72 @@ const Index = () => {
                       Tap a sphere to explore its metrics &amp; coherence
                     </p>
                   </div>
-                  <div className="space-y-1">
-                    {SPHERE_ARRAY.map((sphere) => (
-                      <button
-                        key={sphere.id}
-                        onClick={() => navigate(`/sphere/${sphere.id}`)}
-                        className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-muted/15 transition-all duration-200 cursor-pointer group"
-                      >
-                        {/* Sphere orb — matches HGS resonance diagram sizing */}
-                        <div className="w-[56px] h-[56px] flex-shrink-0 rounded-full relative flex items-center justify-center">
-                          {/* Outer ring */}
-                          <div
-                            className="absolute inset-0 rounded-full"
-                            style={{
-                              border: `1px solid ${sphere.color}40`,
-                              boxShadow: `0 0 12px 2px ${sphere.color}15, inset 0 0 8px ${sphere.color}10`,
-                            }}
-                          />
-                          {/* Inner orb */}
-                          <div
-                            className="w-7 h-7 rounded-full"
-                            style={{
-                              background: `radial-gradient(circle at 35% 35%, ${sphere.color}cc, ${sphere.color}30 70%, transparent)`,
-                              boxShadow: `0 0 10px 3px ${sphere.color}25`,
-                            }}
-                          />
-                        </div>
-                        <div className="min-w-0 text-left">
-                          <div className="text-sm font-medium text-foreground/90 group-hover:text-foreground transition-colors">
-                            {sphere.name}
+                  <div className="space-y-0.5">
+                    {SPHERE_ARRAY.map((sphere, i) => {
+                      const coherence = [78, 82, 72, 76, 65, 88][i] || 75;
+                      return (
+                        <button
+                          key={sphere.id}
+                          onClick={() => navigate(`/sphere/${sphere.id}`)}
+                          className="w-full flex items-center gap-3 px-2 py-2.5 rounded-lg hover:bg-muted/15 transition-all duration-300 cursor-pointer group"
+                        >
+                          {/* Canvas-style orb with animated ring */}
+                          <div className="w-[48px] h-[48px] flex-shrink-0 rounded-full relative flex items-center justify-center">
+                            <div
+                              className="absolute inset-0 rounded-full opacity-60 group-hover:opacity-100 transition-opacity duration-300"
+                              style={{
+                                border: `1px solid ${sphere.color}50`,
+                                boxShadow: `0 0 8px 1px ${sphere.color}12`,
+                              }}
+                            />
+                            <div
+                              className="w-6 h-6 rounded-full transition-transform duration-300 group-hover:scale-110"
+                              style={{
+                                background: `radial-gradient(circle at 30% 30%, ${sphere.color}dd, ${sphere.color}40 65%, transparent)`,
+                                boxShadow: `0 0 8px 2px ${sphere.color}20`,
+                              }}
+                            />
                           </div>
-                          <div className="text-[10px] text-muted-foreground/60 font-mono">
-                            {sphere.description.split("—")[1]?.trim() || sphere.description.split("—")[0].trim()}
+                          <div className="min-w-0 text-left flex-1">
+                            <div className="text-[13px] font-medium text-foreground/85 group-hover:text-foreground transition-colors leading-tight">
+                              {sphere.name}
+                            </div>
+                            <div className="flex items-center gap-2 mt-1">
+                              <div className="flex-1 h-[3px] rounded-full bg-muted/20 overflow-hidden">
+                                <div
+                                  className="h-full rounded-full transition-all duration-500"
+                                  style={{
+                                    width: `${coherence}%`,
+                                    background: `linear-gradient(90deg, ${sphere.color}60, ${sphere.color})`,
+                                  }}
+                                />
+                              </div>
+                              <span className="text-[9px] font-mono text-muted-foreground/50 w-7 text-right">
+                                {coherence}%
+                              </span>
+                            </div>
                           </div>
-                        </div>
-                      </button>
-                    ))}
+                        </button>
+                      );
+                    })}
                   </div>
                 </div>
 
                 {/* Coherence summary */}
-                <div className="mt-3 px-1 pt-2 border-t border-border/20">
+                <div className="mt-2 mx-1 pt-2 border-t border-border/20">
                   <div className="flex items-center justify-between mb-1.5">
-                    <span className="text-[10px] uppercase tracking-wider text-muted-foreground/60 font-medium">Planetary Coherence</span>
-                    <span className="text-xs font-semibold text-primary">76%</span>
+                    <span className="text-[9px] uppercase tracking-wider text-muted-foreground/50 font-medium">
+                      Planetary Coherence
+                    </span>
+                    <span className="text-[11px] font-semibold text-primary font-mono">76%</span>
                   </div>
-                  <div className="w-full h-1.5 rounded-full bg-muted/20 overflow-hidden">
-                    <div className="h-full rounded-full bg-gradient-to-r from-primary/60 to-primary" style={{ width: "76%" }} />
+                  <div className="w-full h-1 rounded-full bg-muted/15 overflow-hidden">
+                    <div
+                      className="h-full rounded-full bg-gradient-to-r from-primary/50 to-primary"
+                      style={{ width: "76%" }}
+                    />
                   </div>
-                  <p className="text-[9px] text-muted-foreground/50 mt-2 text-center">
+                  <p className="text-[8px] text-muted-foreground/40 mt-1.5 text-center tracking-wide">
                     Monitoring 6 spheres · Gaia Intelligence Network
                   </p>
                 </div>
