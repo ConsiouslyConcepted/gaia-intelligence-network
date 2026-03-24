@@ -47,23 +47,16 @@ export const HGSDashboard = () => {
                         : "hover:bg-muted/20 border border-transparent hover:border-border/30"
                     }`}
                   >
-                    <div
-                      className="w-3.5 h-3.5 rounded-full transition-all duration-300 relative overflow-hidden"
+                    <img
+                      src={p.image}
+                      alt={p.name}
+                      className="w-5 h-5 rounded-full object-cover transition-all duration-300"
                       style={{
-                        background: `radial-gradient(circle at 40% 35%, 
-                          ${p.color} 0%, 
-                          ${p.color}aa 55%, 
-                          ${p.color}33 100%)`,
                         boxShadow: playing === p.id
                           ? `0 0 6px 2px ${p.color}90, 0 0 14px 4px ${p.color}30`
-                          : `0 0 5px 1px ${p.color}50`,
+                          : `0 0 4px 1px ${p.color}40`,
                       }}
-                    >
-                      {/* Limb darkening */}
-                      <div className="absolute inset-0 rounded-full"
-                        style={{ background: `radial-gradient(circle, transparent 40%, rgba(0,0,0,0.3) 100%)` }}
-                      />
-                    </div>
+                    />
                     <span className={`text-[10px] font-medium transition-colors duration-300 ${
                       playing === p.id ? "text-foreground/90" : "text-muted-foreground group-hover:text-foreground/70"
                     }`}>
