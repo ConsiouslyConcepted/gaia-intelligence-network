@@ -52,17 +52,12 @@ export default function SphereDetail() {
                   }}
                 />
                 <div
-                  className="w-5 h-5 rounded-full relative"
+                  className="w-5 h-5 rounded-full"
                   style={{
                     background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
                     boxShadow: `0 1px 6px ${sphere.color}20`,
                   }}
-                >
-                  <div
-                    className="absolute w-1.5 h-1 rounded-full top-[5px] left-[7px]"
-                    style={{ background: `radial-gradient(ellipse, rgba(255,255,255,0.3), transparent)` }}
-                  />
-                </div>
+                />
               </div>
               <div>
                 <h1 className="text-lg font-semibold tracking-wide" style={{ color: sphere.color }}>
