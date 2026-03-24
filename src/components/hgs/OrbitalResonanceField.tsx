@@ -208,34 +208,33 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
       ctx.arc(cx, cy, 5, 0, Math.PI * 2);
       ctx.fill();
 
-      // Planet bodies — only show selected (or all if none selected)
-      for (const p of planetData) {
-        if (sel && p.id !== sel) continue;
+      // Planet bodies — hide in isolation mode, uniform size otherwise
+      if (!sel) {
+        for (const p of planetData) {
+          const angle = time * p.speed * 6 + p.orbitRadius * 20;
+          const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
+          const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
+          const drawSize = 4 * 2.5; // uniform size matching Pluto
 
-        const angle = time * p.speed * 6 + p.orbitRadius * 20;
-        const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
-        const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
-        const r = p.size;
-        const drawSize = r * (sel ? 3.0 : 2.5);
-
-        // Soft glow behind planet
-        const glowGrad = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r * 3.5);
-        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
-        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
-        glowGrad.addColorStop(1, "transparent");
-        ctx.fillStyle = glowGrad;
-        ctx.beginPath();
-        ctx.arc(sx, sy, r * 3.5, 0, Math.PI * 2);
-        ctx.fill();
-
-        const img = planetImages[p.id];
-        if (img && img.complete && img.naturalWidth > 0) {
-          ctx.drawImage(img, sx - drawSize, sy - drawSize, drawSize * 2, drawSize * 2);
-        } else {
-          ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.9)`;
+          // Soft glow behind planet
+          const glowGrad = ctx.createRadialGradient(sx, sy, 2, sx, sy, 14);
+          glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
+          glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
+          glowGrad.addColorStop(1, "transparent");
+          ctx.fillStyle = glowGrad;
           ctx.beginPath();
-          ctx.arc(sx, sy, r, 0, Math.PI * 2);
+          ctx.arc(sx, sy, 14, 0, Math.PI * 2);
           ctx.fill();
+
+          const img = planetImages[p.id];
+          if (img && img.complete && img.naturalWidth > 0) {
+            ctx.drawImage(img, sx - drawSize, sy - drawSize, drawSize * 2, drawSize * 2);
+          } else {
+            ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.9)`;
+            ctx.beginPath();
+            ctx.arc(sx, sy, 4, 0, Math.PI * 2);
+            ctx.fill();
+          }
         }
       }
 
