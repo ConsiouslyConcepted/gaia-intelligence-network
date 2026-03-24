@@ -37,11 +37,11 @@ export const HGSDashboard = () => {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <header className="p-4 pb-0">
-        <h1 className="text-2xl font-bold tracking-tight text-foreground/90">
+      <header className="px-4 pt-2 pb-1">
+        <h1 className="text-xl font-bold tracking-tight text-foreground/90">
           Musica Universalis
         </h1>
-        <p className="text-xs text-muted-foreground mt-1">
+        <p className="text-xs text-muted-foreground">
           Harmonic ratios between planetary orbits — celestial mechanics &amp; the music of the spheres
         </p>
       </header>
