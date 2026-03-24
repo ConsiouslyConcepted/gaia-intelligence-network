@@ -52,17 +52,6 @@ export const SPHERES: Record<SphereId, Sphere> = {
     hasMapLayers: true,
     hasStellarLayers: false,
   },
-  technosphere: {
-    id: "technosphere",
-    name: "Technosphere",
-    description: "Synthetic cognition — digital networks, AI, technological infrastructure",
-    color: "#00ffff",
-    radius: 1.45,
-    opacity: 0.15,
-    orderIndex: 4,
-    hasMapLayers: true,
-    hasStellarLayers: false,
-  },
   magnetosphere: {
     id: "magnetosphere",
     name: "Magnetosphere",
