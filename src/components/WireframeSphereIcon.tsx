@@ -76,7 +76,7 @@ export const WireframeSphereIcon = ({
     >
       <defs>
         <radialGradient id={`wf-glow-${color.replace('#', '')}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.08" />
+          <stop offset="0%" stopColor={color} stopOpacity="0.18" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </radialGradient>
       </defs>
@@ -91,8 +91,8 @@ export const WireframeSphereIcon = ({
         r="18"
         fill="none"
         stroke={color}
-        strokeWidth="0.4"
-        opacity="0.3"
+        strokeWidth="0.5"
+        opacity="0.5"
       />
 
       {/* Latitude lines */}
@@ -102,8 +102,8 @@ export const WireframeSphereIcon = ({
           d={d}
           fill="none"
           stroke={color}
-          strokeWidth="0.3"
-          opacity={0.12 + (i % 3 === 0 ? 0.06 : 0)}
+          strokeWidth="0.35"
+          opacity={0.22 + (i % 3 === 0 ? 0.1 : 0)}
         />
       ))}
 
@@ -114,8 +114,8 @@ export const WireframeSphereIcon = ({
           d={d}
           fill="none"
           stroke={color}
-          strokeWidth="0.3"
-          opacity={0.12 + (i % 4 === 0 ? 0.08 : 0)}
+          strokeWidth="0.35"
+          opacity={0.22 + (i % 4 === 0 ? 0.12 : 0)}
         />
       ))}
     </svg>
