@@ -80,7 +80,7 @@ export function SphereAIMReport({ sphere }: { sphere: Sphere }) {
           </div>
           <div className="text-right">
             <div className="text-sm text-muted-foreground mb-1">Overall Score</div>
-            <div className="text-4xl font-bold text-primary">{overallScore}%</div>
+            <div className="text-4xl font-bold" style={{ color: sphere.color }}>{overallScore}%</div>
           </div>
         </div>
       </Card>
