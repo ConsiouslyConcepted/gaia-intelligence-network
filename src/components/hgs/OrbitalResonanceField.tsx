@@ -73,9 +73,16 @@ export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldP
         });
       }
 
+      // Find max extent for normalization in isolation mode
+      let maxR = 0;
+      for (const pt of points) {
+        maxR = Math.max(maxR, Math.abs(pt.x1), Math.abs(pt.y1), Math.abs(pt.x2), Math.abs(pt.y2));
+      }
+
       return {
         ...pair,
         points,
+        maxR,
         rgb1: p1.rgb,
         rgb2: p2.rgb,
         planet1Id: p1.id,
