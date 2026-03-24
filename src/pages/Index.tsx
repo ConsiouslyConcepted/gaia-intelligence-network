@@ -93,34 +93,24 @@ const Index = () => {
                           className="w-full flex items-center gap-3 px-2 py-3 rounded-lg hover:bg-muted/10 transition-all duration-300 cursor-pointer group border border-transparent hover:border-border/20"
                         >
                           {/* Sphere indicator */}
-                          <div className="w-12 h-12 flex-shrink-0 rounded-full relative flex items-center justify-center">
-                            {/* Outer ring */}
+                          <div className="w-10 h-10 flex-shrink-0 rounded-full relative flex items-center justify-center">
                             <div
                               className="absolute inset-0 rounded-full transition-opacity duration-300"
                               style={{
-                                border: `1.5px solid ${sphere.color}20`,
-                                boxShadow: `inset 0 0 8px ${sphere.color}08, 0 0 12px ${sphere.color}06`,
+                                border: `1px solid ${sphere.color}18`,
+                                boxShadow: `inset 0 0 6px ${sphere.color}06`,
                               }}
                             />
-                            {/* Ambient glow behind sphere */}
                             <div
-                              className="absolute w-7 h-7 rounded-full blur-md opacity-40 group-hover:opacity-60 transition-opacity duration-300"
-                              style={{ background: sphere.color }}
-                            />
-                            {/* 3D sphere */}
-                            <div
-                              className="w-6 h-6 rounded-full relative transition-all duration-300 group-hover:scale-110"
+                              className="w-5 h-5 rounded-full transition-all duration-300 group-hover:scale-110"
                               style={{
-                                background: `radial-gradient(circle at 35% 30%, ${sphere.color}ff, ${sphere.color}bb 45%, ${sphere.color}55 75%, ${sphere.color}20)`,
-                                boxShadow: `0 2px 8px ${sphere.color}30, inset 0 -2px 4px ${sphere.color}20`,
+                                background: `radial-gradient(circle at 38% 32%, ${sphere.color}ee, ${sphere.color}80 55%, ${sphere.color}30)`,
+                                boxShadow: `0 1px 6px ${sphere.color}20`,
                               }}
                             >
-                              {/* Specular highlight */}
                               <div
-                                className="absolute w-2 h-1.5 rounded-full top-1 left-1.5"
-                                style={{
-                                  background: `radial-gradient(ellipse, rgba(255,255,255,0.45), transparent)`,
-                                }}
+                                className="absolute w-1.5 h-1 rounded-full top-[5px] left-[7px]"
+                                style={{ background: `radial-gradient(ellipse, rgba(255,255,255,0.3), transparent)` }}
                               />
                             </div>
                           </div>
