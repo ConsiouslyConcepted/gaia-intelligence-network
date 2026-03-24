@@ -81,7 +81,7 @@ export const HGSDashboard = () => {
         </div>
 
         {/* Right sidebar */}
-        <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0">
+        <Card className="glass-panel w-[280px] flex-shrink-0 flex flex-col min-h-0 mt-8">
           {/* Selected planet detail area */}
           {selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
