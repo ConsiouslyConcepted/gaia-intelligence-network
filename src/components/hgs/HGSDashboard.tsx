@@ -2,6 +2,7 @@ import { useState } from "react";
 import { Info, Volume2, Eye } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
+import { ResonanceIcon } from "@/components/hgs/ResonanceIcon";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
@@ -106,17 +107,9 @@ export const HGSDashboard = () => {
                         : "hover:bg-muted/20 border border-transparent hover:border-border/30"
                     }`}
                   >
-                    <img
-                      src={p.image}
-                      alt={p.name}
-                      className={`rounded-full object-cover transition-all duration-300 ${
-                        isSelected ? "w-7 h-7" : "w-6 h-6"
-                      }`}
-                      style={{
-                        boxShadow: isSelected
-                          ? `0 0 6px 2px ${p.color}90, 0 0 14px 4px ${p.color}30`
-                          : `0 0 4px 1px ${p.color}40`,
-                      }}
+                    <ResonanceIcon
+                      planetId={p.id}
+                      size={isSelected ? 32 : 28}
                     />
                     <span className={`text-[11px] font-medium transition-colors duration-300 ${
                       isSelected
