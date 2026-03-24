@@ -1,13 +1,22 @@
 import { useEffect, useRef } from "react";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 
+interface OrbitalResonanceFieldProps {
+  selectedPlanet?: string | null;
+}
+
 /**
  * Cymatic orbital resonance visualization of our solar system.
- * Draws lines connecting planet positions at each time step,
- * producing real geometric rose patterns from their harmonic ratios.
+ * When selectedPlanet is set, only resonance pairs involving that planet are shown.
  */
-export const OrbitalResonanceField = () => {
+export const OrbitalResonanceField = ({ selectedPlanet }: OrbitalResonanceFieldProps) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const selectedRef = useRef<string | null>(null);
+
+  // Keep ref in sync so the animation loop reads the latest value
+  useEffect(() => {
+    selectedRef.current = selectedPlanet ?? null;
+  }, [selectedPlanet]);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -26,13 +35,10 @@ export const OrbitalResonanceField = () => {
 
     // Preload planet images
     const planetImages: Record<string, HTMLImageElement> = {};
-    let imagesLoaded = 0;
-    const totalImages = SOLAR_PLANETS.length;
 
     SOLAR_PLANETS.forEach((p) => {
       const img = new Image();
       img.src = p.image;
-      img.onload = () => { imagesLoaded++; };
       planetImages[p.id] = img;
     });
 
@@ -72,6 +78,8 @@ export const OrbitalResonanceField = () => {
         points,
         rgb1: p1.rgb,
         rgb2: p2.rgb,
+        planet1Id: p1.id,
+        planet2Id: p2.id,
       };
     });
 
@@ -104,6 +112,7 @@ export const OrbitalResonanceField = () => {
       const cx = w * 0.45;
       const cy = h * 0.5;
       const scale = Math.min(w, h) * 0.48;
+      const sel = selectedRef.current;
 
       ctx.fillStyle = "rgb(4, 4, 14)";
       ctx.fillRect(0, 0, w, h);
@@ -123,11 +132,18 @@ export const OrbitalResonanceField = () => {
       const sin = Math.sin(globalRotation);
 
       for (const pp of pairPatterns) {
+        // Filter: if a planet is selected, only show pairs involving it
+        const involved = !sel || pp.planet1Id === sel || pp.planet2Id === sel;
+        if (!involved) continue;
+
         const mr = (pp.rgb1[0] + pp.rgb2[0]) / 2;
         const mg = (pp.rgb1[1] + pp.rgb2[1]) / 2;
         const mb = (pp.rgb1[2] + pp.rgb2[2]) / 2;
 
-        ctx.lineWidth = 0.35;
+        // When isolated, boost visibility
+        const alphaBoost = sel ? 1.8 : 1.0;
+
+        ctx.lineWidth = sel ? 0.5 : 0.35;
         const skip = 3;
 
         for (let s = 0; s < pp.points.length; s += skip) {
@@ -137,7 +153,7 @@ export const OrbitalResonanceField = () => {
           const x2 = cx + (p.x2 * cos - p.y2 * sin) * scale;
           const y2 = cy + (p.x2 * sin + p.y2 * cos) * scale;
 
-          const alpha = 0.06 + Math.sin(s * 0.008) * 0.025;
+          const alpha = (0.06 + Math.sin(s * 0.008) * 0.025) * alphaBoost;
           ctx.strokeStyle = `rgba(${mr},${mg},${mb},${alpha})`;
           ctx.beginPath();
           ctx.moveTo(x1, y1);
@@ -148,7 +164,10 @@ export const OrbitalResonanceField = () => {
 
       // Orbital rings
       for (const p of planetData) {
-        ctx.strokeStyle = "rgba(255,255,255,0.1)";
+        const isRelevant = !sel || p.id === sel;
+        ctx.strokeStyle = isRelevant
+          ? "rgba(255,255,255,0.12)"
+          : "rgba(255,255,255,0.03)";
         ctx.lineWidth = 0.5;
         ctx.beginPath();
         ctx.arc(cx, cy, p.orbitRadius * scale, 0, Math.PI * 2);
@@ -174,12 +193,16 @@ export const OrbitalResonanceField = () => {
         const sx = cx + Math.cos(angle) * p.orbitRadius * scale;
         const sy = cy + Math.sin(angle) * p.orbitRadius * scale;
         const r = p.size;
-        const drawSize = r * 2.5; // image draw size (slightly larger than old circle)
+
+        const isSelected = sel === p.id;
+        const dimmed = sel && !isSelected;
+        const drawSize = r * (isSelected ? 3.0 : 2.5);
+        const glowAlpha = dimmed ? 0.06 : 0.2;
 
         // Soft glow behind planet
         const glowGrad = ctx.createRadialGradient(sx, sy, r * 0.5, sx, sy, r * 3.5);
-        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.2)`);
-        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.05)`);
+        glowGrad.addColorStop(0, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},${glowAlpha})`);
+        glowGrad.addColorStop(0.5, `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},${glowAlpha * 0.25})`);
         glowGrad.addColorStop(1, "transparent");
         ctx.fillStyle = glowGrad;
         ctx.beginPath();
@@ -188,15 +211,16 @@ export const OrbitalResonanceField = () => {
 
         // Draw planet image if loaded
         const img = planetImages[p.id];
+        ctx.globalAlpha = dimmed ? 0.3 : 1.0;
         if (img && img.complete && img.naturalWidth > 0) {
           ctx.drawImage(img, sx - drawSize, sy - drawSize, drawSize * 2, drawSize * 2);
         } else {
-          // Fallback circle
           ctx.fillStyle = `rgba(${p.rgb[0]},${p.rgb[1]},${p.rgb[2]},0.9)`;
           ctx.beginPath();
           ctx.arc(sx, sy, r, 0, Math.PI * 2);
           ctx.fill();
         }
+        ctx.globalAlpha = 1.0;
       }
 
       animationId = requestAnimationFrame(animate);
