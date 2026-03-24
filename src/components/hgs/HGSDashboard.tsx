@@ -28,30 +28,46 @@ export const HGSDashboard = () => {
           <OrbitalResonanceField />
 
           {/* Floating planet legend with click-to-play */}
-          <div className="absolute bottom-3 left-3 flex gap-2 flex-wrap">
-            {SOLAR_PLANETS.map((p) => (
-              <button
-                key={p.id}
-                onClick={() => play(p.id)}
-                className={`flex items-center gap-1.5 px-2 py-1 rounded-md transition-all ${
-                  playing === p.id
-                    ? "bg-primary/20 border border-primary/40"
-                    : "hover:bg-muted/30"
-                }`}
-              >
-                <div
-                  className="w-2 h-2 rounded-full"
-                  style={{
-                    backgroundColor: p.color,
-                    boxShadow: `0 0 6px ${p.color}`,
-                  }}
-                />
-                <span className="text-[10px] text-muted-foreground">{p.name}</span>
-                {playing === p.id && (
-                  <Volume2 className="w-2.5 h-2.5 text-primary animate-pulse" />
-                )}
-              </button>
-            ))}
+          <div className="absolute bottom-3 left-3 right-3">
+            <div className="glass-panel rounded-lg px-3 py-2.5 border border-border/20">
+              <div className="flex items-center gap-1 mb-2">
+                <Volume2 className="w-3 h-3 text-muted-foreground/50" />
+                <span className="text-[9px] uppercase tracking-widest text-muted-foreground/50 font-medium">
+                  Click to hear · Planetary Frequencies
+                </span>
+              </div>
+              <div className="flex gap-1.5 flex-wrap">
+                {SOLAR_PLANETS.map((p) => (
+                  <button
+                    key={p.id}
+                    onClick={() => play(p.id)}
+                    className={`group flex items-center gap-1.5 px-2.5 py-1.5 rounded-md transition-all duration-300 ${
+                      playing === p.id
+                        ? "bg-primary/15 border border-primary/30 shadow-[0_0_12px_rgba(var(--primary),0.15)]"
+                        : "hover:bg-muted/20 border border-transparent hover:border-border/30"
+                    }`}
+                  >
+                    <div
+                      className="w-2.5 h-2.5 rounded-full transition-all duration-300"
+                      style={{
+                        backgroundColor: p.color,
+                        boxShadow: playing === p.id
+                          ? `0 0 10px ${p.color}, 0 0 20px ${p.color}40`
+                          : `0 0 4px ${p.color}60`,
+                      }}
+                    />
+                    <span className={`text-[10px] font-medium transition-colors duration-300 ${
+                      playing === p.id ? "text-foreground/90" : "text-muted-foreground group-hover:text-foreground/70"
+                    }`}>
+                      {p.name}
+                    </span>
+                    {playing === p.id && (
+                      <Volume2 className="w-3 h-3 text-primary animate-pulse" />
+                    )}
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Badge */}
