@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Scan, Activity, GitBranch } from "lucide-react";
+import { ArrowLeft, Scan, Activity, BarChart3, GitBranch } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { SPHERES, SphereId } from "@/types/spheres";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
 import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel";
-import { DataPanel } from "@/components/sphere-detail/DataPanel";
+import { SignalsPanel } from "@/components/sphere-detail/SignalsPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
 
 const ACCENT = "#5ce0d2";
