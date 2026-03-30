@@ -10,7 +10,7 @@ import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel"
 import { SignalsPanel } from "@/components/sphere-detail/SignalsPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
 
-const ACCENT = "#5ce0d2";
+const ACCENT = "#5ce0d2"; // sphere accent
 
 export default function SphereDetail() {
   const { sphereId } = useParams<{ sphereId: SphereId }>();
