@@ -1,12 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
-import { GeosphereSim } from "./simulations/GeosphereSim";
-import { BiosphereSim } from "./simulations/BiosphereSim";
-import { MagnetosphereSim } from "./simulations/MagnetosphereSim";
-import { IonosphereSim } from "./simulations/IonosphereSim";
-import { NoosphereSim } from "./simulations/NoosphereSim";
-import { CrystalsphereeSim } from "./simulations/CrystalsphereeSim";
+import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
 
 interface Props {
   sphere: Sphere;
@@ -19,14 +14,6 @@ interface BehaviorPattern {
   timeScale: string;
 }
 
-const SIM_COMPONENTS: Record<SphereId, React.ComponentType> = {
-  geosphere: GeosphereSim,
-  biosphere: BiosphereSim,
-  magnetosphere: MagnetosphereSim,
-  ionosphere: IonosphereSim,
-  noosphere: NoosphereSim,
-  crystalsphere: CrystalsphereeSim,
-};
 
 const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPattern[] }> = {
   geosphere: {
@@ -87,7 +74,7 @@ const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPatte
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const behavior = BEHAVIOR_DATA[sphere.id];
-  const SimComponent = SIM_COMPONENTS[sphere.id];
+  
 
   return (
     <div className="space-y-4">
@@ -110,9 +97,9 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Live Simulation */}
-      <Card className="glass-panel rounded-xl p-3 relative">
-        <SimComponent />
+      {/* Blue Marble Globe */}
+      <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
+        <BlueMarbleGlobe height={280} />
       </Card>
 
       {/* Behavior Summary */}
