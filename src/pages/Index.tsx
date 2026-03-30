@@ -56,18 +56,14 @@ const Index = () => {
   const coherenceValues = [78, 82, 72, 76, 65, 88];
   const globalCoherence = Math.round(coherenceValues.reduce((a, b) => a + b, 0) / coherenceValues.length);
 
-  const liveReadouts = useMemo(() => ({
-    left: [
-      { label: "Seismic Index", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "Mw", color: "#cc5533", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
-      { label: "Solar Flux", value: Math.round(142 + Math.sin(tick * 0.15) * 12).toString(), unit: "SFU", color: "#e8c86a", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.15) * 0.3) },
-      { label: "Kp Index", value: (4.3 + Math.sin(tick * 0.2) * 0.8).toFixed(1), unit: "", color: "#4466dd", trend: Array.from({ length: 12 }, (_, i) => 0.45 + Math.sin((tick + i) * 0.2) * 0.35) },
-    ],
-    right: [
-      { label: "TEC Global", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TECU", color: "#4488cc", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
-      { label: "Schumann Res", value: (7.83 + Math.sin(tick * 0.08) * 0.15).toFixed(2), unit: "Hz", color: "#d4a56a", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.08) * 0.2) },
-      { label: "B-Field Str", value: (48.2 + Math.cos(tick * 0.1) * 2.1).toFixed(1), unit: "μT", color: "#7ecbcb", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.1) * 0.25) },
-    ],
-  }), [tick]);
+  const liveReadouts = useMemo(() => ([
+    { label: "Seismic Index", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "Mw", color: "#cc5533", sphere: "Geosphere", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
+    { label: "Solar Flux", value: Math.round(142 + Math.sin(tick * 0.15) * 12).toString(), unit: "SFU", color: "#4466dd", sphere: "Magnetosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.15) * 0.3) },
+    { label: "TEC Global", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TECU", color: "#4488cc", sphere: "Ionosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
+    { label: "Schumann Res", value: (7.83 + Math.sin(tick * 0.08) * 0.15).toFixed(2), unit: "Hz", color: "#d4a56a", sphere: "Crystalsphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.08) * 0.2) },
+    { label: "Global NDVI", value: (0.42 + Math.sin(tick * 0.04) * 0.06).toFixed(2), unit: "idx", color: "#4caf50", sphere: "Biosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.04) * 0.25) },
+    { label: "Collective Attention", value: (840 + Math.cos(tick * 0.06) * 80).toFixed(0), unit: "Tb/s", color: "#ab47bc", sphere: "Noosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.06) * 0.3) },
+  ]), [tick]);
 
   if (activeView === "hgs") {
     return <HGSDashboard onSwitchView={() => setActiveView("planetary")} />;
@@ -169,41 +165,24 @@ const Index = () => {
         </HudPanel>
       </div>
 
-      {/* ─── RIGHT HUD: Live Feeds ─── */}
-      <div className="absolute right-4 top-[96px] bottom-4 z-10 flex flex-col gap-3 pointer-events-none w-[220px]">
-        <HudPanel className="pointer-events-auto p-3" glow="#4488cc">
+      {/* ─── RIGHT HUD: Sphere Signals ─── */}
+      <div className="absolute right-4 top-[96px] bottom-4 z-10 flex flex-col pointer-events-none w-[220px]">
+        <HudPanel className="pointer-events-auto p-3 flex-1 overflow-y-auto" glow="#4488cc">
           <div className="flex items-center gap-1.5 mb-2.5">
             <Zap className="w-3 h-3 text-accent/50" />
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Live Feeds</span>
+            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Signals</span>
           </div>
           <div className="space-y-2.5">
-            {liveReadouts.left.map((d) => (
+            {liveReadouts.map((d) => (
               <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-1">
+                <div className="flex items-baseline justify-between mb-0.5">
                   <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/35">{d.label}</span>
                   <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
                     {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
                   </span>
                 </div>
-                <MiniGraph color={d.color} data={d.trend} />
-              </div>
-            ))}
-          </div>
-        </HudPanel>
-
-        <HudPanel className="pointer-events-auto p-3" glow="#7ecbcb">
-          <div className="flex items-center gap-1.5 mb-2.5">
-            <Zap className="w-3 h-3 text-accent/50" />
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Field Metrics</span>
-          </div>
-          <div className="space-y-2.5">
-            {liveReadouts.right.map((d) => (
-              <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-1">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/35">{d.label}</span>
-                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
-                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
-                  </span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
                 </div>
                 <MiniGraph color={d.color} data={d.trend} />
               </div>
