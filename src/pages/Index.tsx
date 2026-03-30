@@ -150,12 +150,6 @@ const Index = () => {
                       <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
                     </div>
                     <p className="text-[8px] text-muted-foreground/40 leading-snug mt-0.5">{sphere.description}</p>
-                    <div className="flex items-center gap-2 mt-1.5">
-                      <div className="flex-1 h-[3px] rounded-full overflow-hidden" style={{ backgroundColor: `${sphere.color}10` }}>
-                        <div className="h-full rounded-full transition-all duration-1000" style={{ width: `${coherence}%`, background: `linear-gradient(90deg, ${sphere.color}50, ${sphere.color})` }} />
-                      </div>
-                      <span className="text-[10px] font-mono tabular-nums w-8 text-right" style={{ color: `${sphere.color}aa` }}>{coherence}%</span>
-                    </div>
                   </div>
                 </button>
               );
