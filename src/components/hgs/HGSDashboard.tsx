@@ -142,11 +142,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                   <p className="text-[8px] text-muted-foreground/35 self-start -mt-3 tracking-wider">Cymatic pattern of {selectedData.name}'s orbital tone</p>
 
                   <div className="relative">
-                    <img
-                      src={selectedData.cymaticImage}
-                      alt={`${selectedData.name} cymatic frequency pattern`}
-                      className="w-44 h-44 rounded-full object-cover"
-                      style={{ boxShadow: `0 0 20px 6px ${selectedData.color}50, 0 0 40px 12px ${selectedData.color}20` }}
+                    <LiveCymaticPattern
+                      planetColor={selectedData.color}
+                      planetId={selectedData.id}
+                      isPlaying={playing === selectedData.id}
+                      getFrequencyData={getFrequencyData}
+                      size={176}
                     />
                     {playing === selectedData.id && (
                       <div className="absolute inset-0 rounded-full border-2 border-primary/40 animate-pulse" />
