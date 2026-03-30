@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Volume2, Radar, Signal, Activity } from "lucide-react";
-import harmonicsIcon from "@/assets/harmonics-icon.png";
+import { Volume2, Signal, Activity } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
+import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 import { usePlanetAudio } from "@/hooks/usePlanetAudio";
 
