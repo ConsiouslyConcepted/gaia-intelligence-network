@@ -13,39 +13,33 @@ const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topolog
  * Source: NASA Earth Observations (NEO) — public domain.
  */
 const SPHERE_OVERLAYS: Record<string, { url: string; opacity: number; blending: THREE.Blending }> = {
-  // Topography + Bathymetry (land elevation & ocean depth)
   geosphere: {
-    url: "https://eoimages.gsfc.nasa.gov/images/imagerecords/73000/73909/world.topo.bathy.200412.3x5400x2700.jpg",
+    url: "/overlays/topo-bathy.jpg",
     opacity: 0.55,
     blending: THREE.AdditiveBlending,
   },
-  // NDVI Vegetation Index — real greenness of the planet
   biosphere: {
-    url: "https://neo.gsfc.nasa.gov/servlet/RenderData?si=2046169&cs=rgb&format=PNG&width=2048&height=1024",
+    url: "/overlays/ndvi.png",
     opacity: 0.6,
     blending: THREE.AdditiveBlending,
   },
-  // Night lights / population density — human network activity
   noosphere: {
-    url: "https://eoimages.gsfc.nasa.gov/images/imagerecords/144000/144898/BlackMarble_2016_3km.jpg",
+    url: "/overlays/night-lights.jpg",
     opacity: 0.85,
     blending: THREE.AdditiveBlending,
   },
-  // Active fires — proxy for geomagnetic energy interaction with atmosphere
   magnetosphere: {
-    url: "https://neo.gsfc.nasa.gov/servlet/RenderData?si=2045708&cs=rgb&format=PNG&width=2048&height=1024",
+    url: "/overlays/fires.png",
     opacity: 0.7,
     blending: THREE.AdditiveBlending,
   },
-  // Water vapor / atmospheric moisture — ionospheric density proxy
   ionosphere: {
-    url: "https://neo.gsfc.nasa.gov/servlet/RenderData?si=2045724&cs=rgb&format=PNG&width=2048&height=1024",
+    url: "/overlays/water-vapor.png",
     opacity: 0.5,
     blending: THREE.AdditiveBlending,
   },
-  // Land surface temperature — energy grid / thermal resonance
   crystalsphere: {
-    url: "https://neo.gsfc.nasa.gov/servlet/RenderData?si=875430&cs=rgb&format=PNG&width=2048&height=1024",
+    url: "/overlays/land-temp.png",
     opacity: 0.55,
     blending: THREE.AdditiveBlending,
   },
