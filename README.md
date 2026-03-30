@@ -4,9 +4,7 @@ This repository is currently under active development.
 
 ## Overview
 
-GaiaSphere is a developing planetary intelligence operating system and dashboard for interfacing with Earth’s planetary and universal systems of intelligence.
-
-This repository captures the current developmental state of GaiaSphere as its structure, scope, and architecture continue to evolve.
+GaiaSphere is a developing planetary intelligence operating system and dashboard for interfacing with Earth’s planetary and universal systems of intelligence. This repository captures the current developmental state of GaiaSphere as its structure, scope, and architecture continue to evolve.
 
 ---
 
