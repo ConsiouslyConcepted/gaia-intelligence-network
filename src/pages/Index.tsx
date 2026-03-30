@@ -111,7 +111,7 @@ const Index = () => {
             style={{ color: "hsla(174,60%,60%,0.7)" }}
             title="Planetary Commons Data"
           >
-            <CommonsIcon size={24} />
+            <CommonsIcon size={28} />
           </button>
 
           {/* Right: View toggle */}
