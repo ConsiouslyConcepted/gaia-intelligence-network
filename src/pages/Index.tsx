@@ -103,6 +103,16 @@ const Index = () => {
           </div>
 
 
+          {/* Commons Data icon */}
+          <button
+            onClick={() => navigate("/commons")}
+            className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+            style={{ color: "hsla(174,60%,60%,0.7)" }}
+            title="Planetary Commons Data"
+          >
+            <Database className="w-3.5 h-3.5" style={{ color: "#5ce0d2" }} />
+          </button>
+
           {/* Right: View toggle */}
           <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
             <button
