@@ -3,7 +3,8 @@ import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
-import { Activity, Radar, Signal, Zap, ArrowRight, Database } from "lucide-react";
+import { Activity, Radar, Signal, Zap, ArrowRight } from "lucide-react";
+import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
@@ -110,7 +111,7 @@ const Index = () => {
             style={{ color: "hsla(174,60%,60%,0.7)" }}
             title="Planetary Commons Data"
           >
-            <Database className="w-3.5 h-3.5" style={{ color: "#5ce0d2" }} />
+            <CommonsIcon size={14} />
           </button>
 
           {/* Right: View toggle */}

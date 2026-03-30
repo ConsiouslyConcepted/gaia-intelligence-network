@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Scan, Activity, Database, GitBranch } from "lucide-react";
+import { ArrowLeft, Scan, Activity, GitBranch } from "lucide-react";
+import { CommonsIcon } from "@/components/CommonsIcon";
 import { SPHERES, SphereId } from "@/types/spheres";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
@@ -65,7 +66,7 @@ export default function SphereDetail() {
             className="h-8 w-8 hover:bg-muted/20 rounded-lg"
             title="Planetary Commons Data"
           >
-            <Database className="w-4 h-4" style={{ color: "#5ce0d2" }} />
+            <CommonsIcon size={16} />
           </Button>
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
@@ -86,17 +87,17 @@ export default function SphereDetail() {
         <Tabs defaultValue="anatomy" className="h-full flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
-              { value: "anatomy", icon: Scan, label: "Anatomy" },
-              { value: "live-dynamics", icon: Activity, label: "Live Dynamics" },
-              { value: "data", icon: Database, label: "Data" },
-              { value: "coupling", icon: GitBranch, label: "Coupling" },
+              { value: "anatomy", icon: Scan, label: "Anatomy", isCustom: false },
+              { value: "live-dynamics", icon: Activity, label: "Live Dynamics", isCustom: false },
+              { value: "data", icon: null, label: "Data", isCustom: true },
+              { value: "coupling", icon: GitBranch, label: "Coupling", isCustom: false },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
                 className="gap-1.5 text-xs px-3 py-1.5 rounded-lg data-[state=active]:bg-muted/20 data-[state=active]:shadow-none"
               >
-                <tab.icon className="w-3.5 h-3.5" />
+                {tab.isCustom ? <CommonsIcon size={14} /> : tab.icon && <tab.icon className="w-3.5 h-3.5" />}
                 {tab.label}
               </TabsTrigger>
             ))}
