@@ -432,7 +432,7 @@ export default function PlanetaryCommons() {
             { label: "Update Freq", value: "~60s", sub: "Fastest refresh" },
           ].map((stat) => (
             <Card key={stat.label} className="glass-panel rounded-xl p-3 text-center">
-              <div className="text-lg font-bold font-mono" style={{ color: ACCENT }}>{stat.value}</div>
+              <div className="text-lg font-bold font-mono text-foreground/85">{stat.value}</div>
               <div className="text-[9px] font-semibold uppercase tracking-wider text-foreground/60">{stat.label}</div>
               <div className="text-[8px] text-muted-foreground/30 mt-0.5">{stat.sub}</div>
             </Card>
