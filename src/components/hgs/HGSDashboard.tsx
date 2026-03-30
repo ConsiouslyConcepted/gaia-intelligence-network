@@ -10,16 +10,15 @@ type SidebarMode = "patterns" | "cymatics";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
-    className={`relative rounded-xl border-[1.5px] backdrop-blur-2xl ${className}`}
+    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
     style={{
       background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      borderColor: "hsla(38,50%,50%,0.25)",
-      boxShadow: `0 0 25px hsla(38,50%,45%,0.08), 0 0 50px hsla(38,50%,45%,0.04), inset 0 1px 0 hsla(38,50%,60%,0.1), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`,
+      boxShadow: glow
+        ? `0 0 40px ${glow}15, inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`
+        : "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
     }}
   >
-    {/* Top highlight edge */}
-    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(38,50%,55%,0.35), transparent)" }} />
-    {/* Bottom subtle edge */}
+    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
     <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
     {children}
   </div>
