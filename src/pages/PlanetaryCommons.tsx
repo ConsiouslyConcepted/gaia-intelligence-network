@@ -408,7 +408,7 @@ export default function PlanetaryCommons() {
               className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
               style={{ backgroundColor: `${ACCENT}12` }}
             >
-              <Database className="w-6 h-6" style={{ color: ACCENT }} />
+              <Database className="w-6 h-6 text-foreground/60" />
             </div>
             <div>
               <h2 className="text-sm font-semibold">Open Planetary Data</h2>
