@@ -10,16 +10,15 @@ type SidebarMode = "patterns" | "cymatics";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
-    className={`relative rounded-xl border-[1.5px] backdrop-blur-2xl ${className}`}
+    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
     style={{
       background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      borderColor: "hsla(38,50%,50%,0.25)",
-      boxShadow: `0 0 25px hsla(38,50%,45%,0.08), 0 0 50px hsla(38,50%,45%,0.04), inset 0 1px 0 hsla(38,50%,60%,0.1), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`,
+      boxShadow: glow
+        ? `0 0 40px ${glow}15, inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`
+        : "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
     }}
   >
-    {/* Top highlight edge */}
-    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(38,50%,55%,0.35), transparent)" }} />
-    {/* Bottom subtle edge */}
+    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
     <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
     {children}
   </div>
@@ -101,26 +100,30 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 onClick={() => setSelectedPlanet(null)}
                 className="text-[10px] uppercase tracking-wider transition-all duration-300 px-4 py-2 rounded-lg font-medium"
                 style={{
-                  color: "#5ce0d2",
-                  background: "hsla(174,60%,50%,0.08)",
-                  border: "1px solid hsla(174,60%,50%,0.25)",
-                  boxShadow: "0 0 12px hsla(174,60%,50%,0.08), inset 0 1px 0 hsla(174,60%,70%,0.08)",
+                  color: "hsla(0,0%,100%,0.6)",
+                  background: "hsla(0,0%,100%,0.04)",
+                  border: "1px solid hsla(0,0%,100%,0.1)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06)",
                 }}
               >
                 Show All
               </button>
             )}
-            <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
-              <button onClick={onSwitchView} className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase text-muted-foreground/40 hover:text-foreground/60 transition-all duration-300 hover:bg-foreground/[0.04]">
-                <Signal className="w-3.5 h-3.5" style={{ color: "#5ce0d2" }} />Planetary
+            <div className="flex gap-1 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
+              <button
+                onClick={onSwitchView}
+                className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+                style={{ color: "hsla(0,0%,100%,0.4)" }}
+              >
+                <Signal className="w-3.5 h-3.5" />Planetary
               </button>
               <button
                 className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(135deg, hsla(38,60%,50%,0.3) 0%, hsla(38,70%,40%,0.2) 100%)",
-                  color: "#e8b960",
-                  border: "1px solid hsla(38,60%,55%,0.45)",
-                  boxShadow: "0 0 20px hsla(38,65%,50%,0.2), inset 0 1px 0 hsla(38,60%,70%,0.15), 0 2px 8px rgba(0,0,0,0.3)",
+                  background: "hsla(0,0%,100%,0.06)",
+                  color: "hsla(0,0%,100%,0.85)",
+                  border: "1px solid hsla(0,0%,100%,0.12)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 2px 8px rgba(0,0,0,0.3)",
                 }}
               >
                 <Activity className="w-3.5 h-3.5" />HGS
