@@ -66,7 +66,7 @@ export default function SphereDetail() {
             className="h-8 w-8 hover:bg-muted/20 rounded-lg"
             title="Planetary Commons Data"
           >
-            <Database className="w-4 h-4" style={{ color: "#5ce0d2" }} />
+            <CommonsIcon size={16} />
           </Button>
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
