@@ -1,13 +1,13 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Scan, Activity, GitBranch } from "lucide-react";
+import { ArrowLeft, Scan, Activity, BarChart3, GitBranch } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { SPHERES, SphereId } from "@/types/spheres";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
 import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel";
-import { DataPanel } from "@/components/sphere-detail/DataPanel";
+import { SignalsPanel } from "@/components/sphere-detail/SignalsPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
 
 const ACCENT = "#5ce0d2";
@@ -85,17 +85,17 @@ export default function SphereDetail() {
         <Tabs defaultValue="anatomy" className="h-full flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
-              { value: "anatomy", icon: Scan, label: "Anatomy", isCustom: false },
-              { value: "live-dynamics", icon: Activity, label: "Live Dynamics", isCustom: false },
-              { value: "data", icon: null, label: "Data", isCustom: true },
-              { value: "coupling", icon: GitBranch, label: "Coupling", isCustom: false },
+              { value: "anatomy", icon: Scan, label: "Anatomy" },
+              { value: "live-dynamics", icon: Activity, label: "Live Dynamics" },
+              { value: "signals", icon: BarChart3, label: "Signals" },
+              { value: "coupling", icon: GitBranch, label: "Coupling" },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
                 className="gap-1.5 text-xs px-3 py-1.5 rounded-lg data-[state=active]:bg-muted/20 data-[state=active]:shadow-none"
               >
-                {tab.isCustom ? <CommonsIcon size={14} /> : tab.icon && <tab.icon className="w-3.5 h-3.5" />}
+                <tab.icon className="w-3.5 h-3.5" />
                 {tab.label}
               </TabsTrigger>
             ))}
@@ -108,8 +108,8 @@ export default function SphereDetail() {
             <TabsContent value="live-dynamics" className="mt-0">
               <LiveDynamicsPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            <TabsContent value="data" className="mt-0">
-              <DataPanel sphere={sphere} accent={ACCENT} />
+            <TabsContent value="signals" className="mt-0">
+              <SignalsPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
             <TabsContent value="coupling" className="mt-0">
               <CouplingPanel sphere={sphere} accent={ACCENT} />

@@ -1,71 +1,89 @@
+import { useMemo, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
-import { Sphere, SPHERE_ARRAY } from "@/types/spheres";
-import { GitBranch } from "lucide-react";
+import { Sphere, SPHERE_ARRAY, SphereId } from "@/types/spheres";
+import { GitBranch, ArrowRight } from "lucide-react";
 
 interface Props {
   sphere: Sphere;
   accent: string;
 }
 
-const COUPLING_MAP: Record<string, { affects: string[]; affectedBy: string[]; examples: string[] }> = {
-  geosphere: {
-    affects: ["Biosphere", "Atmosphere"],
-    affectedBy: ["Noosphere (human activity)"],
-    examples: [
-      "Volcanic eruption → atmospheric chemistry → vegetation shifts",
-      "Tectonic stress → tsunami → coastal ecosystem disruption",
-      "Mineral deposits → electromagnetic field anomalies",
-    ],
-  },
-  biosphere: {
-    affects: ["Atmosphere", "Ionosphere", "Geosphere"],
-    affectedBy: ["Geosphere", "Magnetosphere", "Noosphere"],
-    examples: [
-      "Forest emissions → atmospheric chemistry → ionization changes",
-      "Geomagnetic storms → animal navigation disruption",
-      "Deforestation → carbon cycle → climate feedback",
-    ],
-  },
-  magnetosphere: {
-    affects: ["Ionosphere", "Biosphere", "Crystalsphere"],
-    affectedBy: ["Solar wind", "Geosphere (core dynamo)"],
-    examples: [
-      "Solar flare → geomagnetic storm → power grid disruption",
-      "CME impact → radiation belt enhancement → satellite damage",
-      "Field compression → auroral intensification → ionospheric disturbance",
-    ],
-  },
-  ionosphere: {
-    affects: ["Magnetosphere", "Biosphere"],
-    affectedBy: ["Magnetosphere", "Solar radiation"],
-    examples: [
-      "TEC variations → GPS signal degradation",
-      "Ionospheric storms → radio blackouts",
-      "Auroral precipitation → atmospheric heating",
-    ],
-  },
-  noosphere: {
-    affects: ["Biosphere", "Geosphere"],
-    affectedBy: ["All spheres (feedback)"],
-    examples: [
-      "Industrial emissions → atmospheric composition change",
-      "Mining activity → geosphere stress redistribution",
-      "Urbanization → biodiversity pressure",
-    ],
-  },
-  crystalsphere: {
-    affects: ["All (resonance overlay)"],
-    affectedBy: ["Magnetosphere", "Geosphere"],
-    examples: [
-      "Schumann resonance modulation → biosphere timing",
-      "Piezoelectric signals → seismic precursors",
-      "EM field harmonics → mineral lattice response",
-    ],
-  },
+interface CouplingLink {
+  target: SphereId;
+  strength: number; // 0-1
+  mechanism: string;
+  direction: "outgoing" | "incoming" | "bidirectional";
+}
+
+const COUPLING_DATA: Record<SphereId, CouplingLink[]> = {
+  geosphere: [
+    { target: "biosphere", strength: 0.72, mechanism: "Soil formation, mineral nutrients, volcanic fertilization", direction: "outgoing" },
+    { target: "magnetosphere", strength: 0.88, mechanism: "Core dynamo generates the planetary magnetic field", direction: "outgoing" },
+    { target: "ionosphere", strength: 0.45, mechanism: "Seismic-ionospheric coupling via acoustic-gravity waves", direction: "outgoing" },
+    { target: "crystalsphere", strength: 0.65, mechanism: "Piezoelectric transduction in crustal mineral lattices", direction: "bidirectional" },
+    { target: "noosphere", strength: 0.58, mechanism: "Resource extraction, land use, geohazard impact on infrastructure", direction: "incoming" },
+  ],
+  biosphere: [
+    { target: "geosphere", strength: 0.55, mechanism: "Weathering, soil generation, organic sedimentation", direction: "outgoing" },
+    { target: "ionosphere", strength: 0.32, mechanism: "Biogenic gas emissions alter atmospheric chemistry", direction: "outgoing" },
+    { target: "noosphere", strength: 0.78, mechanism: "Ecosystem services, agriculture, biodiversity under anthropogenic pressure", direction: "bidirectional" },
+    { target: "magnetosphere", strength: 0.28, mechanism: "Magnetic field variations affect animal navigation and migration", direction: "incoming" },
+    { target: "crystalsphere", strength: 0.42, mechanism: "Schumann resonance correlation with biological rhythms", direction: "incoming" },
+  ],
+  magnetosphere: [
+    { target: "ionosphere", strength: 0.92, mechanism: "Particle precipitation, field-aligned currents, auroral electrojets", direction: "outgoing" },
+    { target: "biosphere", strength: 0.35, mechanism: "Cosmic ray modulation, UV shielding via atmospheric retention", direction: "outgoing" },
+    { target: "crystalsphere", strength: 0.70, mechanism: "Field harmonic structure shapes resonance cavity modes", direction: "bidirectional" },
+    { target: "geosphere", strength: 0.88, mechanism: "Core convection dynamo drives field generation", direction: "incoming" },
+    { target: "noosphere", strength: 0.52, mechanism: "Geomagnetic storms disrupt power grids and satellite systems", direction: "outgoing" },
+  ],
+  ionosphere: [
+    { target: "magnetosphere", strength: 0.85, mechanism: "Ionospheric conductivity modulates magnetospheric currents", direction: "bidirectional" },
+    { target: "geosphere", strength: 0.40, mechanism: "TEC anomalies observed before major seismic events", direction: "incoming" },
+    { target: "crystalsphere", strength: 0.75, mechanism: "Earth-ionosphere waveguide sustains Schumann resonances", direction: "bidirectional" },
+    { target: "noosphere", strength: 0.60, mechanism: "GPS degradation, radio propagation, satellite drag", direction: "outgoing" },
+    { target: "biosphere", strength: 0.30, mechanism: "UV filtering variations affect surface biological activity", direction: "outgoing" },
+  ],
+  noosphere: [
+    { target: "geosphere", strength: 0.68, mechanism: "Mining, drilling, construction alter crustal stress and surface morphology", direction: "outgoing" },
+    { target: "biosphere", strength: 0.82, mechanism: "Deforestation, pollution, urbanization, conservation", direction: "outgoing" },
+    { target: "ionosphere", strength: 0.38, mechanism: "RF emissions, rocket launches, atmospheric chemical injection", direction: "outgoing" },
+    { target: "magnetosphere", strength: 0.25, mechanism: "Observation networks monitor space weather for mitigation", direction: "outgoing" },
+    { target: "crystalsphere", strength: 0.30, mechanism: "EM pollution alters natural resonance background", direction: "outgoing" },
+  ],
+  crystalsphere: [
+    { target: "ionosphere", strength: 0.75, mechanism: "Resonance cavity boundary conditions shape EM mode structure", direction: "bidirectional" },
+    { target: "magnetosphere", strength: 0.70, mechanism: "Harmonic coupling between field oscillations and cavity modes", direction: "bidirectional" },
+    { target: "geosphere", strength: 0.65, mechanism: "Piezoelectric stress-EM conversion in crystalline structures", direction: "bidirectional" },
+    { target: "biosphere", strength: 0.48, mechanism: "Schumann resonance frequencies correlate with biological timing", direction: "outgoing" },
+    { target: "noosphere", strength: 0.22, mechanism: "Subtle field coherence patterns in collective activity data", direction: "outgoing" },
+  ],
+};
+
+const SPHERE_COLORS: Record<SphereId, string> = {
+  geosphere: "#cc5533",
+  biosphere: "#4caf50",
+  magnetosphere: "#4466dd",
+  ionosphere: "#4488cc",
+  noosphere: "#ab47bc",
+  crystalsphere: "#d4a56a",
 };
 
 export function CouplingPanel({ sphere, accent }: Props) {
-  const coupling = COUPLING_MAP[sphere.id] || COUPLING_MAP.geosphere;
+  const links = COUPLING_DATA[sphere.id] || COUPLING_DATA.geosphere;
+  const [tick, setTick] = useState(0);
+
+  useEffect(() => {
+    const iv = setInterval(() => setTick(t => t + 1), 2000);
+    return () => clearInterval(iv);
+  }, []);
+
+  // Sort by strength
+  const sorted = useMemo(() => [...links].sort((a, b) => b.strength - a.strength), [links]);
+
+  // Relationship network SVG
+  const centerSphere = sphere.id;
+  const connectedSpheres = sorted.map(l => l.target);
 
   return (
     <div className="space-y-4">
@@ -75,81 +93,116 @@ export function CouplingPanel({ sphere, accent }: Props) {
             <GitBranch className="w-6 h-6" style={{ color: accent }} />
           </div>
           <div className="flex-1">
-            <h2 className="text-base font-semibold tracking-wide">Inter-Sphere Coupling — {sphere.name}</h2>
+            <h2 className="text-base font-semibold tracking-wide">Coupling — {sphere.name}</h2>
             <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
-              Bidirectional relationships · Causal pathways · Cross-domain correlations
+              Inter-sphere relationships · Coupling strength · Causal mechanisms
             </p>
           </div>
         </div>
       </Card>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
-        {/* What this sphere affects */}
-        <Card className="glass-panel rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-semibold">Outgoing Influence</h3>
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider">What {sphere.name} affects</p>
-          <div className="space-y-2">
-            {coupling.affects.map((target, idx) => (
-              <div key={idx} className="px-3 py-2 rounded-lg bg-muted/5 border border-border/10 flex items-center gap-3">
-                <div className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} />
-                <span className="text-xs text-foreground/70">{sphere.name}</span>
-                <span className="text-[9px] text-muted-foreground/30 font-mono">→</span>
-                <span className="text-xs font-medium" style={{ color: accent }}>{target}</span>
-              </div>
-            ))}
-          </div>
-        </Card>
+      {/* Relationship Diagram */}
+      <Card className="glass-panel rounded-xl p-5">
+        <h3 className="text-sm font-semibold mb-4">Coupling Network</h3>
+        <div className="relative aspect-[2/1] min-h-[220px]">
+          <svg viewBox="0 0 500 250" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+            {/* Center node */}
+            <circle cx="250" cy="125" r="28" fill={`${accent}18`} stroke={accent} strokeWidth="1.5" />
+            <text x="250" y="121" textAnchor="middle" fill={accent} fontSize="8" fontWeight="600" className="uppercase">
+              {sphere.name.length > 10 ? sphere.name.slice(0, 9) + "…" : sphere.name}
+            </text>
+            <text x="250" y="133" textAnchor="middle" fill="hsla(0,0%,100%,0.3)" fontSize="6">
+              CENTER
+            </text>
 
-        {/* What affects this sphere */}
-        <Card className="glass-panel rounded-xl p-5 space-y-4">
-          <h3 className="text-sm font-semibold">Incoming Drivers</h3>
-          <p className="text-[10px] text-muted-foreground/40 uppercase tracking-wider">What drives {sphere.name}</p>
-          <div className="space-y-2">
-            {coupling.affectedBy.map((source, idx) => (
-              <div key={idx} className="px-3 py-2 rounded-lg bg-muted/5 border border-border/10 flex items-center gap-3">
-                <span className="text-xs font-medium" style={{ color: accent }}>{source}</span>
-                <span className="text-[9px] text-muted-foreground/30 font-mono">→</span>
-                <span className="text-xs text-foreground/70">{sphere.name}</span>
-                <div className="w-1.5 h-1.5 rounded-full ml-auto" style={{ backgroundColor: accent }} />
+            {/* Connected nodes in arc */}
+            {connectedSpheres.map((targetId, i) => {
+              const link = sorted[i];
+              const angle = -Math.PI / 2 + ((i + 0.5) / connectedSpheres.length) * Math.PI;
+              const radiusX = 180;
+              const radiusY = 90;
+              const x = 250 + Math.cos(angle) * radiusX;
+              const y = 125 + Math.sin(angle) * radiusY;
+              const color = SPHERE_COLORS[targetId] || "#888";
+              const opacity = 0.3 + link.strength * 0.7;
+              const strokeW = 0.5 + link.strength * 2;
+              const targetSphere = SPHERE_ARRAY.find(s => s.id === targetId);
+
+              // Animated dash offset
+              const dashOffset = link.direction === "incoming" ? tick * 3 : -(tick * 3);
+
+              return (
+                <g key={targetId}>
+                  {/* Connection line */}
+                  <line
+                    x1={250} y1={125} x2={x} y2={y}
+                    stroke={color}
+                    strokeWidth={strokeW}
+                    opacity={opacity * 0.5}
+                    strokeDasharray="4 3"
+                    strokeDashoffset={dashOffset}
+                  />
+                  {/* Strength label on line */}
+                  <text
+                    x={(250 + x) / 2 + (i % 2 === 0 ? 8 : -8)}
+                    y={(125 + y) / 2 + (i % 2 === 0 ? -4 : 8)}
+                    textAnchor="middle"
+                    fill="hsla(0,0%,100%,0.25)"
+                    fontSize="7"
+                    fontFamily="monospace"
+                  >
+                    {(link.strength * 100).toFixed(0)}%
+                  </text>
+                  {/* Target node */}
+                  <circle cx={x} cy={y} r="20" fill={`${color}15`} stroke={color} strokeWidth="1" opacity={0.8} />
+                  <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="7" fontWeight="500">
+                    {targetSphere?.name.length! > 9 ? targetSphere?.name.slice(0, 8) + "…" : targetSphere?.name}
+                  </text>
+                  <text x={x} y={y + 8} textAnchor="middle" fill="hsla(0,0%,100%,0.2)" fontSize="5">
+                    {link.direction === "bidirectional" ? "⇄" : link.direction === "outgoing" ? "→" : "←"}
+                  </text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </Card>
+
+      {/* Coupling Details */}
+      <div className="space-y-3">
+        {sorted.map((link) => {
+          const color = SPHERE_COLORS[link.target];
+          const targetSphere = SPHERE_ARRAY.find(s => s.id === link.target);
+          const strengthPct = Math.round(link.strength * 100);
+
+          return (
+            <Card key={link.target} className="glass-panel rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}12` }}>
+                  <span className="text-sm font-mono font-bold" style={{ color }}>{strengthPct}</span>
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-xs font-semibold text-foreground/80">{sphere.name}</span>
+                    <span className="text-[9px] font-mono text-muted-foreground/30">
+                      {link.direction === "bidirectional" ? "⇄" : link.direction === "outgoing" ? "→" : "←"}
+                    </span>
+                    <span className="text-xs font-semibold" style={{ color }}>{targetSphere?.name}</span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground/50 leading-relaxed">{link.mechanism}</p>
+                  {/* Strength bar */}
+                  <div className="mt-2 h-1 rounded-full bg-muted/10 overflow-hidden">
+                    <div
+                      className="h-full rounded-full transition-all duration-1000"
+                      style={{ width: `${strengthPct}%`, backgroundColor: color }}
+                    />
+                  </div>
+                </div>
               </div>
-            ))}
-          </div>
-        </Card>
+            </Card>
+          );
+        })}
       </div>
-
-      {/* Coupling Examples */}
-      <Card className="glass-panel rounded-xl p-5 space-y-4">
-        <h3 className="text-sm font-semibold">Causal Pathways</h3>
-        <div className="space-y-2">
-          {coupling.examples.map((example, idx) => (
-            <div key={idx} className="px-3 py-2.5 rounded-lg bg-muted/5 border border-border/10 flex items-start gap-2.5">
-              <div
-                className="w-5 h-5 rounded-md flex items-center justify-center text-[9px] font-bold mt-0.5 shrink-0"
-                style={{ backgroundColor: `${accent}15`, color: accent }}
-              >
-                {idx + 1}
-              </div>
-              <p className="text-[11px] text-muted-foreground/60 leading-relaxed">{example}</p>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      {/* Correlation placeholder */}
-      <Card className="glass-panel rounded-xl p-5 space-y-3">
-        <h3 className="text-sm font-semibold">Correlation Matrix</h3>
-        <p className="text-[10px] text-muted-foreground/40">
-          Dynamic relationship graph computed from lagged cross-correlations and causal inference models.
-        </p>
-        <div className="h-48 rounded-lg bg-muted/5 border border-border/10 flex items-center justify-center">
-          <div className="text-center space-y-1.5">
-            <GitBranch className="w-8 h-8 mx-auto" style={{ color: `${accent}30` }} />
-            <p className="text-[10px] text-muted-foreground/30 uppercase tracking-wider">
-              Cross-domain correlation engine
-            </p>
-          </div>
-        </div>
-      </Card>
     </div>
   );
 }
