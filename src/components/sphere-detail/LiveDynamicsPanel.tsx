@@ -75,7 +75,7 @@ const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPatte
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const behavior = BEHAVIOR_DATA[sphere.id];
-  
+  const live = useLiveOverlay(sphere.id);
 
   return (
     <div className="space-y-4">
@@ -92,15 +92,55 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
             </p>
           </div>
           <div className="flex items-center gap-1.5">
-            <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ backgroundColor: accent }} />
-            <span className="text-[9px] uppercase tracking-wider text-muted-foreground/40">Live</span>
+            <div
+              className="w-1.5 h-1.5 rounded-full animate-pulse"
+              style={{ backgroundColor: live.isLive ? "#22c55e" : accent }}
+            />
+            <span className="text-[9px] uppercase tracking-wider text-muted-foreground/40">
+              {live.isLive ? "Live" : "Static"}
+            </span>
           </div>
         </div>
       </Card>
 
-      {/* Blue Marble Globe with sphere-specific overlay */}
+      {/* Blue Marble Globe with live overlay */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        <BlueMarbleGlobe height={340} sphereId={sphere.id} />
+        <BlueMarbleGlobe
+          height={340}
+          sphereId={sphere.id}
+          overlayUrl={live.textureUrl}
+          quakes={sphere.id === "geosphere" ? live.quakes : undefined}
+        />
+      </Card>
+
+      {/* Data source info */}
+      <Card className="glass-panel rounded-xl px-4 py-3">
+        <div className="flex items-center justify-between">
+          <div className="flex items-center gap-2">
+            <Satellite className="w-3.5 h-3.5 text-muted-foreground/40" />
+            <div>
+              <span className="text-[10px] font-medium text-foreground/70">{live.source}</span>
+              <p className="text-[9px] text-muted-foreground/40">{live.description}</p>
+            </div>
+          </div>
+          <button
+            onClick={live.refresh}
+            className="p-1.5 rounded-lg hover:bg-muted/20 transition-colors"
+            title="Refresh live data"
+          >
+            <RefreshCw className={`w-3.5 h-3.5 text-muted-foreground/40 ${live.loading ? 'animate-spin' : ''}`} />
+          </button>
+        </div>
+        {sphere.id === "geosphere" && live.quakes.length > 0 && (
+          <p className="text-[9px] text-muted-foreground/30 mt-1">
+            {live.quakes.length} earthquakes (M2.5+) in last 24h
+          </p>
+        )}
+        {sphere.id === "magnetosphere" && live.kpIndex !== null && (
+          <p className="text-[9px] text-muted-foreground/30 mt-1">
+            Current Kp index: {live.kpIndex} — {live.kpIndex >= 5 ? "Storm" : live.kpIndex >= 4 ? "Active" : "Quiet"}
+          </p>
+        )}
       </Card>
 
       {/* Behavior Summary */}
