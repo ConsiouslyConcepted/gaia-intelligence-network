@@ -1,7 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
-import { Activity } from "lucide-react";
+import { Activity, RefreshCw, Satellite } from "lucide-react";
 import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
+import { useLiveOverlay } from "@/hooks/useLiveOverlay";
 
 interface Props {
   sphere: Sphere;
