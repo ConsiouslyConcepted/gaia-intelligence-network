@@ -1,7 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { ArrowLeft, Scan, Activity, Database, GitBranch } from "lucide-react";
+import { ArrowLeft, Scan, Activity, GitBranch } from "lucide-react";
+import { CommonsIcon } from "@/components/CommonsIcon";
 import { SPHERES, SphereId } from "@/types/spheres";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
