@@ -14,7 +14,10 @@ interface SphereLayer {
   id: string;
 }
 
-/** Core sphere with solid, lit surface */
+const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
+const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
+
+/** Core sphere with Blue Marble Earth texture */
 const CoreSphere = ({
   layer,
   onClick,
@@ -24,6 +27,7 @@ const CoreSphere = ({
 }) => {
   const [hovered, setHovered] = useState(false);
   const meshRef = useRef<THREE.Mesh>(null);
+  const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
 
   useFrame((state) => {
     if (meshRef.current) {
@@ -33,21 +37,23 @@ const CoreSphere = ({
 
   return (
     <group>
-      <Sphere
+      <mesh
         ref={meshRef}
-        args={[layer.radius, 128, 128]}
         onClick={() => onClick(layer.id)}
         onPointerOver={() => setHovered(true)}
         onPointerOut={() => setHovered(false)}
       >
-        <meshStandardMaterial
-          color={layer.color}
-          emissive={layer.color}
-          emissiveIntensity={hovered ? 0.35 : 0.12}
-          roughness={0.55}
-          metalness={0.35}
+        <sphereGeometry args={[layer.radius, 128, 128]} />
+        <meshPhongMaterial
+          map={earthMap}
+          bumpMap={bumpMap}
+          bumpScale={0.03}
+          specular={new THREE.Color("#334466")}
+          shininess={8}
+          emissive={new THREE.Color(layer.color)}
+          emissiveIntensity={hovered ? 0.15 : 0.05}
         />
-      </Sphere>
+      </mesh>
       {/* Atmosphere glow shell */}
       <Sphere args={[layer.radius * 1.03, 64, 64]}>
         <meshBasicMaterial
