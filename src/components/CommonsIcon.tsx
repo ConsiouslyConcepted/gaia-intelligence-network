@@ -4,7 +4,7 @@ interface CommonsIconProps {
   className?: string;
 }
 
-export const CommonsIcon = ({ size = 16, color = "#5ce0d2", className = "" }: CommonsIconProps) => (
+export const CommonsIcon = ({ size = 16, color = "#4488cc", className = "" }: CommonsIconProps) => (
   <svg
     viewBox="0 0 24 24"
     width={size}
