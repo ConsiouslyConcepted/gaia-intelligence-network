@@ -52,12 +52,12 @@ const CoreSphere = ({
           shininess={8}
         />
       </mesh>
-      {/* Atmosphere glow shell */}
+      {/* Atmosphere glow shell — blue tint */}
       <Sphere args={[layer.radius * 1.03, 64, 64]}>
         <meshBasicMaterial
-          color={layer.color}
+          color="#4488cc"
           transparent
-          opacity={hovered ? 0.12 : 0.05}
+          opacity={hovered ? 0.1 : 0.04}
           side={THREE.BackSide}
         />
       </Sphere>
@@ -189,11 +189,11 @@ export const EarthVisualization = () => {
           gl.toneMappingExposure = 1.2;
         }}
       >
-        {/* Rich warm lighting setup */}
-        <ambientLight intensity={0.08} color="#d4a56a" />
-        <directionalLight position={[5, 5, 5]} intensity={1.0} color="#e8c86a" />
-        <pointLight position={[-4, -3, -4]} intensity={0.25} color="#4488cc" />
-        <pointLight position={[0, 6, 2]} intensity={0.15} color="#c8b070" />
+        {/* Lighting: bright white directional for Blue Marble visibility */}
+        <ambientLight intensity={0.35} color="#ffffff" />
+        <directionalLight position={[5, 3, 5]} intensity={1.8} color="#ffffff" />
+        <directionalLight position={[-3, -2, -4]} intensity={0.4} color="#88aaff" />
+        <pointLight position={[0, 6, 2]} intensity={0.3} color="#ffffff" />
 
         {/* Starfield */}
         <Stars radius={80} depth={60} count={2000} factor={3} saturation={0.1} fade speed={0.5} />
