@@ -165,41 +165,24 @@ const Index = () => {
         </HudPanel>
       </div>
 
-      {/* ─── RIGHT HUD: Live Feeds ─── */}
-      <div className="absolute right-4 top-[96px] bottom-4 z-10 flex flex-col gap-3 pointer-events-none w-[220px]">
-        <HudPanel className="pointer-events-auto p-3" glow="#4488cc">
+      {/* ─── RIGHT HUD: Sphere Signals ─── */}
+      <div className="absolute right-4 top-[96px] bottom-4 z-10 flex flex-col pointer-events-none w-[220px]">
+        <HudPanel className="pointer-events-auto p-3 flex-1 overflow-y-auto" glow="#4488cc">
           <div className="flex items-center gap-1.5 mb-2.5">
             <Zap className="w-3 h-3 text-accent/50" />
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Live Feeds</span>
+            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Signals</span>
           </div>
           <div className="space-y-2.5">
-            {liveReadouts.left.map((d) => (
+            {liveReadouts.map((d) => (
               <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-1">
+                <div className="flex items-baseline justify-between mb-0.5">
                   <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/35">{d.label}</span>
                   <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
                     {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
                   </span>
                 </div>
-                <MiniGraph color={d.color} data={d.trend} />
-              </div>
-            ))}
-          </div>
-        </HudPanel>
-
-        <HudPanel className="pointer-events-auto p-3" glow="#7ecbcb">
-          <div className="flex items-center gap-1.5 mb-2.5">
-            <Zap className="w-3 h-3 text-accent/50" />
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Field Metrics</span>
-          </div>
-          <div className="space-y-2.5">
-            {liveReadouts.right.map((d) => (
-              <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-1">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/35">{d.label}</span>
-                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
-                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
-                  </span>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
                 </div>
                 <MiniGraph color={d.color} data={d.trend} />
               </div>
