@@ -97,9 +97,9 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Blue Marble Globe */}
+      {/* Blue Marble Globe with sphere-specific overlay */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        <BlueMarbleGlobe height={280} />
+        <BlueMarbleGlobe height={340} sphereId={sphere.id} />
       </Card>
 
       {/* Behavior Summary */}
