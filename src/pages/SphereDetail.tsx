@@ -64,7 +64,7 @@ export default function SphereDetail() {
             className="hover:opacity-80 transition-opacity"
             title="Planetary Commons Data"
           >
-            <CommonsIcon size={28} />
+            <CommonsIcon size={22} />
           </button>
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
