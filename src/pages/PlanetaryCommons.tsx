@@ -18,7 +18,7 @@ import {
   ChevronUp,
 } from "lucide-react";
 import { useState, useEffect } from "react";
-import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
+
 
 const ACCENT = "#5ce0d2";
 
