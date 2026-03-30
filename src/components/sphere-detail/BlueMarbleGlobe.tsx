@@ -14,32 +14,32 @@ const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topolog
  */
 const SPHERE_OVERLAYS: Record<string, { url: string; opacity: number; blending: THREE.Blending }> = {
   geosphere: {
-    url: "/overlays/topo-bathy.jpg",
+    url: "/overlays/geosphere-overlay.jpg",
     opacity: 0.7,
     blending: THREE.AdditiveBlending,
   },
   biosphere: {
-    url: "/overlays/ndvi.jpg",
-    opacity: 0.75,
+    url: "/overlays/biosphere-overlay.jpg",
+    opacity: 0.7,
     blending: THREE.AdditiveBlending,
   },
   noosphere: {
-    url: "/overlays/night-lights.jpg",
+    url: "/overlays/noosphere-overlay.jpg",
     opacity: 0.9,
     blending: THREE.AdditiveBlending,
   },
   magnetosphere: {
-    url: "/overlays/fires.jpg",
+    url: "/overlays/magnetosphere-overlay.jpg",
     opacity: 0.8,
     blending: THREE.AdditiveBlending,
   },
   ionosphere: {
-    url: "/overlays/water-vapor.jpg",
+    url: "/overlays/ionosphere-overlay.jpg",
     opacity: 0.65,
     blending: THREE.AdditiveBlending,
   },
   crystalsphere: {
-    url: "/overlays/land-temp.jpg",
+    url: "/overlays/crystalsphere-overlay.jpg",
     opacity: 0.7,
     blending: THREE.AdditiveBlending,
   },
