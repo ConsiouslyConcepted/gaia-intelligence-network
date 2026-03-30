@@ -48,8 +48,8 @@ export default function SphereDetail() {
           </div>
           <div>
             <h1
-              className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: ACCENT, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              className="text-base font-semibold tracking-wide leading-none text-foreground/90"
+              style={{ fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               {sphere.name}
             </h1>
@@ -66,7 +66,7 @@ export default function SphereDetail() {
             className="h-8 w-8 hover:bg-muted/20 rounded-lg"
             title="Planetary Commons Data"
           >
-            <CommonsIcon size={24} />
+            <CommonsIcon size={28} />
           </Button>
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
