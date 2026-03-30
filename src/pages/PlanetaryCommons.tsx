@@ -469,7 +469,7 @@ export default function PlanetaryCommons() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[10px] font-medium hover:underline"
-              style={{ color: ACCENT }}
+              style={{ color: "hsla(0,0%,100%,0.6)" }}
             >
               <ExternalLink className="w-3 h-3" />
               Full GIBS Documentation
