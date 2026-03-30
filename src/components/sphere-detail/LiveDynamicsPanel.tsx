@@ -15,14 +15,6 @@ interface BehaviorPattern {
   timeScale: string;
 }
 
-const SIM_COMPONENTS: Record<SphereId, React.ComponentType> = {
-  geosphere: GeosphereSim,
-  biosphere: BiosphereSim,
-  magnetosphere: MagnetosphereSim,
-  ionosphere: IonosphereSim,
-  noosphere: NoosphereSim,
-  crystalsphere: CrystalsphereeSim,
-};
 
 const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPattern[] }> = {
   geosphere: {
