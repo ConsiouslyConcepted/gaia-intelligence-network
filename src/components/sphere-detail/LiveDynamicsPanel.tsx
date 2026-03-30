@@ -74,7 +74,7 @@ const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPatte
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const behavior = BEHAVIOR_DATA[sphere.id];
-  const SimComponent = SIM_COMPONENTS[sphere.id];
+  
 
   return (
     <div className="space-y-4">
