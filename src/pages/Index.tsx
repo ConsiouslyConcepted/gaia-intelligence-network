@@ -3,7 +3,7 @@ import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
-import { Activity, Radar, Signal, Zap, ArrowRight } from "lucide-react";
+import { Activity, Radar, Signal, Zap, ArrowRight, Database } from "lucide-react";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
