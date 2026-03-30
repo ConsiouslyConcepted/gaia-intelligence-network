@@ -97,9 +97,9 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Live Simulation */}
-      <Card className="glass-panel rounded-xl p-3 relative">
-        <SimComponent />
+      {/* Blue Marble Globe */}
+      <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
+        <BlueMarbleGlobe height={280} />
       </Card>
 
       {/* Behavior Summary */}
