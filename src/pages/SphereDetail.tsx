@@ -87,17 +87,17 @@ export default function SphereDetail() {
         <Tabs defaultValue="anatomy" className="h-full flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
-              { value: "anatomy", icon: Scan, label: "Anatomy" },
-              { value: "live-dynamics", icon: Activity, label: "Live Dynamics" },
-              { value: "data", icon: () => <CommonsIcon size={14} />, label: "Data" },
-              { value: "coupling", icon: GitBranch, label: "Coupling" },
+              { value: "anatomy", icon: Scan, label: "Anatomy", isCustom: false },
+              { value: "live-dynamics", icon: Activity, label: "Live Dynamics", isCustom: false },
+              { value: "data", icon: null, label: "Data", isCustom: true },
+              { value: "coupling", icon: GitBranch, label: "Coupling", isCustom: false },
             ].map(tab => (
               <TabsTrigger
                 key={tab.value}
                 value={tab.value}
                 className="gap-1.5 text-xs px-3 py-1.5 rounded-lg data-[state=active]:bg-muted/20 data-[state=active]:shadow-none"
               >
-                <tab.icon className="w-3.5 h-3.5" />
+                {tab.isCustom ? <CommonsIcon size={14} /> : tab.icon && <tab.icon className="w-3.5 h-3.5" />}
                 {tab.label}
               </TabsTrigger>
             ))}
