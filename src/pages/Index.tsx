@@ -115,14 +115,14 @@ const Index = () => {
           </button>
 
           {/* Right: View toggle */}
-          <div className="flex gap-1.5 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
+          <div className="flex gap-1 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
             <button
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
               style={{
-                background: "linear-gradient(135deg, hsla(174,60%,50%,0.15) 0%, hsla(174,60%,40%,0.1) 100%)",
-                color: "#5ce0d2",
-                border: "1px solid hsla(174,60%,50%,0.3)",
-                boxShadow: "0 0 16px hsla(174,60%,50%,0.1), inset 0 1px 0 hsla(174,60%,70%,0.1), 0 2px 8px rgba(0,0,0,0.3)",
+                background: "hsla(0,0%,100%,0.06)",
+                color: "hsla(0,0%,100%,0.85)",
+                border: "1px solid hsla(0,0%,100%,0.12)",
+                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 2px 8px rgba(0,0,0,0.3)",
               }}
             >
               <Signal className="w-3.5 h-3.5" />Planetary
@@ -130,9 +130,9 @@ const Index = () => {
             <button
               onClick={() => setActiveView("hgs")}
               className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
-              style={{ color: "hsla(38,60%,60%,0.7)" }}
+              style={{ color: "hsla(0,0%,100%,0.4)" }}
             >
-              <Activity className="w-3.5 h-3.5" style={{ color: "#e8b960" }} />HGS
+              <Activity className="w-3.5 h-3.5" />HGS
             </button>
           </div>
         </HudPanel>
