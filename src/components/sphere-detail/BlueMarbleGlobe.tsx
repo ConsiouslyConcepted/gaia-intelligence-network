@@ -1,48 +1,21 @@
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
+import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
 import { OrbitControls } from "@react-three/drei";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect, useState } from "react";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import { SphereId } from "@/types/spheres";
+import { QuakePoint } from "@/lib/liveOverlays";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
 
-/**
- * Real NASA equirectangular overlays for each sphere.
- * Source: NASA Earth Observations (NEO) — public domain.
- */
-const SPHERE_OVERLAYS: Record<string, { url: string; opacity: number; blending: THREE.Blending }> = {
-  geosphere: {
-    url: "/overlays/geosphere-overlay.jpg",
-    opacity: 0.7,
-    blending: THREE.AdditiveBlending,
-  },
-  biosphere: {
-    url: "/overlays/biosphere-overlay.jpg",
-    opacity: 0.7,
-    blending: THREE.AdditiveBlending,
-  },
-  noosphere: {
-    url: "/overlays/noosphere-overlay.jpg",
-    opacity: 0.9,
-    blending: THREE.AdditiveBlending,
-  },
-  magnetosphere: {
-    url: "/overlays/magnetosphere-overlay.jpg",
-    opacity: 0.8,
-    blending: THREE.AdditiveBlending,
-  },
-  ionosphere: {
-    url: "/overlays/ionosphere-overlay.jpg",
-    opacity: 0.65,
-    blending: THREE.AdditiveBlending,
-  },
-  crystalsphere: {
-    url: "/overlays/crystalsphere-overlay.jpg",
-    opacity: 0.7,
-    blending: THREE.AdditiveBlending,
-  },
+const OVERLAY_SETTINGS: Record<string, { opacity: number; blending: THREE.Blending }> = {
+  geosphere: { opacity: 0.7, blending: THREE.AdditiveBlending },
+  biosphere: { opacity: 0.7, blending: THREE.AdditiveBlending },
+  noosphere: { opacity: 0.9, blending: THREE.AdditiveBlending },
+  magnetosphere: { opacity: 0.8, blending: THREE.AdditiveBlending },
+  ionosphere: { opacity: 0.65, blending: THREE.AdditiveBlending },
+  crystalsphere: { opacity: 0.7, blending: THREE.AdditiveBlending },
 };
 
 const SPHERE_COLORS: Record<string, string> = {
@@ -80,13 +53,31 @@ function GlobeMesh() {
   );
 }
 
-// ─── NASA overlay sphere ───
+// ─── Dynamic overlay sphere (loads texture from URL) ───
 
-function NASAOverlay({ sphereId }: { sphereId: SphereId }) {
+function DynamicOverlay({ sphereId, textureUrl }: { sphereId: SphereId; textureUrl: string }) {
   const meshRef = useRef<THREE.Mesh>(null);
-  const overlay = SPHERE_OVERLAYS[sphereId];
+  const [texture, setTexture] = useState<THREE.Texture | null>(null);
+  const settings = OVERLAY_SETTINGS[sphereId];
 
-  const overlayTex = useLoader(TextureLoader, overlay.url);
+  useEffect(() => {
+    const loader = new THREE.TextureLoader();
+    loader.crossOrigin = "anonymous";
+    loader.load(
+      textureUrl,
+      (tex) => {
+        tex.minFilter = THREE.LinearFilter;
+        tex.magFilter = THREE.LinearFilter;
+        setTexture(tex);
+      },
+      undefined,
+      () => setTexture(null)
+    );
+
+    return () => {
+      if (texture) texture.dispose();
+    };
+  }, [textureUrl]);
 
   useFrame((state) => {
     if (meshRef.current) {
@@ -94,17 +85,59 @@ function NASAOverlay({ sphereId }: { sphereId: SphereId }) {
     }
   });
 
+  if (!texture) return null;
+
   return (
     <mesh ref={meshRef}>
       <sphereGeometry args={[1.805, 64, 64]} />
       <meshBasicMaterial
-        map={overlayTex}
+        map={texture}
         transparent
-        opacity={overlay.opacity}
-        blending={overlay.blending}
+        opacity={settings.opacity}
+        blending={settings.blending}
         depthWrite={false}
       />
     </mesh>
+  );
+}
+
+// ─── Earthquake points (Geosphere) ───
+
+function QuakePoints({ quakes }: { quakes: QuakePoint[] }) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  const points = useMemo(() => {
+    return quakes.map((q) => {
+      const phi = (90 - q.lat) * (Math.PI / 180);
+      const theta = (q.lng + 180) * (Math.PI / 180);
+      const r = 1.82;
+      return {
+        position: new THREE.Vector3(
+          -r * Math.sin(phi) * Math.cos(theta),
+          r * Math.cos(phi),
+          r * Math.sin(phi) * Math.sin(theta)
+        ),
+        size: Math.max(0.01, q.magnitude * 0.008),
+        color: q.magnitude >= 5 ? "#ff3333" : q.magnitude >= 4 ? "#ff8833" : "#ffcc33",
+      };
+    });
+  }, [quakes]);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {points.map((p, i) => (
+        <mesh key={i} position={p.position}>
+          <sphereGeometry args={[p.size, 8, 8]} />
+          <meshBasicMaterial color={p.color} transparent opacity={0.9} />
+        </mesh>
+      ))}
+    </group>
   );
 }
 
@@ -129,9 +162,18 @@ function AtmosphereGlow({ color }: { color: string }) {
 interface BlueMarbleGlobeProps {
   height?: number;
   sphereId?: SphereId;
+  /** Dynamic overlay texture URL (from live data hook) */
+  overlayUrl?: string;
+  /** Earthquake data points (geosphere only) */
+  quakes?: QuakePoint[];
 }
 
-export const BlueMarbleGlobe = ({ height = 340, sphereId }: BlueMarbleGlobeProps) => {
+export const BlueMarbleGlobe = ({
+  height = 340,
+  sphereId,
+  overlayUrl,
+  quakes,
+}: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
 
   return (
@@ -148,7 +190,10 @@ export const BlueMarbleGlobe = ({ height = 340, sphereId }: BlueMarbleGlobeProps
         <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#88aaff" />
         <pointLight position={[0, 4, 3]} intensity={0.5} color="#ffffff" />
         <GlobeMesh />
-        {sphereId && <NASAOverlay sphereId={sphereId} />}
+        {sphereId && overlayUrl && (
+          <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
+        )}
+        {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
           enableZoom={false}
