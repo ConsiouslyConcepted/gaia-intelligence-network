@@ -1,12 +1,8 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
-import { GeosphereSim } from "./simulations/GeosphereSim";
-import { BiosphereSim } from "./simulations/BiosphereSim";
-import { MagnetosphereSim } from "./simulations/MagnetosphereSim";
-import { IonosphereSim } from "./simulations/IonosphereSim";
-import { NoosphereSim } from "./simulations/NoosphereSim";
-import { CrystalsphereeSim } from "./simulations/CrystalsphereeSim";
+import { Suspense } from "react";
+import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
 
 interface Props {
   sphere: Sphere;
