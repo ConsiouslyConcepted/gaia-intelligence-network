@@ -89,7 +89,7 @@ export default function SphereDetail() {
             {[
               { value: "anatomy", icon: Scan, label: "Anatomy" },
               { value: "live-dynamics", icon: Activity, label: "Live Dynamics" },
-              { value: "data", icon: Database, label: "Data" },
+              { value: "data", icon: () => <CommonsIcon size={14} />, label: "Data" },
               { value: "coupling", icon: GitBranch, label: "Coupling" },
             ].map(tab => (
               <TabsTrigger
