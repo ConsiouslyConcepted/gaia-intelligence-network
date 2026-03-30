@@ -31,15 +31,17 @@ function GlobeMesh() {
   );
 }
 
-export const BlueMarbleGlobe = ({ height = 280 }: { height?: number }) => (
+export const BlueMarbleGlobe = ({ height = 340 }: { height?: number }) => (
   <div style={{ height }} className="w-full rounded-xl overflow-hidden">
     <Canvas
-      camera={{ position: [0, 0, 4.2], fov: 45 }}
+      camera={{ position: [0, 0, 4.8], fov: 45 }}
       gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping }}
+      onCreated={({ gl }) => { gl.toneMappingExposure = 1.6; }}
     >
-      <ambientLight intensity={0.35} color="#ffffff" />
-      <directionalLight position={[5, 3, 5]} intensity={1.8} color="#ffffff" />
-      <directionalLight position={[-3, -2, -4]} intensity={0.4} color="#88aaff" />
+      <ambientLight intensity={0.5} color="#ffffff" />
+      <directionalLight position={[5, 3, 5]} intensity={2.5} color="#ffffff" />
+      <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#88aaff" />
+      <pointLight position={[0, 4, 3]} intensity={0.5} color="#ffffff" />
       <GlobeMesh />
       <OrbitControls
         enableZoom={false}
