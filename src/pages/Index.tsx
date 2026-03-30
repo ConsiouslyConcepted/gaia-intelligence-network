@@ -166,7 +166,7 @@ const Index = () => {
       </div>
 
       {/* ─── RIGHT HUD: Sphere Signals ─── */}
-      <div className="absolute right-4 top-[96px] z-10 flex flex-col pointer-events-none w-[220px]">
+      <div className="absolute right-4 top-[96px] z-10 flex flex-col pointer-events-none w-[260px]">
         <HudPanel className="pointer-events-auto p-3" glow="#4488cc">
           <div className="flex items-center gap-1.5 mb-2.5">
             <Zap className="w-3 h-3 text-accent/50" />
