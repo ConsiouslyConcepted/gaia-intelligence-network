@@ -108,8 +108,8 @@ export default function SphereDetail() {
             <TabsContent value="live-dynamics" className="mt-0">
               <LiveDynamicsPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
-            <TabsContent value="data" className="mt-0">
-              <DataPanel sphere={sphere} accent={ACCENT} />
+            <TabsContent value="signals" className="mt-0">
+              <SignalsPanel sphere={sphere} accent={ACCENT} />
             </TabsContent>
             <TabsContent value="coupling" className="mt-0">
               <CouplingPanel sphere={sphere} accent={ACCENT} />
