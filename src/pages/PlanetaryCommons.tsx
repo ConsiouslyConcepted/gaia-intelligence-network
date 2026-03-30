@@ -383,12 +383,12 @@ export default function PlanetaryCommons() {
           </Button>
           <div className="h-4 w-px bg-border/20" />
           <div className="w-9 h-9 rounded-full bg-background/40 border border-border/20 flex items-center justify-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
-            <Database className="w-4.5 h-4.5" style={{ color: ACCENT }} />
+            <Database className="w-4.5 h-4.5 text-foreground/70" />
           </div>
           <div>
             <h1
-              className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: ACCENT, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              className="text-base font-semibold tracking-wide leading-none text-foreground/90"
+              style={{ fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               Planetary Commons
             </h1>
@@ -408,7 +408,7 @@ export default function PlanetaryCommons() {
               className="w-12 h-12 rounded-xl flex items-center justify-center shrink-0"
               style={{ backgroundColor: `${ACCENT}12` }}
             >
-              <Database className="w-6 h-6" style={{ color: ACCENT }} />
+              <Database className="w-6 h-6 text-foreground/60" />
             </div>
             <div>
               <h2 className="text-sm font-semibold">Open Planetary Data</h2>
@@ -432,7 +432,7 @@ export default function PlanetaryCommons() {
             { label: "Update Freq", value: "~60s", sub: "Fastest refresh" },
           ].map((stat) => (
             <Card key={stat.label} className="glass-panel rounded-xl p-3 text-center">
-              <div className="text-lg font-bold font-mono" style={{ color: ACCENT }}>{stat.value}</div>
+              <div className="text-lg font-bold font-mono text-foreground/85">{stat.value}</div>
               <div className="text-[9px] font-semibold uppercase tracking-wider text-foreground/60">{stat.label}</div>
               <div className="text-[8px] text-muted-foreground/30 mt-0.5">{stat.sub}</div>
             </Card>
@@ -469,7 +469,7 @@ export default function PlanetaryCommons() {
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center gap-1.5 text-[10px] font-medium hover:underline"
-              style={{ color: ACCENT }}
+              style={{ color: "hsla(0,0%,100%,0.6)" }}
             >
               <ExternalLink className="w-3 h-3" />
               Full GIBS Documentation
