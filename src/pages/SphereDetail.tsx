@@ -58,16 +58,14 @@ export default function SphereDetail() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-3">
-          <Button
-            variant="ghost"
-            size="icon"
+        <div className="flex items-center gap-4">
+          <button
             onClick={() => navigate("/commons")}
-            className="h-8 w-8 hover:bg-muted/20 rounded-lg"
+            className="hover:opacity-80 transition-opacity"
             title="Planetary Commons Data"
           >
-            <CommonsIcon size={48} />
-          </Button>
+            <CommonsIcon size={56} />
+          </button>
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
             <div className="text-xs font-semibold font-mono leading-none mt-0.5 text-foreground/80">
