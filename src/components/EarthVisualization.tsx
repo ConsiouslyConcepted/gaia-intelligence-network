@@ -52,12 +52,12 @@ const CoreSphere = ({
           shininess={8}
         />
       </mesh>
-      {/* Atmosphere glow shell */}
+      {/* Atmosphere glow shell — blue tint */}
       <Sphere args={[layer.radius * 1.03, 64, 64]}>
         <meshBasicMaterial
-          color={layer.color}
+          color="#4488cc"
           transparent
-          opacity={hovered ? 0.12 : 0.05}
+          opacity={hovered ? 0.1 : 0.04}
           side={THREE.BackSide}
         />
       </Sphere>
