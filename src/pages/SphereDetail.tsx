@@ -48,8 +48,8 @@ export default function SphereDetail() {
           </div>
           <div>
             <h1
-              className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: ACCENT, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              className="text-base font-semibold tracking-wide leading-none text-foreground/90"
+              style={{ fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               {sphere.name}
             </h1>
