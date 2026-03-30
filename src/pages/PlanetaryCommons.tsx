@@ -383,12 +383,12 @@ export default function PlanetaryCommons() {
           </Button>
           <div className="h-4 w-px bg-border/20" />
           <div className="w-9 h-9 rounded-full bg-background/40 border border-border/20 flex items-center justify-center shadow-[inset_0_1px_4px_rgba(0,0,0,0.3)]">
-            <Database className="w-4.5 h-4.5" style={{ color: ACCENT }} />
+            <Database className="w-4.5 h-4.5 text-foreground/70" />
           </div>
           <div>
             <h1
-              className="text-base font-semibold tracking-wide leading-none"
-              style={{ color: ACCENT, fontVariant: "small-caps", letterSpacing: "0.06em" }}
+              className="text-base font-semibold tracking-wide leading-none text-foreground/90"
+              style={{ fontVariant: "small-caps", letterSpacing: "0.06em" }}
             >
               Planetary Commons
             </h1>
