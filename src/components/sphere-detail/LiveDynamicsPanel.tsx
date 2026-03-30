@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
 import { Activity } from "lucide-react";
-import { Suspense } from "react";
 import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
 
 interface Props {
