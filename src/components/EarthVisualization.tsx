@@ -50,8 +50,6 @@ const CoreSphere = ({
           bumpScale={0.03}
           specular={new THREE.Color("#334466")}
           shininess={8}
-          emissive={new THREE.Color(layer.color)}
-          emissiveIntensity={hovered ? 0.15 : 0.05}
         />
       </mesh>
       {/* Atmosphere glow shell */}
