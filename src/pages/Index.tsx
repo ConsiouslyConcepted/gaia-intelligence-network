@@ -176,14 +176,14 @@ const Index = () => {
               <div key={d.label}>
                 <div className="flex items-baseline justify-between mb-0.5">
                   <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/40">{d.label}</span>
-                  <span className="text-[11px] font-mono font-semibold tabular-nums text-foreground/70">
-                    {d.value}<span className="text-[8px] text-muted-foreground/30 ml-0.5 font-normal">{d.unit}</span>
+                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
+                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
                   </span>
                 </div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[7px] tracking-[0.1em] uppercase text-muted-foreground/30">{d.sphere}</span>
+                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
                 </div>
-                <MiniGraph color="hsla(0,0%,100%,0.5)" data={d.trend} />
+                <MiniGraph color={d.color} data={d.trend} />
               </div>
             ))}
           </div>
