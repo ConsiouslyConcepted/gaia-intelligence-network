@@ -65,8 +65,8 @@ export const SPHERES: Record<SphereId, Sphere> = {
   },
   ionosphere: {
     id: "ionosphere",
-    name: "Ionosphere",
-    description: "Charged atmospheric layer — TEC, radio propagation, auroral activity",
+    name: "Atmosphere",
+    description: "Dynamic atmospheric systems — weather, climate, air quality, auroral activity",
     color: "#4488cc",
     radius: 1.75,
     opacity: 0.2,
