@@ -166,7 +166,7 @@ const Index = () => {
 
       {/* ─── RIGHT HUD: Sphere Signals ─── */}
       <div className="absolute right-4 top-[96px] z-10 flex flex-col pointer-events-none w-[250px]">
-        <HudPanel className="pointer-events-auto p-4 pb-5" glow="hsla(0,0%,100%,0.15)">
+        <HudPanel className="pointer-events-auto p-4 pb-5 h-[460px]" glow="#4488cc">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Signals</span>
             <span className="text-[8px] font-mono text-muted-foreground/25">Live</span>
