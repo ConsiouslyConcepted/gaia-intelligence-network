@@ -136,24 +136,23 @@ const Index = () => {
 
       {/* ─── LEFT HUD: All Spheres ─── */}
       <div className="absolute left-4 top-[96px] z-10 flex flex-col pointer-events-none w-[250px]">
-        <HudPanel className="pointer-events-auto p-4 pb-6" glow="#5ce0d2">
+        <HudPanel className="pointer-events-auto p-4 pb-5" glow="hsla(0,0%,100%,0.15)">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
             <span className="text-[8px] font-mono text-muted-foreground/25">01–06</span>
           </div>
           <div className="space-y-1">
             {SPHERE_ARRAY.map((sphere, i) => {
-              const coherence = coherenceValues[i];
               return (
                 <button
                   key={sphere.id}
                   onClick={() => navigate(`/sphere/${sphere.id}`)}
-                  className="w-full flex items-center gap-3 px-2.5 py-2 rounded-lg transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
+                  className="w-full flex items-center gap-2.5 px-1.5 py-2 rounded-lg transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
                 >
-                  <WireframeSphereIcon color={sphere.color} size={32} segments={12} className="transition-transform duration-500 group-hover:scale-110 shrink-0" />
+                  <WireframeSphereIcon color={sphere.color} size={28} segments={12} className="transition-transform duration-500 group-hover:scale-110 shrink-0" />
                   <div className="min-w-0 text-left flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
+                      <span className="text-[10px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
                       <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
                     </div>
                     <p className="text-[8px] text-muted-foreground/40 leading-snug mt-0.5">{sphere.description}</p>
@@ -167,24 +166,24 @@ const Index = () => {
 
       {/* ─── RIGHT HUD: Sphere Signals ─── */}
       <div className="absolute right-4 top-[96px] z-10 flex flex-col pointer-events-none w-[250px]">
-        <HudPanel className="pointer-events-auto p-4 pb-6" glow="#4488cc">
-          <div className="flex items-center gap-1.5 mb-2.5">
-            <Zap className="w-3 h-3 text-accent/50" />
-            <span className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Signals</span>
+        <HudPanel className="pointer-events-auto p-4 pb-5" glow="hsla(0,0%,100%,0.15)">
+          <div className="flex items-center justify-between mb-3">
+            <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Signals</span>
+            <span className="text-[8px] font-mono text-muted-foreground/25">Live</span>
           </div>
           <div className="space-y-2.5">
             {liveReadouts.map((d) => (
               <div key={d.label}>
                 <div className="flex items-baseline justify-between mb-0.5">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/35">{d.label}</span>
-                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
-                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
+                  <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/40">{d.label}</span>
+                  <span className="text-[11px] font-mono font-semibold tabular-nums text-foreground/70">
+                    {d.value}<span className="text-[8px] text-muted-foreground/30 ml-0.5 font-normal">{d.unit}</span>
                   </span>
                 </div>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
+                  <span className="text-[7px] tracking-[0.1em] uppercase text-muted-foreground/30">{d.sphere}</span>
                 </div>
-                <MiniGraph color={d.color} data={d.trend} />
+                <MiniGraph color="hsla(0,0%,100%,0.5)" data={d.trend} />
               </div>
             ))}
           </div>
