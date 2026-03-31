@@ -175,7 +175,7 @@ const Index = () => {
             {liveReadouts.map((d) => (
               <div key={d.label}>
                 <div className="flex items-baseline justify-between mb-0.5">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-muted-foreground/40">{d.label}</span>
+                  <span className="text-[8px] uppercase tracking-[0.12em] text-foreground/80">{d.label}</span>
                   <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
                     {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
                   </span>
