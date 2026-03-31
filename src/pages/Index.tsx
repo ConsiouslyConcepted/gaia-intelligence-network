@@ -3,7 +3,7 @@ import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
-import { Activity, Radar, Signal, Zap, ArrowRight } from "lucide-react";
+import { Activity, Signal, ArrowRight } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
