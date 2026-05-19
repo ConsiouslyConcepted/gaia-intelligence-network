@@ -33,7 +33,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
   biosphere: {
     id: "biosphere",
     name: "Biosphere",
-    description: "Earth's living envelope — atmosphere, hydrosphere, lithosphere/geosphere, cryosphere & magnetosphere",
+    description: "Earth's living envelope — atmosphere, hydrosphere, lithosphere/geosphere & cryosphere",
     color: "#7ecbcb",
     radius: 1.15,
     opacity: 0.25,
