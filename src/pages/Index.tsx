@@ -57,7 +57,7 @@ const Index = () => {
   const globalCoherence = Math.round(coherenceValues.reduce((a, b) => a + b, 0) / coherenceValues.length);
 
   const liveReadouts = useMemo(() => ([
-    { label: "Seismic Index", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "Mw", color: "#cc5533", sphere: "Geosphere", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
+    { label: "Ocean Heat", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "ZJ", color: "#7ecbcb", sphere: "Biosphere", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
     { label: "Solar Flux", value: Math.round(142 + Math.sin(tick * 0.15) * 12).toString(), unit: "SFU", color: "#4466dd", sphere: "Magnetosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.15) * 0.3) },
     { label: "Grid Load", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TW", color: "#4488cc", sphere: "Technosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
     { label: "Schumann Res", value: (7.83 + Math.sin(tick * 0.08) * 0.15).toFixed(2), unit: "Hz", color: "#d4a56a", sphere: "Crystalsphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.08) * 0.2) },

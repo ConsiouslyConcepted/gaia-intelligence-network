@@ -33,7 +33,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
   biosphere: {
     id: "biosphere",
     name: "Biosphere",
-    description: "Biological intelligence — ecosystems, biodiversity, life networks",
+    description: "Earth's living envelope — geosphere, hydrosphere, atmosphere & ecosystems",
     color: "#7ecbcb",
     radius: 1.15,
     opacity: 0.25,
@@ -87,4 +87,6 @@ export const SPHERES: Record<SphereId, Sphere> = {
   },
 };
 
-export const SPHERE_ARRAY = Object.values(SPHERES).sort((a, b) => a.orderIndex - b.orderIndex);
+export const SPHERE_ARRAY = Object.values(SPHERES)
+  .filter((s) => s.id !== "geosphere")
+  .sort((a, b) => a.orderIndex - b.orderIndex);
