@@ -65,8 +65,8 @@ export const SPHERES: Record<SphereId, Sphere> = {
   },
   ionosphere: {
     id: "ionosphere",
-    name: "Atmosphere",
-    description: "Dynamic atmospheric systems — weather, climate, air quality, auroral activity",
+    name: "Technosphere",
+    description: "Human-built systems — infrastructure, networks, energy grids, satellites",
     color: "#4488cc",
     radius: 1.75,
     opacity: 0.2,
