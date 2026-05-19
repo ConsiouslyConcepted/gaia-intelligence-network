@@ -126,7 +126,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 2px 8px rgba(0,0,0,0.3)",
                 }}
               >
-                <Activity className="w-3.5 h-3.5" />HGS
+                <Activity className="w-3.5 h-3.5" />Universal
               </button>
             </div>
           </div>
