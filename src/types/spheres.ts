@@ -54,8 +54,8 @@ export const SPHERES: Record<SphereId, Sphere> = {
   },
   magnetosphere: {
     id: "magnetosphere",
-    name: "Magnetosphere",
-    description: "Planetary EM field — geomagnetic dynamics, solar wind interactions",
+    name: "Heliosphere",
+    description: "Solar-driven plasma field — solar wind, cosmic rays, heliospheric currents",
     color: "#4466dd",
     radius: 1.6,
     opacity: 0.15,
