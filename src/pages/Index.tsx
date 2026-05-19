@@ -59,7 +59,7 @@ const Index = () => {
   const liveReadouts = useMemo(() => ([
     { label: "Seismic Index", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "Mw", color: "#cc5533", sphere: "Geosphere", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
     { label: "Solar Flux", value: Math.round(142 + Math.sin(tick * 0.15) * 12).toString(), unit: "SFU", color: "#4466dd", sphere: "Magnetosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.15) * 0.3) },
-    { label: "TEC Global", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TECU", color: "#4488cc", sphere: "Atmosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
+    { label: "Grid Load", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TW", color: "#4488cc", sphere: "Technosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
     { label: "Schumann Res", value: (7.83 + Math.sin(tick * 0.08) * 0.15).toFixed(2), unit: "Hz", color: "#d4a56a", sphere: "Crystalsphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.08) * 0.2) },
     { label: "Global NDVI", value: (0.42 + Math.sin(tick * 0.04) * 0.06).toFixed(2), unit: "idx", color: "#4caf50", sphere: "Biosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.04) * 0.25) },
     { label: "Collective Attention", value: (840 + Math.cos(tick * 0.06) * 80).toFixed(0), unit: "Tb/s", color: "#ab47bc", sphere: "Noosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.06) * 0.3) },
