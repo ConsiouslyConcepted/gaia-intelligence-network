@@ -72,12 +72,7 @@ const Planet = ({
   const visual = PLANET_VISUAL[id];
   const planet = SOLAR_PLANETS.find((p) => p.id === id)!;
   const meshRef = useRef<THREE.Mesh>(null!);
-  let texture: THREE.Texture | null = null;
-  try {
-    texture = useTexture(planet.image);
-  } catch {
-    texture = null;
-  }
+  const texture = useTexture(planet.image);
   useFrame((_, dt) => {
     if (meshRef.current) meshRef.current.rotation.y += dt * 0.2;
   });
@@ -94,7 +89,7 @@ const Planet = ({
       >
         <sphereGeometry args={[visual.size, 32, 32]} />
         {texture ? (
-          <meshStandardMaterial map={texture} roughness={0.85} metalness={0.05} />
+          <meshStandardMaterial map={texture as THREE.Texture} roughness={0.85} metalness={0.05} />
         ) : (
           <meshStandardMaterial color={planet.color} roughness={0.85} />
         )}
