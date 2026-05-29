@@ -88,7 +88,7 @@ const Index = () => {
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
-        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
+        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative" glow="#d4a56a">
           {/* Left: Title */}
           <div>
             <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
@@ -100,10 +100,10 @@ const Index = () => {
           </div>
 
 
-          {/* Commons Data icon */}
+          {/* Commons Data icon — absolutely centered */}
           <button
             onClick={() => navigate("/commons")}
-            className="flex items-center gap-2 px-3 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+            className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 flex items-center gap-2 px-3 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
             style={{ color: "hsla(174,60%,60%,0.7)" }}
             title="Planetary Commons Data"
           >
