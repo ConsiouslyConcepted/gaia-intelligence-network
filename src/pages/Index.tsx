@@ -72,7 +72,7 @@ const Index = () => {
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
       {/* Full-screen globe */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-0 translate-y-[8%]">
         <EarthVisualization />
       </div>
 
