@@ -131,11 +131,11 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 <Activity className="w-3.5 h-3.5" />Universal
               </button>
               <button
-                onClick={() => navigate("/cosmic")}
+                onClick={() => navigate("/cosmological")}
                 className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
-                <Sparkles className="w-3.5 h-3.5" />Cosmic
+                <Sparkles className="w-3.5 h-3.5" />Cosmological
               </button>
             </div>
           </div>

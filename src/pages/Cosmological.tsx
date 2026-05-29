@@ -15,7 +15,7 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
-const Cosmic = () => {
+const Cosmological = () => {
   const navigate = useNavigate();
 
   return (
@@ -41,7 +41,7 @@ const Cosmic = () => {
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#a78bfa">
           <div>
-            <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">Cosmic Intelligence</h1>
+            <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">Cosmological Intelligence</h1>
             <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
               Galactic & Universal Field · Deep Space Observatory
             </p>
@@ -71,7 +71,7 @@ const Cosmic = () => {
                 boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 2px 8px rgba(0,0,0,0.3)",
               }}
             >
-              <Sparkles className="w-3.5 h-3.5" />Cosmic
+              <Sparkles className="w-3.5 h-3.5" />Cosmological
             </button>
           </div>
         </HudPanel>
@@ -82,7 +82,7 @@ const Cosmic = () => {
         <HudPanel className="pointer-events-auto max-w-2xl w-full p-8 text-center" glow="#a78bfa">
           <Sparkles className="w-8 h-8 mx-auto mb-4 text-foreground/60" />
           <h2 className="text-[14px] font-semibold tracking-[0.2em] uppercase text-foreground/85 mb-3">
-            Cosmic Field Observatory
+            Cosmological Field Observatory
           </h2>
           <p className="text-[11px] text-muted-foreground/60 leading-relaxed max-w-lg mx-auto">
             Deep-space observability layer — galactic background radiation, interstellar
@@ -93,7 +93,7 @@ const Cosmic = () => {
           <div className="grid grid-cols-3 gap-3 mt-8">
             {[
               { label: "Galactic Coherence", value: "0.87", unit: "ψ" },
-              { label: "Cosmic Ray Flux", value: "1.42", unit: "p/cm²s" },
+              { label: "Cosmological Ray Flux", value: "1.42", unit: "p/cm²s" },
               { label: "CMB Temp", value: "2.725", unit: "K" },
             ].map((m) => (
               <div
@@ -117,4 +117,4 @@ const Cosmic = () => {
   );
 };
 
-export default Cosmic;
+export default Cosmological;
