@@ -15,7 +15,7 @@ const HudPanel = ({ children, className = "", glow }: { children: React.ReactNod
   </div>
 );
 
-const Cosmic = () => {
+const Cosmological = () => {
   const navigate = useNavigate();
 
   return (
