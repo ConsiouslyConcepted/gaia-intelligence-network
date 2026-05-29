@@ -47,31 +47,31 @@ const Cosmological = () => {
             </p>
           </div>
 
-          <div className="flex gap-1 rounded-xl p-1" style={{ background: "hsla(240,20%,12%,0.6)", boxShadow: "inset 0 1px 3px rgba(0,0,0,0.4)" }}>
+          <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(0,0%,100%,0.06)" }}>
             <button
               onClick={() => navigate("/")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+              className="px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:bg-foreground/[0.05] hover:text-foreground/70"
               style={{ color: "hsla(0,0%,100%,0.4)" }}
             >
-              <Signal className="w-3.5 h-3.5" />Planetary
+              Planetary
             </button>
             <button
               onClick={() => navigate("/?view=hgs")}
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+              className="px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 hover:bg-foreground/[0.05] hover:text-foreground/70"
               style={{ color: "hsla(0,0%,100%,0.4)" }}
             >
-              <Activity className="w-3.5 h-3.5" />Universal
+              Universal
             </button>
             <button
-              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-semibold tracking-wider uppercase transition-all duration-300"
+              className="px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
               style={{
-                background: "hsla(0,0%,100%,0.06)",
-                color: "hsla(0,0%,100%,0.85)",
-                border: "1px solid hsla(0,0%,100%,0.12)",
-                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 2px 8px rgba(0,0,0,0.3)",
+                background: "linear-gradient(180deg, hsla(0,0%,100%,0.10) 0%, hsla(0,0%,100%,0.04) 100%)",
+                color: "hsla(0,0%,100%,0.95)",
+                border: "1px solid hsla(0,0%,100%,0.14)",
+                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 4px 14px rgba(0,0,0,0.45), 0 0 20px hsla(38,40%,60%,0.08)",
               }}
             >
-              <Sparkles className="w-3.5 h-3.5" />Cosmological
+              Cosmological
             </button>
           </div>
         </HudPanel>
