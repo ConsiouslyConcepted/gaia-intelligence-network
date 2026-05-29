@@ -1,11 +1,18 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2, Signal, Activity, Sparkles } from "lucide-react";
+import { Volume2, Signal, Activity, Sparkles, Waves } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 import { usePlanetAudio } from "@/hooks/usePlanetAudio";
+import { LivingSolarSystem } from "@/components/universal/LivingSolarSystem";
+import { ViewModeToggle, UniversalViewMode } from "@/components/universal/ViewModeToggle";
+import { SolarCyclePanel } from "@/components/universal/SolarCyclePanel";
+import { AlignmentIndicator } from "@/components/universal/AlignmentIndicator";
+import { SpaceWeatherLink } from "@/components/universal/SpaceWeatherLink";
+import { usePlanetaryPositions } from "@/hooks/usePlanetaryPositions";
+import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
 
 type SidebarMode = "patterns" | "cymatics";
 
@@ -42,9 +49,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const navigate = useNavigate();
   const { play, playing, getFrequencyData } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
-  
-
-
+  const [viewMode, setViewMode] = useState<UniversalViewMode>("harmonic");
+  const [showHarmonicArcs, setShowHarmonicArcs] = useState(true);
+  const states = usePlanetaryPositions(1, 200);
+  const { data: solarCycle } = useNOAASolarCycle();
+  const currentSSN = solarCycle?.[solarCycle.length - 1]?.smoothedSSN || 50;
+  const solarIntensity = Math.min(1, currentSSN / 150);
 
   const handlePlanetClick = (planetId: string) => {
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
@@ -64,13 +74,45 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
-      {/* Full-screen orbital field */}
+      {/* Full-screen orbital field / 3D scene */}
       <div className="absolute inset-x-0 top-[92px] bottom-0 z-0">
-        <OrbitalResonanceField
-          selectedPlanet={selectedPlanet}
-          onPlanetClick={(id) => setSelectedPlanet(id)}
-        />
+        {viewMode === "harmonic" ? (
+          <OrbitalResonanceField
+            selectedPlanet={selectedPlanet}
+            onPlanetClick={(id) => setSelectedPlanet(id)}
+          />
+        ) : (
+          <LivingSolarSystem
+            selectedPlanet={selectedPlanet}
+            onPlanetClick={(id) => setSelectedPlanet(id)}
+            states={states}
+            showHarmonics={showHarmonicArcs}
+            solarIntensity={solarIntensity}
+          />
+        )}
       </div>
+
+      {/* Universal HUD overlays */}
+      <SolarCyclePanel />
+      {viewMode === "living" && <AlignmentIndicator states={states} />}
+      <SpaceWeatherLink />
+      <ViewModeToggle mode={viewMode} onChange={setViewMode} />
+      {viewMode === "living" && (
+        <button
+          onClick={() => setShowHarmonicArcs((v) => !v)}
+          className="absolute bottom-6 left-1/2 translate-x-[140px] z-20 pointer-events-auto flex items-center gap-2 px-4 py-2.5 rounded-xl text-[10px] font-semibold tracking-[0.18em] uppercase backdrop-blur-2xl transition-all"
+          style={{
+            background: showHarmonicArcs
+              ? "linear-gradient(180deg, hsla(0,0%,100%,0.10) 0%, hsla(0,0%,100%,0.04) 100%)"
+              : "hsla(240,25%,8%,0.78)",
+            color: showHarmonicArcs ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
+            border: "1px solid hsla(0,0%,100%,0.1)",
+            boxShadow: "0 8px 24px rgba(0,0,0,0.5)",
+          }}
+        >
+          <Waves className="w-3.5 h-3.5" /> Harmonics
+        </button>
+      )}
 
       {/* Vignette */}
       <div className="absolute inset-0 z-[1] pointer-events-none" style={{
