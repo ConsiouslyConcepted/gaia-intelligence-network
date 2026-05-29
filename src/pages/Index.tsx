@@ -88,7 +88,21 @@ const Index = () => {
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
-        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative" glow="#d4a56a">
+        <div
+          className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
+          style={{
+            background:
+              "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
+            border: "1px solid hsla(0,0%,100%,0.08)",
+            boxShadow:
+              "inset 0 1px 0 hsla(0,0%,100%,0.14), inset 0 -1px 0 hsla(0,0%,0%,0.6), inset 0 -10px 24px -10px hsla(0,0%,0%,0.5), 0 12px 28px -6px rgba(0,0,0,0.75), 0 24px 60px -20px rgba(0,0,0,0.9), 0 0 0 1px hsla(0,0%,0%,0.4)",
+          }}
+        >
+          {/* Glossy top highlight */}
+          <div className="pointer-events-none absolute top-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(0,0%,100%,0.35), transparent)" }} />
+          {/* Subtle bottom edge shadow */}
+          <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
+
           {/* Left: Title */}
           <div>
             <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">
@@ -140,7 +154,7 @@ const Index = () => {
               <CommonsIcon size={20} />
             </button>
           </div>
-        </HudPanel>
+        </div>
       </div>
 
       {/* ─── LEFT HUD: All Spheres ─── */}
