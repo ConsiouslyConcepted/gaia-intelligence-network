@@ -3,7 +3,7 @@ import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
-import { Activity, Signal, ArrowRight } from "lucide-react";
+import { Activity, Signal, ArrowRight, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 
@@ -129,6 +129,13 @@ const Index = () => {
               style={{ color: "hsla(0,0%,100%,0.4)" }}
             >
               <Activity className="w-3.5 h-3.5" />Universal
+            </button>
+            <button
+              onClick={() => navigate("/cosmic")}
+              className="flex items-center gap-2 px-5 py-2.5 rounded-lg text-[11px] font-medium tracking-wider uppercase transition-all duration-300 hover:bg-foreground/[0.04]"
+              style={{ color: "hsla(0,0%,100%,0.4)" }}
+            >
+              <Sparkles className="w-3.5 h-3.5" />Cosmic
             </button>
           </div>
         </HudPanel>
