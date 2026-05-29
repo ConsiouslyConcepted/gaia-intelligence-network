@@ -154,7 +154,7 @@ const Index = () => {
               <CommonsIcon size={20} />
             </button>
           </div>
-        </HudPanel>
+        </div>
       </div>
 
       {/* ─── LEFT HUD: All Spheres ─── */}
