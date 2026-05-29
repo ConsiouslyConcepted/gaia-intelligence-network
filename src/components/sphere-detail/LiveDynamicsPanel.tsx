@@ -62,6 +62,24 @@ const BEHAVIOR_DATA: Record<SphereId, { summary: string; patterns: BehaviorPatte
       { name: "Surge Patterns", description: "Explosive growth in information flow during global events — natural disasters, political events, cultural moments.", timeScale: "Minutes → Days" },
     ],
   },
+  hydrosphere: {
+    summary: "The Hydrosphere circulates as a planetary-scale conveyor — surface and deep ocean currents redistribute heat, freshwater cycles between atmosphere, land, and sea, and ice melt drives changes in salinity and circulation strength.",
+    patterns: [
+      { name: "Ocean Heat Redistribution", description: "Surface and thermohaline currents transport equatorial heat poleward, regulating regional climate and marine ecosystems.", timeScale: "Days → Decades" },
+      { name: "Hydrological Cycling", description: "Evaporation, condensation, precipitation, and runoff continuously transfer water between reservoirs.", timeScale: "Hours → Years" },
+      { name: "Sea Level Variability", description: "Steric expansion, ice mass loss, and ocean basin redistribution drive measurable global mean sea level change.", timeScale: "Months → Decades" },
+      { name: "Salinity & Density Drift", description: "Freshwater input from ice melt and precipitation modulates ocean stratification and circulation strength.", timeScale: "Years → Centuries" },
+    ],
+  },
+  cryosphere: {
+    summary: "The Cryosphere acts as the planet's thermal buffer and albedo regulator — it expands and contracts with seasons, accumulates and discharges mass over decades, and amplifies climate signals through ice-albedo feedbacks.",
+    patterns: [
+      { name: "Seasonal Ice Cycling", description: "Hemispheric sea ice expansion and retreat producing the strongest annual albedo signal on the planet.", timeScale: "Months (seasonal)" },
+      { name: "Glacier Mass Balance", description: "Accumulation vs. ablation across mountain glaciers and ice sheets — net mass loss accelerating worldwide.", timeScale: "Years → Decades" },
+      { name: "Permafrost Thaw", description: "Progressive warming of frozen ground releasing methane and CO₂, destabilizing infrastructure and ecosystems.", timeScale: "Years → Centuries" },
+      { name: "Ice Shelf Dynamics", description: "Calving, basal melt, and grounding-line retreat at Antarctic and Greenland margins driving sea level rise.", timeScale: "Days → Decades" },
+    ],
+  },
   crystalsphere: {
     summary: "The Crystalsphere represents modeled harmonic behavior — lattice activation patterns, frequency-linked modulation of resonance intensity, and symmetry shifts in the geometric scaffold responding to planetary field dynamics.",
     patterns: [

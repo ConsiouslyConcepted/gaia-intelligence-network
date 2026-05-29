@@ -53,6 +53,18 @@ const SIGNALS: Record<SphereId, SignalDef[]> = {
     { key: "thermal", label: "Urban Heat Signature", unit: "ΔK", baseline: 2.4, amplitude: 0.8, frequency: 0.04, color: "#9c27b0" },
     { key: "coord", label: "Coordination Index", unit: "CI", baseline: 0.62, amplitude: 0.1, frequency: 0.02, color: "#ba68c8" },
   ],
+  hydrosphere: [
+    { key: "sst", label: "Global Sea Surface Temp", unit: "°C", baseline: 18.2, amplitude: 0.8, frequency: 0.02, color: "#2d7fb8" },
+    { key: "salinity", label: "Surface Salinity", unit: "PSU", baseline: 34.7, amplitude: 0.4, frequency: 0.03, color: "#3a9bd9" },
+    { key: "amoc", label: "AMOC Strength", unit: "Sv", baseline: 17, amplitude: 2.5, frequency: 0.015, color: "#1a5d8a" },
+    { key: "precip", label: "Global Precipitation", unit: "mm/d", baseline: 2.7, amplitude: 0.6, frequency: 0.05, color: "#5dade2" },
+  ],
+  cryosphere: [
+    { key: "seaice", label: "Arctic Sea Ice Extent", unit: "Mkm²", baseline: 10.5, amplitude: 4.2, frequency: 0.018, color: "#bcdfe8" },
+    { key: "albedo", label: "Polar Albedo", unit: "α", baseline: 0.78, amplitude: 0.05, frequency: 0.03, color: "#e0f0f5" },
+    { key: "glacier", label: "Glacier Mass Balance", unit: "Gt/yr", baseline: -280, amplitude: 60, frequency: 0.02, color: "#a0c8d4" },
+    { key: "permafrost", label: "Permafrost Temp", unit: "°C", baseline: -3.2, amplitude: 0.3, frequency: 0.025, color: "#88b8c5" },
+  ],
   crystalsphere: [
     { key: "schumann", label: "Schumann Resonance", unit: "Hz", baseline: 7.83, amplitude: 0.15, frequency: 0.03, color: "#d4a56a" },
     { key: "tidal", label: "Tidal Harmonic Amplitude", unit: "cm", baseline: 42, amplitude: 12, frequency: 0.02, color: "#e8c86a" },
