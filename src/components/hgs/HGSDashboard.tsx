@@ -1,18 +1,11 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2, Signal, Activity, Sparkles, Waves } from "lucide-react";
+import { Volume2, Signal, Activity, Sparkles } from "lucide-react";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 import { usePlanetAudio } from "@/hooks/usePlanetAudio";
-import { LivingSolarSystem } from "@/components/universal/LivingSolarSystem";
-import { ViewModeToggle, UniversalViewMode } from "@/components/universal/ViewModeToggle";
-import { SolarCyclePanel } from "@/components/universal/SolarCyclePanel";
-import { AlignmentIndicator } from "@/components/universal/AlignmentIndicator";
-import { SpaceWeatherLink } from "@/components/universal/SpaceWeatherLink";
-import { usePlanetaryPositions } from "@/hooks/usePlanetaryPositions";
-import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
 
 type SidebarMode = "patterns" | "cymatics";
 
