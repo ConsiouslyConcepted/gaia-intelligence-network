@@ -1,81 +1,69 @@
 
-# Universal Page — Living Solar System Upgrade
+# Sphere Intelligence Cards
 
-Keep the existing 2D `OrbitalResonanceField` (rename it the "Harmonic" view) and add a new 3D "Living Solar System" view powered by react-three-fiber. A floating glass pill at bottom-center switches between the two modes. Surrounding panels add Solar Cycle, Alignment Indicator, and a link card to Magnetosphere/Ionosphere for space weather (no duplication of Solar Flares/CMEs).
+Give every sphere a uniform intelligence contract — **Purpose, Metrics, Score, Trend, Baseline, Anomalies** — surfaced two ways:
 
-## Viewport modes
+- **Compact chip** in the HUD's Sphere Systems / Sphere Signals lists (Score + sparkline + trend arrow)
+- **Full Intelligence Card** at the top of the sphere detail view, above the existing Anatomy / Live Dynamics / Signals / Coupling layers
 
+## Sphere contracts
+
+All 7 spheres get the same shape. Scores normalize to 0–100 (higher = more stable / coherent, except Lithosphere where higher = more active — labeled accordingly).
+
+| Sphere | Score name | Core metrics |
+|---|---|---|
+| Biosphere | Vitality | NDVI, vegetation health, carbon uptake, seasonal productivity |
+| Atmosphere | Stability | ENSO, global temp anomaly, pressure oscillations, jet stream |
+| Hydrosphere | Ocean Dynamics | Ocean heat content, SST anomaly, AMOC / circulation |
+| Cryosphere | Stability | Arctic sea ice, Antarctic sea ice, snow cover |
+| Lithosphere | Activity | Seismic energy, earthquake frequency, volcanic activity |
+| Magnetosphere | Coherence | Kp index, solar wind pressure, Schumann resonance, geomag activity |
+| Noosphere | Coherence | Information flow, signal-to-noise, collective attention proxies |
+| Crystalsphere | Resonance | Lattice symmetry, harmonic phase lock, cross-sphere coupling strength |
+
+Noosphere + Crystalsphere keep the same card contract so the dashboard stays uniform.
+
+## Data approach
+
+- Scores are computed from realistic mock formulas now, structured so each metric slot is a swappable data source.
+- Where live telemetry is already wired (USGS seismic, NOAA Kp/space-weather, NASA EONET/GIBS), the metric reader points at the existing hook; everything else uses a deterministic mock with realistic jitter.
+- Trend = delta vs 30-day rolling baseline. Anomalies = metrics outside ±2σ of baseline, surfaced as chips.
+- Strictly read-only — no thresholds that trigger actions, only observability.
+
+## UI
+
+**Compact chip** (in HUD lists):
 ```text
-                  ┌──────────────── Universal ────────────────┐
-                  │ Top bar: Planetary | Universal | Cosmological │
-                  │                                           │
-                  │      [ Harmonic 2D   |   Living 3D ]      │  ← bottom-center pill
-                  └───────────────────────────────────────────┘
+[ Biosphere ─────────────────── 72 ▲ ]
+[ ▁▂▃▅▆▇ sparkline       Vitality   ]
 ```
 
-- **Harmonic** — existing `OrbitalResonanceField` + right sidebar (cymatics, tone, pairs).
-- **Living** — new full-bleed 3D solar system with right sidebar reused.
+**Full Intelligence Card** (top of detail view):
+- Header: sphere name + purpose line
+- Big Score (0–100) with label ("Vitality", "Stability", …) and trend arrow + delta vs baseline
+- Metrics grid: each metric shows current value, unit, mini sparkline, baseline comparison
+- Active Anomalies row: chips for any metric currently outside ±2σ
+- Quiet glassmorphism, neutral tones, white text — matches existing aesthetic
 
-## New 3D view: "Living Solar System"
-
-Cinematic, accurate, monochromatic glassmorphism HUD overlay.
-
-- Sun with corona bloom shader; brightness driven by current Solar Cycle SSN (already fetched via `useNOAASolarCycle`).
-- 9 planets (Mercury → Pluto) with PBR textures, axial tilt, rotation; rings for Saturn and Uranus.
-- Elliptical orbit trails computed from Keplerian elements (J2000), no API needed; planet positions update in real time from current date.
-- Camera: auto-orbit by default; scroll to zoom from inner planets out to Pluto; click a planet to focus + isolate (same selection state as Harmonic view, so sidebar stays in sync).
-- Starfield background, subtle dust, depth-of-field on focus.
-- Harmonic Overlay toggle (HUD button): renders the same orbital-resonance arcs from the 2D view as glowing threads between planets in 3D space.
-- Performance: dpr capped at 1.5, instanced orbit lines, suspense fallback.
-
-## Additional Universal panels
-
-Layered above the canvas as compact glass HUD cards (do not crowd the scene):
-
-1. **Solar Cycle Progression** (top-left strip) — sparkline of `useNOAASolarCycle` smoothed SSN + current phase label.
-2. **Planetary Alignment Indicator** (bottom-left chip) — computes heliocentric longitudes from the same Keplerian set; lights up when 3+ planets fall within a configurable arc (default 15°). Shows participating planets.
-3. **Space Weather link card** (bottom-right small) — "Solar Flares · CMEs — view in Magnetosphere" → navigates to `/sphere/magnetosphere`. No charts duplicated here.
-
-Right sidebar (existing `HGSDashboard` sidebar) is preserved across both modes.
-
-## Files
+## File plan
 
 New:
-- `src/components/universal/LivingSolarSystem.tsx` — R3F `<Canvas>` scene root.
-- `src/components/universal/scene/Sun.tsx`, `Planet.tsx`, `OrbitTrail.tsx`, `HarmonicArcs3D.tsx`, `Starfield.tsx`.
-- `src/components/universal/ViewModeToggle.tsx` — floating bottom-center pill (Harmonic ↔ Living).
-- `src/components/universal/SolarCyclePanel.tsx`
-- `src/components/universal/AlignmentIndicator.tsx`
-- `src/components/universal/SpaceWeatherLink.tsx`
-- `src/lib/orbitalMechanics.ts` — Keplerian element table + position solver (heliocentric XYZ + longitude). Pure functions, no deps.
-- `src/hooks/usePlanetaryPositions.ts` — ticks positions on a `requestAnimationFrame` loop, exposes `{ id, position, longitude }[]`.
+- `src/lib/sphereIntelligence.ts` — types (`SphereScore`, `MetricReading`, `Anomaly`), score formulas, baseline math
+- `src/hooks/useSphereIntelligence.ts` — per-sphere hook returning `{ score, label, trend, metrics, anomalies }`
+- `src/components/sphere-intelligence/SphereIntelligenceCard.tsx` — full card for detail view
+- `src/components/sphere-intelligence/SphereIntelligenceChip.tsx` — compact chip for HUD lists
+- `src/components/sphere-intelligence/MetricTile.tsx` — single metric cell
+- `src/components/sphere-intelligence/sources/` — one small reader per sphere (`biosphere.ts`, `atmosphere.ts`, …) so live wiring can land sphere-by-sphere
 
 Edited:
-- `src/components/hgs/HGSDashboard.tsx` — add `viewMode` state, render `<OrbitalResonanceField>` or `<LivingSolarSystem>`, mount `<ViewModeToggle>`, `<SolarCyclePanel>`, `<AlignmentIndicator>`, `<SpaceWeatherLink>`. Selection state shared between modes.
+- `src/pages/Index.tsx` — render `SphereIntelligenceChip` inside each row of the Sphere Systems and Sphere Signals panels
+- `src/components/sphere-detail/DataPanel.tsx` (or the sphere detail container) — mount `SphereIntelligenceCard` above the existing Anatomy/Live Dynamics/Signals/Coupling tabs
+- `src/types/spheres.ts` — add `scoreLabel` + `scorePolarity` ("stability" | "activity") to each sphere config
 
-## Dependencies
+No changes to HGS mode, audio, or existing layers.
 
-Pinned for React 18 (per project constraint):
-- `three@^0.160.0`
-- `@react-three/fiber@^8.18.0`
-- `@react-three/drei@^9.122.0` (for `OrbitControls`, `Stars`, `Html`, `useTexture`, `Bloom` via postprocessing)
-- `@react-three/postprocessing@^2.16.0` (bloom on Sun + selected planet)
+## Out of scope (for this pass)
 
-## Design
-
-- Monochromatic glassmorphism preserved: HUD cards use existing translucent panel style; 3D scene uses neutral palette — white/warm-white Sun, planet textures kept naturalistic but desaturated slightly to fit the command-center tone.
-- Bottom-center pill matches the existing toggle group styling in the top bar (same inset shadow, border, font tracking).
-- No new accent colors; selection glow reuses the planet's own color (already defined in `SOLAR_PLANETS`).
-
-## Out of scope
-
-- Solar Flares and CMEs panels (stay in Magnetosphere/Ionosphere; only linked from here).
-- No backend, no new API integrations — positions are computed client-side; SSN reuses existing hook.
-- No changes to Planetary or Cosmological pages.
-
-## Validation
-
-- Toggle switches modes without unmounting the sidebar (selection persists).
-- 3D scene renders at >40fps on the current preview viewport; falls back gracefully if WebGL unavailable.
-- Alignment Indicator lights up when test date is set to a known multi-planet conjunction.
-- Space Weather link routes to `/sphere/magnetosphere`.
+- Wiring every metric to live APIs (structure is ready; we land sources incrementally in follow-ups)
+- Historical persistence (baselines computed in-memory from the rolling window)
+- Alerting / notifications (would violate observability-only constraint)

@@ -9,6 +9,7 @@ import { AnatomyPanel } from "@/components/sphere-detail/AnatomyPanel";
 import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel";
 import { SignalsPanel } from "@/components/sphere-detail/SignalsPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
+import { SphereIntelligenceCard } from "@/components/sphere-intelligence/SphereIntelligenceCard";
 
 const ACCENT = "#5ce0d2"; // sphere accent
 
@@ -81,8 +82,9 @@ export default function SphereDetail() {
       </header>
 
       {/* Main Content */}
-      <div className="flex-1 px-3 py-3">
-        <Tabs defaultValue="anatomy" className="h-full flex flex-col gap-3">
+      <div className="flex-1 px-3 py-3 flex flex-col gap-3">
+        <SphereIntelligenceCard sphereId={sphere.id} accent={ACCENT} />
+        <Tabs defaultValue="anatomy" className="flex-1 flex flex-col gap-3">
           <TabsList className="glass-panel rounded-xl w-full justify-start overflow-x-auto px-1 py-1 h-auto gap-0.5">
             {[
               { value: "anatomy", icon: Scan, label: "Anatomy" },

@@ -6,6 +6,7 @@ import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { Activity, Signal, ArrowRight, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
+import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
@@ -178,7 +179,7 @@ const Index = () => {
                       <span className="text-[11px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
                       <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
                     </div>
-                    <p className="text-[9px] text-muted-foreground/30 leading-snug mt-0.5">{sphere.description}</p>
+                    <SphereIntelligenceChip sphereId={sphere.id} accent={sphere.color} />
                   </div>
                 </button>
               );
