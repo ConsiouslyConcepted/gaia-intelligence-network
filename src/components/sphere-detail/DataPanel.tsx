@@ -7,6 +7,8 @@ import { BiosphereLiveState } from "./live-state/BiosphereLiveState";
 import { IonosphereLiveState } from "./live-state/IonosphereLiveState";
 import { NoosphereLiveState } from "./live-state/NoosphereLiveState";
 import { CrystalsphereLiveState } from "./live-state/CrystalsphereLiveState";
+import { HydrosphereLiveState } from "./live-state/HydrosphereLiveState";
+import { CryosphereLiveState } from "./live-state/CryosphereLiveState";
 
 interface Props {
   sphere: Sphere;
@@ -15,6 +17,8 @@ interface Props {
 
 const DATA_COMPONENTS: Record<string, React.ComponentType<{ accent: string }>> = {
   geosphere: GeosphereLiveState,
+  hydrosphere: HydrosphereLiveState,
+  cryosphere: CryosphereLiveState,
   magnetosphere: MagnetosphereLiveState,
   biosphere: BiosphereLiveState,
   ionosphere: IonosphereLiveState,

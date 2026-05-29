@@ -11,6 +11,8 @@ const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topolog
 
 const OVERLAY_SETTINGS: Record<string, { opacity: number; blending: THREE.Blending }> = {
   geosphere: { opacity: 0.7, blending: THREE.AdditiveBlending },
+  hydrosphere: { opacity: 0.75, blending: THREE.AdditiveBlending },
+  cryosphere: { opacity: 0.85, blending: THREE.AdditiveBlending },
   biosphere: { opacity: 0.7, blending: THREE.AdditiveBlending },
   noosphere: { opacity: 0.9, blending: THREE.AdditiveBlending },
   magnetosphere: { opacity: 0.8, blending: THREE.AdditiveBlending },
@@ -20,6 +22,8 @@ const OVERLAY_SETTINGS: Record<string, { opacity: number; blending: THREE.Blendi
 
 const SPHERE_COLORS: Record<string, string> = {
   geosphere: "#cc5533",
+  hydrosphere: "#2d7fb8",
+  cryosphere: "#bcdfe8",
   biosphere: "#7ecbcb",
   noosphere: "#d4a56a",
   magnetosphere: "#4466dd",
