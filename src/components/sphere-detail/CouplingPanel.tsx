@@ -32,7 +32,7 @@ const COUPLING_DATA: Record<SphereId, CouplingLink[]> = {
   ],
   magnetosphere: [
     { target: "ionosphere", strength: 0.92, mechanism: "Particle precipitation, field-aligned currents, auroral electrojets", direction: "outgoing" },
-    { target: "biosphere", strength: 0.35, mechanism: "Cosmic ray modulation, UV shielding via atmospheric retention", direction: "outgoing" },
+    { target: "biosphere", strength: 0.35, mechanism: "Cosmological ray modulation, UV shielding via atmospheric retention", direction: "outgoing" },
     { target: "crystalsphere", strength: 0.70, mechanism: "Field harmonic structure shapes resonance cavity modes", direction: "bidirectional" },
     { target: "geosphere", strength: 0.88, mechanism: "Core convection dynamo drives field generation", direction: "incoming" },
     { target: "noosphere", strength: 0.52, mechanism: "Geomagnetic storms disrupt power grids and satellite systems", direction: "outgoing" },
