@@ -1,5 +1,7 @@
 export type SphereId = 
   | "geosphere" 
+  | "hydrosphere"
+  | "cryosphere"
   | "biosphere" 
   | "noosphere" 
   | "magnetosphere" 
@@ -30,14 +32,36 @@ export const SPHERES: Record<SphereId, Sphere> = {
     hasMapLayers: true,
     hasStellarLayers: false,
   },
+  hydrosphere: {
+    id: "hydrosphere",
+    name: "Hydrosphere",
+    description: "Planetary water — oceans, rivers, groundwater, atmospheric moisture",
+    color: "#2d7fb8",
+    radius: 1.07,
+    opacity: 0.4,
+    orderIndex: 2,
+    hasMapLayers: true,
+    hasStellarLayers: false,
+  },
+  cryosphere: {
+    id: "cryosphere",
+    name: "Cryosphere",
+    description: "Frozen systems — sea ice, glaciers, ice sheets, permafrost",
+    color: "#bcdfe8",
+    radius: 1.1,
+    opacity: 0.3,
+    orderIndex: 3,
+    hasMapLayers: true,
+    hasStellarLayers: false,
+  },
   biosphere: {
     id: "biosphere",
     name: "Biosphere",
-    description: "Earth's living envelope — atmosphere, hydrosphere, lithosphere/geosphere & cryosphere",
+    description: "Earth's living envelope — ecosystems, biomes, biogeochemical cycles",
     color: "#7ecbcb",
     radius: 1.15,
     opacity: 0.25,
-    orderIndex: 2,
+    orderIndex: 4,
     hasMapLayers: true,
     hasStellarLayers: false,
   },
@@ -48,7 +72,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#d4a56a",
     radius: 1.3,
     opacity: 0.2,
-    orderIndex: 3,
+    orderIndex: 5,
     hasMapLayers: true,
     hasStellarLayers: false,
   },
@@ -59,7 +83,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#4466dd",
     radius: 1.6,
     opacity: 0.15,
-    orderIndex: 5,
+    orderIndex: 6,
     hasMapLayers: true,
     hasStellarLayers: true,
   },
@@ -70,7 +94,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#4488cc",
     radius: 1.75,
     opacity: 0.2,
-    orderIndex: 6,
+    orderIndex: 7,
     hasMapLayers: true,
     hasStellarLayers: true,
   },
@@ -81,7 +105,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#e8c86a",
     radius: 1.9,
     opacity: 0.1,
-    orderIndex: 7,
+    orderIndex: 8,
     hasMapLayers: true,
     hasStellarLayers: false,
   },
@@ -90,3 +114,4 @@ export const SPHERES: Record<SphereId, Sphere> = {
 export const SPHERE_ARRAY = Object.values(SPHERES)
   .filter((s) => s.id !== "geosphere")
   .sort((a, b) => a.orderIndex - b.orderIndex);
+
