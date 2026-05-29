@@ -82,6 +82,20 @@ export const SPHERE_LIVE_CONFIG: Record<SphereId, LiveOverlayConfig> = {
     description: "Daily atmospheric water vapor (H₂O mixing ratio)",
     gibsLayer: "AIRS_L3_Water_Vapor_H2O_Daily_Day",
   },
+  hydrosphere: {
+    textureUrl: gibsUrl("GHRSST_L4_MUR_Sea_Surface_Temperature"),
+    fallbackUrl: "/overlays/crystalsphere-overlay.jpg",
+    source: "NASA MUR SST",
+    description: "Sea surface temperature — global ocean thermal field",
+    gibsLayer: "GHRSST_L4_MUR_Sea_Surface_Temperature",
+  },
+  cryosphere: {
+    textureUrl: gibsUrl("MODIS_Terra_NDSI_Snow_Cover"),
+    fallbackUrl: "/overlays/biosphere-overlay.jpg",
+    source: "NASA MODIS Terra",
+    description: "Normalized Difference Snow Index — snow and ice cover",
+    gibsLayer: "MODIS_Terra_NDSI_Snow_Cover",
+  },
   crystalsphere: {
     textureUrl: gibsUrl("MODIS_Terra_L3_SST_Thermal_4Day_Day"),
     fallbackUrl: "/overlays/crystalsphere-overlay.jpg",

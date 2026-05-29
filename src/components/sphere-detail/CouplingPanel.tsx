@@ -51,6 +51,20 @@ const COUPLING_DATA: Record<SphereId, CouplingLink[]> = {
     { target: "magnetosphere", strength: 0.25, mechanism: "Observation networks monitor space weather for mitigation", direction: "outgoing" },
     { target: "crystalsphere", strength: 0.30, mechanism: "EM pollution alters natural resonance background", direction: "outgoing" },
   ],
+  hydrosphere: [
+    { target: "biosphere", strength: 0.85, mechanism: "Marine ecosystems, freshwater habitats, nutrient delivery", direction: "bidirectional" },
+    { target: "cryosphere", strength: 0.88, mechanism: "Phase exchange — ice melt, ocean freezing, salinity coupling", direction: "bidirectional" },
+    { target: "geosphere", strength: 0.55, mechanism: "Erosion, sediment transport, hydrothermal circulation", direction: "bidirectional" },
+    { target: "ionosphere", strength: 0.35, mechanism: "Evaporation drives atmospheric water vapor and convection", direction: "outgoing" },
+    { target: "noosphere", strength: 0.70, mechanism: "Water resources, fisheries, shipping, coastal infrastructure", direction: "bidirectional" },
+  ],
+  cryosphere: [
+    { target: "hydrosphere", strength: 0.88, mechanism: "Ice melt freshens oceans and modulates thermohaline circulation", direction: "bidirectional" },
+    { target: "biosphere", strength: 0.62, mechanism: "Polar and alpine ecosystems, permafrost carbon stocks", direction: "bidirectional" },
+    { target: "geosphere", strength: 0.45, mechanism: "Glacial erosion, isostatic rebound, permafrost ground stability", direction: "bidirectional" },
+    { target: "ionosphere", strength: 0.42, mechanism: "Ice-albedo feedback regulates surface energy budget", direction: "outgoing" },
+    { target: "noosphere", strength: 0.55, mechanism: "Sea level rise, water security, polar shipping routes", direction: "outgoing" },
+  ],
   crystalsphere: [
     { target: "ionosphere", strength: 0.75, mechanism: "Resonance cavity boundary conditions shape EM mode structure", direction: "bidirectional" },
     { target: "magnetosphere", strength: 0.70, mechanism: "Harmonic coupling between field oscillations and cavity modes", direction: "bidirectional" },
@@ -62,6 +76,8 @@ const COUPLING_DATA: Record<SphereId, CouplingLink[]> = {
 
 const SPHERE_COLORS: Record<SphereId, string> = {
   geosphere: "#cc5533",
+  hydrosphere: "#2d7fb8",
+  cryosphere: "#bcdfe8",
   biosphere: "#4caf50",
   magnetosphere: "#4466dd",
   ionosphere: "#4488cc",
