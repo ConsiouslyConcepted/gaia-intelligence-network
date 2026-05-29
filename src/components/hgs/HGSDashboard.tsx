@@ -39,6 +39,7 @@ const PLANET_TONES: Record<string, { note: string; freq: string; octave: string 
 };
 
 export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
+  const navigate = useNavigate();
   const { play, playing, getFrequencyData } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   
