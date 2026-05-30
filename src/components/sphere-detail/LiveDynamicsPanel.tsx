@@ -9,7 +9,9 @@ import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphere
 import { CRYO_REGIONS, cryoRegionById, buildCryoReading, CryoRegionId } from "@/lib/cryosphereRegions";
 import { BIO_REGIONS, bioRegionById, buildBioReading, BioRegionId } from "@/lib/biosphereRegions";
 import { HELIO_ZONES, helioZoneById, buildHelioReading, HelioZoneId } from "@/lib/heliosphereZones";
+import { TECHNO_ZONES, technoZoneById, buildTechnoReading, TechnoZoneId } from "@/lib/technosphereZones";
 import { HelioActivityMap } from "./HelioActivityMap";
+import { TechnoInfrastructureMap } from "./TechnoInfrastructureMap";
 import { BASIN_BOUNDS, RegionDef } from "@/lib/basinMasks";
 import { useEffect, useMemo, useState } from "react";
 
