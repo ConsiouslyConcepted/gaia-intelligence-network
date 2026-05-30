@@ -202,8 +202,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         </HudPanel>
       </div>
 
-      {/* ─── FLOATING SUB-MODE TOGGLE (bottom-center) ─── */}
-      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+      {/* ─── FLOATING SUB-MODE TOGGLE (centered under the orbits, offset for the right sidebar) ─── */}
+      <div
+        className="absolute bottom-6 z-20 pointer-events-none -translate-x-1/2"
+        style={{ left: mode === "transits" ? "50%" : "calc((100% - 280px) / 2)" }}
+      >
+
         <div
           className="pointer-events-auto flex gap-1 rounded-2xl p-1.5"
           style={{
@@ -222,7 +226,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 key={id}
                 onClick={() => setMode(id)}
-                className="min-w-[140px] text-center px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
+                className="min-w-[170px] text-center px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
                 style={
                   active
                     ? {
