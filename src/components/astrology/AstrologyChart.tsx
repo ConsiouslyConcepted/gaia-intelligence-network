@@ -103,19 +103,19 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       <circle cx={C} cy={C} r={R_OUTER + 8} fill="url(#discGlow)" />
 
       {/* Outer ring outline */}
-      <circle cx={C} cy={C} r={R_OUTER} fill="none" stroke="hsla(40, 30%, 70%, 0.15)" strokeWidth="0.8" />
-      <circle cx={C} cy={C} r={R_CONST_IN} fill="none" stroke="hsla(40, 30%, 70%, 0.10)" strokeWidth="0.5" />
+      <circle cx={C} cy={C} r={R_OUTER} fill="none" stroke="hsla(220, 15%, 75%, 0.18)" strokeWidth="0.8" />
+      <circle cx={C} cy={C} r={R_CONST_IN} fill="none" stroke="hsla(220, 15%, 75%, 0.10)" strokeWidth="0.5" />
 
       {/* Sign band background (cream/gold accent — wayfinding hue exception) */}
-      <circle cx={C} cy={C} r={R_SIGN_OUT} fill="hsla(40, 35%, 78%, 0.06)" />
+      <circle cx={C} cy={C} r={R_SIGN_OUT} fill="hsla(220, 15%, 80%, 0.05)" />
       <circle cx={C} cy={C} r={R_SIGN_IN} fill="hsla(228, 40%, 6%, 0.85)" />
 
       {/* 12 sign segments + dividers + glyphs */}
       {segments.map(({ sign, start, end, mid, dots }) => {
         const isActive = selectedSign === sign.id;
         const fill = isActive
-          ? "hsla(40, 60%, 75%, 0.18)"
-          : "hsla(40, 35%, 78%, 0.0)";
+          ? "hsla(220, 20%, 85%, 0.15)"
+          : "hsla(220, 15%, 80%, 0.0)";
         const div = polar(C, C, R_SIGN_OUT, start);
         const divIn = polar(C, C, R_SIGN_IN, start);
         const labelPos = polar(C, C, (R_SIGN_OUT + R_SIGN_IN) / 2, mid);
@@ -133,7 +133,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               onClick={() => onSignClick(sign.id)}
             />
             {/* divider */}
-            <line x1={div.x} y1={div.y} x2={divIn.x} y2={divIn.y} stroke="hsla(40, 30%, 70%, 0.25)" strokeWidth="0.6" />
+            <line x1={div.x} y1={div.y} x2={divIn.x} y2={divIn.y} stroke="hsla(220, 15%, 75%, 0.22)" strokeWidth="0.6" />
             {/* sign glyph (force text presentation, not emoji) */}
             <text
               x={labelPos.x}
@@ -141,7 +141,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               textAnchor="middle"
               dominantBaseline="central"
               fontSize="28"
-              fill={isActive ? "hsla(40, 85%, 82%, 0.98)" : "hsla(40, 60%, 78%, 0.88)"}
+              fill={isActive ? "hsla(220, 15%, 96%, 0.98)" : "hsla(220, 10%, 85%, 0.82)"}
               style={{
                 fontFamily: '"Times New Roman", "DejaVu Serif", "Noto Serif", serif',
                 fontVariantEmoji: "text",
@@ -154,7 +154,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             {/* constellation dots */}
             <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid})`} className="pointer-events-none">
               {dots.map((d, i) => (
-                <circle key={i} cx={d.x} cy={d.y} r={d.r} fill="hsla(40, 40%, 75%, 0.55)" />
+                <circle key={i} cx={d.x} cy={d.y} r={d.r} fill="hsla(220, 12%, 80%, 0.5)" />
               ))}
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
@@ -163,7 +163,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsla(40, 35%, 65%, 0.22)"
+                  stroke="hsla(220, 10%, 70%, 0.2)"
                   strokeWidth="0.4"
                 />
               ))}
@@ -178,7 +178,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               fontSize="13"
               letterSpacing="0.22em"
               fontWeight={500}
-              fill={isActive ? "hsla(40, 80%, 85%, 0.98)" : "hsla(40, 55%, 78%, 0.85)"}
+              fill={isActive ? "hsla(220, 15%, 96%, 0.98)" : "hsla(220, 10%, 82%, 0.8)"}
               transform={`rotate(${mid} ${constLabel.x} ${constLabel.y})`}
               className="uppercase select-none pointer-events-none"
               style={{ fontFamily: "ui-sans-serif, system-ui" }}
@@ -203,7 +203,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             y1={p1.y}
             x2={p2.x}
             y2={p2.y}
-            stroke="hsla(40, 30%, 65%, 0.3)"
+            stroke="hsla(220, 12%, 70%, 0.28)"
             strokeWidth={isThirty ? 0.7 : isFive ? 0.45 : 0.25}
           />
         );
@@ -235,8 +235,8 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       </g>
 
       {/* Inner disc rim */}
-      <circle cx={C} cy={C} r={R_ASPECT + 5} fill="none" stroke="hsla(40, 25%, 60%, 0.15)" strokeWidth="0.5" />
-      <circle cx={C} cy={C} r={R_PLANET + 10} fill="none" stroke="hsla(40, 25%, 60%, 0.12)" strokeWidth="0.5" />
+      <circle cx={C} cy={C} r={R_ASPECT + 5} fill="none" stroke="hsla(220, 12%, 70%, 0.15)" strokeWidth="0.5" />
+      <circle cx={C} cy={C} r={R_PLANET + 10} fill="none" stroke="hsla(220, 12%, 70%, 0.12)" strokeWidth="0.5" />
 
       {/* Planet glyphs */}
       {positions.map((p) => {
@@ -302,7 +302,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       })}
 
       {/* Center marker */}
-      <circle cx={C} cy={C} r={2} fill="hsla(40, 50%, 75%, 0.6)" />
+      <circle cx={C} cy={C} r={2} fill="hsla(220, 12%, 80%, 0.55)" />
     </svg>
   );
 }
