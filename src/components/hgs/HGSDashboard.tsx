@@ -167,8 +167,9 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Planetary
-
+              </button>
               <button
+
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
                   background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
