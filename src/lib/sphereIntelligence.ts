@@ -146,13 +146,14 @@ export const SPHERE_INTEL: Record<SphereId, SphereIntelligenceSpec> = {
   },
   ionosphere: {
     id: "ionosphere",
-    purpose: "Track planetary technological infrastructure.",
+    purpose: "Track the planetary footprint of human infrastructure.",
     scoreLabel: "Stability",
     polarity: "stability",
     metrics: [
-      { key: "grid", label: "Grid Load", unit: "TW", baseline: 28.4, sigma: 2.2, amplitude: 3.0, frequency: 0.06, phase: 0.0, invert: true, precision: 1 },
-      { key: "uptime", label: "Network Uptime", unit: "%", baseline: 99.92, sigma: 0.04, amplitude: 0.05, frequency: 0.05, phase: 1.6, precision: 2 },
-      { key: "sats", label: "Active Satellites", unit: "k", baseline: 9.4, sigma: 0.12, amplitude: 0.18, frequency: 0.03, phase: 2.4, precision: 2 },
+      { key: "grid", label: "Global Grid Load", unit: "TW", baseline: 28.4, sigma: 2.2, amplitude: 3.0, frequency: 0.06, phase: 0.0, invert: true, precision: 1 },
+      { key: "dc_energy", label: "Data Center Energy", unit: "TWh/yr", baseline: 460, sigma: 22, amplitude: 30, frequency: 0.04, phase: 1.6, invert: true, precision: 0 },
+      { key: "traffic", label: "Internet Traffic", unit: "Pb/s", baseline: 1.2, sigma: 0.08, amplitude: 0.12, frequency: 0.05, phase: 2.1, precision: 2 },
+      { key: "satellites", label: "Active Satellites", unit: "k", baseline: 10.2, sigma: 0.25, amplitude: 0.35, frequency: 0.03, phase: 2.4, invert: true, precision: 1 },
     ],
   },
   crystalsphere: {
