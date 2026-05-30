@@ -105,6 +105,16 @@ const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElem
       { name: "Seasonal Snow Cover", description: "Northern Hemisphere snowpack — the most variable component of the cryosphere, modulating spring runoff and surface energy budget." },
     ],
   },
+  atmosphere: {
+    overview: "The gaseous envelope — a vertically stratified column of nitrogen, oxygen, water vapor, and trace gases extending from surface to exosphere. Structure is defined by temperature inversions, circulation cells, chemical reservoirs, and exchange interfaces with the surface and space environment.",
+    elements: [
+      { name: "Tropospheric Weather Layer", description: "Lowest ~12 km hosting convective weather, water cycle, and ~80% of atmospheric mass; bounded above by the tropopause." },
+      { name: "Stratospheric Ozone Reservoir", description: "Ozone-rich layer (15–35 km) that absorbs solar UV-B radiation and warms with altitude, stabilizing the column." },
+      { name: "Global Circulation Cells", description: "Hadley, Ferrel, and Polar cells driving meridional heat and moisture transport, modulated by jet streams and Rossby waves." },
+      { name: "Greenhouse Gas Reservoir", description: "Long-lived CO₂, CH₄, N₂O and short-lived H₂O vapor regulating the planetary radiative balance." },
+      { name: "Aerosol & Cloud Field", description: "Particulate matter and condensed water modulating albedo, precipitation, and atmospheric chemistry." },
+    ],
+  },
   crystalsphere: {
     overview: "The harmonic resonance layer — a modeled domain representing crystalline lattice structures, standing-wave geometries, and frequency-coherent spatial organization across the planetary system.",
     elements: [
