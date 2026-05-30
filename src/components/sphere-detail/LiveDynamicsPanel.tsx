@@ -31,7 +31,9 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const isHydro = sphere.id === "hydrosphere";
   const isCryo = sphere.id === "cryosphere";
   const isBio = sphere.id === "biosphere";
+  const isHelio = sphere.id === "heliosphere";
   const hasRegions = isHydro || isCryo || isBio;
+  const hasZones = isHelio;
 
   // Selected region id (string for generic globe API)
   const [selectedId, setSelectedId] = useState<string>("global");
