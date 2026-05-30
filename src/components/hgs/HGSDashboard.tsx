@@ -195,25 +195,22 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <h2 className="text-base font-bold text-white/85 tracking-[0.32em]">GEOMETRY OF MUSIC</h2>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
             </div>
-            <div className="w-full flex flex-col xl:flex-row items-center xl:items-stretch justify-center gap-4">
-              <div className="w-full xl:w-[320px] xl:flex-shrink-0 flex">
+            <div className="w-full max-w-5xl flex flex-col items-center gap-3">
+              {/* Side-by-side panels at top */}
+              <div className="w-full flex flex-col sm:flex-row gap-3">
                 <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
-              </div>
-              <div className="flex-shrink-0 flex flex-col items-center gap-3">
-                <ChromaticWheel
-                  interval={selectedInterval}
-                  size={760}
-                  onSelectInterval={setSelectedIntervalId}
-                  onPlanetClick={(id) => handlePlanetClick(id)}
-                  onPlanetContext={(id) => handleTonePlay(id)}
-                  highlightedPlanet={selectedPlanet}
-                />
-                <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
-                <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
-              </div>
-              <div className="w-full xl:w-[320px] xl:flex-shrink-0 flex">
                 <OrbitToToneBridge interval={selectedInterval} selectedPlanet={selectedPlanet} />
               </div>
+              <ChromaticWheel
+                interval={selectedInterval}
+                size={840}
+                onSelectInterval={setSelectedIntervalId}
+                onPlanetClick={(id) => handlePlanetClick(id)}
+                onPlanetContext={(id) => handleTonePlay(id)}
+                highlightedPlanet={selectedPlanet}
+              />
+              <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
+              <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
             </div>
 
           </div>
