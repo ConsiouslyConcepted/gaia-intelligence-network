@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2, Signal, Activity, Sparkles } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 import { usePlanetAudio } from "@/hooks/usePlanetAudio";
+import { AstrologyChart } from "@/components/astrology/AstrologyChart";
+import { ZodiacSidebar } from "@/components/astrology/ZodiacSidebar";
+import { TransitsPanel } from "@/components/astrology/TransitsPanel";
+import { computeAspects, computePositions } from "@/lib/astrology/ephemeris";
 
-type SidebarMode = "patterns" | "cymatics";
+type UniverseMode = "harmonics" | "transits";
 
 const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
@@ -56,6 +60,26 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const navigate = useNavigate();
   const { play, playing, getFrequencyData } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
+  const [mode, setMode] = useState<UniverseMode>("harmonics");
+  const [selectedSign, setSelectedSign] = useState<string | null>(null);
+  const [astroSelected, setAstroSelected] = useState<string | null>(null);
+  const [now, setNow] = useState<Date>(new Date());
+
+  // Recompute live transits every 10 minutes
+  useEffect(() => {
+    if (mode !== "transits") return;
+    const t = setInterval(() => setNow(new Date()), 10 * 60 * 1000);
+    return () => clearInterval(t);
+  }, [mode]);
+
+  const positions = useMemo(
+    () => (mode === "transits" ? computePositions(now) : []),
+    [mode, now],
+  );
+  const aspects = useMemo(
+    () => (mode === "transits" ? computeAspects(positions) : []),
+    [mode, positions],
+  );
 
   const handlePlanetClick = (planetId: string) => {
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
@@ -65,22 +89,28 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
     ? SOLAR_PLANETS.find((p) => p.id === selectedPlanet)
     : null;
 
-  const visiblePairs = selectedPlanet
-    ? PLANET_RESONANCE_PAIRS.filter((pair) => {
-        const p1 = SOLAR_PLANETS[pair.i];
-        const p2 = SOLAR_PLANETS[pair.j];
-        return p1.id === selectedPlanet || p2.id === selectedPlanet;
-      })
-    : PLANET_RESONANCE_PAIRS;
-
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
-      {/* Full-screen orbital field */}
+      {/* Full-screen visualization */}
       <div className="absolute inset-x-0 top-[92px] bottom-0 z-0">
-        <OrbitalResonanceField
-          selectedPlanet={selectedPlanet}
-          onPlanetClick={(id) => setSelectedPlanet(id)}
-        />
+        {mode === "harmonics" ? (
+          <OrbitalResonanceField
+            selectedPlanet={selectedPlanet}
+            onPlanetClick={(id) => setSelectedPlanet(id)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center px-[300px]">
+            <AstrologyChart
+              positions={positions}
+              aspects={aspects}
+              selectedSign={selectedSign}
+              selectedPlanet={astroSelected}
+              onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
+              onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
+              onPlanetContext={(id) => play(id)}
+            />
+          </div>
+        )}
       </div>
 
       {/* Vignette */}
@@ -96,14 +126,50 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
         <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" glow="#d4a56a">
-          {/* Left: Title */}
-          <div>
-            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
-              Universal Intelligence
-            </h1>
-            <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Harmonic Guidance System · Celestial Mechanics
-            </p>
+          {/* Left: Title + sub-mode toggle */}
+          <div className="flex items-center gap-5">
+            <div>
+              <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
+                Universal Intelligence
+              </h1>
+              <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
+                Harmonic Guidance System · Celestial Mechanics
+              </p>
+            </div>
+            <div
+              className="flex gap-1 rounded-xl p-1"
+              style={{
+                background: "hsla(228,40%,5%,0.4)",
+                border: "1px solid hsla(220,30%,55%,0.35)",
+                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.05), inset 0 -1px 0 rgba(0,0,0,0.4)",
+              }}
+            >
+              {(["harmonics", "transits"] as UniverseMode[]).map((m) => {
+                const active = mode === m;
+                return (
+                  <button
+                    key={m}
+                    onClick={() => setMode(m)}
+                    className="px-3.5 py-1.5 rounded-lg text-[10px] font-medium tracking-[0.18em] uppercase transition-all duration-300"
+                    style={
+                      active
+                        ? {
+                            background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+                            color: "hsla(0,0%,100%,0.95)",
+                            border: "1px solid hsla(220,35%,60%,0.55)",
+                            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 18px hsla(210,75%,62%,0.22)",
+                          }
+                        : {
+                            color: "hsla(0,0%,100%,0.42)",
+                            border: "1px solid transparent",
+                          }
+                    }
+                  >
+                    {m}
+                  </button>
+                );
+              })}
+            </div>
           </div>
 
           {/* Right: View toggle + controls */}
@@ -168,10 +234,31 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         </HudPanel>
       </div>
 
+      {/* ─── LEFT SIDEBAR (transits mode only) ─── */}
+      {mode === "transits" && (
+        <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+          <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
+            <ZodiacSidebar
+              positions={positions}
+              selectedSign={selectedSign}
+              onSelect={setSelectedSign}
+            />
+          </HudPanel>
+        </div>
+      )}
+
       {/* ─── RIGHT SIDEBAR ─── */}
       <div className="absolute right-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
-          {selectedData ? (
+          {mode === "transits" ? (
+            <TransitsPanel
+              positions={positions}
+              selectedSign={selectedSign}
+              selectedPlanet={astroSelected}
+              onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
+              timestamp={now}
+            />
+          ) : selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-3">
