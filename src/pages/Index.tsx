@@ -270,7 +270,7 @@ const Index = () => {
         <div
           className="flex items-center gap-10 px-10 py-2 rounded-full backdrop-blur-2xl"
           style={{
-            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,22%,7%,0.92) 100%)",
+            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,28%,7%,0.92) 100%)",
             border: "1px solid hsla(0,0%,100%,0.07)",
             boxShadow:
               "inset 0 1px 0 hsla(0,0%,100%,0.10), 0 10px 28px rgba(0,0,0,0.65), 0 0 36px hsla(190,60%,50%,0.05)",
