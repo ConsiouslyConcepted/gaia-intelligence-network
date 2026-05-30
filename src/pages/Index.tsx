@@ -202,19 +202,13 @@ const Index = () => {
             <span className="text-[8px] font-mono text-muted-foreground/25">Live</span>
           </div>
           <div className="space-y-2.5">
-            {liveReadouts.map((d) => (
-              <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-0.5">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-foreground/80">{d.label}</span>
-                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
-                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
-                </div>
-                <MiniGraph color={d.color} data={d.trend} />
-              </div>
+            {SIGNAL_FEED.map((s) => (
+              <SphereSignalRow
+                key={s.sphereId + s.metricKey}
+                sphereId={s.sphereId}
+                metricKey={s.metricKey}
+                label={s.label}
+              />
             ))}
           </div>
         </HudPanel>
