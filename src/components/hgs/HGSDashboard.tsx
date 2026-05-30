@@ -16,6 +16,8 @@ import { PairOrbitDiagram } from "@/components/geometry/PairOrbitDiagram";
 import { IntervalsSidebar } from "@/components/geometry/IntervalsSidebar";
 import { PairsPanel } from "@/components/geometry/PairsPanel";
 import { PlanetNoteLegend } from "@/components/geometry/PlanetNoteLegend";
+import { GeometryGuide } from "@/components/geometry/GeometryGuide";
+import { IntervalLegend } from "@/components/geometry/IntervalLegend";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
 type UniverseMode = "harmonics" | "transits" | "geometry";
