@@ -361,7 +361,7 @@ export function CouplingPanel({ sphere, accent }: Props) {
 
       {/* List */}
       <div className="space-y-2">
-        {couplings.map((link) => {
+        {sortedList.map((link) => {
           const color = sphereTone(link.target);
           const target = SPHERE_ARRAY.find((s) => s.id === link.target);
           const pct = Math.round(link.strength * 100);
