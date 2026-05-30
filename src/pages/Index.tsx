@@ -147,12 +147,8 @@ const Index = () => {
               "inset 0 1px 0 hsla(200,60%,78%,0.25), inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.6), inset 0 -10px 24px -10px hsla(0,0%,0%,0.5), 0 12px 28px -6px rgba(0,0,0,0.75), 0 24px 60px -20px rgba(0,0,0,0.9), 0 0 24px -4px hsla(210,50%,60%,0.18)",
           }}
         >
-          {/* Bright top rim highlight */}
-          <div className="pointer-events-none absolute top-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(200,60%,78%,0.55), transparent)" }} />
           {/* Outer edge glow */}
           <div className="pointer-events-none absolute inset-0 rounded-xl" style={{ boxShadow: "0 0 32px -8px hsla(210,60%,65%,0.25)" }} />
-          {/* Bottom accent line */}
-          <div className="pointer-events-none absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)" }} />
           {/* Subtle bottom edge shadow */}
           <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
 
@@ -169,14 +165,14 @@ const Index = () => {
 
           {/* Right: View toggle + Commons icon */}
           <div className="flex items-center gap-3">
-            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(0,0%,100%,0.06)" }}>
+            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 0 12px hsla(210,50%,60%,0.06), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
                   background: "linear-gradient(180deg, hsla(0,0%,100%,0.10) 0%, hsla(0,0%,100%,0.04) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
-                  border: "1px solid hsla(0,0%,100%,0.14)",
-                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 4px 14px rgba(0,0,0,0.45), 0 0 20px hsla(38,40%,60%,0.08)",
+                  border: "1px solid hsla(220,30%,55%,0.35)",
+                  boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 8px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.45), 0 0 18px -4px hsla(210,60%,65%,0.22)",
                 }}
               >
                 Planetary
@@ -201,7 +197,7 @@ const Index = () => {
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
-              style={{ color: "hsla(174,60%,60%,0.7)", border: "1px solid hsla(0,0%,100%,0.06)", background: "hsla(240,25%,8%,0.5)" }}
+              style={{ color: "hsla(0,0%,100%,0.75)", border: "1px solid hsla(220,30%,55%,0.35)", background: "hsla(240,25%,8%,0.5)", boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)" }}
               title="Planetary Commons Data"
             >
               <CommonsIcon size={20} />
