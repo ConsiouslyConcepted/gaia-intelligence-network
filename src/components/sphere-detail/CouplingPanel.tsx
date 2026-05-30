@@ -140,7 +140,7 @@ function DualSpark({ a, b, colorA, colorB, lag }: { a: number[]; b: number[]; co
 
 export function CouplingPanel({ sphere, accent }: Props) {
   const navigate = useNavigate();
-  const couplings = useSphereCouplings(sphere.id);
+  const couplings = useSphereCouplings(sphere.id, 6000);
   const [selected, setSelected] = useState<SphereId | null>(null);
 
   const meanStrength = useMemo(
@@ -180,6 +180,17 @@ export function CouplingPanel({ sphere, accent }: Props) {
 
   const selectedLink = couplings.find((c) => c.target === selected) ?? couplings[0] ?? null;
   const selectedTarget = selectedLink ? SPHERE_ARRAY.find((s) => s.id === selectedLink.target) : null;
+  const selectedMechanism = selectedLink
+    ? (MECHANISMS[sphere.id]?.[selectedLink.target] ?? "Cross-sphere relationship inferred from live score correlation.")
+    : "";
+  const selectedSignLabel = selectedLink ? (selectedLink.r >= 0 ? "In phase" : "Inverse") : "—";
+  const selectedLeadLabel = selectedLink
+    ? selectedLink.direction === "outgoing"
+      ? `${sphere.name} leads`
+      : selectedLink.direction === "incoming"
+      ? `${sphere.name} follows`
+      : "Phase locked"
+    : "—";
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -223,7 +234,7 @@ export function CouplingPanel({ sphere, accent }: Props) {
         <div className="mb-4 rounded-lg border border-border/15 bg-background/30 p-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-[10px] text-muted-foreground/65 leading-relaxed">
           <div>
             <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">1 · Select a link</div>
-            Pick any outer sphere. The highlighted edge becomes the one relationship you are reading right now.
+            Use the selector row or the map. One relationship stays pinned until you choose another.
           </div>
           <div>
             <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">2 · Read strength + lag</div>
@@ -231,8 +242,37 @@ export function CouplingPanel({ sphere, accent }: Props) {
           </div>
           <div>
             <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">3 · Check the evidence</div>
-            The inspector keeps the two score traces pinned so the view does not move while the live window updates.
+            The focused inspector updates on a slower cadence so it reads as a monitor, not a flicker.
           </div>
+        </div>
+
+        <div className="mb-4 grid grid-cols-2 md:grid-cols-3 xl:grid-cols-6 gap-2">
+          {stableList.map((link) => {
+            const target = SPHERE_ARRAY.find((s) => s.id === link.target);
+            const color = sphereTone(link.target);
+            const isSelected = selectedLink?.target === link.target;
+
+            return (
+              <button
+                key={`selector-${link.target}`}
+                className="rounded-lg border px-3 py-2 text-left transition-all duration-200"
+                style={{
+                  borderColor: isSelected ? `${color}55` : undefined,
+                  background: isSelected ? `${color}10` : undefined,
+                  boxShadow: isSelected ? `0 0 0 1px ${color}22 inset` : undefined,
+                }}
+                onClick={() => setSelected(link.target)}
+              >
+                <div className="text-[10px] font-semibold truncate" style={{ color: isSelected ? color : undefined }}>
+                  {target?.name}
+                </div>
+                <div className="mt-1 flex items-center justify-between gap-2 text-[9px] font-mono text-muted-foreground/55">
+                  <span>{Math.round(link.strength * 100)}%</span>
+                  <span>{link.lag >= 0 ? `+${link.lag}` : link.lag}</span>
+                </div>
+              </button>
+            );
+          })}
         </div>
 
 
@@ -299,17 +339,7 @@ export function CouplingPanel({ sphere, accent }: Props) {
                     strokeLinecap="round"
                     style={{ transition: "opacity 300ms, stroke-width 300ms" }}
                   />
-                  {/* Edge chip — |r| as percent */}
-                  <g opacity={isDim ? 0.3 : 1} style={{ transition: "opacity 300ms" }}>
-                    <rect
-                      x={midX - 16} y={midY - 9} width={32} height={16} rx={8}
-                      fill="hsla(240,25%,7%,0.9)"
-                      stroke={color} strokeOpacity={0.45} strokeWidth={0.6}
-                    />
-                    <text x={midX} y={midY + 3} textAnchor="middle" fill={color} fontSize="8" fontFamily="ui-monospace, monospace" fontWeight="600">
-                      {Math.round(link.strength * 100)}
-                    </text>
-                  </g>
+                  <circle cx={midX} cy={midY} r={isActive ? 7 : 5} fill={color} opacity={isDim ? 0.18 : 0.45} />
                 </g>
               );
             })}
@@ -359,11 +389,8 @@ export function CouplingPanel({ sphere, accent }: Props) {
                   <text x={x} y={y - 4} textAnchor="middle" fill={color} fontSize="9" fontWeight="600">
                     {target?.name}
                   </text>
-                  <text x={x} y={y + 7} textAnchor="middle" fill="hsla(0,0%,100%,0.5)" fontSize="6.5" fontFamily="ui-monospace, monospace">
-                    {link ? (link.r >= 0 ? "+" : "−") : ""}{pct}%
-                  </text>
-                  <text x={x} y={y + 16} textAnchor="middle" fill="hsla(0,0%,100%,0.3)" fontSize="6" fontFamily="ui-monospace, monospace">
-                    Δt {link && link.lag >= 0 ? "+" : ""}{link?.lag ?? 0}
+                  <text x={x} y={y + 9} textAnchor="middle" fill="hsla(0,0%,100%,0.38)" fontSize="6.5" fontFamily="ui-monospace, monospace">
+                    {pct}%
                   </text>
                 </g>
               );
@@ -371,20 +398,39 @@ export function CouplingPanel({ sphere, accent }: Props) {
           </svg>
         </div>
 
-        {/* Evidence strip — stays pinned to the selected relationship */}
         {selectedLink && selectedTarget && (
-          <EvidenceStrip
-            sourceName={sphere.name}
-            targetName={selectedTarget.name}
-            link={selectedLink}
-            sourceColor={accent}
-            targetColor={sphereTone(selectedLink.target)}
-            mechanism={
-              MECHANISMS[sphere.id]?.[selectedLink.target] ??
-              "Cross-sphere relationship inferred from live score correlation."
-            }
-            onOpen={() => navigate(`/sphere/${selectedLink.target}`)}
-          />
+          <div className="mt-4 rounded-lg border border-border/15 bg-background/25 p-4 space-y-4">
+            <div className="flex items-start justify-between gap-3 flex-wrap">
+              <div>
+                <div className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/45 mb-1">Focused relationship</div>
+                <h4 className="text-sm font-semibold text-foreground/85">{sphere.name} ↔ {selectedTarget.name}</h4>
+                <p className="text-[11px] text-muted-foreground/55 mt-1 max-w-2xl">{selectedMechanism}</p>
+              </div>
+              <button
+                className="inline-flex items-center gap-1 rounded-md border border-border/20 bg-background/40 px-2.5 py-1.5 text-[10px] uppercase tracking-[0.12em] text-muted-foreground/60 transition-colors hover:text-foreground/80"
+                onClick={() => navigate(`/sphere/${selectedLink.target}`)}
+              >
+                Open sphere
+                <ExternalLink className="w-3 h-3" />
+              </button>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+              <Stat label="Strength" value={`${Math.round(selectedLink.strength * 100)}%`} accent={accent} />
+              <Stat label="Timing" value={`${selectedLeadLabel} · Δt ${selectedLink.lag >= 0 ? "+" : ""}${selectedLink.lag}`} accent={sphereTone(selectedLink.target)} />
+              <Stat label="Phase" value={`${selectedSignLabel} · r ${selectedLink.r >= 0 ? "+" : ""}${selectedLink.r.toFixed(2)}`} accent={sphereTone(selectedLink.target)} />
+            </div>
+
+            <EvidenceStrip
+              sourceName={sphere.name}
+              targetName={selectedTarget.name}
+              link={selectedLink}
+              sourceColor={accent}
+              targetColor={sphereTone(selectedLink.target)}
+              mechanism={selectedMechanism}
+              onOpen={() => navigate(`/sphere/${selectedLink.target}`)}
+            />
+          </div>
         )}
       </Card>
 
