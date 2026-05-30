@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { Activity, Signal, Sparkles } from "lucide-react";
+import { CommonsIcon } from "@/components/CommonsIcon";
 
 const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
@@ -62,38 +63,50 @@ const Cosmological = () => {
             </p>
           </div>
 
-          <div
-            className="flex gap-1.5 rounded-2xl p-1.5"
-            style={{
-              background: "hsla(240,25%,8%,0.7)",
-              border: "1px solid hsla(220,30%,55%,0.25)",
-              boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)",
-            }}
-          >
-            <button
-              onClick={() => navigate("/")}
-              className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
-              style={{ color: "hsla(0,0%,100%,0.4)" }}
-            >
-              Planetary
-            </button>
-            <button
-              onClick={() => navigate("/?view=hgs")}
-              className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
-              style={{ color: "hsla(0,0%,100%,0.4)" }}
-            >
-              Universal
-            </button>
-            <button
-              className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
+          <div className="flex items-center gap-3">
+            <div
+              className="flex gap-1.5 rounded-2xl p-1.5"
               style={{
-                background: "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,28%,9%,0.96) 100%)",
-                color: "hsla(0,0%,100%,0.95)",
-                border: "1px solid hsla(220,40%,65%,0.5)",
-                boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.22), inset 0 0 10px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.5), 0 0 18px -4px hsla(210,60%,65%,0.25)",
+                background: "hsla(240,25%,8%,0.7)",
+                border: "1px solid hsla(220,30%,55%,0.25)",
+                boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)",
               }}
             >
-              Cosmological
+              <button
+                onClick={() => navigate("/")}
+                className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                style={{ color: "hsla(0,0%,100%,0.4)" }}
+              >
+                Planetary
+              </button>
+              <button
+                onClick={() => navigate("/?view=hgs")}
+                className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                style={{ color: "hsla(0,0%,100%,0.4)" }}
+              >
+                Universal
+              </button>
+              <button
+                className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
+                style={{
+                  background: "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,28%,9%,0.96) 100%)",
+                  color: "hsla(0,0%,100%,0.95)",
+                  border: "1px solid hsla(220,40%,65%,0.5)",
+                  boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.22), inset 0 0 10px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.5), 0 0 18px -4px hsla(210,60%,65%,0.25)",
+                }}
+              >
+                Cosmological
+              </button>
+            </div>
+
+            {/* Commons Data icon — tucked next to the toggle */}
+            <button
+              onClick={() => navigate("/commons")}
+              className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
+              style={{ color: "hsla(0,0%,100%,0.75)", border: "1px solid hsla(220,30%,55%,0.35)", background: "hsla(240,25%,8%,0.5)", boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)" }}
+              title="Planetary Commons Data"
+            >
+              <CommonsIcon size={20} />
             </button>
           </div>
         </HudPanel>
