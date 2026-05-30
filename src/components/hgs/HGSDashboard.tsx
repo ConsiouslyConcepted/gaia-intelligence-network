@@ -173,7 +173,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => handlePlanetClick(id)}
             />
           )
-        ) : (
+        ) : mode === "transits" ? (
           <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
             <AstrologyChart
               positions={positions}
@@ -183,6 +183,15 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               onPlanetContext={() => { /* tone playback disabled */ }}
+            />
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-4 pb-12 px-[300px]">
+            <ChromaticWheel interval={selectedInterval} size={340} />
+            <PairOrbitDiagram
+              pair={selectedPair}
+              size={300}
+              onPlanetContext={(id) => handleTonePlay(id)}
             />
           </div>
         )}
