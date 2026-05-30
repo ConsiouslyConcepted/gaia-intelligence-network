@@ -234,10 +234,31 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         </HudPanel>
       </div>
 
+      {/* ─── LEFT SIDEBAR (transits mode only) ─── */}
+      {mode === "transits" && (
+        <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+          <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
+            <ZodiacSidebar
+              positions={positions}
+              selectedSign={selectedSign}
+              onSelect={setSelectedSign}
+            />
+          </HudPanel>
+        </div>
+      )}
+
       {/* ─── RIGHT SIDEBAR ─── */}
       <div className="absolute right-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
-          {selectedData ? (
+          {mode === "transits" ? (
+            <TransitsPanel
+              positions={positions}
+              selectedSign={selectedSign}
+              selectedPlanet={astroSelected}
+              onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
+              timestamp={now}
+            />
+          ) : selectedData ? (
             <div className="flex-1 flex flex-col min-h-0">
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-3">
