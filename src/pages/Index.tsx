@@ -147,14 +147,14 @@ const Index = () => {
               "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
-          {/* Bright top rim light (matches side panels) */}
+          {/* Top rim — matches panel outline color */}
           <div
             className="absolute -top-px left-4 right-4 h-px pointer-events-none"
             style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+              background: "hsla(220,30%,55%,0.35)",
             }}
           />
+
 
 
           {/* Left: Title */}
