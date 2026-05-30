@@ -138,7 +138,7 @@ const Index = () => {
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <div
-          className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
+          className="pointer-events-auto px-4 py-4 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
           style={{
             background:
               "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
