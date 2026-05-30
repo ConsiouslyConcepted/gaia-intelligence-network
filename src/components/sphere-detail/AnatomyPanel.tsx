@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Card } from "@/components/ui/card";
 import { Sphere, SphereId } from "@/types/spheres";
-import { Scan, ChevronDown } from "lucide-react";
+import { Scan, ChevronDown, Activity, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { useSphereIntelligence } from "@/hooks/useSphereIntelligence";
 
 interface Props {
   sphere: Sphere;
@@ -128,9 +129,83 @@ const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElem
   },
 };
 
+// ── Live element telemetry helpers ─────────────────────────────────────────
+
+function hashString(s: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function elementNoise(seed: number, t: number): number {
+  let x = (seed + t * 0x9e3779b1) | 0;
+  x = Math.imul(x ^ (x >>> 15), x | 1);
+  x ^= x + Math.imul(x ^ (x >>> 7), x | 61);
+  return ((x ^ (x >>> 14)) >>> 0) / 0xffffffff;
+}
+
+/** Deterministic 0-100 element load that drifts with the global tick + sphere score. */
+function elementLoad(elementName: string, sphereId: string, baseScore: number, t: number): number {
+  const seed = hashString(`${sphereId}:${elementName}`);
+  const wave =
+    Math.sin(t * 0.11 + (seed % 1000) / 159) * 7 +
+    Math.sin(t * 0.043 + (seed % 733) / 117) * 5;
+  const jitter = (elementNoise(seed, Math.floor(t / 2)) - 0.5) * 8;
+  // anchor near sphere score with mild per-element bias
+  const bias = ((seed % 21) - 10) * 0.6;
+  return Math.max(2, Math.min(99, baseScore + bias + wave + jitter));
+}
+
+function elementSeries(elementName: string, sphereId: string, baseScore: number, t: number, n = 18): number[] {
+  return Array.from({ length: n }, (_, i) => elementLoad(elementName, sphereId, baseScore, t - (n - 1 - i)));
+}
+
+function loadStatus(v: number): { label: string; tone: string } {
+  if (v >= 78) return { label: "OPTIMAL", tone: "rgb(120, 200, 150)" };
+  if (v >= 55) return { label: "NOMINAL", tone: "rgb(180, 190, 200)" };
+  if (v >= 35) return { label: "ELEVATED", tone: "rgb(220, 180, 120)" };
+  return { label: "STRESSED", tone: "rgb(220, 130, 130)" };
+}
+
+function Sparkline({ data, color }: { data: number[]; color: string }) {
+  const w = 90;
+  const h = 22;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = Math.max(max - min, 0.001);
+  const pts = data
+    .map((v, i) => {
+      const x = (i / (data.length - 1)) * w;
+      const y = h - ((v - min) / range) * h;
+      return `${x.toFixed(1)},${y.toFixed(1)}`;
+    })
+    .join(" ");
+  return (
+    <svg width={w} height={h} className="overflow-visible">
+      <polyline points={pts} fill="none" stroke={color} strokeWidth={1.2} strokeOpacity={0.85} strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  );
+}
+
 export function AnatomyPanel({ sphere, accent }: Props) {
   const anatomy = ANATOMY_DATA[sphere.id];
+  const intel = useSphereIntelligence(sphere.id, 2000);
   const [expanded, setExpanded] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const iv = setInterval(() => setNow(Date.now()), 1000);
+    return () => clearInterval(iv);
+  }, []);
+
+  const tick = Math.floor(now / 2000);
+  const lastSync = useMemo(() => new Date(now).toLocaleTimeString([], { hour12: false }), [now]);
+
+  const trendIcon = intel.trend > 0.5 ? TrendingUp : intel.trend < -0.5 ? TrendingDown : Minus;
+  const TrendIcon = trendIcon;
 
   return (
     <div className="space-y-4">
@@ -143,8 +218,41 @@ export function AnatomyPanel({ sphere, accent }: Props) {
           <div className="flex-1">
             <h2 className="text-base font-semibold tracking-wide">Anatomy — {sphere.name}</h2>
             <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
-              Structural model · Domain architecture · System elements
+              Structural model · Live element telemetry · {anatomy.elements.length} subsystems
             </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <span
+              className="w-2 h-2 rounded-full animate-pulse"
+              style={{ backgroundColor: accent, boxShadow: `0 0 8px ${accent}` }}
+            />
+            <span className="text-[10px] font-mono uppercase tracking-[0.12em] text-muted-foreground/60">
+              LIVE · {lastSync}
+            </span>
+          </div>
+        </div>
+
+        {/* Live system summary */}
+        <div className="grid grid-cols-3 gap-3 mt-4 pt-4 border-t border-border/10">
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/45">{intel.scoreLabel}</div>
+            <div className="text-2xl font-light font-mono mt-0.5" style={{ color: accent }}>{intel.score}</div>
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/45">Trend (24t)</div>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <TrendIcon className="w-4 h-4 text-foreground/70" />
+              <span className="text-2xl font-light font-mono text-foreground/80">
+                {intel.trend > 0 ? "+" : ""}{intel.trend.toFixed(1)}
+              </span>
+            </div>
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.15em] text-muted-foreground/45">Anomalies</div>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <Activity className="w-4 h-4" style={{ color: intel.anomalies.length > 0 ? "rgb(220,130,130)" : "rgb(120,200,150)" }} />
+              <span className="text-2xl font-light font-mono text-foreground/80">{intel.anomalies.length}</span>
+            </div>
           </div>
         </div>
       </Card>
@@ -153,7 +261,7 @@ export function AnatomyPanel({ sphere, accent }: Props) {
       <Card className="glass-panel rounded-xl p-5 space-y-3">
         <h3 className="text-sm font-semibold">Structural Overview</h3>
         <p className="text-xs text-muted-foreground/60 leading-relaxed">{anatomy.overview}</p>
-        
+
         <button
           onClick={() => setExpanded(!expanded)}
           className="flex items-center gap-2 w-full pt-2 border-t border-border/10 transition-all duration-300 group"
@@ -179,24 +287,73 @@ export function AnatomyPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Structural Elements */}
+      {/* Structural Elements — live */}
       <div className="space-y-3">
-        {anatomy.elements.map((el, idx) => (
-          <Card key={idx} className="glass-panel rounded-xl p-4">
-            <div className="flex items-start gap-3">
-              <div
-                className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold font-mono shrink-0 mt-0.5"
-                style={{ backgroundColor: `${accent}12`, color: accent }}
-              >
-                {String(idx + 1).padStart(2, "0")}
+        {anatomy.elements.map((el, idx) => {
+          const load = elementLoad(el.name, sphere.id, intel.score, tick);
+          const series = elementSeries(el.name, sphere.id, intel.score, tick);
+          const prev = series[series.length - 2] ?? load;
+          const delta = load - prev;
+          const status = loadStatus(load);
+
+          return (
+            <Card key={idx} className="glass-panel rounded-xl p-4">
+              <div className="flex items-start gap-3">
+                <div
+                  className="w-7 h-7 rounded-lg flex items-center justify-center text-[10px] font-bold font-mono shrink-0 mt-0.5"
+                  style={{ backgroundColor: `${accent}12`, color: accent }}
+                >
+                  {String(idx + 1).padStart(2, "0")}
+                </div>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 flex-wrap">
+                    <h4 className="text-sm font-semibold text-foreground/85">{el.name}</h4>
+                    <span
+                      className="text-[8.5px] font-mono uppercase tracking-[0.14em] px-1.5 py-[2px] rounded-sm"
+                      style={{ backgroundColor: `${status.tone}18`, color: status.tone }}
+                    >
+                      {status.label}
+                    </span>
+                    <span
+                      className="w-1.5 h-1.5 rounded-full animate-pulse"
+                      style={{ backgroundColor: status.tone, boxShadow: `0 0 6px ${status.tone}` }}
+                    />
+                  </div>
+                  <p className="text-[11px] text-muted-foreground/50 leading-relaxed mt-1">{el.description}</p>
+
+                  {/* live readout row */}
+                  <div className="mt-3 flex items-center gap-3">
+                    <div className="flex-1">
+                      <div className="h-1 rounded-full bg-foreground/5 overflow-hidden">
+                        <div
+                          className="h-full rounded-full transition-all duration-700 ease-out"
+                          style={{ width: `${load}%`, backgroundColor: accent, opacity: 0.85 }}
+                        />
+                      </div>
+                      <div className="flex items-center justify-between mt-1.5">
+                        <span className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40">
+                          Subsystem Load
+                        </span>
+                        <span className="text-[10px] font-mono text-muted-foreground/70">
+                          {load.toFixed(1)}<span className="text-muted-foreground/40">%</span>
+                          <span
+                            className="ml-2"
+                            style={{ color: delta >= 0 ? "rgb(140,200,160)" : "rgb(220,150,150)" }}
+                          >
+                            {delta >= 0 ? "▲" : "▼"}{Math.abs(delta).toFixed(1)}
+                          </span>
+                        </span>
+                      </div>
+                    </div>
+                    <div className="shrink-0">
+                      <Sparkline data={series} color={accent} />
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="flex-1 min-w-0">
-                <h4 className="text-sm font-semibold text-foreground/85">{el.name}</h4>
-                <p className="text-[11px] text-muted-foreground/50 leading-relaxed mt-1">{el.description}</p>
-              </div>
-            </div>
-          </Card>
-        ))}
+            </Card>
+          );
+        })}
       </div>
     </div>
   );
