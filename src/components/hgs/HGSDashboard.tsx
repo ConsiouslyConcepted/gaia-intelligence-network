@@ -337,7 +337,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                   return (
                     <button
                       key={p.id}
-                      onClick={() => play(p.id)}
+                      onClick={() => handleTonePlay(p.id)}
                       onContextMenu={(e) => { e.preventDefault(); handlePlanetClick(p.id); }}
                       className={`w-full flex items-center gap-2.5 px-2.5 rounded-lg transition-all duration-200 text-left ${
                         isSelected ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]"
