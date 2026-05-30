@@ -456,6 +456,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               timestamp={now}
             />
+          ) : mode === "geometry" ? (
+            <PairsPanel
+              selectedPairId={selectedPairId}
+              onSelect={setSelectedPairId}
+              onPlanetContext={(id) => handleTonePlay(id)}
+            />
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
