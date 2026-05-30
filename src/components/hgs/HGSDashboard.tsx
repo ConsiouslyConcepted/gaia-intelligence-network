@@ -299,7 +299,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* ─── LEFT SIDEBAR ─── */}
       {mode === "transits" ? (
-        <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <ZodiacSidebar
               positions={positions}
@@ -309,7 +309,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           </HudPanel>
         </div>
       ) : (
-        <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
@@ -393,7 +393,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
 
       {/* ─── RIGHT SIDEBAR ─── */}
-      <div className="absolute right-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+      <div className="absolute right-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
           {mode === "transits" ? (
             <TransitsPanel
