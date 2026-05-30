@@ -136,7 +136,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           ) : (
             <OrbitalResonanceField
               selectedPlanet={selectedPlanet}
-              onPlanetClick={(id) => setSelectedPlanet(id)}
+              onPlanetClick={(id) => handlePlanetClick(id)}
             />
           )
         ) : (
