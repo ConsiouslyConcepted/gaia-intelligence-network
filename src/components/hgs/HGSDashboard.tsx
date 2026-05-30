@@ -99,7 +99,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             onPlanetClick={(id) => setSelectedPlanet(id)}
           />
         ) : (
-          <div className="w-full h-full flex items-start justify-center pt-6 px-[300px]">
+          <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
             <AstrologyChart
               positions={positions}
               aspects={aspects}
