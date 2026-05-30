@@ -94,10 +94,43 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
       {/* Full-screen visualization */}
       <div className="absolute inset-x-0 top-[92px] bottom-0 z-0">
         {mode === "harmonics" ? (
-          <OrbitalResonanceField
-            selectedPlanet={selectedPlanet}
-            onPlanetClick={(id) => setSelectedPlanet(id)}
-          />
+          playing ? (
+            <div className="w-full h-full flex items-center justify-center px-[300px]">
+              {(() => {
+                const tonePlanet = SOLAR_PLANETS.find((p) => p.id === playing);
+                if (!tonePlanet) return null;
+                return (
+                  <div className="flex flex-col items-center gap-5">
+                    <LiveCymaticPattern
+                      planetColor={tonePlanet.color}
+                      planetId={tonePlanet.id}
+                      isPlaying={true}
+                      getFrequencyData={getFrequencyData}
+                      size={520}
+                    />
+                    <div className="flex flex-col items-center gap-1">
+                      <span className="text-[10px] tracking-[0.3em] uppercase text-foreground/50">
+                        Cymatic Resonance
+                      </span>
+                      <span className="text-[15px] font-semibold tracking-wide text-foreground/90">
+                        {tonePlanet.name}
+                        {PLANET_TONES[tonePlanet.id] && (
+                          <span className="ml-2 text-foreground/55 font-normal">
+                            · {PLANET_TONES[tonePlanet.id].note} · {PLANET_TONES[tonePlanet.id].freq}
+                          </span>
+                        )}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
+            </div>
+          ) : (
+            <OrbitalResonanceField
+              selectedPlanet={selectedPlanet}
+              onPlanetClick={(id) => setSelectedPlanet(id)}
+            />
+          )
         ) : (
           <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
             <AstrologyChart
