@@ -1,10 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Sphere } from "@/types/spheres";
-import { Activity, RefreshCw, Satellite, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Activity, RefreshCw, Satellite, TrendingUp, TrendingDown, Minus, Globe } from "lucide-react";
 import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
 import { useLiveOverlay } from "@/hooks/useLiveOverlay";
 import { useSphereIntelligence } from "@/hooks/useSphereIntelligence";
 import { buildLiveBehavior } from "@/lib/behavioralSummary";
+import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphereBasins";
 import { useEffect, useMemo, useState } from "react";
 
 interface Props {
