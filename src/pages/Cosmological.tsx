@@ -56,7 +56,7 @@ const Cosmological = () => {
 
       {/* Top bar with toggle */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
-        <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" glow="#a78bfa">
+        <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" glow="#a78bfa" topBar>
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Cosmological Intelligence</h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
