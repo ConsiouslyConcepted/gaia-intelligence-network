@@ -567,6 +567,8 @@ interface BlueMarbleGlobeProps {
   onSelectRegion?: (id: string) => void;
   /** Tint color used for the highlighted region's glow */
   selectedRegionColor?: string;
+  /** Crystalsphere overlay: planetary grid (icosahedral) or ley line network */
+  crystalOverlay?: "ley" | "grid" | null;
 }
 
 export const BlueMarbleGlobe = ({
@@ -578,6 +580,7 @@ export const BlueMarbleGlobe = ({
   selectedRegionId,
   onSelectRegion,
   selectedRegionColor,
+  crystalOverlay,
 }: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
 
