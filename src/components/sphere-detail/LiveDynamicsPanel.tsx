@@ -8,6 +8,8 @@ import { buildLiveBehavior } from "@/lib/behavioralSummary";
 import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphereBasins";
 import { CRYO_REGIONS, cryoRegionById, buildCryoReading, CryoRegionId } from "@/lib/cryosphereRegions";
 import { BIO_REGIONS, bioRegionById, buildBioReading, BioRegionId } from "@/lib/biosphereRegions";
+import { HELIO_ZONES, helioZoneById, buildHelioReading, HelioZoneId } from "@/lib/heliosphereZones";
+import { HelioActivityMap } from "./HelioActivityMap";
 import { BASIN_BOUNDS, RegionDef } from "@/lib/basinMasks";
 import { useEffect, useMemo, useState } from "react";
 
@@ -29,7 +31,9 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const isHydro = sphere.id === "hydrosphere";
   const isCryo = sphere.id === "cryosphere";
   const isBio = sphere.id === "biosphere";
+  const isHelio = sphere.id === "magnetosphere"; // displayed as "Heliosphere"
   const hasRegions = isHydro || isCryo || isBio;
+  const hasZones = isHelio;
 
   // Selected region id (string for generic globe API)
   const [selectedId, setSelectedId] = useState<string>("global");
@@ -97,8 +101,23 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         chips,
       };
     }
+    if (isHelio) {
+      const cur = helioZoneById(selectedId as HelioZoneId);
+      const r = buildHelioReading(intel, cur);
+      const chips = HELIO_ZONES.map((z) => ({ id: z.id, name: z.name, tint: z.tint }));
+      return {
+        regions: undefined,
+        regionTint: cur.tint,
+        regionName: cur.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
     return { regions: undefined, regionTint: undefined, regionName: undefined, regionSummary: null, regionPatterns: null, regionScore: null, regionTrend: null, chips: [] as { id: string; name: string; tint: string }[] };
-  }, [isHydro, isCryo, isBio, selectedId, intel]);
+  }, [isHydro, isCryo, isBio, isHelio, selectedId, intel]);
 
   const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
   const displaySummary = regionSummary ?? globalBehavior.summary;
@@ -118,7 +137,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   }, []);
   const secsAgo = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
 
-  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : "region";
+  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : isHelio ? "activity zone" : "region";
 
   return (
     <div className="space-y-4">
@@ -144,7 +163,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
                 </span>
               </div>
               <p className="text-[8px] uppercase tracking-wider text-muted-foreground/40">
-                {hasRegions ? regionName : intel.scoreLabel}
+                {hasRegions || hasZones ? regionName : intel.scoreLabel}
               </p>
             </div>
             <div className="flex items-center gap-1.5">
@@ -160,27 +179,35 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Blue Marble Globe with live overlay */}
+      {/* Visualization: Helio activity map for heliosphere, Blue Marble for Earth spheres */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        <BlueMarbleGlobe
-          height={340}
-          sphereId={sphere.id}
-          overlayUrl={hasRegions ? undefined : live.textureUrl}
-          quakes={sphere.id === "geosphere" ? live.quakes : undefined}
-          regions={regions}
-          selectedRegionId={hasRegions ? selectedId : undefined}
-          selectedRegionColor={regionTint}
-          onSelectRegion={hasRegions ? setSelectedId : undefined}
-        />
-        {hasRegions && (
+        {hasZones ? (
+          <HelioActivityMap
+            height={340}
+            selectedId={selectedId as HelioZoneId}
+            onSelect={(id) => setSelectedId(id)}
+          />
+        ) : (
+          <BlueMarbleGlobe
+            height={340}
+            sphereId={sphere.id}
+            overlayUrl={hasRegions ? undefined : live.textureUrl}
+            quakes={sphere.id === "geosphere" ? live.quakes : undefined}
+            regions={regions}
+            selectedRegionId={hasRegions ? selectedId : undefined}
+            selectedRegionColor={regionTint}
+            onSelectRegion={hasRegions ? setSelectedId : undefined}
+          />
+        )}
+        {(hasRegions || hasZones) && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
-            Click an {regionLabel} on the globe · or select below
+            {hasZones ? "Click an activity zone · or select below" : `Click an ${regionLabel} on the globe · or select below`}
           </p>
         )}
       </Card>
 
-      {/* Region selector chips */}
-      {hasRegions && (
+      {/* Region / zone selector chips */}
+      {(hasRegions || hasZones) && (
         <Card className="glass-panel rounded-xl px-3 py-2">
           <div className="flex items-center gap-2 overflow-x-auto">
             <Globe className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
