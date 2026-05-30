@@ -43,7 +43,7 @@ export const OrbitToToneBridge = ({ selectedPlanet, interval }: Props) => {
   if (!planet) {
     return (
       <div
-        className="relative w-full max-w-[760px] rounded-xl backdrop-blur-xl"
+        className="relative w-full max-w-[480px] rounded-xl backdrop-blur-xl"
         style={panelStyle}
       >
         <div className="absolute -top-px left-4 right-4 h-px pointer-events-none bg-gradient-to-r from-transparent via-foreground/40 to-transparent" />
@@ -68,7 +68,7 @@ export const OrbitToToneBridge = ({ selectedPlanet, interval }: Props) => {
 
   return (
     <div
-      className="relative w-full max-w-[760px] rounded-xl backdrop-blur-xl"
+      className="relative w-full max-w-[480px] rounded-xl backdrop-blur-xl"
       style={panelStyle}
     >
       <div className="absolute -top-px left-4 right-4 h-px pointer-events-none bg-gradient-to-r from-transparent via-foreground/40 to-transparent" />
