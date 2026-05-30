@@ -202,7 +202,50 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         </HudPanel>
       </div>
 
+      {/* ─── FLOATING SUB-MODE TOGGLE (bottom-center) ─── */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <div
+          className="pointer-events-auto flex gap-1 rounded-2xl p-1.5"
+          style={{
+            background: "hsla(228,40%,5%,0.6)",
+            border: "1px solid hsla(220,30%,55%,0.4)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06), inset 0 -1px 0 rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.5)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {[
+            { id: "harmonics" as const, label: "Harmonics" },
+            { id: "transits" as const, label: "Astro Transits" },
+          ].map(({ id, label }) => {
+            const active = mode === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setMode(id)}
+                className="px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
+                style={
+                  active
+                    ? {
+                        background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+                        color: "hsla(0,0%,100%,0.95)",
+                        border: "1px solid hsla(220,35%,60%,0.55)",
+                        boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 22px hsla(210,75%,62%,0.25)",
+                      }
+                    : {
+                        color: "hsla(0,0%,100%,0.45)",
+                        border: "1px solid transparent",
+                      }
+                }
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
       {/* ─── LEFT SIDEBAR (transits mode only) ─── */}
+
       {mode === "transits" && (
         <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
