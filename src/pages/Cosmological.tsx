@@ -9,7 +9,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
         "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
       border: "1px solid hsla(220,40%,65%,0.5)",
       boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
+        "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
     <div
