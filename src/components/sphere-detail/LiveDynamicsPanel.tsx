@@ -12,6 +12,7 @@ import { HELIO_ZONES, helioZoneById, buildHelioReading, HelioZoneId } from "@/li
 import { TECHNO_ZONES, technoZoneById, buildTechnoReading, TechnoZoneId } from "@/lib/technosphereZones";
 import { HelioActivityMap } from "./HelioActivityMap";
 import { TechnoInfrastructureMap } from "./TechnoInfrastructureMap";
+import { NoosphereNetworkMap } from "./NoosphereNetworkMap";
 import { BASIN_BOUNDS, RegionDef } from "@/lib/basinMasks";
 import { useEffect, useMemo, useState } from "react";
 
