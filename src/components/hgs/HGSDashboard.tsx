@@ -20,11 +20,12 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     style={{
       background:
         "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-      border: "1.5px solid hsla(220,35%,60%,0.55)",
+      border: "1px solid hsla(220,30%,55%,0.35)",
       boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
+        "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
+    {/* Bright top rim light */}
     <div
       className="absolute -top-px left-4 right-4 h-px pointer-events-none"
       style={{
@@ -32,6 +33,15 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
           "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
       }}
     />
+    {/* Outer edge glow (inset to frame the panel) */}
+    <div
+      className="absolute inset-0 rounded-xl pointer-events-none"
+      style={{
+        boxShadow:
+          "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
+      }}
+    />
+    {/* Bottom subtle accent line */}
     <div
       className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
       style={{
@@ -42,6 +52,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     {children}
   </div>
 );
+
 
 // Musical tones mapped to each planet's orbital frequency (scaled to audible range)
 const PLANET_TONES: Record<string, { note: string; freq: string; octave: string }> = {
@@ -299,7 +310,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* ─── LEFT SIDEBAR ─── */}
       {mode === "transits" ? (
-        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[250px] h-[620px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <ZodiacSidebar
               positions={positions}
@@ -309,7 +320,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           </HudPanel>
         </div>
       ) : (
-        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[250px] h-[620px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
@@ -393,7 +404,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
 
       {/* ─── RIGHT SIDEBAR ─── */}
-      <div className="absolute right-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[260px] h-[680px]">
+      <div className="absolute right-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[250px] h-[620px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
           {mode === "transits" ? (
             <TransitsPanel
