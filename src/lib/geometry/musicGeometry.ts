@@ -49,6 +49,7 @@ const P: Record<string, PlanetRef> = {
 };
 
 export const EPOGDOON = 9 / 8;
+export const ASTEROID_BELT_AU = 2.77;
 
 const pow23 = (b: number, a: number) => Math.pow(b / a, 2 / 3);
 
@@ -63,8 +64,12 @@ export interface PlanetPair {
   intervalId: string;
   /** Target ratio value for the matching interval */
   target: number;
-  /** Accuracy as a percentage close to target */
+  /** Accuracy as a percentage close to target (adjacent) or to belt (mirror) */
   accuracy: number;
+  /** Geometric-mean semi-major axis √(a·b) in AU */
+  geoMeanAU: number;
+  /** Deviation from the asteroid belt centre in AU (signed) — mirror pairs */
+  beltDeltaAU: number;
   kind: "mirror" | "adjacent";
 }
 
@@ -77,7 +82,12 @@ const mkPair = (
 ): PlanetPair => {
   const value = pow23(outer.au, inner.au);
   const target = INTERVALS.find((i) => i.id === intervalId)!.value;
-  const accuracy = 100 - Math.abs((value - target) / target) * 100;
+  const geoMeanAU = Math.sqrt(inner.au * outer.au);
+  const beltDeltaAU = geoMeanAU - ASTEROID_BELT_AU;
+  const accuracy =
+    kind === "mirror"
+      ? 100 - Math.abs(beltDeltaAU / ASTEROID_BELT_AU) * 100
+      : 100 - Math.abs((value - target) / target) * 100;
   return {
     id,
     label: `${inner.name} – ${outer.name}`,
@@ -87,6 +97,8 @@ const mkPair = (
     intervalId,
     target,
     accuracy,
+    geoMeanAU,
+    beltDeltaAU,
     kind,
   };
 };
