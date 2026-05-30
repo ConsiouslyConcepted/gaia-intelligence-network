@@ -165,7 +165,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               selectedPlanet={astroSelected}
               onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
-              onPlanetContext={(id) => play(id)}
+              onPlanetContext={() => { /* tone playback disabled */ }}
             />
           </div>
         )}
