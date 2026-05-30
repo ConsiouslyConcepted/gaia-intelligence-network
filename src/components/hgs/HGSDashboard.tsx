@@ -324,9 +324,9 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           }}
         >
           {[
-            { id: "harmonics" as const, label: "Harmonics" },
-            { id: "geometry" as const, label: "Geometry" },
-            { id: "transits" as const, label: "Astro Transits" },
+            { id: "harmonics" as const, label: "Orbits" },
+            { id: "geometry" as const, label: "Intervals" },
+            { id: "transits" as const, label: "Transits" },
           ].map(({ id, label }) => {
             const active = mode === id;
             return (
