@@ -1,7 +1,17 @@
 import * as THREE from "three";
 
+export type Surface = "ocean" | "land" | "any";
+
+export interface RegionDef {
+  id: string;
+  /** rectangular regions in [latMin, latMax, lngMin, lngMax]; multiple boxes support antimeridian-crossing regions */
+  boxes: [number, number, number, number][];
+  /** which surface to paint inside the bounds */
+  surface: Surface;
+}
+
+// ─── Legacy hydrosphere bounds (kept for backwards compat) ───
 export interface BasinBounds {
-  /** rectangular regions in [latMin, latMax, lngMin, lngMax]; multiple boxes support antimeridian-crossing basins */
   boxes: [number, number, number, number][];
 }
 
@@ -20,7 +30,6 @@ export const BASIN_BOUNDS: Record<string, BasinBounds> = {
 
 /** Return basin id whose bounds contain the given lat/lng, or null. */
 export function basinAtLatLng(lat: number, lng: number): string | null {
-  // priority order: polar first, then regional
   const order = ["arctic", "southern", "atlantic", "indian", "pacific"];
   for (const id of order) {
     const b = BASIN_BOUNDS[id];
@@ -28,6 +37,18 @@ export function basinAtLatLng(lat: number, lng: number): string | null {
     for (const [latMin, latMax, lngMin, lngMax] of b.boxes) {
       if (lat >= latMin && lat <= latMax && lng >= lngMin && lng <= lngMax) {
         return id;
+      }
+    }
+  }
+  return null;
+}
+
+/** Generic: find region id whose boxes contain lat/lng. First match wins (caller controls priority). */
+export function regionAtLatLng(regions: RegionDef[], lat: number, lng: number): string | null {
+  for (const r of regions) {
+    for (const [latMin, latMax, lngMin, lngMax] of r.boxes) {
+      if (lat >= latMin && lat <= latMax && lng >= lngMin && lng <= lngMax) {
+        return r.id;
       }
     }
   }
@@ -54,7 +75,6 @@ function loadOceanMask(): Promise<Float32Array> {
       ctx.drawImage(img, 0, 0, MASK_W, MASK_H);
       const { data } = ctx.getImageData(0, 0, MASK_W, MASK_H);
       const mask = new Float32Array(MASK_W * MASK_H);
-      // Blue Marble: ocean pixels are blue-dominant + relatively dark.
       for (let i = 0, j = 0; i < data.length; i += 4, j++) {
         const r = data[i], g = data[i + 1], b = data[i + 2];
         const lum = (r + g + b) / 3;
@@ -69,12 +89,12 @@ function loadOceanMask(): Promise<Float32Array> {
   return oceanMaskPromise;
 }
 
-/** Build an equirectangular RGBA texture that lights up only the ocean pixels inside the basin. */
-export function buildBasinMaskTexture(
-  basinId: string,
+/** Build an RGBA equirectangular highlight texture for arbitrary boxes + surface filter. */
+export function buildRegionMaskTexture(
+  boxes: [number, number, number, number][],
   color: string,
+  surface: Surface = "any",
 ): { texture: THREE.CanvasTexture; ready: Promise<void> } {
-  const bounds = BASIN_BOUNDS[basinId];
   const canvas = document.createElement("canvas");
   canvas.width = MASK_W;
   canvas.height = MASK_H;
@@ -88,12 +108,14 @@ export function buildBasinMaskTexture(
   const rgb = hexToRgb(color);
 
   const ready = (async () => {
-    if (!bounds) return;
-    let oceanMask: Float32Array;
-    try {
-      oceanMask = await loadOceanMask();
-    } catch {
-      return;
+    if (!boxes || boxes.length === 0) return;
+    let oceanMask: Float32Array | null = null;
+    if (surface !== "any") {
+      try {
+        oceanMask = await loadOceanMask();
+      } catch {
+        return;
+      }
     }
 
     const img = ctx.createImageData(MASK_W, MASK_H);
@@ -104,27 +126,35 @@ export function buildBasinMaskTexture(
       for (let x = 0; x < MASK_W; x++) {
         const lng = (x / MASK_W) * 360 - 180;
 
-        // Signed distance to nearest box (positive inside, negative outside; degrees).
         let best = -Infinity;
-        for (const [latMin, latMax, lngMin, lngMax] of bounds.boxes) {
+        for (const [latMin, latMax, lngMin, lngMax] of boxes) {
           const dLat = Math.min(lat - latMin, latMax - lat);
           const dLng = Math.min(lng - lngMin, lngMax - lng);
           const d = Math.min(dLat, dLng);
           if (d > best) best = d;
         }
 
-        // Bounds gating: full inside, soft 6° feather outside
         let regionAlpha = 0;
         if (best >= 0) regionAlpha = 1;
         else if (best > -6) regionAlpha = (6 + best) / 6;
         if (regionAlpha <= 0) continue;
 
         const idx = y * MASK_W + x;
-        const ocean = oceanMask[idx];
-        if (ocean <= 0) continue;
+
+        let surfaceMul = 1;
+        if (oceanMask) {
+          const ocean = oceanMask[idx];
+          if (surface === "ocean") {
+            if (ocean <= 0) continue;
+            surfaceMul = ocean;
+          } else if (surface === "land") {
+            if (ocean > 0) continue;
+            surfaceMul = 1 - ocean;
+          }
+        }
 
         const i = idx * 4;
-        const alpha = Math.round(ocean * regionAlpha * 235);
+        const alpha = Math.round(surfaceMul * regionAlpha * 235);
         data[i] = rgb.r;
         data[i + 1] = rgb.g;
         data[i + 2] = rgb.b;
@@ -137,6 +167,12 @@ export function buildBasinMaskTexture(
   })();
 
   return { texture, ready };
+}
+
+/** Backwards-compat wrapper for hydrosphere basins. */
+export function buildBasinMaskTexture(basinId: string, color: string) {
+  const bounds = BASIN_BOUNDS[basinId];
+  return buildRegionMaskTexture(bounds?.boxes ?? [], color, "ocean");
 }
 
 function hexToRgb(hex: string): { r: number; g: number; b: number } {
