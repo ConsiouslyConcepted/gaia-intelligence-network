@@ -9,6 +9,7 @@ import { NoosphereLiveState } from "./live-state/NoosphereLiveState";
 import { CrystalsphereLiveState } from "./live-state/CrystalsphereLiveState";
 import { HydrosphereLiveState } from "./live-state/HydrosphereLiveState";
 import { CryosphereLiveState } from "./live-state/CryosphereLiveState";
+import { AtmosphereLiveState } from "./live-state/AtmosphereLiveState";
 
 interface Props {
   sphere: Sphere;
