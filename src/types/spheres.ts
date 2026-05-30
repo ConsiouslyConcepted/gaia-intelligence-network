@@ -2,6 +2,7 @@ export type SphereId =
   | "geosphere" 
   | "hydrosphere"
   | "cryosphere"
+  | "atmosphere"
   | "biosphere" 
   | "noosphere" 
   | "magnetosphere" 
@@ -23,8 +24,8 @@ export interface Sphere {
 export const SPHERES: Record<SphereId, Sphere> = {
   geosphere: {
     id: "geosphere",
-    name: "Geosphere",
-    description: "Structural intelligence — seismic, tectonic, volcanic systems",
+    name: "Lithosphere",
+    description: "Rigid outer shell — seismic, tectonic, volcanic, crustal systems",
     color: "#cc5533",
     radius: 1,
     opacity: 1,
@@ -65,6 +66,17 @@ export const SPHERES: Record<SphereId, Sphere> = {
     hasMapLayers: true,
     hasStellarLayers: false,
   },
+  atmosphere: {
+    id: "atmosphere",
+    name: "Atmosphere",
+    description: "Gaseous envelope — troposphere to stratosphere, weather, climate, chemistry",
+    color: "#a8c8dd",
+    radius: 1.22,
+    opacity: 0.22,
+    orderIndex: 5,
+    hasMapLayers: true,
+    hasStellarLayers: false,
+  },
   noosphere: {
     id: "noosphere",
     name: "Noosphere",
@@ -72,18 +84,18 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#d4a56a",
     radius: 1.3,
     opacity: 0.2,
-    orderIndex: 5,
+    orderIndex: 6,
     hasMapLayers: true,
     hasStellarLayers: false,
   },
   magnetosphere: {
     id: "magnetosphere",
-    name: "Heliosphere",
-    description: "Solar-driven plasma field — solar wind, cosmic rays, heliospheric currents",
+    name: "Magnetosphere",
+    description: "Earth's magnetic shield — dipole field, solar wind interaction, auroral zones",
     color: "#4466dd",
     radius: 1.6,
     opacity: 0.15,
-    orderIndex: 6,
+    orderIndex: 7,
     hasMapLayers: true,
     hasStellarLayers: true,
   },
@@ -94,7 +106,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#4488cc",
     radius: 1.75,
     opacity: 0.2,
-    orderIndex: 7,
+    orderIndex: 8,
     hasMapLayers: true,
     hasStellarLayers: true,
   },
@@ -105,13 +117,11 @@ export const SPHERES: Record<SphereId, Sphere> = {
     color: "#e8c86a",
     radius: 1.9,
     opacity: 0.1,
-    orderIndex: 8,
+    orderIndex: 9,
     hasMapLayers: true,
     hasStellarLayers: false,
   },
 };
 
 export const SPHERE_ARRAY = Object.values(SPHERES)
-  .filter((s) => s.id !== "geosphere" && s.id !== "magnetosphere")
   .sort((a, b) => a.orderIndex - b.orderIndex);
-

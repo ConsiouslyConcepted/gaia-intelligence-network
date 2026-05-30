@@ -29,6 +29,8 @@ const EARTH_IMPACT: Record<SphereId, string> = {
   hydrosphere: "Oceans cover 71% of Earth's surface and store over 97% of its water, acting as the planet's primary heat reservoir and climate regulator. Thermohaline circulation transports heat from the tropics to the poles over millennial timescales, while wind-driven surface currents drive regional weather and marine productivity. The hydrological cycle continuously exchanges water between oceans, atmosphere, land, and ice — fueling precipitation, weathering, and erosion. Rivers and groundwater sustain terrestrial ecosystems and agriculture; coastal zones support the majority of human population. Ocean acidification from absorbed CO₂ threatens shell-forming marine life, while warming weakens stratification and circulation. Sea level rise, driven by thermal expansion and ice loss, reshapes coastlines globally.",
 
   cryosphere: "The cryosphere — sea ice, glaciers, ice sheets, snow cover, and permafrost — regulates Earth's energy balance through its high albedo, reflecting solar radiation back to space. Polar ice caps stabilize atmospheric and oceanic circulation by maintaining steep equator-to-pole temperature gradients. Mountain glaciers feed major river systems supplying freshwater to billions. Permafrost stores roughly twice the carbon currently in the atmosphere as frozen organic matter; thaw releases methane and CO₂, amplifying warming. Sea ice loss reduces albedo and accelerates Arctic warming through ice-albedo feedback. Ice sheet collapse in Greenland and West Antarctica contributes to accelerating sea level rise and disrupts ocean circulation through freshwater pulses.",
+
+  atmosphere: "The atmosphere is the thin gaseous envelope that buffers temperature extremes, distributes heat and moisture, shields the surface from harmful radiation, and supplies the oxygen and CO₂ that drive metabolism and photosynthesis. Tropospheric weather systems redistribute energy from equator to poles and from ocean to land, generating precipitation that sustains terrestrial life. The stratospheric ozone layer absorbs UV-B radiation that would otherwise damage DNA and ecosystems. Greenhouse gases — CO₂, methane, water vapor — trap outgoing infrared radiation and set the equilibrium surface temperature; rapid anthropogenic increases now drive global warming, sea level rise, and intensifying extreme weather. Aerosols scatter sunlight, seed clouds, and exert a partial cooling counterforce with strong regional variability. Atmospheric chemistry couples to the biosphere (oxygen, CO₂, biogenic VOCs), the hydrosphere (evaporation, precipitation), the cryosphere (snow and ice feedback), and the ionosphere (photoionization at its upper boundary).",
 };
 
 const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElement[] }> = {
@@ -101,6 +103,16 @@ const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElem
       { name: "Mountain Glacier Systems", description: "Alpine and high-latitude glaciers feeding major river systems and acting as visible indicators of climate change." },
       { name: "Permafrost Zones", description: "Perennially frozen ground across Arctic and sub-Arctic regions storing vast quantities of organic carbon as methane and CO₂." },
       { name: "Seasonal Snow Cover", description: "Northern Hemisphere snowpack — the most variable component of the cryosphere, modulating spring runoff and surface energy budget." },
+    ],
+  },
+  atmosphere: {
+    overview: "The gaseous envelope — a vertically stratified column of nitrogen, oxygen, water vapor, and trace gases extending from surface to exosphere. Structure is defined by temperature inversions, circulation cells, chemical reservoirs, and exchange interfaces with the surface and space environment.",
+    elements: [
+      { name: "Tropospheric Weather Layer", description: "Lowest ~12 km hosting convective weather, water cycle, and ~80% of atmospheric mass; bounded above by the tropopause." },
+      { name: "Stratospheric Ozone Reservoir", description: "Ozone-rich layer (15–35 km) that absorbs solar UV-B radiation and warms with altitude, stabilizing the column." },
+      { name: "Global Circulation Cells", description: "Hadley, Ferrel, and Polar cells driving meridional heat and moisture transport, modulated by jet streams and Rossby waves." },
+      { name: "Greenhouse Gas Reservoir", description: "Long-lived CO₂, CH₄, N₂O and short-lived H₂O vapor regulating the planetary radiative balance." },
+      { name: "Aerosol & Cloud Field", description: "Particulate matter and condensed water modulating albedo, precipitation, and atmospheric chemistry." },
     ],
   },
   crystalsphere: {

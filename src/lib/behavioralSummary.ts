@@ -301,6 +301,38 @@ const BUILDERS: Record<SphereId, Builder> = {
     };
   },
 
+  atmosphere: (intel) => {
+    const m = intel.metrics;
+    const co2 = pick(m, "co2");
+    const ozone = pick(m, "ozone");
+    const aerosol = pick(m, "aerosol");
+    const tempAnom = pick(m, "tempAnom");
+    const r = regime(intel.score);
+    const summary =
+      `Atmospheric stability ${intel.score} (${r.tag}) — ${trendPhrase(intel.trend)}. ` +
+      (co2 ? `CO₂ ${fmt(co2)}, ` : "") +
+      (ozone ? `ozone column ${fmt(ozone)}, ` : "") +
+      (tempAnom ? `surface anomaly ${fmt(tempAnom)}. ` : "") +
+      `Gaseous envelope in a ${r.tone}.`;
+    return {
+      summary,
+      patterns: [
+        { name: "Greenhouse Forcing", description: "Long-lived greenhouse gases (CO₂, CH₄, N₂O) trap outgoing longwave radiation, raising the equilibrium surface temperature.", timeScale: "Decades → Centuries",
+          status: co2 ? `CO₂ ${fmt(co2)} (${signed(co2.deltaPct)}%)` : "—",
+          intensity: intensityFrom(m, ["co2", "tempAnom"]), metricKeys: ["co2"] },
+        { name: "Stratospheric Ozone Cycle", description: "Photochemical balance between ozone production and destruction in the stratosphere shields the surface from UV-B radiation.", timeScale: "Months → Years",
+          status: ozone ? `Column ${fmt(ozone)}` : "—",
+          intensity: intensityFrom(m, ["ozone"]), metricKeys: ["ozone"] },
+        { name: "Aerosol Loading", description: "Natural and anthropogenic aerosols scatter sunlight and seed cloud condensation, exerting a net cooling effect with strong regional variability.", timeScale: "Days → Years",
+          status: aerosol ? `AOD ${fmt(aerosol)} (${signed(aerosol.z, 1)}σ)` : "—",
+          intensity: intensityFrom(m, ["aerosol"]), metricKeys: ["aerosol"] },
+        { name: "Weather & Climate Variability", description: "Synoptic systems and large-scale oscillations (ENSO, NAO, MJO) redistribute heat, moisture, and momentum across the atmosphere.", timeScale: "Days → Years",
+          status: tempAnom ? `ΔT ${fmt(tempAnom)} (${signed(tempAnom.z, 1)}σ)` : `${trendPhrase(intel.trend)}`,
+          intensity: intensityFrom(m, ["tempAnom"]), metricKeys: ["tempAnom"] },
+      ],
+    };
+  },
+
   crystalsphere: (intel) => {
     const m = intel.metrics;
     const lattice = pick(m, "lattice");

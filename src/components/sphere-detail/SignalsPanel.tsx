@@ -71,6 +71,12 @@ const SIGNALS: Record<SphereId, SignalDef[]> = {
     { key: "piezo", label: "Piezoelectric Signal", unit: "μV", baseline: 120, amplitude: 35, frequency: 0.06, color: "#c49a44" },
     { key: "coherence", label: "Field Coherence", unit: "%", baseline: 72, amplitude: 10, frequency: 0.04, color: "#daa520" },
   ],
+  atmosphere: [
+    { key: "co2", label: "Atmospheric CO₂", unit: "ppm", baseline: 424, amplitude: 2.5, frequency: 0.015, color: "#a8c8dd" },
+    { key: "ozone", label: "Ozone Column", unit: "DU", baseline: 298, amplitude: 18, frequency: 0.04, color: "#88b4d4" },
+    { key: "aod", label: "Aerosol Optical Depth", unit: "AOD", baseline: 0.16, amplitude: 0.05, frequency: 0.06, color: "#6f9cc4" },
+    { key: "tempAnom", label: "Surface Temp Anomaly", unit: "°C", baseline: 1.18, amplitude: 0.15, frequency: 0.025, color: "#c0d8e8" },
+  ],
 };
 
 function generateTimeSeries(signal: SignalDef, tick: number) {
