@@ -36,11 +36,15 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const isBio = sphere.id === "biosphere";
   const isHelio = sphere.id === "magnetosphere"; // displayed as "Magnetosphere"
   const isTechno = sphere.id === "ionosphere"; // displayed as "Technosphere"
+  const isNoo = sphere.id === "noosphere";
+  const isCrystal = sphere.id === "crystalsphere";
   const hasRegions = isHydro || isCryo || isBio;
   const hasZones = isHelio || isTechno;
 
   // Selected region id (string for generic globe API)
   const [selectedId, setSelectedId] = useState<string>("global");
+  // Crystalsphere overlay toggle
+  const [crystalMode, setCrystalMode] = useState<"ley" | "grid">("grid");
 
   // Reset selection when switching spheres
   useEffect(() => {
