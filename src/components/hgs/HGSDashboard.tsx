@@ -195,8 +195,13 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             {/* Commons Data icon — tucked next to the toggle */}
             <button
               onClick={() => navigate("/commons")}
-              className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
-              style={{ color: "hsla(0,0%,100%,0.75)", border: "1px solid hsla(220,30%,55%,0.35)", background: "hsla(240,25%,8%,0.5)", boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)" }}
+              className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
+              style={{
+                color: "hsla(0,0%,100%,0.85)",
+                background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+                border: "1.5px solid hsla(220,35%,60%,0.55)",
+                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 24px hsla(210,70%,60%,0.25), 0 0 48px hsla(210,70%,55%,0.15), 0 12px 32px rgba(0,0,0,0.5)",
+              }}
               title="Planetary Commons Data"
             >
               <CommonsIcon size={20} />
