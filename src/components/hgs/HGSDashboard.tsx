@@ -257,9 +257,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         </div>
       </div>
 
-      {/* ─── LEFT SIDEBAR (transits mode only) ─── */}
-
-      {mode === "transits" && (
+      {/* ─── LEFT SIDEBAR ─── */}
+      {mode === "transits" ? (
         <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <ZodiacSidebar
@@ -269,7 +268,80 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </HudPanel>
         </div>
+      ) : (
+        <div className="absolute left-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
+          <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
+            <div className="flex-1 overflow-y-auto flex flex-col">
+              {/* Header */}
+              <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
+                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Sounds of the Planets</h2>
+                <p className="text-[9px] text-muted-foreground/50 leading-snug">
+                  Tap any planet to hear its orbital tone — frequencies derived from Keplerian ratios.
+                </p>
+              </div>
+
+              {/* Planet tone list */}
+              <div className="flex-1 px-2 py-2 space-y-1">
+                {SOLAR_PLANETS.map((p) => {
+                  const tone = PLANET_TONES[p.id];
+                  const isPlaying = playing === p.id;
+                  const isSelected = selectedPlanet === p.id;
+                  return (
+                    <button
+                      key={p.id}
+                      onClick={() => play(p.id)}
+                      onContextMenu={(e) => { e.preventDefault(); handlePlanetClick(p.id); }}
+                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all duration-200 text-left ${
+                        isSelected ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]"
+                      }`}
+                      style={{
+                        border: `1px solid ${isPlaying ? "hsla(210,70%,65%,0.45)" : "hsla(0,0%,100%,0.05)"}`,
+                        boxShadow: isPlaying ? "0 0 16px hsla(210,70%,60%,0.25)" : "none",
+                      }}
+                    >
+                      <div
+                        className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center"
+                        style={{
+                          background: `radial-gradient(circle at 30% 30%, ${p.color}cc, ${p.color}33)`,
+                          boxShadow: isPlaying ? `0 0 12px ${p.color}aa` : `0 0 6px ${p.color}55`,
+                        }}
+                      >
+                        <Volume2
+                          className={`w-3 h-3 ${isPlaying ? "animate-pulse" : ""}`}
+                          style={{ color: isPlaying ? "#fff" : "hsla(0,0%,100%,0.6)" }}
+                        />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-semibold text-foreground/85 tracking-wide">{p.name}</span>
+                          {tone && (
+                            <span className="text-[10px] font-bold tracking-wide" style={{ color: p.color }}>{tone.note}</span>
+                          )}
+                        </div>
+                        {tone && (
+                          <div className="flex items-center justify-between mt-0.5">
+                            <span className="text-[8px] text-muted-foreground/45 tracking-wider uppercase">
+                              {isPlaying ? "Playing" : "Orbital Tone"}
+                            </span>
+                            <span className="text-[9px] text-foreground/55 font-medium">{tone.freq}</span>
+                          </div>
+                        )}
+                      </div>
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="px-3 py-2 border-t border-border/15">
+                <p className="text-[8px] text-muted-foreground/35 tracking-wider text-center leading-relaxed">
+                  Left-click to hear · Right-click to isolate resonance
+                </p>
+              </div>
+            </div>
+          </HudPanel>
+        </div>
       )}
+
 
       {/* ─── RIGHT SIDEBAR ─── */}
       <div className="absolute right-4 top-[128px] bottom-4 z-10 pointer-events-none w-[260px]">
