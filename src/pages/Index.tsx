@@ -147,12 +147,8 @@ const Index = () => {
               "inset 0 1px 0 hsla(200,60%,78%,0.25), inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.6), inset 0 -10px 24px -10px hsla(0,0%,0%,0.5), 0 12px 28px -6px rgba(0,0,0,0.75), 0 24px 60px -20px rgba(0,0,0,0.9), 0 0 24px -4px hsla(210,50%,60%,0.18)",
           }}
         >
-          {/* Bright top rim highlight */}
-          <div className="pointer-events-none absolute top-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(200,60%,78%,0.55), transparent)" }} />
           {/* Outer edge glow */}
           <div className="pointer-events-none absolute inset-0 rounded-xl" style={{ boxShadow: "0 0 32px -8px hsla(210,60%,65%,0.25)" }} />
-          {/* Bottom accent line */}
-          <div className="pointer-events-none absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)" }} />
           {/* Subtle bottom edge shadow */}
           <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
 
