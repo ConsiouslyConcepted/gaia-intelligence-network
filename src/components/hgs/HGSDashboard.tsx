@@ -291,10 +291,11 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                       key={p.id}
                       onClick={() => play(p.id)}
                       onContextMenu={(e) => { e.preventDefault(); handlePlanetClick(p.id); }}
-                      className={`w-full flex items-center gap-2.5 px-2.5 py-2 rounded-lg transition-all duration-200 text-left ${
+                      className={`w-full flex items-center gap-2.5 px-2.5 rounded-lg transition-all duration-200 text-left ${
                         isSelected ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]"
                       }`}
                       style={{
+                        height: "52px",
                         border: `1px solid ${isPlaying ? "hsla(210,70%,65%,0.45)" : "hsla(0,0%,100%,0.05)"}`,
                         boxShadow: isPlaying ? "0 0 16px hsla(210,70%,60%,0.25)" : "none",
                       }}
