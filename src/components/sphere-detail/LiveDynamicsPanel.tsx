@@ -108,6 +108,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
           quakes={sphere.id === "geosphere" ? live.quakes : undefined}
           basins={basinMarkers}
           selectedBasinId={isHydro ? basinId : undefined}
+          selectedBasinColor={basinReading?.basin.tint}
           onSelectBasin={isHydro ? ((id) => setBasinId(id as BasinId)) : undefined}
         />
         {isHydro && (
