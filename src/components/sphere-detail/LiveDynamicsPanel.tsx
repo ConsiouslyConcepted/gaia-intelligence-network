@@ -163,7 +163,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
                 </span>
               </div>
               <p className="text-[8px] uppercase tracking-wider text-muted-foreground/40">
-                {hasRegions ? regionName : intel.scoreLabel}
+                {hasRegions || hasZones ? regionName : intel.scoreLabel}
               </p>
             </div>
             <div className="flex items-center gap-1.5">
