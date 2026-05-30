@@ -256,20 +256,20 @@ export const PairsPanel = ({ selectedPairId, onSelect, onPlanetContext }: Props)
           />
         </div>
         <div className="flex items-center justify-between gap-1.5">
-          <div className="flex gap-1">
+          <div className="flex gap-1 min-w-0">
             <FilterPill value="all" label="All" />
             <FilterPill value="mirror" label="Mirror" />
-            <FilterPill value="adjacent" label="Adjacent" />
+            <FilterPill value="adjacent" label="Adj" />
           </div>
           <button
             onClick={() =>
               setSort(sort === "default" ? "accuracy" : sort === "accuracy" ? "value" : "default")
             }
-            className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[9px] tracking-wider uppercase font-semibold bg-foreground/[0.03] border border-foreground/10 text-foreground/70 hover:text-foreground transition-all"
+            className="flex items-center gap-1 px-1.5 py-1 rounded-md text-[9px] tracking-wider uppercase font-semibold bg-foreground/[0.03] border border-foreground/10 text-foreground/70 hover:text-foreground transition-all shrink-0"
             title="Cycle sort: default → accuracy → value"
           >
             <ArrowUpDown className="w-2.5 h-2.5" />
-            {sort}
+            {sort === "default" ? "Def" : sort === "accuracy" ? "Acc" : "Val"}
           </button>
         </div>
       </div>
