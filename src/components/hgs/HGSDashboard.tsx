@@ -140,7 +140,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,28%,9%,0.96) 100%)",
+                  background: "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
                   border: "1px solid hsla(220,40%,65%,0.5)",
                   boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.22), inset 0 0 10px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.5), 0 0 18px -4px hsla(210,60%,65%,0.25)",
