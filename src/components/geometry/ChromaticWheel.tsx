@@ -157,20 +157,6 @@ export const ChromaticWheel = ({ interval, size = 520, onSelectInterval }: Props
         12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS
       </text>
 
-      {/* Selected interval caption (bottom) */}
-      <text x={cx} y={size - size * 0.05} textAnchor="middle"
-        fontSize={size * 0.034} fontWeight={700}
-        fill={INTERVAL_COLORS[interval.id] ?? "hsla(0,0%,100%,0.9)"}
-        style={{ fontFamily: "ui-sans-serif, system-ui", letterSpacing: "0.18em" }}>
-        {interval.short} · {interval.ratio}
-      </text>
-      <text x={cx} y={size - size * 0.025} textAnchor="middle"
-        fontSize={size * 0.018}
-        fill="hsla(0,0%,100%,0.55)"
-        style={{ fontFamily: "ui-sans-serif, system-ui", letterSpacing: "0.22em" }}>
-        {interval.name.toUpperCase()}
-      </text>
-
       {hover !== null && (
         <text x={cx} y={cy + r * 0.55} textAnchor="middle"
           fontSize={size * 0.022}
