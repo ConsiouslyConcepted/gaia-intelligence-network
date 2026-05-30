@@ -1,69 +1,61 @@
+## Astrological Transits — Universal view
 
-# Sphere Intelligence Cards
+A second mode inside the Universal (HGS) dashboard that swaps the orbital-resonance field for a live astrological chart showing where the planets currently sit in the zodiac. A toggle in the top bar flips between **Harmonics** and **Transits**. A new left rail lists the 12 zodiac signs.
 
-Give every sphere a uniform intelligence contract — **Purpose, Metrics, Score, Trend, Baseline, Anomalies** — surfaced two ways:
+### What the user sees
 
-- **Compact chip** in the HUD's Sphere Systems / Sphere Signals lists (Score + sparkline + trend arrow)
-- **Full Intelligence Card** at the top of the sphere detail view, above the existing Anatomy / Live Dynamics / Signals / Coupling layers
+**Top bar (Universal view only)**
+A new pill toggle next to the title: `Harmonics ⇄ Transits`. Same glass styling as the existing pills.
 
-## Sphere contracts
+**Harmonics mode (unchanged)**
+Current OrbitalResonanceField + right Planetary Harmonics panel.
 
-All 7 spheres get the same shape. Scores normalize to 0–100 (higher = more stable / coherent, except Lithosphere where higher = more active — labeled accordingly).
+**Transits mode**
+- Left rail: "Zodiac Signs" panel with the 12 signs. Each row shows the glyph, name, element color tint, and a small marker if a planet currently transits there.
+- Center: the natal-style chart wheel.
+- Right rail: replaces "Planetary Harmonics" with "Live Transits" — a list of each planet and the sign + degree it's currently in, plus a "today" timestamp.
 
-| Sphere | Score name | Core metrics |
-|---|---|---|
-| Biosphere | Vitality | NDVI, vegetation health, carbon uptake, seasonal productivity |
-| Atmosphere | Stability | ENSO, global temp anomaly, pressure oscillations, jet stream |
-| Hydrosphere | Ocean Dynamics | Ocean heat content, SST anomaly, AMOC / circulation |
-| Cryosphere | Stability | Arctic sea ice, Antarctic sea ice, snow cover |
-| Lithosphere | Activity | Seismic energy, earthquake frequency, volcanic activity |
-| Magnetosphere | Coherence | Kp index, solar wind pressure, Schumann resonance, geomag activity |
-| Noosphere | Coherence | Information flow, signal-to-noise, collective attention proxies |
-| Crystalsphere | Resonance | Lattice symmetry, harmonic phase lock, cross-sphere coupling strength |
-
-Noosphere + Crystalsphere keep the same card contract so the dashboard stays uniform.
-
-## Data approach
-
-- Scores are computed from realistic mock formulas now, structured so each metric slot is a swappable data source.
-- Where live telemetry is already wired (USGS seismic, NOAA Kp/space-weather, NASA EONET/GIBS), the metric reader points at the existing hook; everything else uses a deterministic mock with realistic jitter.
-- Trend = delta vs 30-day rolling baseline. Anomalies = metrics outside ±2σ of baseline, surfaced as chips.
-- Strictly read-only — no thresholds that trigger actions, only observability.
-
-## UI
-
-**Compact chip** (in HUD lists):
+**The chart wheel (hybrid of your two references)**
 ```text
-[ Biosphere ─────────────────── 72 ▲ ]
-[ ▁▂▃▅▆▇ sparkline       Vitality   ]
+              outer ring: 12 constellation names + tiny star-dot art
+            ┌───────────────────────────────────┐
+            │  sign band: cream ring, sign      │
+            │  glyphs at 12 positions, degree   │
+            │  ticks every 5° / 1°              │
+            │   ┌─────────────────────────┐     │
+            │   │ planet glyphs placed at │     │
+            │   │ their real longitudes,  │     │
+            │   │ aspect lines drawn      │     │
+            │   │ across the inner disc   │     │
+            │   └─────────────────────────┘     │
+            └───────────────────────────────────┘
 ```
+Pure SVG, monochromatic with subtle cream-gold accents allowed for the sign band (consistent with the wayfinding-hue exception).
 
-**Full Intelligence Card** (top of detail view):
-- Header: sphere name + purpose line
-- Big Score (0–100) with label ("Vitality", "Stability", …) and trend arrow + delta vs baseline
-- Metrics grid: each metric shows current value, unit, mini sparkline, baseline comparison
-- Active Anomalies row: chips for any metric currently outside ±2σ
-- Quiet glassmorphism, neutral tones, white text — matches existing aesthetic
+### Interactions
 
-## File plan
+- Click a sign in the left rail → that segment of the wheel glows and the right rail filters to planets currently in that sign.
+- Click a planet glyph on the wheel → highlight its aspects (lines to other planets) and show its degree/sign in the right rail.
+- Right-click a planet → plays its tone (reuses existing `usePlanetAudio`), matching the existing interaction rule.
 
-New:
-- `src/lib/sphereIntelligence.ts` — types (`SphereScore`, `MetricReading`, `Anomaly`), score formulas, baseline math
-- `src/hooks/useSphereIntelligence.ts` — per-sphere hook returning `{ score, label, trend, metrics, anomalies }`
-- `src/components/sphere-intelligence/SphereIntelligenceCard.tsx` — full card for detail view
-- `src/components/sphere-intelligence/SphereIntelligenceChip.tsx` — compact chip for HUD lists
-- `src/components/sphere-intelligence/MetricTile.tsx` — single metric cell
-- `src/components/sphere-intelligence/sources/` — one small reader per sphere (`biosphere.ts`, `atmosphere.ts`, …) so live wiring can land sphere-by-sphere
+### Live data
 
-Edited:
-- `src/pages/Index.tsx` — render `SphereIntelligenceChip` inside each row of the Sphere Systems and Sphere Signals panels
-- `src/components/sphere-detail/DataPanel.tsx` (or the sphere detail container) — mount `SphereIntelligenceCard` above the existing Anatomy/Live Dynamics/Signals/Coupling tabs
-- `src/types/spheres.ts` — add `scoreLabel` + `scorePolarity` ("stability" | "activity") to each sphere config
+Use the `astronomy-engine` npm package (no API key, fully client-side) to compute current ecliptic longitudes for Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Recompute on mount and every 10 minutes. Convert longitude → sign + degree, and detect major aspects (conjunction, sextile, square, trine, opposition) within standard orbs.
 
-No changes to HGS mode, audio, or existing layers.
+### Technical details
 
-## Out of scope (for this pass)
+- New file `src/components/astrology/AstrologyChart.tsx` — SVG wheel (outer constellation ring, sign band, planet layer, aspect layer).
+- New file `src/components/astrology/ZodiacSidebar.tsx` — left rail listing the 12 signs.
+- New file `src/components/astrology/TransitsPanel.tsx` — right rail planet/degree list.
+- New file `src/lib/astrology/ephemeris.ts` — wraps `astronomy-engine` to return `{ planet, longitude, sign, degree, retrograde }[]` and computed aspects.
+- New file `src/lib/astrology/constants.ts` — sign metadata (name, glyph, element, ruler, color hint, constellation polyline coords).
+- Edit `src/components/hgs/HGSDashboard.tsx` — add `mode: "harmonics" | "transits"` state, render the new toggle in the top bar, and conditionally render either the existing OrbitalResonanceField + harmonics rails or the new astrology trio.
+- Install `astronomy-engine`.
+- All styling reuses the existing `HudPanel` and panel gradient tokens — no new design system.
+- Memory: add a `mem://features/astrology` note describing the mode and add a Core line that Universal has two sub-modes (Harmonics, Transits).
 
-- Wiring every metric to live APIs (structure is ready; we land sources incrementally in follow-ups)
-- Historical persistence (baselines computed in-memory from the rolling window)
-- Alerting / notifications (would violate observability-only constraint)
+### Out of scope
+
+- Birth chart input form (not requested; can be added later by adding a date/time/location form that overrides "today").
+- Houses / Ascendant calculation (requires location; deferred).
+- Transit-to-natal comparisons.
