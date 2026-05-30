@@ -155,7 +155,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   }, []);
   const secsAgo = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
 
-  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : isHelio ? "activity zone" : "region";
+  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : isHelio ? "activity zone" : isTechno ? "infrastructure layer" : "region";
 
   return (
     <div className="space-y-4">
