@@ -422,9 +422,17 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
-              <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
-                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Orbits</h2>
-                <p className="text-[9px] text-muted-foreground/50 leading-snug">
+              <div className="relative px-3.5 pt-3 pb-2.5 border-b border-border/20 overflow-hidden">
+                <div className="absolute inset-0 bg-gradient-to-b from-foreground/[0.05] via-foreground/[0.015] to-transparent pointer-events-none" />
+                <div className="absolute top-0 left-3 right-3 h-px bg-gradient-to-r from-transparent via-foreground/25 to-transparent" />
+                <div className="relative flex items-center gap-2 mb-1">
+                  <div className="w-5 h-5 rounded-md flex items-center justify-center bg-foreground/[0.06] border border-foreground/10">
+                    <Orbit className="w-2.5 h-2.5 text-foreground/70" strokeWidth={2} />
+                  </div>
+                  <h2 className="text-[10px] font-bold tracking-[0.2em] uppercase text-foreground/90">Planetary Orbits</h2>
+                  <div className="flex-1 h-px bg-gradient-to-r from-foreground/15 to-transparent" />
+                </div>
+                <p className="relative text-[9px] text-muted-foreground/55 leading-snug pl-7">
                   Resonance ratios between neighboring planetary orbits.
                 </p>
               </div>
