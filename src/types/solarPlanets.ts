@@ -19,10 +19,10 @@ export const SOLAR_PLANETS: SolarPlanet[] = [
   { id: "venus", name: "Venus", color: "#e8c86a", orbitRadius: 0.20, speed: 1.625, size: 6, image: "/planets/venus.png", cymaticImage: "/cymatics/venus.png" },
   { id: "earth", name: "Earth", color: "#4488cc", orbitRadius: 0.30, speed: 1.0, size: 7, image: "/planets/earth.png", cymaticImage: "/cymatics/earth.png" },
   { id: "mars", name: "Mars", color: "#cc5533", orbitRadius: 0.40, speed: 0.532, size: 5, image: "/planets/mars.png", cymaticImage: "/cymatics/mars.png" },
-  { id: "jupiter", name: "Jupiter", color: "#d4a56a", orbitRadius: 0.55, speed: 0.0843, size: 12, image: "/planets/jupiter.png", cymaticImage: "/cymatics/jupiter.png" },
-  { id: "saturn", name: "Saturn", color: "#c8b070", orbitRadius: 0.70, speed: 0.0339, size: 10, image: "/planets/saturn.png", cymaticImage: "/cymatics/saturn.png" },
+  { id: "jupiter", name: "Jupiter", color: "#e8893a", orbitRadius: 0.55, speed: 0.0843, size: 12, image: "/planets/jupiter.png", cymaticImage: "/cymatics/jupiter.png" },
+  { id: "saturn", name: "Saturn", color: "#d49a4a", orbitRadius: 0.70, speed: 0.0339, size: 10, image: "/planets/saturn.png", cymaticImage: "/cymatics/saturn.png" },
   { id: "uranus", name: "Uranus", color: "#7ecbcb", orbitRadius: 0.82, speed: 0.0119, size: 8, image: "/planets/uranus.png", cymaticImage: "/cymatics/uranus.png" },
-  { id: "neptune", name: "Neptune", color: "#4466dd", orbitRadius: 0.88, speed: 0.00607, size: 7, image: "/planets/neptune.png", cymaticImage: "/cymatics/neptune.png" },
+  { id: "neptune", name: "Neptune", color: "#7a4fcf", orbitRadius: 0.88, speed: 0.00607, size: 7, image: "/planets/neptune.png", cymaticImage: "/cymatics/neptune.png" },
   { id: "pluto", name: "Pluto", color: "#c4a882", orbitRadius: 0.96, speed: 0.00404, size: 4, image: "/planets/pluto.png", cymaticImage: "/cymatics/pluto.png" },
 ];
 
