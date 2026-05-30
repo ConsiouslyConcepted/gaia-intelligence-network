@@ -621,6 +621,9 @@ export const BlueMarbleGlobe = ({
             color={selectedRegionColor!}
           />
         )}
+        {crystalOverlay && (
+          <CrystalOverlay mode={crystalOverlay} color={selectedRegionColor || "#e8c86a"} />
+        )}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
           enableZoom={false}
