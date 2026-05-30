@@ -44,12 +44,24 @@ function GlobeMesh({ onPickLatLng }: { onPickLatLng?: (lat: number, lng: number)
     }
   });
 
+  // Track pointerdown screen pos so drags (orbit controls) don't fire as clicks
+  const downPos = useRef<{ x: number; y: number } | null>(null);
+  const DRAG_THRESHOLD = 5; // px
+
   return (
     <mesh
       ref={meshRef}
-      onClick={onPickLatLng ? (e) => {
+      onPointerDown={onPickLatLng ? (e) => {
+        downPos.current = { x: e.clientX, y: e.clientY };
+      } : undefined}
+      onPointerUp={onPickLatLng ? (e) => {
+        const start = downPos.current;
+        downPos.current = null;
+        if (!start || !meshRef.current) return;
+        const dx = e.clientX - start.x;
+        const dy = e.clientY - start.y;
+        if (Math.hypot(dx, dy) > DRAG_THRESHOLD) return; // it was a drag, ignore
         e.stopPropagation();
-        if (!meshRef.current) return;
         const local = meshRef.current.worldToLocal(e.point.clone());
         const r = local.length();
         const lat = 90 - (Math.acos(local.y / r) * 180) / Math.PI;
