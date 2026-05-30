@@ -415,23 +415,24 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
               <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
-                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Harmonics</h2>
+                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Orbits</h2>
                 <p className="text-[9px] text-muted-foreground/50 leading-snug">
-                  Tap to see planetary resonance patterns and sounds unique to each planet.
+                  Resonance ratios between neighboring planetary orbits.
                 </p>
               </div>
 
               {/* Resonance pairs list */}
-              <div className="flex-1 px-2 py-2 space-y-0.5">
+              <div className="flex-1 px-2 py-2 space-y-1">
                 {PLANET_RESONANCE_PAIRS.map((pair) => {
                   const p1 = SOLAR_PLANETS[pair.i];
                   return (
                     <button
                       key={pair.label}
                       onClick={() => handlePlanetClick(p1.id)}
-                      className="w-full text-left rounded-lg hover:bg-foreground/[0.04] transition-all duration-200 cursor-pointer py-0.5"
+                      className="w-full text-left rounded-lg hover:bg-foreground/[0.04] transition-all duration-200 cursor-pointer flex items-center"
+                      style={{ height: "52px", border: "1px solid hsla(0,0%,100%,0.05)" }}
                     >
-                      <ResonancePairDiagram label={pair.label} color1={pair.c1} color2={pair.c2} ratioA={pair.a} ratioB={pair.b} size={56} />
+                      <ResonancePairDiagram label={pair.label} color1={pair.c1} color2={pair.c2} ratioA={pair.a} ratioB={pair.b} size={44} />
                     </button>
                   );
                 })}
