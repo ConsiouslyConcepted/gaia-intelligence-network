@@ -20,6 +20,7 @@ const DATA_COMPONENTS: Record<string, React.ComponentType<{ accent: string }>> =
   geosphere: GeosphereLiveState,
   hydrosphere: HydrosphereLiveState,
   cryosphere: CryosphereLiveState,
+  atmosphere: AtmosphereLiveState,
   magnetosphere: MagnetosphereLiveState,
   biosphere: BiosphereLiveState,
   ionosphere: IonosphereLiveState,
