@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { TextureLoader } from "three";
 import { SphereId } from "@/types/spheres";
 import { QuakePoint } from "@/lib/liveOverlays";
-import { buildBasinMaskTexture, basinAtLatLng } from "@/lib/basinMasks";
+import { buildRegionMaskTexture, regionAtLatLng, Surface, RegionDef } from "@/lib/basinMasks";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
