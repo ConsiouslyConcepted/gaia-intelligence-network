@@ -165,13 +165,6 @@ export const ChromaticWheel = ({ interval, size = 520, onSelectInterval }: Props
           {NOTE_NAMES[hover]} → {NOTE_NAMES[(hover + interval.semitones) % 12]}
         </text>
       )}
-        <text x={cx} y={cy + r * 0.55} textAnchor="middle"
-          fontSize={size * 0.022}
-          fill="hsla(45,80%,80%,0.9)"
-          style={{ fontFamily: "ui-sans-serif, system-ui", letterSpacing: "0.18em" }}>
-          {NOTE_NAMES[hover]} → {NOTE_NAMES[(hover + interval.semitones) % 12]}
-        </text>
-      )}
     </svg>
   );
 };
