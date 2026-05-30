@@ -202,7 +202,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Visualization: zone maps for Helio/Techno, Blue Marble for Earth spheres */}
+      {/* Visualization: zone maps for Helio/Techno/Noo, Blue Marble for Earth spheres */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
         {isHelio ? (
           <HelioActivityMap
@@ -216,17 +216,40 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
             selectedId={selectedId as TechnoZoneId}
             onSelect={(id) => setSelectedId(id)}
           />
+        ) : isNoo ? (
+          <NoosphereNetworkMap height={340} accent={accent} />
         ) : (
-          <BlueMarbleGlobe
-            height={340}
-            sphereId={sphere.id}
-            overlayUrl={hasRegions ? undefined : live.textureUrl}
-            quakes={sphere.id === "geosphere" ? live.quakes : undefined}
-            regions={regions}
-            selectedRegionId={hasRegions ? selectedId : undefined}
-            selectedRegionColor={regionTint}
-            onSelectRegion={hasRegions ? setSelectedId : undefined}
-          />
+          <>
+            <BlueMarbleGlobe
+              height={340}
+              sphereId={sphere.id}
+              overlayUrl={hasRegions || isCrystal ? undefined : live.textureUrl}
+              quakes={sphere.id === "geosphere" ? live.quakes : undefined}
+              regions={regions}
+              selectedRegionId={hasRegions ? selectedId : undefined}
+              selectedRegionColor={isCrystal ? "#e8c86a" : regionTint}
+              onSelectRegion={hasRegions ? setSelectedId : undefined}
+              crystalOverlay={isCrystal ? crystalMode : null}
+            />
+            {isCrystal && (
+              <div className="absolute top-4 right-4 glass-panel rounded-lg p-1 flex gap-1 z-10">
+                {(["grid", "ley"] as const).map((m) => (
+                  <button
+                    key={m}
+                    onClick={() => setCrystalMode(m)}
+                    className="px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider transition-colors border"
+                    style={{
+                      backgroundColor: crystalMode === m ? "#e8c86a25" : "transparent",
+                      borderColor: crystalMode === m ? "#e8c86a" : "hsl(var(--border) / 0.3)",
+                      color: crystalMode === m ? "#e8c86a" : "hsl(var(--muted-foreground))",
+                    }}
+                  >
+                    {m === "grid" ? "Planetary Grid" : "Ley Lines"}
+                  </button>
+                ))}
+              </div>
+            )}
+          </>
         )}
         {(hasRegions || hasZones) && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
@@ -235,7 +258,13 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
               : `Click an ${regionLabel} on the globe · or select below`}
           </p>
         )}
+        {isCrystal && (
+          <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
+            Toggle between icosahedral planetary grid and curated ley-line node network
+          </p>
+        )}
       </Card>
+
 
 
       {/* Region / zone selector chips */}
