@@ -247,15 +247,26 @@ function BasinMarkers({
   );
 }
 
-// ─── Basin highlight (lights up the actual ocean shape) ───
+// ─── Region highlight (lights up a region — ocean/land/any) ───
 
-function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
+function RegionHighlight({
+  boxes,
+  surface,
+  color,
+}: {
+  boxes: [number, number, number, number][];
+  surface: Surface;
+  color: string;
+}) {
   const innerRef = useRef<THREE.Mesh>(null);
   const outerRef = useRef<THREE.Mesh>(null);
   const innerMat = useRef<THREE.MeshBasicMaterial>(null);
   const outerMat = useRef<THREE.MeshBasicMaterial>(null);
 
-  const { texture } = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
+  const { texture } = useMemo(
+    () => buildRegionMaskTexture(boxes, color, surface),
+    [boxes, color, surface],
+  );
   useEffect(() => () => { texture.dispose(); }, [texture]);
 
   useFrame((state) => {
