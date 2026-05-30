@@ -1,7 +1,7 @@
 import { useMemo, useState, useEffect } from "react";
 import { Card } from "@/components/ui/card";
 import { Sphere, SPHERE_ARRAY, SphereId } from "@/types/spheres";
-import { GitBranch, ArrowRight } from "lucide-react";
+import { GitBranch, ArrowUpRight, ArrowDownLeft, ArrowLeftRight } from "lucide-react";
 
 interface Props {
   sphere: Sphere;
@@ -10,7 +10,7 @@ interface Props {
 
 interface CouplingLink {
   target: SphereId;
-  strength: number; // 0-1
+  strength: number;
   mechanism: string;
   direction: "outgoing" | "incoming" | "bidirectional";
 }
@@ -85,97 +85,268 @@ const SPHERE_COLORS: Record<SphereId, string> = {
   crystalsphere: "#d4a56a",
 };
 
+const DIR_LABEL: Record<CouplingLink["direction"], string> = {
+  outgoing: "Outflow",
+  incoming: "Inflow",
+  bidirectional: "Bidirectional",
+};
+
+function DirIcon({ d, className }: { d: CouplingLink["direction"]; className?: string }) {
+  if (d === "outgoing") return <ArrowUpRight className={className} />;
+  if (d === "incoming") return <ArrowDownLeft className={className} />;
+  return <ArrowLeftRight className={className} />;
+}
+
 export function CouplingPanel({ sphere, accent }: Props) {
   const links = COUPLING_DATA[sphere.id] || COUPLING_DATA.geosphere;
   const [tick, setTick] = useState(0);
+  const [hovered, setHovered] = useState<SphereId | null>(null);
 
   useEffect(() => {
-    const iv = setInterval(() => setTick(t => t + 1), 2000);
+    const iv = setInterval(() => setTick((t) => t + 1), 80);
     return () => clearInterval(iv);
   }, []);
 
-  // Sort by strength
   const sorted = useMemo(() => [...links].sort((a, b) => b.strength - a.strength), [links]);
+  const avgStrength = useMemo(
+    () => Math.round((sorted.reduce((s, l) => s + l.strength, 0) / sorted.length) * 100),
+    [sorted]
+  );
+  const strongest = sorted[0];
+  const strongestTarget = SPHERE_ARRAY.find((s) => s.id === strongest.target);
 
-  // Relationship network SVG
-  const centerSphere = sphere.id;
-  const connectedSpheres = sorted.map(l => l.target);
+  // Radial layout — full circle for breathing room
+  const CX = 250;
+  const CY = 250;
+  const R = 165;
+  const positions = useMemo(() => {
+    return sorted.map((link, i) => {
+      const angle = -Math.PI / 2 + (i / sorted.length) * Math.PI * 2;
+      return {
+        link,
+        x: CX + Math.cos(angle) * R,
+        y: CY + Math.sin(angle) * R,
+        angle,
+      };
+    });
+  }, [sorted]);
 
   return (
     <div className="space-y-4">
+      {/* Header */}
       <Card className="glass-panel rounded-xl p-5">
         <div className="flex items-center gap-4">
-          <div className="w-12 h-12 rounded-xl flex items-center justify-center" style={{ backgroundColor: `${accent}12` }}>
+          <div
+            className="w-12 h-12 rounded-xl flex items-center justify-center"
+            style={{ backgroundColor: `${accent}12` }}
+          >
             <GitBranch className="w-6 h-6" style={{ color: accent }} />
           </div>
-          <div className="flex-1">
+          <div className="flex-1 min-w-0">
             <h2 className="text-base font-semibold tracking-wide">Coupling — {sphere.name}</h2>
             <p className="text-[9px] uppercase tracking-[0.12em] text-muted-foreground/40 mt-0.5">
               Inter-sphere relationships · Coupling strength · Causal mechanisms
             </p>
           </div>
+          <div className="hidden md:flex items-stretch gap-2">
+            <div className="px-3 py-2 rounded-lg border border-border/15 bg-background/30">
+              <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40">Mean Coupling</div>
+              <div className="text-sm font-mono font-semibold mt-0.5" style={{ color: accent }}>
+                {avgStrength}%
+              </div>
+            </div>
+            <div className="px-3 py-2 rounded-lg border border-border/15 bg-background/30">
+              <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40">Strongest Link</div>
+              <div
+                className="text-sm font-mono font-semibold mt-0.5"
+                style={{ color: SPHERE_COLORS[strongest.target] }}
+              >
+                {strongestTarget?.name}
+              </div>
+            </div>
+          </div>
         </div>
       </Card>
 
-      {/* Relationship Diagram */}
+      {/* Network diagram */}
       <Card className="glass-panel rounded-xl p-5">
-        <h3 className="text-sm font-semibold mb-4">Coupling Network</h3>
-        <div className="relative aspect-[2/1] min-h-[220px]">
-          <svg viewBox="0 0 500 250" className="w-full h-full" preserveAspectRatio="xMidYMid meet">
+        <div className="flex items-center justify-between mb-4">
+          <h3 className="text-sm font-semibold">Coupling Network</h3>
+          <div className="flex items-center gap-3 text-[9px] uppercase tracking-[0.14em] text-muted-foreground/50">
+            <span className="flex items-center gap-1.5">
+              <ArrowLeftRight className="w-3 h-3" /> Bidirectional
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ArrowUpRight className="w-3 h-3" /> Outflow
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ArrowDownLeft className="w-3 h-3" /> Inflow
+            </span>
+          </div>
+        </div>
+
+        <div className="relative aspect-square w-full max-w-[560px] mx-auto">
+          <svg viewBox="0 0 500 500" className="w-full h-full">
+            <defs>
+              <radialGradient id="centerGlow" cx="50%" cy="50%" r="50%">
+                <stop offset="0%" stopColor={accent} stopOpacity="0.35" />
+                <stop offset="60%" stopColor={accent} stopOpacity="0.08" />
+                <stop offset="100%" stopColor={accent} stopOpacity="0" />
+              </radialGradient>
+              <filter id="softGlow">
+                <feGaussianBlur stdDeviation="2.5" />
+              </filter>
+            </defs>
+
+            {/* Concentric coupling rings */}
+            {[0.33, 0.66, 1].map((f, i) => (
+              <circle
+                key={i}
+                cx={CX}
+                cy={CY}
+                r={R * f}
+                fill="none"
+                stroke="hsla(0,0%,100%,0.05)"
+                strokeWidth="0.5"
+                strokeDasharray="2 4"
+              />
+            ))}
+
+            {/* Center halo */}
+            <circle cx={CX} cy={CY} r={90} fill="url(#centerGlow)" />
+
+            {/* Edges */}
+            {positions.map(({ link, x, y }) => {
+              const color = SPHERE_COLORS[link.target];
+              const isHover = hovered === link.target;
+              const isDim = hovered && !isHover;
+              const baseOpacity = 0.25 + link.strength * 0.55;
+              const opacity = isHover ? 1 : isDim ? 0.1 : baseOpacity;
+              const strokeW = 0.8 + link.strength * 2.2;
+              const dashSpeed =
+                link.direction === "incoming" ? tick * 0.6 : link.direction === "outgoing" ? -tick * 0.6 : 0;
+              const midX = (CX + x) / 2;
+              const midY = (CY + y) / 2;
+
+              return (
+                <g key={link.target}>
+                  <line
+                    x1={CX}
+                    y1={CY}
+                    x2={x}
+                    y2={y}
+                    stroke={color}
+                    strokeWidth={strokeW + 1.5}
+                    opacity={isHover ? 0.25 : 0}
+                    filter="url(#softGlow)"
+                  />
+                  <line
+                    x1={CX}
+                    y1={CY}
+                    x2={x}
+                    y2={y}
+                    stroke={color}
+                    strokeWidth={strokeW}
+                    opacity={opacity}
+                    strokeDasharray={link.direction === "bidirectional" ? "0" : "5 4"}
+                    strokeDashoffset={dashSpeed}
+                    strokeLinecap="round"
+                  />
+                  {/* Strength chip on edge */}
+                  <g opacity={isDim ? 0.3 : 1}>
+                    <rect
+                      x={midX - 14}
+                      y={midY - 8}
+                      width={28}
+                      height={14}
+                      rx={7}
+                      fill="hsla(240,25%,7%,0.85)"
+                      stroke={color}
+                      strokeOpacity={0.45}
+                      strokeWidth={0.6}
+                    />
+                    <text
+                      x={midX}
+                      y={midY + 2}
+                      textAnchor="middle"
+                      fill={color}
+                      fontSize="8"
+                      fontFamily="ui-monospace, monospace"
+                      fontWeight="600"
+                    >
+                      {Math.round(link.strength * 100)}
+                    </text>
+                  </g>
+                </g>
+              );
+            })}
+
             {/* Center node */}
-            <circle cx="250" cy="125" r="28" fill={`${accent}18`} stroke={accent} strokeWidth="1.5" />
-            <text x="250" y="121" textAnchor="middle" fill={accent} fontSize="8" fontWeight="600" className="uppercase">
-              {sphere.name.length > 10 ? sphere.name.slice(0, 9) + "…" : sphere.name}
+            <circle cx={CX} cy={CY} r={42} fill="hsla(240,30%,8%,0.95)" stroke={accent} strokeWidth="1.5" />
+            <circle
+              cx={CX}
+              cy={CY}
+              r={42}
+              fill="none"
+              stroke={accent}
+              strokeWidth="1"
+              opacity={0.3 + Math.sin(tick * 0.05) * 0.2}
+              filter="url(#softGlow)"
+            />
+            <text
+              x={CX}
+              y={CY - 2}
+              textAnchor="middle"
+              fill={accent}
+              fontSize="10"
+              fontWeight="700"
+              letterSpacing="1"
+            >
+              {sphere.name.toUpperCase()}
             </text>
-            <text x="250" y="133" textAnchor="middle" fill="hsla(0,0%,100%,0.3)" fontSize="6">
+            <text
+              x={CX}
+              y={CY + 11}
+              textAnchor="middle"
+              fill="hsla(0,0%,100%,0.35)"
+              fontSize="6.5"
+              letterSpacing="2"
+            >
               CENTER
             </text>
 
-            {/* Connected nodes in arc */}
-            {connectedSpheres.map((targetId, i) => {
-              const link = sorted[i];
-              const angle = -Math.PI / 2 + ((i + 0.5) / connectedSpheres.length) * Math.PI;
-              const radiusX = 180;
-              const radiusY = 90;
-              const x = 250 + Math.cos(angle) * radiusX;
-              const y = 125 + Math.sin(angle) * radiusY;
-              const color = SPHERE_COLORS[targetId] || "#888";
-              const opacity = 0.3 + link.strength * 0.7;
-              const strokeW = 0.5 + link.strength * 2;
-              const targetSphere = SPHERE_ARRAY.find(s => s.id === targetId);
-
-              // Animated dash offset
-              const dashOffset = link.direction === "incoming" ? tick * 3 : -(tick * 3);
+            {/* Target nodes */}
+            {positions.map(({ link, x, y }) => {
+              const color = SPHERE_COLORS[link.target];
+              const target = SPHERE_ARRAY.find((s) => s.id === link.target);
+              const isHover = hovered === link.target;
+              const isDim = hovered && !isHover;
+              const r = 26 + link.strength * 6;
 
               return (
-                <g key={targetId}>
-                  {/* Connection line */}
-                  <line
-                    x1={250} y1={125} x2={x} y2={y}
-                    stroke={color}
-                    strokeWidth={strokeW}
-                    opacity={opacity * 0.5}
-                    strokeDasharray="4 3"
-                    strokeDashoffset={dashOffset}
-                  />
-                  {/* Strength label on line */}
+                <g
+                  key={link.target}
+                  style={{ cursor: "pointer", transition: "opacity 200ms" }}
+                  opacity={isDim ? 0.35 : 1}
+                  onMouseEnter={() => setHovered(link.target)}
+                  onMouseLeave={() => setHovered(null)}
+                >
+                  {isHover && (
+                    <circle cx={x} cy={y} r={r + 8} fill={color} opacity={0.18} filter="url(#softGlow)" />
+                  )}
+                  <circle cx={x} cy={y} r={r} fill="hsla(240,30%,8%,0.92)" stroke={color} strokeWidth="1.2" />
+                  <text x={x} y={y - 1} textAnchor="middle" fill={color} fontSize="9" fontWeight="600">
+                    {target?.name}
+                  </text>
                   <text
-                    x={(250 + x) / 2 + (i % 2 === 0 ? 8 : -8)}
-                    y={(125 + y) / 2 + (i % 2 === 0 ? -4 : 8)}
+                    x={x}
+                    y={y + 11}
                     textAnchor="middle"
-                    fill="hsla(0,0%,100%,0.25)"
+                    fill="hsla(0,0%,100%,0.35)"
                     fontSize="7"
-                    fontFamily="monospace"
+                    fontFamily="ui-monospace, monospace"
                   >
-                    {(link.strength * 100).toFixed(0)}%
-                  </text>
-                  {/* Target node */}
-                  <circle cx={x} cy={y} r="20" fill={`${color}15`} stroke={color} strokeWidth="1" opacity={0.8} />
-                  <text x={x} y={y - 2} textAnchor="middle" fill={color} fontSize="7" fontWeight="500">
-                    {targetSphere?.name.length! > 9 ? targetSphere?.name.slice(0, 8) + "…" : targetSphere?.name}
-                  </text>
-                  <text x={x} y={y + 8} textAnchor="middle" fill="hsla(0,0%,100%,0.2)" fontSize="5">
-                    {link.direction === "bidirectional" ? "⇄" : link.direction === "outgoing" ? "→" : "←"}
+                    {Math.round(link.strength * 100)}%
                   </text>
                 </g>
               );
@@ -184,35 +355,69 @@ export function CouplingPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Coupling Details */}
-      <div className="space-y-3">
+      {/* Coupling list — refined */}
+      <div className="space-y-2">
         {sorted.map((link) => {
           const color = SPHERE_COLORS[link.target];
-          const targetSphere = SPHERE_ARRAY.find(s => s.id === link.target);
-          const strengthPct = Math.round(link.strength * 100);
+          const target = SPHERE_ARRAY.find((s) => s.id === link.target);
+          const pct = Math.round(link.strength * 100);
+          const isHover = hovered === link.target;
 
           return (
-            <Card key={link.target} className="glass-panel rounded-xl p-4">
-              <div className="flex items-start gap-3">
-                <div className="w-10 h-10 rounded-lg flex items-center justify-center shrink-0" style={{ backgroundColor: `${color}12` }}>
-                  <span className="text-sm font-mono font-bold" style={{ color }}>{strengthPct}</span>
-                </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-xs font-semibold text-foreground/80">{sphere.name}</span>
-                    <span className="text-[9px] font-mono text-muted-foreground/30">
-                      {link.direction === "bidirectional" ? "⇄" : link.direction === "outgoing" ? "→" : "←"}
-                    </span>
-                    <span className="text-xs font-semibold" style={{ color }}>{targetSphere?.name}</span>
-                  </div>
-                  <p className="text-[11px] text-muted-foreground/50 leading-relaxed">{link.mechanism}</p>
-                  {/* Strength bar */}
-                  <div className="mt-2 h-1 rounded-full bg-muted/10 overflow-hidden">
-                    <div
-                      className="h-full rounded-full transition-all duration-1000"
-                      style={{ width: `${strengthPct}%`, backgroundColor: color }}
+            <Card
+              key={link.target}
+              className="glass-panel rounded-xl p-4 transition-all duration-200 cursor-pointer"
+              style={{
+                borderColor: isHover ? `${color}55` : undefined,
+                boxShadow: isHover ? `0 0 0 1px ${color}33, 0 8px 24px ${color}15` : undefined,
+              }}
+              onMouseEnter={() => setHovered(link.target)}
+              onMouseLeave={() => setHovered(null)}
+            >
+              <div className="flex items-center gap-4">
+                {/* Strength dial */}
+                <div className="relative w-14 h-14 shrink-0">
+                  <svg viewBox="0 0 56 56" className="w-full h-full -rotate-90">
+                    <circle cx="28" cy="28" r="22" fill="none" stroke="hsla(0,0%,100%,0.06)" strokeWidth="3" />
+                    <circle
+                      cx="28"
+                      cy="28"
+                      r="22"
+                      fill="none"
+                      stroke={color}
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      strokeDasharray={2 * Math.PI * 22}
+                      strokeDashoffset={2 * Math.PI * 22 * (1 - link.strength)}
+                      style={{ transition: "stroke-dashoffset 600ms" }}
                     />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-[11px] font-mono font-bold" style={{ color }}>
+                      {pct}
+                    </span>
                   </div>
+                </div>
+
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center gap-2 mb-1 flex-wrap">
+                    <span className="text-xs font-semibold text-foreground/80">{sphere.name}</span>
+                    <DirIcon d={link.direction} className="w-3 h-3 text-muted-foreground/50" />
+                    <span className="text-xs font-semibold" style={{ color }}>
+                      {target?.name}
+                    </span>
+                    <span
+                      className="ml-auto text-[8px] uppercase tracking-[0.14em] px-1.5 py-0.5 rounded border"
+                      style={{
+                        color: `${color}cc`,
+                        borderColor: `${color}33`,
+                        background: `${color}10`,
+                      }}
+                    >
+                      {DIR_LABEL[link.direction]}
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-muted-foreground/55 leading-relaxed">{link.mechanism}</p>
                 </div>
               </div>
             </Card>
