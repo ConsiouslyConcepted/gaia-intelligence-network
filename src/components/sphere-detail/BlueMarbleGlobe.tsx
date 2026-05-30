@@ -220,11 +220,11 @@ function BasinMarkers({
               }}
             >
               <sphereGeometry args={[isSel ? 0.06 : 0.04, 16, 16]} />
-              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 1 : 0.85} />
+              <meshBasicMaterial color={isSel ? "#e8f1f7" : "#b8cdd9"} transparent opacity={isSel ? 1 : 0.8} />
             </mesh>
             <mesh>
               <sphereGeometry args={[isSel ? 0.11 : 0.08, 16, 16]} />
-              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 0.28 : 0.14} />
+              <meshBasicMaterial color={isSel ? "#cfe0ec" : "#8fa9b8"} transparent opacity={isSel ? 0.3 : 0.15} />
             </mesh>
           </group>
         );
@@ -236,50 +236,31 @@ function BasinMarkers({
 // ─── Basin highlight (lights up the actual ocean shape) ───
 
 function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
-  const innerRef = useRef<THREE.Mesh>(null);
-  const outerRef = useRef<THREE.Mesh>(null);
-  const innerMat = useRef<THREE.MeshBasicMaterial>(null);
-  const outerMat = useRef<THREE.MeshBasicMaterial>(null);
+  const meshRef = useRef<THREE.Mesh>(null);
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
 
   const { texture } = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
   useEffect(() => () => { texture.dispose(); }, [texture]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    if (innerRef.current) innerRef.current.rotation.y = t * 0.08;
-    if (outerRef.current) outerRef.current.rotation.y = t * 0.08;
-    const pulse = 0.78 + Math.sin(t * 1.3) * 0.18;
-    if (innerMat.current) innerMat.current.opacity = pulse;
-    if (outerMat.current) outerMat.current.opacity = pulse * 0.55;
+    if (meshRef.current) meshRef.current.rotation.y = t * 0.08;
+    // Very subtle breathing so it feels alive but natural
+    if (matRef.current) matRef.current.opacity = 0.62 + Math.sin(t * 0.8) * 0.05;
   });
 
   return (
-    <group>
-      {/* Inner sheet — sits tight on the surface, bright */}
-      <mesh ref={innerRef}>
-        <sphereGeometry args={[1.812, 128, 128]} />
-        <meshBasicMaterial
-          ref={innerMat}
-          map={texture}
-          transparent
-          opacity={1}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-      {/* Outer halo — slightly larger, softer additive bloom */}
-      <mesh ref={outerRef}>
-        <sphereGeometry args={[1.84, 128, 128]} />
-        <meshBasicMaterial
-          ref={outerMat}
-          map={texture}
-          transparent
-          opacity={0.5}
-          blending={THREE.AdditiveBlending}
-          depthWrite={false}
-        />
-      </mesh>
-    </group>
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[1.808, 128, 128]} />
+      <meshBasicMaterial
+        ref={matRef}
+        map={texture}
+        transparent
+        opacity={0.65}
+        blending={THREE.NormalBlending}
+        depthWrite={false}
+      />
+    </mesh>
   );
 }
 
