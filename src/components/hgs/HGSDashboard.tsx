@@ -274,7 +274,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
               <div className="px-3 pt-2.5 pb-1.5 border-b border-border/15">
-                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Sounds of the Planets</h2>
+                <h2 className="text-[10px] font-bold tracking-[0.15em] uppercase text-foreground/85 mb-0.5">Planetary Tones</h2>
                 <p className="text-[9px] text-muted-foreground/50 leading-snug">
                   Tap any planet to hear its orbital tone — frequencies derived from Keplerian ratios.
                 </p>
