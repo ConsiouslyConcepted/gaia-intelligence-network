@@ -117,8 +117,8 @@ const Index = () => {
           style={{
             background:
               "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
-            border: "1px solid hsla(210,40%,82%,0.65)",
-            boxShadow: "0 12px 40px rgba(0,0,0,0.55)",
+            border: "1px solid hsla(205,85%,70%,0.85)",
+            boxShadow: "0 0 0 0.5px hsla(205,90%,80%,0.5), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
 
