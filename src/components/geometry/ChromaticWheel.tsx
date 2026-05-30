@@ -1,11 +1,21 @@
 import { useMemo, useState } from "react";
 import { INTERVALS, NOTE_NAMES, type Interval } from "@/lib/geometry/musicGeometry";
+import { PLANET_NOTES, NOTE_INDEX } from "@/lib/geometry/planetNoteMap";
 
 interface Props {
   interval: Interval;
   size?: number;
   onSelectInterval?: (id: string) => void;
+  onPlanetClick?: (id: string) => void;
+  onPlanetContext?: (id: string) => void;
+  highlightedPlanet?: string | null;
 }
+
+const PLANET_GLYPHS: Record<string, string> = {
+  mercury: "☿", venus: "♀", earth: "⊕", mars: "♂",
+  jupiter: "♃", saturn: "♄", uranus: "♅", neptune: "♆", pluto: "♇",
+};
+
 
 /** Distinct hue per interval — echoes the "Geometry of Music" reference. */
 const INTERVAL_COLORS: Record<string, string> = {
