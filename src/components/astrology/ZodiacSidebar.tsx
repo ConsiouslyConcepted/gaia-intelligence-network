@@ -34,8 +34,8 @@ export function ZodiacSidebar({ positions, selectedSign, onSelect }: Props) {
               onClick={() => onSelect(isActive ? null : s.id)}
               className="w-full text-left rounded-lg transition-all duration-200 cursor-pointer flex items-center gap-2.5 px-2 py-1.5"
               style={{
-                background: isActive ? "hsla(40, 60%, 60%, 0.10)" : "transparent",
-                border: `1px solid ${isActive ? "hsla(40, 60%, 65%, 0.35)" : "transparent"}`,
+                background: isActive ? "hsla(220, 15%, 75%, 0.10)" : "transparent",
+                border: `1px solid ${isActive ? "hsla(220, 15%, 75%, 0.30)" : "transparent"}`,
               }}
             >
               <span
@@ -43,7 +43,7 @@ export function ZodiacSidebar({ positions, selectedSign, onSelect }: Props) {
                 style={{
                   color: s.tint,
                   background: "hsla(228, 40%, 8%, 0.7)",
-                  border: "1px solid hsla(40, 30%, 60%, 0.18)",
+                  border: "1px solid hsla(220, 12%, 70%, 0.18)",
                   fontFamily: '"Times New Roman", "DejaVu Serif", "Noto Serif", serif',
                   fontVariantEmoji: "text",
                 } as React.CSSProperties}
