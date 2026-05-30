@@ -197,12 +197,18 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Visualization: Helio activity map for heliosphere, Blue Marble for Earth spheres */}
+      {/* Visualization: zone maps for Helio/Techno, Blue Marble for Earth spheres */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        {hasZones ? (
+        {isHelio ? (
           <HelioActivityMap
             height={340}
             selectedId={selectedId as HelioZoneId}
+            onSelect={(id) => setSelectedId(id)}
+          />
+        ) : isTechno ? (
+          <TechnoInfrastructureMap
+            height={340}
+            selectedId={selectedId as TechnoZoneId}
             onSelect={(id) => setSelectedId(id)}
           />
         ) : (
@@ -219,10 +225,13 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         )}
         {(hasRegions || hasZones) && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
-            {hasZones ? "Click an activity zone · or select below" : `Click an ${regionLabel} on the globe · or select below`}
+            {isTechno ? "Click an infrastructure layer · or select below"
+              : isHelio ? "Click an activity zone · or select below"
+              : `Click an ${regionLabel} on the globe · or select below`}
           </p>
         )}
       </Card>
+
 
       {/* Region / zone selector chips */}
       {(hasRegions || hasZones) && (
