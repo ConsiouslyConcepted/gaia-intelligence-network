@@ -87,8 +87,19 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const [selectedSign, setSelectedSign] = useState<string | null>(null);
   const [astroSelected, setAstroSelected] = useState<string | null>(null);
   const [now, setNow] = useState<Date>(new Date());
+  const [selectedIntervalId, setSelectedIntervalId] = useState<string>("p5");
+  const [selectedPairId, setSelectedPairId] = useState<string>("jup-mars");
 
-  // Recompute live transits every 10 minutes
+  const selectedInterval = useMemo(
+    () => INTERVALS.find((i) => i.id === selectedIntervalId) ?? INTERVALS[1],
+    [selectedIntervalId],
+  );
+  const selectedPair = useMemo(
+    () =>
+      [...MIRROR_PAIRS, ...ADJACENT_PAIRS].find((p) => p.id === selectedPairId) ??
+      MIRROR_PAIRS[0],
+    [selectedPairId],
+  );
   useEffect(() => {
     if (mode !== "transits") return;
     const t = setInterval(() => setNow(new Date()), 10 * 60 * 1000);
