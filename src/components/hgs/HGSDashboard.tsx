@@ -11,8 +11,13 @@ import { AstrologyChart } from "@/components/astrology/AstrologyChart";
 import { ZodiacSidebar } from "@/components/astrology/ZodiacSidebar";
 import { TransitsPanel } from "@/components/astrology/TransitsPanel";
 import { computeAspects, computePositions } from "@/lib/astrology/ephemeris";
+import { ChromaticWheel } from "@/components/geometry/ChromaticWheel";
+import { PairOrbitDiagram } from "@/components/geometry/PairOrbitDiagram";
+import { IntervalsSidebar } from "@/components/geometry/IntervalsSidebar";
+import { PairsPanel } from "@/components/geometry/PairsPanel";
+import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
-type UniverseMode = "harmonics" | "transits";
+type UniverseMode = "harmonics" | "transits" | "geometry";
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
@@ -82,8 +87,19 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const [selectedSign, setSelectedSign] = useState<string | null>(null);
   const [astroSelected, setAstroSelected] = useState<string | null>(null);
   const [now, setNow] = useState<Date>(new Date());
+  const [selectedIntervalId, setSelectedIntervalId] = useState<string>("p5");
+  const [selectedPairId, setSelectedPairId] = useState<string>("jup-mars");
 
-  // Recompute live transits every 10 minutes
+  const selectedInterval = useMemo(
+    () => INTERVALS.find((i) => i.id === selectedIntervalId) ?? INTERVALS[1],
+    [selectedIntervalId],
+  );
+  const selectedPair = useMemo(
+    () =>
+      [...MIRROR_PAIRS, ...ADJACENT_PAIRS].find((p) => p.id === selectedPairId) ??
+      MIRROR_PAIRS[0],
+    [selectedPairId],
+  );
   useEffect(() => {
     if (mode !== "transits") return;
     const t = setInterval(() => setNow(new Date()), 10 * 60 * 1000);
@@ -118,7 +134,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
       {/* Full-screen visualization */}
-      <div className={`absolute inset-x-0 top-[92px] bottom-0 z-0 ${mode === "harmonics" ? "-translate-y-10" : "translate-y-6"}`}>
+      <div className={`absolute inset-x-0 top-[92px] bottom-0 z-0 ${mode === "harmonics" ? "-translate-y-10" : mode === "transits" ? "translate-y-6" : ""}`}>
         {mode === "harmonics" ? (
           playing ? (
             <div className="w-full h-full flex items-center justify-center px-[300px]">
@@ -157,7 +173,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => handlePlanetClick(id)}
             />
           )
-        ) : (
+        ) : mode === "transits" ? (
           <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
             <AstrologyChart
               positions={positions}
@@ -167,6 +183,15 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               onPlanetContext={() => { /* tone playback disabled */ }}
+            />
+          </div>
+        ) : (
+          <div className="w-full h-full flex flex-col items-center justify-center gap-4 pb-12 px-[300px]">
+            <ChromaticWheel interval={selectedInterval} size={340} />
+            <PairOrbitDiagram
+              pair={selectedPair}
+              size={300}
+              onPlanetContext={(id) => handleTonePlay(id)}
             />
           </div>
         )}
@@ -286,6 +311,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         >
           {[
             { id: "harmonics" as const, label: "Harmonics" },
+            { id: "geometry" as const, label: "Geometry" },
             { id: "transits" as const, label: "Astro Transits" },
           ].map(({ id, label }) => {
             const active = mode === id;
@@ -323,6 +349,15 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               positions={positions}
               selectedSign={selectedSign}
               onSelect={setSelectedSign}
+            />
+          </HudPanel>
+        </div>
+      ) : mode === "geometry" ? (
+        <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 pointer-events-none w-[250px] h-[620px]">
+          <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
+            <IntervalsSidebar
+              selected={selectedIntervalId}
+              onSelect={setSelectedIntervalId}
             />
           </HudPanel>
         </div>
@@ -420,6 +455,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               selectedPlanet={astroSelected}
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               timestamp={now}
+            />
+          ) : mode === "geometry" ? (
+            <PairsPanel
+              selectedPairId={selectedPairId}
+              onSelect={setSelectedPairId}
+              onPlanetContext={(id) => handleTonePlay(id)}
             />
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
