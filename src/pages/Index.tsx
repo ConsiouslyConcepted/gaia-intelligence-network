@@ -141,7 +141,7 @@ const Index = () => {
           className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
           style={{
             background:
-              "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+              "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
             border: "1px solid hsla(220,30%,55%,0.35)",
             boxShadow:
               "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(220,40%,50%,0.08), 0 12px 40px rgba(0,0,0,0.55)",
@@ -163,6 +163,8 @@ const Index = () => {
                 "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
             }}
           />
+          {/* Subtle bottom edge shadow */}
+          <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
 
           {/* Left: Title */}
           <div>
