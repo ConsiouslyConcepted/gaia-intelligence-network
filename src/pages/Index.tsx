@@ -7,6 +7,7 @@ import { Activity, Signal, ArrowRight, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
+import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
@@ -57,14 +58,19 @@ const Index = () => {
   const coherenceValues = [78, 82, 72, 76, 65, 88];
   const globalCoherence = Math.round(coherenceValues.reduce((a, b) => a + b, 0) / coherenceValues.length);
 
-  const liveReadouts = useMemo(() => ([
-    { label: "Ocean Heat", value: (3.2 + Math.sin(tick * 0.3) * 0.4).toFixed(1), unit: "ZJ", color: "#7ecbcb", sphere: "Biosphere", trend: Array.from({ length: 12 }, (_, i) => 0.4 + Math.sin((tick + i) * 0.3) * 0.3) },
-    { label: "Solar Flux", value: Math.round(142 + Math.sin(tick * 0.15) * 12).toString(), unit: "SFU", color: "#4466dd", sphere: "Heliosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.15) * 0.3) },
-    { label: "Grid Load", value: (28.4 + Math.cos(tick * 0.12) * 3.2).toFixed(1), unit: "TW", color: "#4488cc", sphere: "Technosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.12) * 0.3) },
-    { label: "Schumann Res", value: (7.83 + Math.sin(tick * 0.08) * 0.15).toFixed(2), unit: "Hz", color: "#d4a56a", sphere: "Crystalsphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.08) * 0.2) },
-    { label: "Global NDVI", value: (0.42 + Math.sin(tick * 0.04) * 0.06).toFixed(2), unit: "idx", color: "#4caf50", sphere: "Biosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.sin((tick + i) * 0.04) * 0.25) },
-    { label: "Collective Attention", value: (840 + Math.cos(tick * 0.06) * 80).toFixed(0), unit: "Tb/s", color: "#ab47bc", sphere: "Noosphere", trend: Array.from({ length: 12 }, (_, i) => 0.5 + Math.cos((tick + i) * 0.06) * 0.3) },
-  ]), [tick]);
+  // One featured signal per sphere — pulled live from useSphereIntelligence
+  // inside SphereSignalRow. Neutral mono styling per design system.
+  const SIGNAL_FEED: Array<{ sphereId: import("@/types/spheres").SphereId; metricKey: string; label: string }> = [
+    { sphereId: "geosphere",     metricKey: "seismic",   label: "Seismic Energy" },
+    { sphereId: "hydrosphere",   metricKey: "ohc",       label: "Ocean Heat" },
+    { sphereId: "cryosphere",    metricKey: "arctic",    label: "Arctic Sea Ice" },
+    { sphereId: "atmosphere",    metricKey: "co2",       label: "CO₂ Concentration" },
+    { sphereId: "biosphere",     metricKey: "ndvi",      label: "Global NDVI" },
+    { sphereId: "magnetosphere", metricKey: "kp",        label: "Kp Index" },
+    { sphereId: "ionosphere",    metricKey: "grid",      label: "Grid Load" },
+    { sphereId: "noosphere",     metricKey: "flow",      label: "Information Flow" },
+    { sphereId: "crystalsphere", metricKey: "lattice",   label: "Lattice Symmetry" },
+  ];
 
   if (activeView === "hgs") {
     return <HGSDashboard onSwitchView={() => setActiveView("planetary")} />;
@@ -196,19 +202,13 @@ const Index = () => {
             <span className="text-[8px] font-mono text-muted-foreground/25">Live</span>
           </div>
           <div className="space-y-2.5">
-            {liveReadouts.map((d) => (
-              <div key={d.label}>
-                <div className="flex items-baseline justify-between mb-0.5">
-                  <span className="text-[8px] uppercase tracking-[0.12em] text-foreground/80">{d.label}</span>
-                  <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: `${d.color}cc` }}>
-                    {d.value}<span className="text-[8px] text-muted-foreground/25 ml-0.5 font-normal">{d.unit}</span>
-                  </span>
-                </div>
-                <div className="flex items-center justify-between mb-1">
-                  <span className="text-[7px] tracking-[0.1em] uppercase" style={{ color: `${d.color}50` }}>{d.sphere}</span>
-                </div>
-                <MiniGraph color={d.color} data={d.trend} />
-              </div>
+            {SIGNAL_FEED.map((s) => (
+              <SphereSignalRow
+                key={s.sphereId + s.metricKey}
+                sphereId={s.sphereId}
+                metricKey={s.metricKey}
+                label={s.label}
+              />
             ))}
           </div>
         </HudPanel>
