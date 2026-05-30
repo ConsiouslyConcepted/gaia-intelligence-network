@@ -30,7 +30,7 @@ export const GeometryGuide = ({ interval, selectedPlanet }: Props) => {
 
   return (
     <div
-      className="relative w-full max-w-[480px] rounded-xl backdrop-blur-xl"
+      className="relative w-full max-w-full rounded-xl backdrop-blur-xl"
       style={{
         background:
           "linear-gradient(145deg, hsla(220,30%,16%,0.85) 0%, hsla(225,35%,10%,0.85) 100%)",
