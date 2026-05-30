@@ -34,10 +34,10 @@ export const OrbitToToneBridge = ({ selectedPlanet, interval }: Props) => {
 
   const panelStyle = {
     background:
-      "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-    border: "1px solid hsla(220,30%,55%,0.35)",
+      "linear-gradient(145deg, hsla(220,30%,16%,0.85) 0%, hsla(225,35%,10%,0.85) 100%)",
+    border: "1px solid hsla(220,40%,65%,0.55)",
     boxShadow:
-      "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(210,75%,62%,0.18), 0 8px 28px rgba(0,0,0,0.45)",
+      "inset 0 1px 0 hsla(0,0%,100%,0.15), 0 0 0 1px hsla(220,30%,30%,0.35), 0 0 32px hsla(210,75%,62%,0.22), 0 8px 28px rgba(0,0,0,0.5)",
   } as const;
 
   if (!planet) {
