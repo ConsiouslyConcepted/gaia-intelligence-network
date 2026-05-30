@@ -290,8 +290,11 @@ export const BlueMarbleGlobe = ({
   basins,
   selectedBasinId,
   onSelectBasin,
+  selectedBasinColor,
 }: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
+  const showBasinHighlight =
+    selectedBasinId && selectedBasinId !== "global" && selectedBasinColor;
 
   return (
     <div style={{ height }} className="w-full rounded-xl overflow-hidden">
