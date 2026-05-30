@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2 } from "lucide-react";
+import { Volume2, Music2, Orbit } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
