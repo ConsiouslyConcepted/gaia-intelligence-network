@@ -125,7 +125,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             <div
               className="flex gap-1.5 rounded-2xl p-1.5"
               style={{
-                background: "hsla(228,40%,5%,0.4)",
+                background: "hsla(228,40%,5%,0.4)", border: "1px solid hsla(220,30%,55%,0.35)", boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.05), inset 0 -1px 0 rgba(0,0,0,0.4)",
               }}
             >
               <button
