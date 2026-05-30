@@ -300,14 +300,14 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                       }}
                     >
                       <div
-                        className="w-7 h-7 rounded-full flex-shrink-0 flex items-center justify-center"
+                        className="w-9 h-9 rounded-full flex-shrink-0 flex items-center justify-center"
                         style={{
                           background: `radial-gradient(circle at 30% 30%, ${p.color}cc, ${p.color}33)`,
                           boxShadow: isPlaying ? `0 0 12px ${p.color}aa` : `0 0 6px ${p.color}55`,
                         }}
                       >
                         <Volume2
-                          className={`w-3 h-3 ${isPlaying ? "animate-pulse" : ""}`}
+                          className={`w-4 h-4 ${isPlaying ? "animate-pulse" : ""}`}
                           style={{ color: isPlaying ? "#fff" : "hsla(0,0%,100%,0.6)" }}
                         />
                       </div>
