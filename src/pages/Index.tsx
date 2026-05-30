@@ -232,15 +232,55 @@ const Index = () => {
           </div>
         </HudPanel>
       </div>
-      {/* Corner brackets */}
+      {/* Corner brackets — sharper, longer */}
       {[
-        "top-3 left-3 border-l border-t rounded-tl",
-        "top-3 right-3 border-r border-t rounded-tr",
-        "bottom-3 left-3 border-l border-b rounded-bl",
-        "bottom-3 right-3 border-r border-b rounded-br",
+        "top-3 left-3 border-l border-t",
+        "top-3 right-3 border-r border-t",
+        "bottom-3 left-3 border-l border-b",
+        "bottom-3 right-3 border-r border-b",
       ].map((pos) => (
-        <div key={pos} className={`absolute ${pos} w-5 h-5 border-border/15 z-10 pointer-events-none`} />
+        <div key={pos} className={`absolute ${pos} w-8 h-8 border-foreground/20 z-10 pointer-events-none`} />
       ))}
+
+      {/* ─── BOTTOM TELEMETRY CHROME ─── */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+        <div
+          className="flex items-center gap-6 px-5 py-2 rounded-full backdrop-blur-2xl"
+          style={{
+            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,28%,7%,0.92) 100%)",
+            border: "1px solid hsla(0,0%,100%,0.07)",
+            boxShadow:
+              "inset 0 1px 0 hsla(0,0%,100%,0.10), 0 10px 28px rgba(0,0,0,0.65), 0 0 36px hsla(190,60%,50%,0.05)",
+          }}
+        >
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">UTC</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
+              {time.toISOString().slice(11, 19)}
+            </span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Coherence</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
+              {globalCoherence.toString().padStart(2, "0")}.{(tick % 100).toString().padStart(2, "0")}
+            </span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Orbital V</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">29.78 km/s</span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex w-1.5 h-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/60 animate-ping" />
+              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-emerald-400/90" />
+            </span>
+            <span className="text-[9px] tracking-[0.28em] uppercase text-foreground/70 font-semibold">Nominal</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
