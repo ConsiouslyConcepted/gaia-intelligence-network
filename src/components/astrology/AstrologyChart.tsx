@@ -134,18 +134,21 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             />
             {/* divider */}
             <line x1={div.x} y1={div.y} x2={divIn.x} y2={divIn.y} stroke="hsla(40, 30%, 70%, 0.25)" strokeWidth="0.6" />
-            {/* sign glyph */}
+            {/* sign glyph (force text presentation, not emoji) */}
             <text
               x={labelPos.x}
               y={labelPos.y}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize="22"
-              fill={isActive ? "hsla(40, 80%, 85%, 0.95)" : "hsla(40, 55%, 78%, 0.85)"}
-              style={{ fontFamily: "serif" }}
+              fontSize="28"
+              fill={isActive ? "hsla(40, 85%, 82%, 0.98)" : "hsla(40, 60%, 78%, 0.88)"}
+              style={{
+                fontFamily: '"Times New Roman", "DejaVu Serif", "Noto Serif", serif',
+                fontVariantEmoji: "text",
+              } as React.CSSProperties}
               className="select-none pointer-events-none"
             >
-              {sign.glyph}
+              {`${sign.glyph}\uFE0E`}
             </text>
 
             {/* constellation dots */}
@@ -166,15 +169,16 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               ))}
             </g>
 
-            {/* constellation name (curved-ish, simple tangent rotation) */}
+            {/* constellation name */}
             <text
               x={constLabel.x}
               y={constLabel.y}
               textAnchor="middle"
               dominantBaseline="central"
-              fontSize="9"
-              letterSpacing="0.15em"
-              fill={isActive ? "hsla(40, 70%, 80%, 0.9)" : "hsla(40, 40%, 70%, 0.55)"}
+              fontSize="13"
+              letterSpacing="0.22em"
+              fontWeight={500}
+              fill={isActive ? "hsla(40, 80%, 85%, 0.98)" : "hsla(40, 55%, 78%, 0.85)"}
               transform={`rotate(${mid} ${constLabel.x} ${constLabel.y})`}
               className="uppercase select-none pointer-events-none"
               style={{ fontFamily: "ui-sans-serif, system-ui" }}
