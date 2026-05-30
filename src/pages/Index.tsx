@@ -179,7 +179,7 @@ const Index = () => {
 
           {/* Right: View toggle + Commons icon */}
           <div className="flex items-center gap-3">
-            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
+            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "transparent", border: "none" }}>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
