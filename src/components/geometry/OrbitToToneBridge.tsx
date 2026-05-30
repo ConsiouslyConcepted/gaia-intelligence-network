@@ -112,8 +112,8 @@ export const OrbitToToneBridge = ({ selectedPlanet, interval }: Props) => {
             label={`${planet.name}-${partner.name}`}
             color1={planet.color}
             color2={partner.color}
-            ratioA={Number(interval.ratio.split(":")[0]) || 1}
-            ratioB={Number(interval.ratio.split(":")[1]) || 1}
+            ratioA={Number(interval.ratio.split("/")[0]) || 1}
+            ratioB={Number(interval.ratio.split("/")[1]) || 1}
             size={84}
           />
           <span className="text-[8px] tracking-[0.18em] uppercase text-foreground/45 mt-0.5">
