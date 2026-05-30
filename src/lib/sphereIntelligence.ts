@@ -98,6 +98,18 @@ export const SPHERE_INTEL: Record<SphereId, SphereIntelligenceSpec> = {
       { key: "snow", label: "Snow Cover", unit: "M km²", baseline: 24.6, sigma: 1.5, amplitude: 2.2, frequency: 0.04, phase: 1.5, precision: 1 },
     ],
   },
+  atmosphere: {
+    id: "atmosphere",
+    purpose: "Track gaseous envelope chemistry and weather state.",
+    scoreLabel: "Stability",
+    polarity: "stability",
+    metrics: [
+      { key: "co2", label: "CO₂ Concentration", unit: "ppm", baseline: 424, sigma: 1.4, amplitude: 1.8, frequency: 0.03, phase: 0.0, invert: true, precision: 1 },
+      { key: "ozone", label: "Ozone Column", unit: "DU", baseline: 298, sigma: 8, amplitude: 12, frequency: 0.05, phase: 1.6, precision: 0 },
+      { key: "aerosol", label: "Aerosol Optical Depth", unit: "AOD", baseline: 0.16, sigma: 0.03, amplitude: 0.04, frequency: 0.06, phase: 2.4, invert: true, precision: 2 },
+      { key: "tempAnom", label: "Surface Temp Anomaly", unit: "°C", baseline: 1.18, sigma: 0.08, amplitude: 0.1, frequency: 0.03, phase: 0.8, invert: true, precision: 2 },
+    ],
+  },
   biosphere: {
     id: "biosphere",
     purpose: "Track Earth's biological vitality.",
