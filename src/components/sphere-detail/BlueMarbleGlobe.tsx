@@ -34,7 +34,7 @@ const SPHERE_COLORS: Record<string, string> = {
 
 // ─── Base Earth mesh ───
 
-function GlobeMesh() {
+function GlobeMesh({ onPickLatLng }: { onPickLatLng?: (lat: number, lng: number) => void }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
 
@@ -45,7 +45,21 @@ function GlobeMesh() {
   });
 
   return (
-    <mesh ref={meshRef}>
+    <mesh
+      ref={meshRef}
+      onClick={onPickLatLng ? (e) => {
+        e.stopPropagation();
+        if (!meshRef.current) return;
+        const local = meshRef.current.worldToLocal(e.point.clone());
+        const r = local.length();
+        const lat = 90 - (Math.acos(local.y / r) * 180) / Math.PI;
+        const lng = (Math.atan2(local.z, -local.x) * 180) / Math.PI - 180;
+        const normLng = ((lng + 540) % 360) - 180;
+        onPickLatLng(lat, normLng);
+      } : undefined}
+      onPointerOver={onPickLatLng ? () => { document.body.style.cursor = "pointer"; } : undefined}
+      onPointerOut={onPickLatLng ? () => { document.body.style.cursor = "default"; } : undefined}
+    >
       <sphereGeometry args={[1.8, 64, 64]} />
       <meshPhongMaterial
         map={earthMap}
