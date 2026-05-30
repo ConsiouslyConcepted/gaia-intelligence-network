@@ -118,7 +118,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
       {/* Full-screen visualization */}
-      <div className="absolute inset-x-0 top-[92px] bottom-0 z-0 -translate-y-10">
+      <div className={`absolute inset-x-0 top-[92px] bottom-0 z-0 ${mode === "harmonics" ? "-translate-y-10" : "translate-y-6"}`}>
         {mode === "harmonics" ? (
           playing ? (
             <div className="w-full h-full flex items-center justify-center px-[300px]">
