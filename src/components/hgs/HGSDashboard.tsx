@@ -69,7 +69,13 @@ const PLANET_TONES: Record<string, { note: string; freq: string; octave: string 
 
 export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) => {
   const navigate = useNavigate();
-  const { play, playing, getFrequencyData } = usePlanetAudio();
+  const { play, stop, playing, getFrequencyData } = usePlanetAudio();
+
+  // Ensure no tone is playing when the dashboard mounts/unmounts.
+  useEffect(() => {
+    stop();
+    return () => stop();
+  }, [stop]);
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
   const [mode, setMode] = useState<UniverseMode>("harmonics");
   const [selectedSign, setSelectedSign] = useState<string | null>(null);
@@ -159,7 +165,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               selectedPlanet={astroSelected}
               onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
-              onPlanetContext={(id) => play(id)}
+              onPlanetContext={() => { /* tone playback disabled */ }}
             />
           </div>
         )}
