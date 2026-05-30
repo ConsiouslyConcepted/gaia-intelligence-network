@@ -19,14 +19,14 @@ export interface Interval {
 }
 
 export const INTERVALS: Interval[] = [
-  { id: "octave", short: "P8", name: "Octave (Diapason)", ratio: "2/1", value: 2 / 1, semitones: 12, desc: "Same note, next octave." },
-  { id: "p5", short: "P5", name: "Perfect Fifth (Diapente)", ratio: "3/2", value: 3 / 2, semitones: 7, desc: "Strongest consonance after the octave." },
-  { id: "p4", short: "P4", name: "Perfect Fourth (Diatessaron)", ratio: "4/3", value: 4 / 3, semitones: 5, desc: "Inversion of the perfect fifth." },
-  { id: "m3", short: "M3", name: "Major Third", ratio: "5/4", value: 5 / 4, semitones: 4, desc: "Bright, consonant triad interval." },
-  { id: "min3", short: "m3", name: "Minor Third", ratio: "6/5", value: 6 / 5, semitones: 3, desc: "Dark, consonant triad interval." },
-  { id: "M6", short: "M6", name: "Major Sixth", ratio: "5/3", value: 5 / 3, semitones: 9, desc: "Open, lifting consonance." },
-  { id: "m6", short: "m6", name: "Minor Sixth", ratio: "8/5", value: 8 / 5, semitones: 8, desc: "Restless consonance." },
-  { id: "M2", short: "M2", name: "Major Second · Epogdoon ★", ratio: "9/8", value: 9 / 8, semitones: 2, desc: "Pythagorean whole-tone — the fundamental ratio of the planetary scale.", fundamental: true },
+  { id: "P8",  short: "P8", name: "Octave (Diapason)", ratio: "2/1", value: 2 / 1, semitones: 12, desc: "Same note, next octave." },
+  { id: "P5",  short: "P5", name: "Perfect Fifth (Diapente)", ratio: "3/2", value: 3 / 2, semitones: 7, desc: "Strongest consonance after the octave." },
+  { id: "P4",  short: "P4", name: "Perfect Fourth (Diatessaron)", ratio: "4/3", value: 4 / 3, semitones: 5, desc: "Inversion of the perfect fifth." },
+  { id: "M3",  short: "M3", name: "Major Third", ratio: "5/4", value: 5 / 4, semitones: 4, desc: "Bright, consonant triad interval." },
+  { id: "m3",  short: "m3", name: "Minor Third", ratio: "6/5", value: 6 / 5, semitones: 3, desc: "Dark, consonant triad interval." },
+  { id: "M6",  short: "M6", name: "Major Sixth", ratio: "5/3", value: 5 / 3, semitones: 9, desc: "Open, lifting consonance." },
+  { id: "m6",  short: "m6", name: "Minor Sixth", ratio: "8/5", value: 8 / 5, semitones: 8, desc: "Restless consonance." },
+  { id: "M2",  short: "M2", name: "Major Second · Epogdoon ★", ratio: "9/8", value: 9 / 8, semitones: 2, desc: "Pythagorean whole-tone — the fundamental ratio of the planetary scale.", fundamental: true },
 ];
 
 export interface PlanetRef {
