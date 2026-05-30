@@ -87,7 +87,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const [selectedSign, setSelectedSign] = useState<string | null>(null);
   const [astroSelected, setAstroSelected] = useState<string | null>(null);
   const [now, setNow] = useState<Date>(new Date());
-  const [selectedIntervalId, setSelectedIntervalId] = useState<string>("p5");
+  const [selectedIntervalId, setSelectedIntervalId] = useState<string>("P5");
   const [selectedPairId, setSelectedPairId] = useState<string>("jup-mars");
 
   const selectedInterval = useMemo(
