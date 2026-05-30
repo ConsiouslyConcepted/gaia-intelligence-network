@@ -142,34 +142,36 @@ export function CouplingPanel({ sphere, accent }: Props) {
   const navigate = useNavigate();
   const couplings = useSphereCouplings(sphere.id);
   const [hovered, setHovered] = useState<SphereId | null>(null);
-  const [pulse, setPulse] = useState(0);
-
-  useEffect(() => {
-    const iv = setInterval(() => setPulse((p) => p + 1), 80);
-    return () => clearInterval(iv);
-  }, []);
 
   const meanStrength = useMemo(
     () => (couplings.length ? Math.round((couplings.reduce((s, c) => s + c.strength, 0) / couplings.length) * 100) : 0),
     [couplings]
   );
-  const strongest = couplings[0];
+  const strongest = useMemo(() => [...couplings].sort((a, b) => b.strength - a.strength)[0], [couplings]);
   const strongestTarget = strongest ? SPHERE_ARRAY.find((s) => s.id === strongest.target) : null;
   const leading = useMemo(() => couplings.filter((c) => c.direction === "outgoing").length, [couplings]);
   const following = useMemo(() => couplings.filter((c) => c.direction === "incoming").length, [couplings]);
 
   const hoveredLink = couplings.find((c) => c.target === hovered) ?? null;
 
-  // Radial layout
+  // FIXED radial layout — canonical sphere order, nodes never swap positions.
   const CX = 250, CY = 250, R = 175;
+  const orderedTargets = useMemo(
+    () => SPHERE_ARRAY.map((s) => s.id).filter((id) => id !== sphere.id),
+    [sphere.id]
+  );
   const positions = useMemo(
     () =>
-      couplings.map((link, i) => {
-        const angle = -Math.PI / 2 + (i / Math.max(1, couplings.length)) * Math.PI * 2;
-        return { link, x: CX + Math.cos(angle) * R, y: CY + Math.sin(angle) * R, angle };
+      orderedTargets.map((targetId, i) => {
+        const angle = -Math.PI / 2 + (i / Math.max(1, orderedTargets.length)) * Math.PI * 2;
+        const link = couplings.find((c) => c.target === targetId);
+        return { targetId, link, x: CX + Math.cos(angle) * R, y: CY + Math.sin(angle) * R, angle };
       }),
-    [couplings]
+    [orderedTargets, couplings]
   );
+
+  // Sort list view by strength (list reorders; network stays still).
+  const sortedList = useMemo(() => [...couplings].sort((a, b) => b.strength - a.strength), [couplings]);
 
   return (
     <div className="space-y-4 animate-fade-in">
