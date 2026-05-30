@@ -15,6 +15,7 @@ import { ChromaticWheel } from "@/components/geometry/ChromaticWheel";
 import { PairOrbitDiagram } from "@/components/geometry/PairOrbitDiagram";
 import { IntervalsSidebar } from "@/components/geometry/IntervalsSidebar";
 import { PairsPanel } from "@/components/geometry/PairsPanel";
+import { PlanetNoteLegend } from "@/components/geometry/PlanetNoteLegend";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
 type UniverseMode = "harmonics" | "transits" | "geometry";
