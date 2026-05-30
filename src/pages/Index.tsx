@@ -17,7 +17,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
         "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
       border: "1px solid hsla(220,30%,55%,0.35)",
       boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(210,70%,60%,0.18), 0 0 48px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
+        "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
     {/* Bright top rim light */}
