@@ -78,20 +78,39 @@ const Index = () => {
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
+      {/* Aurora / nebula glow behind globe */}
+      <div className="absolute inset-0 z-0 pointer-events-none" style={{
+        background:
+          "radial-gradient(ellipse 65% 55% at 50% 58%, hsla(200,80%,40%,0.12) 0%, hsla(260,55%,30%,0.06) 42%, transparent 78%)",
+      }} />
+
       {/* Full-screen globe */}
-      <div className="absolute inset-0 z-0 translate-y-[8%]">
+      <div className="absolute inset-0 z-[1] translate-y-[8%]">
         <EarthVisualization />
       </div>
 
+      {/* Volumetric halo around the planet */}
+      <div className="absolute inset-0 z-[2] pointer-events-none mix-blend-screen" style={{
+        background:
+          "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
+      }} />
+
       {/* Vignette overlay */}
-      <div className="absolute inset-0 z-[1] pointer-events-none" style={{
-        background: "radial-gradient(ellipse at center, transparent 30%, hsla(240,30%,3%,0.6) 80%, hsla(240,30%,3%,0.9) 100%)"
+      <div className="absolute inset-0 z-[3] pointer-events-none" style={{
+        background:
+          "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
       }} />
 
       {/* Scanline overlay */}
-      <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.02]"
+      <div className="absolute inset-0 z-[4] pointer-events-none opacity-[0.025]"
         style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.08) 2px, hsl(var(--foreground) / 0.08) 4px)" }}
       />
+
+      {/* Film grain */}
+      <div className="absolute inset-0 z-[4] pointer-events-none opacity-[0.05] mix-blend-overlay"
+        style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.75'/></svg>\")" }}
+      />
+
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
