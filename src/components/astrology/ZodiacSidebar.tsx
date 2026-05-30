@@ -44,10 +44,11 @@ export function ZodiacSidebar({ positions, selectedSign, onSelect }: Props) {
                   color: s.tint,
                   background: "hsla(228, 40%, 8%, 0.7)",
                   border: "1px solid hsla(40, 30%, 60%, 0.18)",
-                  fontFamily: "serif",
-                }}
+                  fontFamily: '"Times New Roman", "DejaVu Serif", "Noto Serif", serif',
+                  fontVariantEmoji: "text",
+                } as React.CSSProperties}
               >
-                {s.glyph}
+                {`${s.glyph}\uFE0E`}
               </span>
               <div className="flex-1 min-w-0">
                 <div className="text-[11px] tracking-wider uppercase font-medium text-foreground/85">
