@@ -161,15 +161,87 @@ function AtmosphereGlow({ color }: { color: string }) {
   );
 }
 
+// ─── Basin markers (clickable pins) ───
+
+export interface BasinMarker {
+  id: string;
+  name: string;
+  lat: number;
+  lng: number;
+  tint: string;
+}
+
+function latLngToVec3(lat: number, lng: number, r: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lng + 180) * (Math.PI / 180);
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+function BasinMarkers({
+  markers,
+  selectedId,
+  onSelect,
+}: {
+  markers: BasinMarker[];
+  selectedId?: string;
+  onSelect: (id: string) => void;
+}) {
+  const groupRef = useRef<THREE.Group>(null);
+
+  useFrame((state) => {
+    if (groupRef.current) {
+      groupRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    }
+  });
+
+  return (
+    <group ref={groupRef}>
+      {markers.map((m) => {
+        const pos = latLngToVec3(m.lat, m.lng, 1.86);
+        const isSel = selectedId === m.id;
+        return (
+          <group key={m.id} position={pos}>
+            <mesh
+              onClick={(e) => {
+                e.stopPropagation();
+                onSelect(m.id);
+              }}
+              onPointerOver={(e) => {
+                e.stopPropagation();
+                document.body.style.cursor = "pointer";
+              }}
+              onPointerOut={() => {
+                document.body.style.cursor = "default";
+              }}
+            >
+              <sphereGeometry args={[isSel ? 0.06 : 0.04, 16, 16]} />
+              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 1 : 0.85} />
+            </mesh>
+            <mesh>
+              <sphereGeometry args={[isSel ? 0.11 : 0.08, 16, 16]} />
+              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 0.28 : 0.14} />
+            </mesh>
+          </group>
+        );
+      })}
+    </group>
+  );
+}
+
 // ─── Main component ───
 
 interface BlueMarbleGlobeProps {
   height?: number;
   sphereId?: SphereId;
-  /** Dynamic overlay texture URL (from live data hook) */
   overlayUrl?: string;
-  /** Earthquake data points (geosphere only) */
   quakes?: QuakePoint[];
+  basins?: BasinMarker[];
+  selectedBasinId?: string;
+  onSelectBasin?: (id: string) => void;
 }
 
 export const BlueMarbleGlobe = ({
@@ -177,6 +249,9 @@ export const BlueMarbleGlobe = ({
   sphereId,
   overlayUrl,
   quakes,
+  basins,
+  selectedBasinId,
+  onSelectBasin,
 }: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
 
@@ -198,6 +273,9 @@ export const BlueMarbleGlobe = ({
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
+        {basins && basins.length > 0 && onSelectBasin && (
+          <BasinMarkers markers={basins} selectedId={selectedBasinId} onSelect={onSelectBasin} />
+        )}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
           enableZoom={false}
