@@ -82,7 +82,15 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   );
 
   const handlePlanetClick = (planetId: string) => {
+    // Selecting an orbit stops any playing tone so the views don't collide.
+    if (playing) play(playing);
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
+  };
+
+  const handleTonePlay = (planetId: string) => {
+    // Playing a tone clears any isolated-orbit selection.
+    if (selectedPlanet) setSelectedPlanet(null);
+    play(planetId);
   };
 
   const selectedData = selectedPlanet
@@ -128,7 +136,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           ) : (
             <OrbitalResonanceField
               selectedPlanet={selectedPlanet}
-              onPlanetClick={(id) => setSelectedPlanet(id)}
+              onPlanetClick={(id) => handlePlanetClick(id)}
             />
           )
         ) : (
@@ -329,7 +337,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                   return (
                     <button
                       key={p.id}
-                      onClick={() => play(p.id)}
+                      onClick={() => handleTonePlay(p.id)}
                       onContextMenu={(e) => { e.preventDefault(); handlePlanetClick(p.id); }}
                       className={`w-full flex items-center gap-2.5 px-2.5 rounded-lg transition-all duration-200 text-left ${
                         isSelected ? "bg-foreground/[0.06]" : "hover:bg-foreground/[0.04]"
