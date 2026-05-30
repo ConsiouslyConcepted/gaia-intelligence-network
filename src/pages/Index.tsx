@@ -15,35 +15,10 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     style={{
       background:
         "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      border: "1px solid hsla(220,30%,55%,0.35)",
-      boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(220,40%,50%,0.08), 0 12px 40px rgba(0,0,0,0.55)",
+      border: "1px solid hsla(210,40%,82%,0.65)",
+      boxShadow: "0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
-    {/* Bright top rim light */}
-    <div
-      className="absolute -top-px left-4 right-4 h-px"
-      style={{
-        background:
-          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
-      }}
-    />
-    {/* Outer edge glow (inset to frame the panel) */}
-    <div
-      className="absolute inset-0 rounded-xl pointer-events-none"
-      style={{
-        boxShadow:
-          "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
-      }}
-    />
-    {/* Bottom subtle accent line */}
-    <div
-      className="absolute bottom-0 left-6 right-6 h-px"
-      style={{
-        background:
-          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
-      }}
-    />
     {children}
   </div>
 );
@@ -142,13 +117,10 @@ const Index = () => {
           style={{
             background:
               "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
-            border: "1px solid hsla(220,40%,65%,0.5)",
-            boxShadow:
-              "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
+            border: "1px solid hsla(210,40%,82%,0.65)",
+            boxShadow: "0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
-          {/* Subtle bottom edge shadow */}
-          <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
 
           {/* Left: Title */}
           <div>

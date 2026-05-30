@@ -15,18 +15,10 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     style={{
       background:
         "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      border: "1px solid hsla(220,40%,65%,0.5)",
-      boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
+      border: "1px solid hsla(210,40%,82%,0.65)",
+      boxShadow: "0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
-    <div
-      className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
-      style={{
-        background:
-          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
-      }}
-    />
     {children}
   </div>
 );
