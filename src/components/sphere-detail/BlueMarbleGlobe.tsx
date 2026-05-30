@@ -314,10 +314,12 @@ interface BlueMarbleGlobeProps {
   overlayUrl?: string;
   quakes?: QuakePoint[];
   basins?: BasinMarker[];
-  selectedBasinId?: string;
-  onSelectBasin?: (id: string) => void;
-  /** Tint color used for the basin highlight shell */
-  selectedBasinColor?: string;
+  /** Generic clickable regions (oceans, ice fields, biomes). */
+  regions?: RegionDef[];
+  selectedRegionId?: string;
+  onSelectRegion?: (id: string) => void;
+  /** Tint color used for the highlighted region's glow */
+  selectedRegionColor?: string;
 }
 
 export const BlueMarbleGlobe = ({
@@ -325,14 +327,19 @@ export const BlueMarbleGlobe = ({
   sphereId,
   overlayUrl,
   quakes,
-  basins,
-  selectedBasinId,
-  onSelectBasin,
-  selectedBasinColor,
+  regions,
+  selectedRegionId,
+  onSelectRegion,
+  selectedRegionColor,
 }: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
-  const showBasinHighlight =
-    selectedBasinId && selectedBasinId !== "global" && selectedBasinColor;
+
+  const selectedRegion = useMemo(
+    () => regions?.find((r) => r.id === selectedRegionId),
+    [regions, selectedRegionId],
+  );
+  const showHighlight =
+    selectedRegion && selectedRegionId !== "global" && selectedRegionColor;
 
   return (
     <div style={{ height }} className="w-full rounded-xl overflow-hidden">
@@ -348,18 +355,21 @@ export const BlueMarbleGlobe = ({
         <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#88aaff" />
         <pointLight position={[0, 4, 3]} intensity={0.5} color="#ffffff" />
         <GlobeMesh
-          onPickLatLng={onSelectBasin ? (lat, lng) => {
-            const id = basinAtLatLng(lat, lng);
-            if (id) onSelectBasin(id);
-            else onSelectBasin("global");
+          onPickLatLng={onSelectRegion && regions ? (lat, lng) => {
+            const id = regionAtLatLng(regions.filter((r) => r.id !== "global"), lat, lng);
+            onSelectRegion(id ?? "global");
           } : undefined}
         />
         {sphereId && overlayUrl && (
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
-        {showBasinHighlight && (
-          <BasinHighlight basinId={selectedBasinId!} color={selectedBasinColor!} />
+        {showHighlight && (
+          <RegionHighlight
+            boxes={selectedRegion!.boxes}
+            surface={selectedRegion!.surface}
+            color={selectedRegionColor!}
+          />
         )}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
