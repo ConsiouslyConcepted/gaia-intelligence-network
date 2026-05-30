@@ -283,7 +283,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                   <div className="flex-1 h-px bg-gradient-to-r from-foreground/15 to-transparent" />
                 </div>
                 <p className="relative text-[9px] text-muted-foreground/55 leading-snug pl-7">
-                  Tap any planet to hear its orbital tone — frequencies derived from Keplerian ratios.
+                  Tap a planet to hear its orbital tone.
                 </p>
               </div>
 
