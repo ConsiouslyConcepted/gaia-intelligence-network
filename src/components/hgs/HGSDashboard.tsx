@@ -186,13 +186,22 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-4 pb-12 px-[300px]">
-            <ChromaticWheel interval={selectedInterval} size={340} />
-            <PairOrbitDiagram
-              pair={selectedPair}
-              size={300}
-              onPlanetContext={(id) => handleTonePlay(id)}
-            />
+          <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
+            <div className="relative flex items-center justify-center">
+              <ChromaticWheel
+                interval={selectedInterval}
+                size={620}
+                onSelectInterval={setSelectedIntervalId}
+              />
+              {/* Pair orbit diagram as floating side reference */}
+              <div className="absolute -bottom-2 -right-4 opacity-95 pointer-events-auto">
+                <PairOrbitDiagram
+                  pair={selectedPair}
+                  size={210}
+                  onPlanetContext={(id) => handleTonePlay(id)}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>
