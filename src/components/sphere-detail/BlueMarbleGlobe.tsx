@@ -408,7 +408,152 @@ function RegionHighlight({
   );
 }
 
+// ─── Crystalsphere overlays: planetary grid (icosahedral) or ley lines ───
+
+const LEY_SITES: { name: string; lat: number; lng: number }[] = [
+  { name: "Giza", lat: 29.9792, lng: 31.1342 },
+  { name: "Stonehenge", lat: 51.1789, lng: -1.8262 },
+  { name: "Nazca", lat: -14.739, lng: -75.13 },
+  { name: "Easter Island", lat: -27.1127, lng: -109.3497 },
+  { name: "Machu Picchu", lat: -13.1631, lng: -72.545 },
+  { name: "Angkor Wat", lat: 13.4125, lng: 103.866 },
+  { name: "Uluru", lat: -25.3444, lng: 131.0369 },
+  { name: "Kailash", lat: 31.0672, lng: 81.3119 },
+  { name: "Sedona", lat: 34.8697, lng: -111.761 },
+  { name: "Lake Titicaca", lat: -15.7587, lng: -69.6512 },
+  { name: "Mt Shasta", lat: 41.4099, lng: -122.1949 },
+  { name: "Delphi", lat: 38.4824, lng: 22.5009 },
+  { name: "Glastonbury", lat: 51.1452, lng: -2.7148 },
+];
+
+function latLngToVec3Sphere(lat: number, lng: number, r: number): THREE.Vector3 {
+  const phi = (90 - lat) * (Math.PI / 180);
+  const theta = (lng + 180) * (Math.PI / 180);
+  return new THREE.Vector3(
+    -r * Math.sin(phi) * Math.cos(theta),
+    r * Math.cos(phi),
+    r * Math.sin(phi) * Math.sin(theta)
+  );
+}
+
+/** Build a great-circle arc between two unit vectors with N segments. */
+function greatCircle(a: THREE.Vector3, b: THREE.Vector3, segments: number, radius: number): THREE.Vector3[] {
+  const pts: THREE.Vector3[] = [];
+  const omega = Math.acos(Math.min(1, Math.max(-1, a.clone().normalize().dot(b.clone().normalize()))));
+  const sinO = Math.sin(omega);
+  if (sinO < 1e-6) return [a.clone(), b.clone()];
+  for (let i = 0; i <= segments; i++) {
+    const t = i / segments;
+    const s1 = Math.sin((1 - t) * omega) / sinO;
+    const s2 = Math.sin(t * omega) / sinO;
+    const p = a.clone().multiplyScalar(s1).add(b.clone().multiplyScalar(s2));
+    p.normalize().multiplyScalar(radius);
+    pts.push(p);
+  }
+  return pts;
+}
+
+function CrystalOverlay({ mode, color }: { mode: "ley" | "grid"; color: string }) {
+  const groupRef = useRef<THREE.Group>(null);
+  const matRef = useRef<THREE.LineBasicMaterial>(null);
+  const RADIUS = 1.83;
+
+  const { lineGeoms, nodes } = useMemo(() => {
+    const geoms: THREE.BufferGeometry[] = [];
+    let nodes: THREE.Vector3[] = [];
+
+    if (mode === "ley") {
+      const pts = LEY_SITES.map((s) => latLngToVec3Sphere(s.lat, s.lng, RADIUS));
+      nodes = pts;
+      // Connect each site to its 3 nearest neighbors via great circles.
+      for (let i = 0; i < pts.length; i++) {
+        const dists = pts
+          .map((p, j) => ({ j, d: pts[i].distanceTo(p) }))
+          .filter((x) => x.j !== i)
+          .sort((a, b) => a.d - b.d)
+          .slice(0, 3);
+        for (const { j } of dists) {
+          if (j <= i) continue;
+          const arc = greatCircle(pts[i], pts[j], 48, RADIUS);
+          const g = new THREE.BufferGeometry().setFromPoints(arc);
+          geoms.push(g);
+        }
+      }
+    } else {
+      // Icosahedral planetary grid.
+      const ico = new THREE.IcosahedronGeometry(RADIUS, 1);
+      const pos = ico.attributes.position;
+      const seen = new Set<string>();
+      const verts: THREE.Vector3[] = [];
+      for (let i = 0; i < pos.count; i++) {
+        const v = new THREE.Vector3().fromBufferAttribute(pos, i).normalize().multiplyScalar(RADIUS);
+        const k = `${v.x.toFixed(3)},${v.y.toFixed(3)},${v.z.toFixed(3)}`;
+        if (!seen.has(k)) {
+          seen.add(k);
+          verts.push(v);
+        }
+      }
+      nodes = verts;
+      // Build edges from triangles
+      const edgeSet = new Set<string>();
+      for (let i = 0; i < pos.count; i += 3) {
+        const idxs = [i, i + 1, i + 2].map((k) => {
+          const v = new THREE.Vector3().fromBufferAttribute(pos, k).normalize().multiplyScalar(RADIUS);
+          return `${v.x.toFixed(3)},${v.y.toFixed(3)},${v.z.toFixed(3)}`;
+        });
+        for (let a = 0; a < 3; a++) {
+          const b = (a + 1) % 3;
+          const key = [idxs[a], idxs[b]].sort().join("|");
+          if (edgeSet.has(key)) continue;
+          edgeSet.add(key);
+          const [ka, kb] = key.split("|");
+          const pa = new THREE.Vector3(...ka.split(",").map(Number));
+          const pb = new THREE.Vector3(...kb.split(",").map(Number));
+          const arc = greatCircle(pa, pb, 36, RADIUS);
+          const g = new THREE.BufferGeometry().setFromPoints(arc);
+          geoms.push(g);
+        }
+      }
+      ico.dispose();
+    }
+    return { lineGeoms: geoms, nodes };
+  }, [mode]);
+
+  useEffect(() => () => lineGeoms.forEach((g) => g.dispose()), [lineGeoms]);
+
+  useFrame((state) => {
+    const t = state.clock.elapsedTime;
+    if (groupRef.current) groupRef.current.rotation.y = t * 0.08;
+    if (matRef.current) matRef.current.opacity = 0.55 + Math.sin(t * 1.2) * 0.18;
+  });
+
+  return (
+    <group ref={groupRef}>
+      {lineGeoms.map((g, i) => (
+        <line key={i}>
+          <primitive object={g} attach="geometry" />
+          <lineBasicMaterial
+            ref={i === 0 ? matRef : undefined}
+            color={color}
+            transparent
+            opacity={0.65}
+            blending={THREE.AdditiveBlending}
+            depthWrite={false}
+          />
+        </line>
+      ))}
+      {nodes.map((p, i) => (
+        <mesh key={`n${i}`} position={p}>
+          <sphereGeometry args={[0.025, 12, 12]} />
+          <meshBasicMaterial color={color} transparent opacity={0.95} />
+        </mesh>
+      ))}
+    </group>
+  );
+}
+
 // ─── Main component ───
+
 
 interface BlueMarbleGlobeProps {
   height?: number;
