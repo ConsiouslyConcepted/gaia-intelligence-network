@@ -474,9 +474,15 @@ function Stat({ label, value, accent }: { label: string; value: string; accent: 
 }
 
 function EvidenceStrip({
-  sourceName, targetName, link, sourceColor, targetColor,
+  sourceName, targetName, link, sourceColor, targetColor, mechanism, onOpen,
 }: {
-  sourceName: string; targetName: string; link: CouplingResult; sourceColor: string; targetColor: string;
+  sourceName: string;
+  targetName: string;
+  link: CouplingResult;
+  sourceColor: string;
+  targetColor: string;
+  mechanism: string;
+  onOpen: () => void;
 }) {
   return (
     <div
@@ -494,6 +500,13 @@ function EvidenceStrip({
           <span className="text-muted-foreground/60">
             r = {link.r >= 0 ? "+" : ""}{link.r.toFixed(2)} · best lag Δt {link.lag >= 0 ? "+" : ""}{link.lag}
           </span>
+          <button
+            className="ml-auto inline-flex items-center gap-1 rounded-md border border-border/20 bg-background/40 px-2 py-1 text-[9px] uppercase tracking-[0.12em] text-muted-foreground/60 transition-colors hover:text-foreground/80"
+            onClick={onOpen}
+          >
+            Open sphere
+            <ExternalLink className="w-3 h-3" />
+          </button>
         </div>
       </div>
       <DualSpark a={link.sourceSeries} b={link.targetSeries} colorA={sourceColor} colorB={targetColor} lag={link.lag} />
@@ -502,6 +515,7 @@ function EvidenceStrip({
         {link.direction === "incoming" && `${sourceName} follows ${targetName} by ${Math.abs(link.lag)} ticks — the target moves first.`}
         {link.direction === "bidirectional" && `${sourceName} and ${targetName} move in phase — no clear leader at this window.`}
       </p>
+      <p className="text-[10px] text-muted-foreground/45 mt-2 leading-relaxed">{mechanism}</p>
     </div>
   );
 }
