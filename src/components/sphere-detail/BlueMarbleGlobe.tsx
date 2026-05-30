@@ -314,6 +314,9 @@ export const BlueMarbleGlobe = ({
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
+        {showBasinHighlight && (
+          <BasinHighlight basinId={selectedBasinId!} color={selectedBasinColor!} />
+        )}
         {basins && basins.length > 0 && onSelectBasin && (
           <BasinMarkers markers={basins} selectedId={selectedBasinId} onSelect={onSelectBasin} />
         )}
