@@ -160,6 +160,44 @@ export const ChromaticWheel = ({
         );
       })}
 
+
+      {/* ─── Planet markers — outer ring at note positions ─── */}
+      {(() => {
+        const stacks: Record<number, number> = {};
+        const ringBase = r * 1.18;
+        const step = size * 0.052;
+        return PLANET_NOTES.map((p) => {
+          const idx = NOTE_INDEX[p.note];
+          if (idx === undefined) return null;
+          const slot = stacks[idx] ?? 0;
+          stacks[idx] = slot + 1;
+          const radius = ringBase + slot * step;
+          const a = -Math.PI / 2 + (idx / 12) * Math.PI * 2;
+          const x = cx + Math.cos(a) * radius;
+          const y = cy + Math.sin(a) * radius;
+          const isHi = highlightedPlanet === p.id;
+          return (
+            <g key={p.id}
+              onClick={() => onPlanetClick?.(p.id)}
+              onContextMenu={(e) => { e.preventDefault(); onPlanetContext?.(p.id); }}
+              style={{ cursor: "pointer" }}>
+              <circle cx={x} cy={y} r={size * 0.026}
+                fill={`${p.color}${isHi ? "ee" : "aa"}`}
+                stroke={isHi ? "hsla(0,0%,100%,0.95)" : `${p.color}`}
+                strokeWidth={isHi ? 1.6 : 1}
+                style={{ filter: isHi ? "drop-shadow(0 0 8px " + p.color + ")" : `drop-shadow(0 0 4px ${p.color}88)` }}
+              />
+              <text x={x} y={y + 3} textAnchor="middle"
+                fontSize={size * 0.028} fontWeight={600}
+                fill="hsla(240,40%,8%,0.95)"
+                style={{ pointerEvents: "none", fontFamily: "ui-sans-serif, system-ui" }}>
+                {PLANET_GLYPHS[p.id]}
+              </text>
+            </g>
+          );
+        });
+      })()}
+
       {/* Title labels */}
       <text x={cx} y={size * 0.06} textAnchor="middle"
         fontSize={size * 0.028} fontWeight={700}
