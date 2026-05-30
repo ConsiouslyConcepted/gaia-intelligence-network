@@ -16,7 +16,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     style={{
       background:
         "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      border: "1px solid hsla(220,40%,65%,0.5)",
+      border: "1px solid hsla(220,30%,55%,0.45)",
       boxShadow:
         "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
     }}
@@ -142,8 +142,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 style={{
                   background: "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
-                  border: "1px solid hsla(220,40%,65%,0.5)",
-                  boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.22), inset 0 0 10px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.5), 0 0 18px -4px hsla(210,60%,65%,0.25)",
+                  border: "1px solid hsla(220,30%,55%,0.45)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 0 20px hsla(210,70%,60%,0.18), 0 0 40px hsla(210,70%,55%,0.12), 0 6px 18px rgba(0,0,0,0.5)",
                 }}
               >
                 Universal
