@@ -336,16 +336,19 @@ export const BlueMarbleGlobe = ({
         <directionalLight position={[5, 3, 5]} intensity={2.5} color="#ffffff" />
         <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#88aaff" />
         <pointLight position={[0, 4, 3]} intensity={0.5} color="#ffffff" />
-        <GlobeMesh />
+        <GlobeMesh
+          onPickLatLng={onSelectBasin ? (lat, lng) => {
+            const id = basinAtLatLng(lat, lng);
+            if (id) onSelectBasin(id);
+            else onSelectBasin("global");
+          } : undefined}
+        />
         {sphereId && overlayUrl && (
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
         {showBasinHighlight && (
           <BasinHighlight basinId={selectedBasinId!} color={selectedBasinColor!} />
-        )}
-        {basins && basins.length > 0 && onSelectBasin && (
-          <BasinMarkers markers={basins} selectedId={selectedBasinId} onSelect={onSelectBasin} />
         )}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
