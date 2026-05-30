@@ -55,6 +55,7 @@ export const ChromaticWheel = ({
   highlightedPlanet,
 }: Props) => {
   const [hover, setHover] = useState<number | null>(null);
+  const viewBoxPadding = size * 0.16;
   const cx = size / 2;
   const cy = size / 2;
   const r = size * 0.40;
@@ -78,7 +79,12 @@ export const ChromaticWheel = ({
   const selectedEdges = edgesByInterval[interval.id] ?? [];
 
   return (
-    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="drop-shadow-[0_0_24px_hsla(220,40%,40%,0.35)]">
+    <svg
+      width={size}
+      height={size}
+      viewBox={`${-viewBoxPadding} ${-viewBoxPadding} ${size + viewBoxPadding * 2} ${size + viewBoxPadding * 2}`}
+      className="overflow-visible drop-shadow-[0_0_24px_hsla(220,40%,40%,0.35)]"
+    >
       <defs>
         <radialGradient id="cw-core" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="hsla(45,90%,85%,0.85)" />
