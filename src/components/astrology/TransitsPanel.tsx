@@ -50,7 +50,7 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
               }}
             >
               <span
-                className="w-7 h-7 rounded-md flex items-center justify-center text-[14px]"
+                className="w-9 h-9 rounded-md flex items-center justify-center text-[17px]"
                 style={{
                   color: meta.color,
                   background: "hsla(228, 40%, 8%, 0.7)",
