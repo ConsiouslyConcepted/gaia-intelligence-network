@@ -1,61 +1,48 @@
-## Astrological Transits — Universal view
+# Geometry of Music — third Universal mode
 
-A second mode inside the Universal (HGS) dashboard that swaps the orbital-resonance field for a live astrological chart showing where the planets currently sit in the zodiac. A toggle in the top bar flips between **Harmonics** and **Transits**. A new left rail lists the 12 zodiac signs.
+Add a **Geometry** pill to the Universal dashboard top bar, alongside **Harmonics** and **Transits**, that visualizes the Pythagorean/Kepler chord geometry and ties it to Scafetta's `(b/a)^(2/3) ≈ 9/8` mirror-pair scaling of the solar system.
 
-### What the user sees
+## Layout (matches existing symmetrical HUD)
 
-**Top bar (Universal view only)**
-A new pill toggle next to the title: `Harmonics ⇄ Transits`. Same glass styling as the existing pills.
-
-**Harmonics mode (unchanged)**
-Current OrbitalResonanceField + right Planetary Harmonics panel.
-
-**Transits mode**
-- Left rail: "Zodiac Signs" panel with the 12 signs. Each row shows the glyph, name, element color tint, and a small marker if a planet currently transits there.
-- Center: the natal-style chart wheel.
-- Right rail: replaces "Planetary Harmonics" with "Live Transits" — a list of each planet and the sign + degree it's currently in, plus a "today" timestamp.
-
-**The chart wheel (hybrid of your two references)**
 ```text
-              outer ring: 12 constellation names + tiny star-dot art
-            ┌───────────────────────────────────┐
-            │  sign band: cream ring, sign      │
-            │  glyphs at 12 positions, degree   │
-            │  ticks every 5° / 1°              │
-            │   ┌─────────────────────────┐     │
-            │   │ planet glyphs placed at │     │
-            │   │ their real longitudes,  │     │
-            │   │ aspect lines drawn      │     │
-            │   │ across the inner disc   │     │
-            │   └─────────────────────────┘     │
-            └───────────────────────────────────┘
+┌──────────────┬─────────────────────────────────┬──────────────┐
+│ Intervals    │   12-tone Chromatic Wheel       │ Mirror Pairs │
+│ (left rail)  │   + chord polygon overlay       │ + Adjacent   │
+│              │ ─────────────────────────────── │ consonances  │
+│ Octave 2/1   │   Pair Orbit Diagram            │              │
+│ P5    3/2    │   (two concentric orbits,       │ Jup–Mars     │
+│ P4    4/3    │    ratio + interval + acc.)     │ Sat–Earth    │
+│ M3    5/4    │                                 │ Ura–Venus    │
+│ m3    6/5    │                                 │ Nep–Mercury  │
+│ M6    5/3    │                                 │              │
+│ m6    8/5    │                                 │ Adj: M3/P4/  │
+│ M2    9/8 ★  │                                 │ P5/m6        │
+└──────────────┴─────────────────────────────────┴──────────────┘
 ```
-Pure SVG, monochromatic with subtle cream-gold accents allowed for the sign band (consistent with the wayfinding-hue exception).
 
-### Interactions
+## New files
 
-- Click a sign in the left rail → that segment of the wheel glows and the right rail filters to planets currently in that sign.
-- Click a planet glyph on the wheel → highlight its aspects (lines to other planets) and show its degree/sign in the right rail.
-- Right-click a planet → plays its tone (reuses existing `usePlanetAudio`), matching the existing interaction rule.
+- `src/lib/geometry/musicGeometry.ts` — `INTERVALS` (Octave, P5 3/2, P4 4/3, M3 5/4, m3 6/5, M6 5/3, m6 8/5, M2 9/8 epogdoon ★), `MIRROR_PAIRS` (Jup–Mars, Sat–Earth, Ura–Venus, Nep–Mercury with semi-major axes + computed `(b/a)^(2/3)` and accuracy vs `9/8`), `ADJACENT_PAIRS` mapped to M3/P4/P5/m6 consonances.
+- `src/components/geometry/ChromaticWheel.tsx` — SVG 12-node clock; renders chord polygon for selected interval (P5 = 12-point star, M3 = 4 triangles, m3 = 3 squares, M2 = near-dodecagon, etc.).
+- `src/components/geometry/PairOrbitDiagram.tsx` — Two concentric SVG orbits for the focused pair; labels show `a`, `b`, `(b/a)^(2/3)`, matching interval and % accuracy vs 9/8.
+- `src/components/geometry/IntervalsSidebar.tsx` — Left rail list (reuses `HudPanel`).
+- `src/components/geometry/PairsPanel.tsx` — Right rail (mirror pairs + adjacent consonances).
 
-### Live data
+## Edit
 
-Use the `astronomy-engine` npm package (no API key, fully client-side) to compute current ecliptic longitudes for Sun, Moon, Mercury, Venus, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto. Recompute on mount and every 10 minutes. Convert longitude → sign + degree, and detect major aspects (conjunction, sextile, square, trine, opposition) within standard orbs.
+- `src/components/hgs/HGSDashboard.tsx` — extend `mode` union to `"harmonics" | "transits" | "geometry"`, add the third pill, render the geometry trio when active.
 
-### Technical details
+## Interactions
 
-- New file `src/components/astrology/AstrologyChart.tsx` — SVG wheel (outer constellation ring, sign band, planet layer, aspect layer).
-- New file `src/components/astrology/ZodiacSidebar.tsx` — left rail listing the 12 signs.
-- New file `src/components/astrology/TransitsPanel.tsx` — right rail planet/degree list.
-- New file `src/lib/astrology/ephemeris.ts` — wraps `astronomy-engine` to return `{ planet, longitude, sign, degree, retrograde }[]` and computed aspects.
-- New file `src/lib/astrology/constants.ts` — sign metadata (name, glyph, element, ruler, color hint, constellation polyline coords).
-- Edit `src/components/hgs/HGSDashboard.tsx` — add `mode: "harmonics" | "transits"` state, render the new toggle in the top bar, and conditionally render either the existing OrbitalResonanceField + harmonics rails or the new astrology trio.
-- Install `astronomy-engine`.
-- All styling reuses the existing `HudPanel` and panel gradient tokens — no new design system.
-- Memory: add a `mem://features/astrology` note describing the mode and add a Core line that Universal has two sub-modes (Harmonics, Transits).
+- Left-click interval → wheel redraws chord polygon.
+- Left-click planetary pair → orbit diagram switches to that pair.
+- Right-click planet name → plays its tone via existing `usePlanetAudio`.
+- Hover wheel node → highlights note + chord edges.
 
-### Out of scope
+## Styling
 
-- Birth chart input form (not requested; can be added later by adding a date/time/location form that overrides "today").
-- Houses / Ascendant calculation (requires location; deferred).
-- Transit-to-natal comparisons.
+Monochromatic glassmorphism via `HudPanel`. Chord polygons in muted cream/white. Planet labels keep their signature sphere hues (per memory exception). The epogdoon (9/8) row gets a subtle star marker since it's the fundamental planetary-scale ratio.
+
+## Out of scope
+
+Chord audio playback, editable tuning systems, 3D orbits, Kuiper/Vulcanoid extensions (data stubs only — can be turned on later).
