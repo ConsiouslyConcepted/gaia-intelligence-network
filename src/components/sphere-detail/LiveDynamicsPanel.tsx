@@ -119,8 +119,23 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         chips,
       };
     }
+    if (isTechno) {
+      const cur = technoZoneById(selectedId as TechnoZoneId);
+      const r = buildTechnoReading(intel, cur);
+      const chips = TECHNO_ZONES.map((z) => ({ id: z.id, name: z.name, tint: z.tint }));
+      return {
+        regions: undefined,
+        regionTint: cur.tint,
+        regionName: cur.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
     return { regions: undefined, regionTint: undefined, regionName: undefined, regionSummary: null, regionPatterns: null, regionScore: null, regionTrend: null, chips: [] as { id: string; name: string; tint: string }[] };
-  }, [isHydro, isCryo, isBio, isHelio, selectedId, intel]);
+  }, [isHydro, isCryo, isBio, isHelio, isTechno, selectedId, intel]);
 
   const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
   const displaySummary = regionSummary ?? globalBehavior.summary;
