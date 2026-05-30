@@ -13,6 +13,13 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     }}
   >
     <div
+      className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+      }}
+    />
+    <div
       className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
       style={{
         background:

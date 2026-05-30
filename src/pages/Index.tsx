@@ -147,6 +147,15 @@ const Index = () => {
               "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
+          {/* Bright top rim light (matches side panels) */}
+          <div
+            className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+            }}
+          />
+
 
           {/* Left: Title */}
           <div>
