@@ -18,6 +18,7 @@ import { PairsPanel } from "@/components/geometry/PairsPanel";
 import { PlanetNoteLegend } from "@/components/geometry/PlanetNoteLegend";
 import { GeometryGuide } from "@/components/geometry/GeometryGuide";
 import { IntervalLegend } from "@/components/geometry/IntervalLegend";
+import { OrbitToToneBridge } from "@/components/geometry/OrbitToToneBridge";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
 type UniverseMode = "harmonics" | "transits" | "geometry";
@@ -195,6 +196,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
             </div>
             <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
+            <OrbitToToneBridge interval={selectedInterval} selectedPlanet={selectedPlanet} />
             <ChromaticWheel
               interval={selectedInterval}
               size={420}
