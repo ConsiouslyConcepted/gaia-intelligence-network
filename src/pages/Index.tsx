@@ -14,7 +14,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     className={`relative rounded-xl backdrop-blur-2xl ${className}`}
     style={{
       background:
-        "linear-gradient(145deg, hsla(225,15%,8%,0.96) 0%, hsla(225,18%,5%,0.94) 50%, hsla(225,20%,4%,0.96) 100%)",
+        "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
       border: "1px solid hsla(220,30%,55%,0.35)",
       boxShadow:
         "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(220,40%,50%,0.08), 0 12px 40px rgba(0,0,0,0.55)",
@@ -141,7 +141,7 @@ const Index = () => {
           className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
           style={{
             background:
-              "linear-gradient(180deg, hsla(225,15%,10%,0.96) 0%, hsla(225,18%,6%,0.96) 45%, hsla(225,22%,3%,0.97) 100%)",
+              "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
             border: "1px solid hsla(220,30%,55%,0.35)",
             boxShadow:
               "inset 0 1px 0 hsla(200,60%,78%,0.25), inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.6), inset 0 -10px 24px -10px hsla(0,0%,0%,0.5), 0 12px 28px -6px rgba(0,0,0,0.75), 0 24px 60px -20px rgba(0,0,0,0.9), 0 0 24px -4px hsla(210,50%,60%,0.18)",
@@ -165,7 +165,7 @@ const Index = () => {
 
           {/* Right: View toggle + Commons icon */}
           <div className="flex items-center gap-3">
-            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(225,18%,5%,0.85)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 0 12px hsla(210,50%,60%,0.06), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
+            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 0 12px hsla(210,50%,60%,0.06), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
@@ -197,7 +197,7 @@ const Index = () => {
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
-              style={{ color: "hsla(0,0%,100%,0.75)", border: "1px solid hsla(220,30%,55%,0.35)", background: "hsla(225,18%,5%,0.7)", boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)" }}
+              style={{ color: "hsla(0,0%,100%,0.75)", border: "1px solid hsla(220,30%,55%,0.35)", background: "hsla(240,25%,8%,0.5)", boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)" }}
               title="Planetary Commons Data"
             >
               <CommonsIcon size={20} />
@@ -270,7 +270,7 @@ const Index = () => {
         <div
           className="flex items-center gap-10 px-10 py-2 rounded-full backdrop-blur-2xl"
           style={{
-            background: "linear-gradient(180deg, hsla(225,15%,9%,0.92) 0%, hsla(225,20%,4%,0.96) 100%)",
+            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,22%,7%,0.92) 100%)",
             border: "1px solid hsla(0,0%,100%,0.07)",
             boxShadow:
               "inset 0 1px 0 hsla(0,0%,100%,0.10), 0 10px 28px rgba(0,0,0,0.65), 0 0 36px hsla(190,60%,50%,0.05)",
