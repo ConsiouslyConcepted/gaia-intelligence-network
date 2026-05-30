@@ -232,6 +232,41 @@ function BasinMarkers({
   );
 }
 
+// ─── Basin highlight (lit-up ocean region) ───
+
+function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const texture = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
+
+  useEffect(() => () => { texture.dispose(); }, [texture]);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    }
+    if (matRef.current) {
+      // gentle breathing pulse
+      const pulse = 0.85 + Math.sin(state.clock.elapsedTime * 1.4) * 0.15;
+      matRef.current.opacity = pulse;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[1.815, 96, 96]} />
+      <meshBasicMaterial
+        ref={matRef}
+        map={texture}
+        transparent
+        opacity={1}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
 // ─── Main component ───
 
 interface BlueMarbleGlobeProps {
@@ -242,6 +277,8 @@ interface BlueMarbleGlobeProps {
   basins?: BasinMarker[];
   selectedBasinId?: string;
   onSelectBasin?: (id: string) => void;
+  /** Tint color used for the basin highlight shell */
+  selectedBasinColor?: string;
 }
 
 export const BlueMarbleGlobe = ({
