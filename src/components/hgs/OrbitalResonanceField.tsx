@@ -121,7 +121,7 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       const h = rect.height;
       const cx = w * 0.45;
       const cy = h * 0.5;
-      const scale = Math.min(w, h) * 0.48;
+      const scale = Math.min(w, h) * 0.42;
       const sel = selectedRef.current;
 
       ctx.fillStyle = "rgb(4, 4, 14)";
@@ -164,7 +164,7 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
         const sweepPos = ((waveSweep * 0.3 + pp.a * 0.5) % 1.0) * totalPts;
 
         // In isolation mode, normalize so pattern fills the canvas
-        const pairScale = sel ? (Math.min(w, h) * 0.42 / pp.maxR) : scale;
+        const pairScale = sel ? (Math.min(w, h) * 0.37 / pp.maxR) : scale;
 
         for (let s = 0; s < totalPts; s += skip) {
           const p = pp.points[s];
