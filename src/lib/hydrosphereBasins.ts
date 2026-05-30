@@ -19,12 +19,12 @@ export interface Basin {
 }
 
 export const BASINS: Basin[] = [
-  { id: "global",   name: "Global Ocean",   lat: 0,    lng: 0,    ohcBias: 1.00, sstBias:  0.00, amocBias: 1.00, signature: "planetary-scale conveyor", tint: "#0a2540" },
-  { id: "pacific",  name: "Pacific",        lat: 0,    lng: -150, ohcBias: 1.18, sstBias:  0.08, amocBias: 0.85, signature: "ENSO-modulated thermal pool", tint: "#0a2540" },
-  { id: "atlantic", name: "Atlantic",       lat: 25,   lng: -40,  ohcBias: 0.92, sstBias:  0.04, amocBias: 1.20, signature: "AMOC overturning corridor", tint: "#0a2540" },
-  { id: "indian",   name: "Indian",         lat: -15,  lng: 75,   ohcBias: 0.78, sstBias:  0.11, amocBias: 0.70, signature: "monsoon-coupled warming pool", tint: "#0a2540" },
-  { id: "southern", name: "Southern",       lat: -60,  lng: 20,   ohcBias: 0.68, sstBias: -0.18, amocBias: 1.10, signature: "Antarctic bottom-water formation", tint: "#0a2540" },
-  { id: "arctic",   name: "Arctic",         lat: 78,   lng: 0,    ohcBias: 0.35, sstBias: -0.22, amocBias: 0.55, signature: "ice-modulated freshwater cap", tint: "#0a2540" },
+  { id: "global",   name: "Global Ocean",   lat: 0,    lng: 0,    ohcBias: 1.00, sstBias:  0.00, amocBias: 1.00, signature: "planetary-scale conveyor", tint: "#9fd4f5" },
+  { id: "pacific",  name: "Pacific",        lat: 0,    lng: -150, ohcBias: 1.18, sstBias:  0.08, amocBias: 0.85, signature: "ENSO-modulated thermal pool", tint: "#9fd4f5" },
+  { id: "atlantic", name: "Atlantic",       lat: 25,   lng: -40,  ohcBias: 0.92, sstBias:  0.04, amocBias: 1.20, signature: "AMOC overturning corridor", tint: "#9fd4f5" },
+  { id: "indian",   name: "Indian",         lat: -15,  lng: 75,   ohcBias: 0.78, sstBias:  0.11, amocBias: 0.70, signature: "monsoon-coupled warming pool", tint: "#9fd4f5" },
+  { id: "southern", name: "Southern",       lat: -60,  lng: 20,   ohcBias: 0.68, sstBias: -0.18, amocBias: 1.10, signature: "Antarctic bottom-water formation", tint: "#9fd4f5" },
+  { id: "arctic",   name: "Arctic",         lat: 78,   lng: 0,    ohcBias: 0.35, sstBias: -0.22, amocBias: 0.55, signature: "ice-modulated freshwater cap", tint: "#9fd4f5" },
 ];
 
 export function basinById(id: BasinId): Basin {
