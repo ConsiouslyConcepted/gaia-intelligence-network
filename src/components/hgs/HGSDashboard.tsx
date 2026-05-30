@@ -11,8 +11,13 @@ import { AstrologyChart } from "@/components/astrology/AstrologyChart";
 import { ZodiacSidebar } from "@/components/astrology/ZodiacSidebar";
 import { TransitsPanel } from "@/components/astrology/TransitsPanel";
 import { computeAspects, computePositions } from "@/lib/astrology/ephemeris";
+import { ChromaticWheel } from "@/components/geometry/ChromaticWheel";
+import { PairOrbitDiagram } from "@/components/geometry/PairOrbitDiagram";
+import { IntervalsSidebar } from "@/components/geometry/IntervalsSidebar";
+import { PairsPanel } from "@/components/geometry/PairsPanel";
+import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
-type UniverseMode = "harmonics" | "transits";
+type UniverseMode = "harmonics" | "transits" | "geometry";
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
