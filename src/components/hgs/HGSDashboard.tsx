@@ -82,7 +82,15 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   );
 
   const handlePlanetClick = (planetId: string) => {
+    // Selecting an orbit stops any playing tone so the views don't collide.
+    if (playing) play(playing);
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
+  };
+
+  const handleTonePlay = (planetId: string) => {
+    // Playing a tone clears any isolated-orbit selection.
+    if (selectedPlanet) setSelectedPlanet(null);
+    play(planetId);
   };
 
   const selectedData = selectedPlanet
