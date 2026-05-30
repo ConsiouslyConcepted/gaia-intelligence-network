@@ -15,7 +15,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     className={`relative rounded-xl backdrop-blur-2xl ${className}`}
     style={{
       background:
-        "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+        "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
       border: "1px solid hsla(220,30%,55%,0.45)",
       boxShadow:
         "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
@@ -125,7 +125,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             <div
               className="flex gap-1.5 rounded-2xl p-1.5"
               style={{
-                background: "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+                background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
                 border: "1px solid hsla(220,30%,55%,0.45)",
                 boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 0 20px hsla(210,70%,60%,0.18), 0 0 40px hsla(210,70%,55%,0.12), 0 6px 18px rgba(0,0,0,0.5)",
               }}
@@ -140,7 +140,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+                  background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
                   border: "1px solid hsla(220,30%,55%,0.45)",
                   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 0 20px hsla(210,70%,60%,0.18), 0 0 40px hsla(210,70%,55%,0.12), 0 6px 18px rgba(0,0,0,0.5)",
