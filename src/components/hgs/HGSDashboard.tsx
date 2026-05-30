@@ -94,7 +94,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
-        <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#d4a56a">
+        <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" glow="#d4a56a">
           {/* Left: Title */}
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
