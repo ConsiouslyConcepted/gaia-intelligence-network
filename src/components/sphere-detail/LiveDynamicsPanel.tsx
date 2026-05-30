@@ -184,7 +184,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
             </span>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground/70 leading-relaxed">{behavior.summary}</p>
+        <p className="text-xs text-muted-foreground/70 leading-relaxed">{displaySummary}</p>
 
         {/* Live metric chips */}
         <div className="flex flex-wrap gap-1.5 pt-1">
@@ -205,7 +205,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
 
       {/* Dynamic Patterns — live */}
       <div className="space-y-3">
-        {behavior.patterns.map((pattern, idx) => (
+        {displayPatterns.map((pattern, idx) => (
           <Card key={idx} className="glass-panel rounded-xl p-4">
             <div className="flex items-start gap-3">
               <div
