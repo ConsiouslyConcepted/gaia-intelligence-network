@@ -102,6 +102,7 @@ export const SPHERE_LIVE_CONFIG: Record<SphereId, LiveOverlayConfig> = {
     source: "NASA AIRS Aqua",
     description: "Daily surface air temperature — atmospheric thermal field",
     gibsLayer: "AIRS_L3_Surface_Air_Temperature_Daily_Day",
+  },
   crystalsphere: {
     textureUrl: gibsUrl("MODIS_Terra_L3_SST_Thermal_4Day_Day"),
     fallbackUrl: "/overlays/crystalsphere-overlay.jpg",
