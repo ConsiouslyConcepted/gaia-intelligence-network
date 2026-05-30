@@ -164,9 +164,54 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 onClick={onSwitchView}
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+      {/* ─── FLOATING SUB-MODE TOGGLE (bottom-center) ─── */}
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none">
+        <div
+          className="pointer-events-auto flex gap-1 rounded-2xl p-1.5"
+          style={{
+            background: "hsla(228,40%,5%,0.6)",
+            border: "1px solid hsla(220,30%,55%,0.4)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06), inset 0 -1px 0 rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.5)",
+            backdropFilter: "blur(12px)",
+          }}
+        >
+          {([
+            { id: "harmonics" as const, label: "Harmonics" },
+            { id: "transits" as const, label: "Astro Transits" },
+          ]).map(({ id, label }) => {
+            const active = mode === id;
+            return (
+              <button
+                key={id}
+                onClick={() => setMode(id)}
+                className="px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
+                style={
+                  active
+                    ? {
+                        background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+                        color: "hsla(0,0%,100%,0.95)",
+                        border: "1px solid hsla(220,35%,60%,0.55)",
+                        boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 22px hsla(210,75%,62%,0.25)",
+                      }
+                    : {
+                        color: "hsla(0,0%,100%,0.45)",
+                        border: "1px solid transparent",
+                      }
+                }
+              >
+                {label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ─── TOP BAR (continued) ─── */}
+      <div className="hidden">
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Planetary
+
               </button>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
