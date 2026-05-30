@@ -1,14 +1,18 @@
-import { useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Volume2, Signal, Activity, Sparkles } from "lucide-react";
+import { Volume2 } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
 import { SOLAR_PLANETS, PLANET_RESONANCE_PAIRS } from "@/types/solarPlanets";
 import { usePlanetAudio } from "@/hooks/usePlanetAudio";
+import { AstrologyChart } from "@/components/astrology/AstrologyChart";
+import { ZodiacSidebar } from "@/components/astrology/ZodiacSidebar";
+import { TransitsPanel } from "@/components/astrology/TransitsPanel";
+import { computeAspects, computePositions } from "@/lib/astrology/ephemeris";
 
-type SidebarMode = "patterns" | "cymatics";
+type UniverseMode = "harmonics" | "transits";
 
 const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
