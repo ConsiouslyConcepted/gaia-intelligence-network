@@ -236,19 +236,8 @@ export const ChromaticWheel = ({
         });
       })()}
 
-      {/* Title labels */}
-      <text x={cx} y={size * 0.06} textAnchor="middle"
-        fontSize={size * 0.028} fontWeight={700}
-        fill="hsla(0,0%,100%,0.85)"
-        style={{ fontFamily: "ui-sans-serif, system-ui", letterSpacing: "0.32em" }}>
-        GEOMETRY OF MUSIC
-      </text>
-      <text x={cx} y={size * 0.095} textAnchor="middle"
-        fontSize={size * 0.016}
-        fill="hsla(0,0%,100%,0.45)"
-        style={{ fontFamily: "ui-sans-serif, system-ui", letterSpacing: "0.32em" }}>
-        12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS
-      </text>
+      {/* Title rendered outside SVG in dashboard */}
+
 
       {hover !== null && (
         <text x={cx} y={cy + r * 0.55} textAnchor="middle"
