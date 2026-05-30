@@ -16,7 +16,7 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     style={{
       background:
         "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-      border: "1px solid hsla(220,30%,55%,0.45)",
+      border: "1.5px solid hsla(220,35%,60%,0.55)",
       boxShadow:
         "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
     }}
@@ -126,7 +126,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               className="flex gap-1.5 rounded-2xl p-1.5"
               style={{
                 background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-                border: "1px solid hsla(220,30%,55%,0.45)",
+                border: "1.5px solid hsla(220,35%,60%,0.55)",
                 boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
               }}
             >
@@ -142,7 +142,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 style={{
                   background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
-                  border: "1px solid hsla(220,30%,55%,0.45)",
+                  border: "1.5px solid hsla(220,35%,60%,0.55)",
                   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(210,70%,60%,0.18), 0 0 56px hsla(210,70%,55%,0.12), 0 12px 40px rgba(0,0,0,0.55)",
                 }}
               >
