@@ -213,8 +213,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           className="pointer-events-auto flex gap-1 rounded-2xl p-1.5"
           style={{
             background: "hsla(228,40%,5%,0.6)",
-            border: "1px solid hsla(220,30%,55%,0.4)",
-            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06), inset 0 -1px 0 rgba(0,0,0,0.4), 0 12px 32px rgba(0,0,0,0.5)",
+            border: "1px solid hsla(220,40%,65%,0.5)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), inset 0 -1px 0 rgba(0,0,0,0.4), 0 0 24px hsla(210,70%,60%,0.28), 0 0 48px hsla(210,70%,55%,0.18), 0 12px 32px rgba(0,0,0,0.5)",
             backdropFilter: "blur(12px)",
           }}
         >
