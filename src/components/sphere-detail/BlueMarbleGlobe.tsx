@@ -250,31 +250,48 @@ function BasinMarkers({
 // ─── Basin highlight (lights up the actual ocean shape) ───
 
 function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
+  const outerRef = useRef<THREE.Mesh>(null);
+  const innerMat = useRef<THREE.MeshBasicMaterial>(null);
+  const outerMat = useRef<THREE.MeshBasicMaterial>(null);
 
   const { texture } = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
   useEffect(() => () => { texture.dispose(); }, [texture]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    if (meshRef.current) meshRef.current.rotation.y = t * 0.08;
-    // Very subtle breathing so it feels alive but natural
-    if (matRef.current) matRef.current.opacity = 0.62 + Math.sin(t * 0.8) * 0.05;
+    if (innerRef.current) innerRef.current.rotation.y = t * 0.08;
+    if (outerRef.current) outerRef.current.rotation.y = t * 0.08;
+    const pulse = 0.78 + Math.sin(t * 1.2) * 0.12;
+    if (innerMat.current) innerMat.current.opacity = pulse;
+    if (outerMat.current) outerMat.current.opacity = pulse * 0.45;
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[1.808, 128, 128]} />
-      <meshBasicMaterial
-        ref={matRef}
-        map={texture}
-        transparent
-        opacity={0.65}
-        blending={THREE.NormalBlending}
-        depthWrite={false}
-      />
-    </mesh>
+    <group>
+      <mesh ref={innerRef}>
+        <sphereGeometry args={[1.812, 128, 128]} />
+        <meshBasicMaterial
+          ref={innerMat}
+          map={texture}
+          transparent
+          opacity={0.85}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh ref={outerRef}>
+        <sphereGeometry args={[1.85, 128, 128]} />
+        <meshBasicMaterial
+          ref={outerMat}
+          map={texture}
+          transparent
+          opacity={0.4}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
   );
 }
 
