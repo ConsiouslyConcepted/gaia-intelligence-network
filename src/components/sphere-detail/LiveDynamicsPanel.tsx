@@ -21,14 +21,37 @@ function TrendIcon({ trend, accent }: { trend: number; accent: string }) {
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const intel = useSphereIntelligence(sphere.id, 3000);
-  const behavior = useMemo(() => buildLiveBehavior(intel), [intel]);
   const live = useLiveOverlay(sphere.id);
+
+  // Hydrosphere basin selection
+  const isHydro = sphere.id === "hydrosphere";
+  const [basinId, setBasinId] = useState<BasinId>("global");
+  const basinReading = useMemo(
+    () => (isHydro ? buildBasinReading(intel, basinById(basinId)) : null),
+    [isHydro, intel, basinId]
+  );
+  const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
+
+  // Use basin-specific summary/patterns when hydrosphere + basin selected
+  const displaySummary = basinReading ? basinReading.summary : globalBehavior.summary;
+  const displayPatterns = basinReading
+    ? basinReading.patterns.map((p) => ({ ...p, description: p.description }))
+    : globalBehavior.patterns;
+  const displayScore = basinReading ? basinReading.score : intel.score;
+  const displayTrend = basinReading ? basinReading.trend : intel.trend;
+
+  const basinMarkers = useMemo(
+    () => (isHydro ? BASINS.filter((b) => b.id !== "global").map((b) => ({
+      id: b.id, name: b.name, lat: b.lat, lng: b.lng, tint: b.tint,
+    })) : undefined),
+    [isHydro]
+  );
 
   // "updated Xs ago" ticker
   const [updatedAt, setUpdatedAt] = useState(() => Date.now());
   useEffect(() => {
     setUpdatedAt(Date.now());
-  }, [intel.score, intel.trend]);
+  }, [intel.score, intel.trend, basinId]);
   const [, setNow] = useState(Date.now());
   useEffect(() => {
     const iv = setInterval(() => setNow(Date.now()), 1000);
