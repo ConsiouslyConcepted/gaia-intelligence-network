@@ -212,8 +212,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* ─── FLOATING SUB-MODE TOGGLE (bottom-center) ─── */}
       <div
-        className="absolute bottom-6 -translate-x-1/2 z-20 pointer-events-none"
-        style={{ left: mode === "harmonics" ? "45%" : "50%" }}
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 pointer-events-none"
       >
 
 
