@@ -186,12 +186,16 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </div>
         ) : (
-          <div className="w-full h-full flex items-center justify-center pb-12 px-[300px]">
+          <div className="w-full h-full flex flex-col items-center justify-center gap-3 pb-12 px-[300px]">
             <ChromaticWheel
               interval={selectedInterval}
-              size={620}
+              size={600}
               onSelectInterval={setSelectedIntervalId}
+              onPlanetClick={(id) => handlePlanetClick(id)}
+              onPlanetContext={(id) => handleTonePlay(id)}
+              highlightedPlanet={selectedPlanet}
             />
+            <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
           </div>
         )}
       </div>
