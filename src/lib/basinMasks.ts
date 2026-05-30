@@ -18,6 +18,22 @@ export const BASIN_BOUNDS: Record<string, BasinBounds> = {
   arctic: { boxes: [[66, 90, -180, 180]] },
 };
 
+/** Return basin id whose bounds contain the given lat/lng, or null. */
+export function basinAtLatLng(lat: number, lng: number): string | null {
+  // priority order: polar first, then regional
+  const order = ["arctic", "southern", "atlantic", "indian", "pacific"];
+  for (const id of order) {
+    const b = BASIN_BOUNDS[id];
+    if (!b) continue;
+    for (const [latMin, latMax, lngMin, lngMax] of b.boxes) {
+      if (lat >= latMin && lat <= latMax && lng >= lngMin && lng <= lngMax) {
+        return id;
+      }
+    }
+  }
+  return null;
+}
+
 const MASK_W = 2048;
 const MASK_H = 1024;
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";

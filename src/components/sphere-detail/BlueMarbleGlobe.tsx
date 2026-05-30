@@ -5,7 +5,7 @@ import * as THREE from "three";
 import { TextureLoader } from "three";
 import { SphereId } from "@/types/spheres";
 import { QuakePoint } from "@/lib/liveOverlays";
-import { buildBasinMaskTexture } from "@/lib/basinMasks";
+import { buildBasinMaskTexture, basinAtLatLng } from "@/lib/basinMasks";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
@@ -34,7 +34,7 @@ const SPHERE_COLORS: Record<string, string> = {
 
 // ─── Base Earth mesh ───
 
-function GlobeMesh() {
+function GlobeMesh({ onPickLatLng }: { onPickLatLng?: (lat: number, lng: number) => void }) {
   const meshRef = useRef<THREE.Mesh>(null);
   const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
 
@@ -45,7 +45,21 @@ function GlobeMesh() {
   });
 
   return (
-    <mesh ref={meshRef}>
+    <mesh
+      ref={meshRef}
+      onClick={onPickLatLng ? (e) => {
+        e.stopPropagation();
+        if (!meshRef.current) return;
+        const local = meshRef.current.worldToLocal(e.point.clone());
+        const r = local.length();
+        const lat = 90 - (Math.acos(local.y / r) * 180) / Math.PI;
+        const lng = (Math.atan2(local.z, -local.x) * 180) / Math.PI - 180;
+        const normLng = ((lng + 540) % 360) - 180;
+        onPickLatLng(lat, normLng);
+      } : undefined}
+      onPointerOver={onPickLatLng ? () => { document.body.style.cursor = "pointer"; } : undefined}
+      onPointerOut={onPickLatLng ? () => { document.body.style.cursor = "default"; } : undefined}
+    >
       <sphereGeometry args={[1.8, 64, 64]} />
       <meshPhongMaterial
         map={earthMap}
@@ -236,31 +250,48 @@ function BasinMarkers({
 // ─── Basin highlight (lights up the actual ocean shape) ───
 
 function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const innerRef = useRef<THREE.Mesh>(null);
+  const outerRef = useRef<THREE.Mesh>(null);
+  const innerMat = useRef<THREE.MeshBasicMaterial>(null);
+  const outerMat = useRef<THREE.MeshBasicMaterial>(null);
 
   const { texture } = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
   useEffect(() => () => { texture.dispose(); }, [texture]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    if (meshRef.current) meshRef.current.rotation.y = t * 0.08;
-    // Very subtle breathing so it feels alive but natural
-    if (matRef.current) matRef.current.opacity = 0.62 + Math.sin(t * 0.8) * 0.05;
+    if (innerRef.current) innerRef.current.rotation.y = t * 0.08;
+    if (outerRef.current) outerRef.current.rotation.y = t * 0.08;
+    const pulse = 0.78 + Math.sin(t * 1.2) * 0.12;
+    if (innerMat.current) innerMat.current.opacity = pulse;
+    if (outerMat.current) outerMat.current.opacity = pulse * 0.45;
   });
 
   return (
-    <mesh ref={meshRef}>
-      <sphereGeometry args={[1.808, 128, 128]} />
-      <meshBasicMaterial
-        ref={matRef}
-        map={texture}
-        transparent
-        opacity={0.65}
-        blending={THREE.NormalBlending}
-        depthWrite={false}
-      />
-    </mesh>
+    <group>
+      <mesh ref={innerRef}>
+        <sphereGeometry args={[1.812, 128, 128]} />
+        <meshBasicMaterial
+          ref={innerMat}
+          map={texture}
+          transparent
+          opacity={0.85}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+      <mesh ref={outerRef}>
+        <sphereGeometry args={[1.85, 128, 128]} />
+        <meshBasicMaterial
+          ref={outerMat}
+          map={texture}
+          transparent
+          opacity={0.4}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+    </group>
   );
 }
 
@@ -305,16 +336,19 @@ export const BlueMarbleGlobe = ({
         <directionalLight position={[5, 3, 5]} intensity={2.5} color="#ffffff" />
         <directionalLight position={[-3, -2, -4]} intensity={0.6} color="#88aaff" />
         <pointLight position={[0, 4, 3]} intensity={0.5} color="#ffffff" />
-        <GlobeMesh />
+        <GlobeMesh
+          onPickLatLng={onSelectBasin ? (lat, lng) => {
+            const id = basinAtLatLng(lat, lng);
+            if (id) onSelectBasin(id);
+            else onSelectBasin("global");
+          } : undefined}
+        />
         {sphereId && overlayUrl && (
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
         {showBasinHighlight && (
           <BasinHighlight basinId={selectedBasinId!} color={selectedBasinColor!} />
-        )}
-        {basins && basins.length > 0 && onSelectBasin && (
-          <BasinMarkers markers={basins} selectedId={selectedBasinId} onSelect={onSelectBasin} />
         )}
         <AtmosphereGlow color={accentColor} />
         <OrbitControls
