@@ -268,7 +268,7 @@ const Index = () => {
       {/* ─── BOTTOM TELEMETRY CHROME ─── */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
         <div
-          className="flex items-center gap-6 px-5 py-2 rounded-full backdrop-blur-2xl"
+          className="flex items-center gap-10 px-10 py-2 rounded-full backdrop-blur-2xl"
           style={{
             background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,28%,7%,0.92) 100%)",
             border: "1px solid hsla(0,0%,100%,0.07)",
