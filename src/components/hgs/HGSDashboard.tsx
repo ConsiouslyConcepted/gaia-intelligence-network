@@ -226,7 +226,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 key={id}
                 onClick={() => setMode(id)}
-                className="min-w-[140px] text-center px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
+                className="min-w-[170px] text-center px-5 py-2 rounded-xl text-[10px] font-semibold tracking-[0.2em] uppercase transition-all duration-300"
                 style={
                   active
                     ? {
