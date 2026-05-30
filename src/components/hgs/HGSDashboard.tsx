@@ -195,7 +195,14 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <h2 className="text-base font-bold text-white/85 tracking-[0.32em]">GEOMETRY OF MUSIC</h2>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
             </div>
-            <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
+            <div className="w-full max-w-[1100px] flex flex-col lg:flex-row items-stretch gap-3">
+              <div className="flex-1 min-w-0 flex">
+                <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
+              </div>
+              <div className="flex-1 min-w-0 flex">
+                <OrbitToToneBridge interval={selectedInterval} selectedPlanet={selectedPlanet} />
+              </div>
+            </div>
             <ChromaticWheel
               interval={selectedInterval}
               size={420}
@@ -204,7 +211,6 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetContext={(id) => handleTonePlay(id)}
               highlightedPlanet={selectedPlanet}
             />
-            <OrbitToToneBridge interval={selectedInterval} selectedPlanet={selectedPlanet} />
             <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
             <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
 
