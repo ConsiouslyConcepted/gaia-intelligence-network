@@ -7,6 +7,7 @@ import { Activity, Signal, ArrowRight, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
+import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
 
 const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
