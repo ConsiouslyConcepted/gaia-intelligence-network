@@ -280,9 +280,12 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               fill={meta.color}
               fillOpacity={isActive ? 1 : 0.85}
               className="select-none pointer-events-none"
-              style={{ fontFamily: "serif" }}
+              style={{
+                fontFamily: '"Times New Roman", "DejaVu Serif", "Noto Serif", serif',
+                fontVariantEmoji: "text",
+              } as React.CSSProperties}
             >
-              {meta.glyph}
+              {`${meta.glyph}\uFE0E`}
             </text>
             {p.retrograde && (
               <text
