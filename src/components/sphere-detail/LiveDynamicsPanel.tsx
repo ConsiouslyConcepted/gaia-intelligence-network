@@ -179,27 +179,35 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Blue Marble Globe with live overlay */}
+      {/* Visualization: Helio activity map for heliosphere, Blue Marble for Earth spheres */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        <BlueMarbleGlobe
-          height={340}
-          sphereId={sphere.id}
-          overlayUrl={hasRegions ? undefined : live.textureUrl}
-          quakes={sphere.id === "geosphere" ? live.quakes : undefined}
-          regions={regions}
-          selectedRegionId={hasRegions ? selectedId : undefined}
-          selectedRegionColor={regionTint}
-          onSelectRegion={hasRegions ? setSelectedId : undefined}
-        />
-        {hasRegions && (
+        {hasZones ? (
+          <HelioActivityMap
+            height={340}
+            selectedId={selectedId as HelioZoneId}
+            onSelect={(id) => setSelectedId(id)}
+          />
+        ) : (
+          <BlueMarbleGlobe
+            height={340}
+            sphereId={sphere.id}
+            overlayUrl={hasRegions ? undefined : live.textureUrl}
+            quakes={sphere.id === "geosphere" ? live.quakes : undefined}
+            regions={regions}
+            selectedRegionId={hasRegions ? selectedId : undefined}
+            selectedRegionColor={regionTint}
+            onSelectRegion={hasRegions ? setSelectedId : undefined}
+          />
+        )}
+        {(hasRegions || hasZones) && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
-            Click an {regionLabel} on the globe · or select below
+            {hasZones ? "Click an activity zone · or select below" : `Click an ${regionLabel} on the globe · or select below`}
           </p>
         )}
       </Card>
 
-      {/* Region selector chips */}
-      {hasRegions && (
+      {/* Region / zone selector chips */}
+      {(hasRegions || hasZones) && (
         <Card className="glass-panel rounded-xl px-3 py-2">
           <div className="flex items-center gap-2 overflow-x-auto">
             <Globe className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
