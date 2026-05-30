@@ -173,9 +173,9 @@ const Index = () => {
             <div
               className="flex gap-1.5 rounded-2xl p-1.5"
               style={{
-                background: "hsla(240,25%,8%,0.7)",
-                border: "1px solid hsla(220,30%,55%,0.25)",
-                boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)",
+                background: "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+                border: "1px solid hsla(220,30%,55%,0.45)",
+                boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 0 20px hsla(210,70%,60%,0.18), 0 0 40px hsla(210,70%,55%,0.12), 0 6px 18px rgba(0,0,0,0.5)",
               }}
             >
               <button
