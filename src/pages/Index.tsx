@@ -85,7 +85,7 @@ const Index = () => {
       }} />
 
       {/* Full-screen globe */}
-      <div className="absolute inset-0 z-[1] translate-y-[8%]">
+      <div className="absolute inset-0 z-[1] -translate-y-[4%]">
         <EarthVisualization />
       </div>
 
