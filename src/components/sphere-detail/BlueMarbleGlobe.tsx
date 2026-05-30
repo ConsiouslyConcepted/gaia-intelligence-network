@@ -259,7 +259,38 @@ function BasinMarkers({
   );
 }
 
-// ─── Region highlight (lights up a region — ocean/land/any) ───
+// ─── Region highlight: layered fill + rim outline + traveling shimmer ───
+
+/** Shader for a traveling shimmer band across the region using the fill mask. */
+const shimmerVertex = /* glsl */ `
+  varying vec2 vUv;
+  void main() {
+    vUv = uv;
+    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+  }
+`;
+const shimmerFragment = /* glsl */ `
+  uniform sampler2D uMap;
+  uniform float uTime;
+  uniform float uOpacity;
+  uniform vec3 uColor;
+  varying vec2 vUv;
+  void main() {
+    vec4 m = texture2D(uMap, vUv);
+    float mask = m.a;
+    if (mask < 0.01) discard;
+    // Diagonal traveling wave in lat/lng space
+    float wave = sin((vUv.x * 14.0 + vUv.y * 4.0) - uTime * 1.8) * 0.5 + 0.5;
+    // Sharpen into a soft band
+    float band = smoothstep(0.55, 0.95, wave);
+    float a = mask * (0.35 + band * 0.75) * uOpacity;
+    gl_FragColor = vec4(uColor, a);
+  }
+`;
+
+function hexToVec3(hex: string): THREE.Color {
+  return new THREE.Color(hex);
+}
 
 function RegionHighlight({
   boxes,
@@ -270,46 +301,103 @@ function RegionHighlight({
   surface: Surface;
   color: string;
 }) {
-  const innerRef = useRef<THREE.Mesh>(null);
-  const outerRef = useRef<THREE.Mesh>(null);
-  const innerMat = useRef<THREE.MeshBasicMaterial>(null);
-  const outerMat = useRef<THREE.MeshBasicMaterial>(null);
+  const fillRef = useRef<THREE.Mesh>(null);
+  const rimRef = useRef<THREE.Mesh>(null);
+  const haloRef = useRef<THREE.Mesh>(null);
+  const shimmerRef = useRef<THREE.Mesh>(null);
+  const fillMat = useRef<THREE.MeshBasicMaterial>(null);
+  const rimMat = useRef<THREE.MeshBasicMaterial>(null);
+  const haloMat = useRef<THREE.MeshBasicMaterial>(null);
+  const shimmerMat = useRef<THREE.ShaderMaterial>(null);
 
-  const { texture } = useMemo(
+  const { texture, edgeTexture } = useMemo(
     () => buildRegionMaskTexture(boxes, color, surface),
     [boxes, color, surface],
   );
-  useEffect(() => () => { texture.dispose(); }, [texture]);
+  useEffect(() => () => {
+    texture.dispose();
+    edgeTexture.dispose();
+  }, [texture, edgeTexture]);
+
+  const shimmerUniforms = useMemo(() => ({
+    uMap: { value: texture },
+    uTime: { value: 0 },
+    uOpacity: { value: 0.9 },
+    uColor: { value: hexToVec3(color) },
+  }), [texture, color]);
 
   useFrame((state) => {
     const t = state.clock.elapsedTime;
-    if (innerRef.current) innerRef.current.rotation.y = t * 0.08;
-    if (outerRef.current) outerRef.current.rotation.y = t * 0.08;
-    const pulse = 0.78 + Math.sin(t * 1.2) * 0.12;
-    if (innerMat.current) innerMat.current.opacity = pulse;
-    if (outerMat.current) outerMat.current.opacity = pulse * 0.45;
+    const rot = t * 0.08;
+    if (fillRef.current) fillRef.current.rotation.y = rot;
+    if (rimRef.current) rimRef.current.rotation.y = rot;
+    if (haloRef.current) haloRef.current.rotation.y = rot;
+    if (shimmerRef.current) shimmerRef.current.rotation.y = rot;
+
+    // Phase-offset breathing for parallax depth
+    const slow = 0.55 + Math.sin(t * 0.9) * 0.12;
+    const med = 0.85 + Math.sin(t * 1.4 + 0.6) * 0.12;
+    const fast = 0.9 + Math.sin(t * 2.1 + 1.2) * 0.08;
+
+    if (fillMat.current) fillMat.current.opacity = slow * 0.55;
+    if (rimMat.current) rimMat.current.opacity = fast * 1.15;
+    if (haloMat.current) haloMat.current.opacity = slow * 0.32;
+    if (shimmerMat.current) {
+      shimmerMat.current.uniforms.uTime.value = t;
+      shimmerMat.current.uniforms.uOpacity.value = med * 0.55;
+    }
   });
 
   return (
     <group>
-      <mesh ref={innerRef}>
-        <sphereGeometry args={[1.812, 128, 128]} />
+      {/* Soft fill — gentle wash inside the region */}
+      <mesh ref={fillRef}>
+        <sphereGeometry args={[1.811, 128, 128]} />
         <meshBasicMaterial
-          ref={innerMat}
+          ref={fillMat}
           map={texture}
           transparent
-          opacity={0.85}
+          opacity={0.55}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
       </mesh>
-      <mesh ref={outerRef}>
-        <sphereGeometry args={[1.85, 128, 128]} />
+
+      {/* Traveling shimmer band — gives the region a live, flowing feel */}
+      <mesh ref={shimmerRef}>
+        <sphereGeometry args={[1.814, 128, 128]} />
+        <shaderMaterial
+          ref={shimmerMat}
+          vertexShader={shimmerVertex}
+          fragmentShader={shimmerFragment}
+          uniforms={shimmerUniforms}
+          transparent
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Rim outline — traces the coastline/border, the most defining element */}
+      <mesh ref={rimRef}>
+        <sphereGeometry args={[1.818, 128, 128]} />
         <meshBasicMaterial
-          ref={outerMat}
+          ref={rimMat}
+          map={edgeTexture}
+          transparent
+          opacity={1}
+          blending={THREE.AdditiveBlending}
+          depthWrite={false}
+        />
+      </mesh>
+
+      {/* Soft outer halo — atmospheric bloom hint */}
+      <mesh ref={haloRef}>
+        <sphereGeometry args={[1.86, 128, 128]} />
+        <meshBasicMaterial
+          ref={haloMat}
           map={texture}
           transparent
-          opacity={0.4}
+          opacity={0.32}
           blending={THREE.AdditiveBlending}
           depthWrite={false}
         />
