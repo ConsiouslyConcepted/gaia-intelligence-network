@@ -49,8 +49,8 @@ const Cosmological = () => {
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
         <HudPanel className="pointer-events-auto px-4 py-2.5 flex items-center justify-between" glow="#a78bfa">
           <div>
-            <h1 className="text-[11px] font-bold tracking-[0.25em] uppercase text-foreground/80">Cosmological Intelligence</h1>
-            <p className="text-[7px] tracking-[0.25em] uppercase text-muted-foreground/30 mt-0.5">
+            <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Cosmological Intelligence</h1>
+            <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
               Galactic & Universal Field · Deep Space Observatory
             </p>
           </div>
