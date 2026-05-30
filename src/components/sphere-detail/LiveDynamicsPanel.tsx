@@ -1,10 +1,11 @@
 import { Card } from "@/components/ui/card";
 import { Sphere } from "@/types/spheres";
-import { Activity, RefreshCw, Satellite, TrendingUp, TrendingDown, Minus } from "lucide-react";
+import { Activity, RefreshCw, Satellite, TrendingUp, TrendingDown, Minus, Globe } from "lucide-react";
 import { BlueMarbleGlobe } from "./BlueMarbleGlobe";
 import { useLiveOverlay } from "@/hooks/useLiveOverlay";
 import { useSphereIntelligence } from "@/hooks/useSphereIntelligence";
 import { buildLiveBehavior } from "@/lib/behavioralSummary";
+import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphereBasins";
 import { useEffect, useMemo, useState } from "react";
 
 interface Props {
@@ -20,14 +21,37 @@ function TrendIcon({ trend, accent }: { trend: number; accent: string }) {
 
 export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const intel = useSphereIntelligence(sphere.id, 3000);
-  const behavior = useMemo(() => buildLiveBehavior(intel), [intel]);
   const live = useLiveOverlay(sphere.id);
+
+  // Hydrosphere basin selection
+  const isHydro = sphere.id === "hydrosphere";
+  const [basinId, setBasinId] = useState<BasinId>("global");
+  const basinReading = useMemo(
+    () => (isHydro ? buildBasinReading(intel, basinById(basinId)) : null),
+    [isHydro, intel, basinId]
+  );
+  const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
+
+  // Use basin-specific summary/patterns when hydrosphere + basin selected
+  const displaySummary = basinReading ? basinReading.summary : globalBehavior.summary;
+  const displayPatterns = basinReading
+    ? basinReading.patterns.map((p) => ({ ...p, description: p.description }))
+    : globalBehavior.patterns;
+  const displayScore = basinReading ? basinReading.score : intel.score;
+  const displayTrend = basinReading ? basinReading.trend : intel.trend;
+
+  const basinMarkers = useMemo(
+    () => (isHydro ? BASINS.filter((b) => b.id !== "global").map((b) => ({
+      id: b.id, name: b.name, lat: b.lat, lng: b.lng, tint: b.tint,
+    })) : undefined),
+    [isHydro]
+  );
 
   // "updated Xs ago" ticker
   const [updatedAt, setUpdatedAt] = useState(() => Date.now());
   useEffect(() => {
     setUpdatedAt(Date.now());
-  }, [intel.score, intel.trend]);
+  }, [intel.score, intel.trend, basinId]);
   const [, setNow] = useState(Date.now());
   useEffect(() => {
     const iv = setInterval(() => setNow(Date.now()), 1000);
@@ -52,13 +76,15 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
           <div className="flex items-center gap-3">
             <div className="text-right">
               <div className="flex items-center justify-end gap-1.5">
-                <span className="text-lg font-bold font-mono" style={{ color: accent }}>{intel.score}</span>
-                <TrendIcon trend={intel.trend} accent={accent} />
+                <span className="text-lg font-bold font-mono" style={{ color: accent }}>{displayScore}</span>
+                <TrendIcon trend={displayTrend} accent={accent} />
                 <span className="text-[10px] font-mono text-muted-foreground/60">
-                  {intel.trend >= 0 ? "+" : ""}{intel.trend.toFixed(1)}
+                  {displayTrend >= 0 ? "+" : ""}{displayTrend.toFixed(1)}
                 </span>
               </div>
-              <p className="text-[8px] uppercase tracking-wider text-muted-foreground/40">{intel.scoreLabel}</p>
+              <p className="text-[8px] uppercase tracking-wider text-muted-foreground/40">
+                {basinReading ? `${basinReading.basin.name}` : intel.scoreLabel}
+              </p>
             </div>
             <div className="flex items-center gap-1.5">
               <div
@@ -80,8 +106,42 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
           sphereId={sphere.id}
           overlayUrl={live.textureUrl}
           quakes={sphere.id === "geosphere" ? live.quakes : undefined}
+          basins={basinMarkers}
+          selectedBasinId={isHydro ? basinId : undefined}
+          onSelectBasin={isHydro ? ((id) => setBasinId(id as BasinId)) : undefined}
         />
+        {isHydro && (
+          <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
+            Click an ocean basin marker · or select below
+          </p>
+        )}
       </Card>
+
+      {/* Basin selector — hydrosphere only */}
+      {isHydro && (
+        <Card className="glass-panel rounded-xl px-3 py-2">
+          <div className="flex items-center gap-2 overflow-x-auto">
+            <Globe className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
+            {BASINS.map((b) => {
+              const sel = basinId === b.id;
+              return (
+                <button
+                  key={b.id}
+                  onClick={() => setBasinId(b.id)}
+                  className="px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider transition-colors shrink-0 border"
+                  style={{
+                    backgroundColor: sel ? `${b.tint}25` : "transparent",
+                    borderColor: sel ? b.tint : "hsl(var(--border) / 0.3)",
+                    color: sel ? b.tint : "hsl(var(--muted-foreground))",
+                  }}
+                >
+                  {b.name}
+                </button>
+              );
+            })}
+          </div>
+        </Card>
+      )}
 
       {/* Data source info */}
       <Card className="glass-panel rounded-xl px-4 py-3">
@@ -124,7 +184,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
             </span>
           </div>
         </div>
-        <p className="text-xs text-muted-foreground/70 leading-relaxed">{behavior.summary}</p>
+        <p className="text-xs text-muted-foreground/70 leading-relaxed">{displaySummary}</p>
 
         {/* Live metric chips */}
         <div className="flex flex-wrap gap-1.5 pt-1">
@@ -145,7 +205,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
 
       {/* Dynamic Patterns — live */}
       <div className="space-y-3">
-        {behavior.patterns.map((pattern, idx) => (
+        {displayPatterns.map((pattern, idx) => (
           <Card key={idx} className="glass-panel rounded-xl p-4">
             <div className="flex items-start gap-3">
               <div
