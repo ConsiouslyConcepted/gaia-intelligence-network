@@ -9,7 +9,9 @@ import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphere
 import { CRYO_REGIONS, cryoRegionById, buildCryoReading, CryoRegionId } from "@/lib/cryosphereRegions";
 import { BIO_REGIONS, bioRegionById, buildBioReading, BioRegionId } from "@/lib/biosphereRegions";
 import { HELIO_ZONES, helioZoneById, buildHelioReading, HelioZoneId } from "@/lib/heliosphereZones";
+import { TECHNO_ZONES, technoZoneById, buildTechnoReading, TechnoZoneId } from "@/lib/technosphereZones";
 import { HelioActivityMap } from "./HelioActivityMap";
+import { TechnoInfrastructureMap } from "./TechnoInfrastructureMap";
 import { BASIN_BOUNDS, RegionDef } from "@/lib/basinMasks";
 import { useEffect, useMemo, useState } from "react";
 
@@ -31,9 +33,10 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const isHydro = sphere.id === "hydrosphere";
   const isCryo = sphere.id === "cryosphere";
   const isBio = sphere.id === "biosphere";
-  const isHelio = sphere.id === "magnetosphere"; // displayed as "Heliosphere"
+  const isHelio = sphere.id === "magnetosphere"; // displayed as "Magnetosphere"
+  const isTechno = sphere.id === "ionosphere"; // displayed as "Technosphere"
   const hasRegions = isHydro || isCryo || isBio;
-  const hasZones = isHelio;
+  const hasZones = isHelio || isTechno;
 
   // Selected region id (string for generic globe API)
   const [selectedId, setSelectedId] = useState<string>("global");
@@ -116,8 +119,23 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         chips,
       };
     }
+    if (isTechno) {
+      const cur = technoZoneById(selectedId as TechnoZoneId);
+      const r = buildTechnoReading(intel, cur);
+      const chips = TECHNO_ZONES.map((z) => ({ id: z.id, name: z.name, tint: z.tint }));
+      return {
+        regions: undefined,
+        regionTint: cur.tint,
+        regionName: cur.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
     return { regions: undefined, regionTint: undefined, regionName: undefined, regionSummary: null, regionPatterns: null, regionScore: null, regionTrend: null, chips: [] as { id: string; name: string; tint: string }[] };
-  }, [isHydro, isCryo, isBio, isHelio, selectedId, intel]);
+  }, [isHydro, isCryo, isBio, isHelio, isTechno, selectedId, intel]);
 
   const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
   const displaySummary = regionSummary ?? globalBehavior.summary;
@@ -137,7 +155,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   }, []);
   const secsAgo = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
 
-  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : isHelio ? "activity zone" : "region";
+  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : isHelio ? "activity zone" : isTechno ? "infrastructure layer" : "region";
 
   return (
     <div className="space-y-4">
@@ -179,12 +197,18 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         </div>
       </Card>
 
-      {/* Visualization: Helio activity map for heliosphere, Blue Marble for Earth spheres */}
+      {/* Visualization: zone maps for Helio/Techno, Blue Marble for Earth spheres */}
       <Card className="glass-panel rounded-xl p-3 relative overflow-hidden">
-        {hasZones ? (
+        {isHelio ? (
           <HelioActivityMap
             height={340}
             selectedId={selectedId as HelioZoneId}
+            onSelect={(id) => setSelectedId(id)}
+          />
+        ) : isTechno ? (
+          <TechnoInfrastructureMap
+            height={340}
+            selectedId={selectedId as TechnoZoneId}
             onSelect={(id) => setSelectedId(id)}
           />
         ) : (
@@ -201,10 +225,13 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         )}
         {(hasRegions || hasZones) && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
-            {hasZones ? "Click an activity zone · or select below" : `Click an ${regionLabel} on the globe · or select below`}
+            {isTechno ? "Click an infrastructure layer · or select below"
+              : isHelio ? "Click an activity zone · or select below"
+              : `Click an ${regionLabel} on the globe · or select below`}
           </p>
         )}
       </Card>
+
 
       {/* Region / zone selector chips */}
       {(hasRegions || hasZones) && (

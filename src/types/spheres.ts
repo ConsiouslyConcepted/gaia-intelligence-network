@@ -102,7 +102,7 @@ export const SPHERES: Record<SphereId, Sphere> = {
   ionosphere: {
     id: "ionosphere",
     name: "Technosphere",
-    description: "Human-built systems — infrastructure, networks, energy grids, satellites",
+    description: "Human-built infrastructure — power grids, data centers, networks, satellites, supply chains",
     color: "#4488cc",
     radius: 1.75,
     opacity: 0.2,

@@ -42,10 +42,10 @@ const SIGNALS: Record<SphereId, SignalDef[]> = {
     { key: "pressure", label: "Solar Wind Pressure", unit: "nPa", baseline: 2.1, amplitude: 1.4, frequency: 0.07, color: "#91a7ff" },
   ],
   ionosphere: [
-    { key: "tec", label: "Total Electron Content", unit: "TECU", baseline: 28, amplitude: 8, frequency: 0.04, color: "#4488cc" },
-    { key: "fof2", label: "foF2 Critical Frequency", unit: "MHz", baseline: 7.2, amplitude: 1.8, frequency: 0.05, color: "#5dade2" },
-    { key: "hmf2", label: "hmF2 Peak Height", unit: "km", baseline: 280, amplitude: 40, frequency: 0.03, color: "#3498db" },
-    { key: "scint", label: "Scintillation Index S4", unit: "S4", baseline: 0.25, amplitude: 0.15, frequency: 0.06, color: "#2980b9" },
+    { key: "grid", label: "Global Grid Load", unit: "TW", baseline: 28.4, amplitude: 1.8, frequency: 0.06, color: "#e8c47a" },
+    { key: "dc_energy", label: "Data Center Energy", unit: "TWh/yr", baseline: 460, amplitude: 22, frequency: 0.04, color: "#9bd1ff" },
+    { key: "traffic", label: "Internet Traffic", unit: "Pb/s", baseline: 1.2, amplitude: 0.12, frequency: 0.05, color: "#7ec9c7" },
+    { key: "satellites", label: "Active Satellites", unit: "k", baseline: 10.2, amplitude: 0.4, frequency: 0.03, color: "#bfa6ff" },
   ],
   noosphere: [
     { key: "dataflow", label: "Global Data Flow", unit: "Tb/s", baseline: 840, amplitude: 120, frequency: 0.03, color: "#ab47bc" },
