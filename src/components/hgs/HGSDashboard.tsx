@@ -16,6 +16,8 @@ import { PairOrbitDiagram } from "@/components/geometry/PairOrbitDiagram";
 import { IntervalsSidebar } from "@/components/geometry/IntervalsSidebar";
 import { PairsPanel } from "@/components/geometry/PairsPanel";
 import { PlanetNoteLegend } from "@/components/geometry/PlanetNoteLegend";
+import { GeometryGuide } from "@/components/geometry/GeometryGuide";
+import { IntervalLegend } from "@/components/geometry/IntervalLegend";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
 type UniverseMode = "harmonics" | "transits" | "geometry";
@@ -187,15 +189,17 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-center gap-3 pb-12 px-[300px]">
+          <div className="w-full h-full flex flex-col items-center justify-center gap-2.5 pb-10 px-[300px]">
+            <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
             <ChromaticWheel
               interval={selectedInterval}
-              size={600}
+              size={560}
               onSelectInterval={setSelectedIntervalId}
               onPlanetClick={(id) => handlePlanetClick(id)}
               onPlanetContext={(id) => handleTonePlay(id)}
               highlightedPlanet={selectedPlanet}
             />
+            <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
             <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
           </div>
         )}

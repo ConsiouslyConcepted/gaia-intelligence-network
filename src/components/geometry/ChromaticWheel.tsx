@@ -134,6 +134,38 @@ export const ChromaticWheel = ({
         })}
       </g>
 
+      {/* ─── Planet-to-planet harmonic links (when a planet is selected) ─── */}
+      {highlightedPlanet && (() => {
+        const sel = PLANET_NOTES.find((p) => p.id === highlightedPlanet);
+        if (!sel) return null;
+        const selIdx = NOTE_INDEX[sel.note];
+        if (selIdx === undefined) return null;
+        const targetIdx = (selIdx + interval.semitones) % 12;
+        const reverseIdx = (selIdx - interval.semitones + 12) % 12;
+        const partners = PLANET_NOTES.filter(
+          (p) => p.id !== sel.id && (NOTE_INDEX[p.note] === targetIdx || NOTE_INDEX[p.note] === reverseIdx),
+        );
+        if (partners.length === 0) return null;
+        const a0 = -Math.PI / 2 + (selIdx / 12) * Math.PI * 2;
+        const x0 = cx + Math.cos(a0) * r;
+        const y0 = cy + Math.sin(a0) * r;
+        return (
+          <g filter="url(#cw-glow)">
+            {partners.map((p) => {
+              const pIdx = NOTE_INDEX[p.note];
+              const a = -Math.PI / 2 + (pIdx / 12) * Math.PI * 2;
+              const x = cx + Math.cos(a) * r;
+              const y = cy + Math.sin(a) * r;
+              return (
+                <line key={p.id} x1={x0} y1={y0} x2={x} y2={y}
+                  stroke={sel.color} strokeWidth={2.8}
+                  strokeDasharray="6 4" opacity={0.9} />
+              );
+            })}
+          </g>
+        );
+      })()}
+
       {/* Central luminous core */}
       <circle cx={cx} cy={cy} r={r * 0.32} fill="url(#cw-core)" />
       <circle cx={cx} cy={cy} r={r * 0.08} fill="hsla(45,95%,90%,0.9)" filter="url(#cw-glow)" />
