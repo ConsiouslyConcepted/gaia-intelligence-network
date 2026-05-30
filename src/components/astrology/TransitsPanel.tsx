@@ -68,7 +68,7 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
                   )}
                 </div>
                 <div className="text-[9px] text-muted-foreground/50 tracking-wider">
-                  {deg}° {min.toString().padStart(2, "0")}′ {p.signGlyph} {p.signName}
+                  {deg}° {min.toString().padStart(2, "0")}′ {p.signName}
                 </div>
               </div>
             </button>
