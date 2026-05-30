@@ -87,7 +87,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
   }, [positions]);
 
   return (
-    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full h-full max-w-[min(58vh,580px)] max-h-[58vh] mx-auto">
+    <svg viewBox={`0 0 ${SIZE} ${SIZE}`} className="w-full h-full max-w-[min(68vh,680px)] max-h-[68vh] mx-auto">
       <defs>
         <radialGradient id="discGlow" cx="50%" cy="50%" r="50%">
           <stop offset="0%"  stopColor="hsla(210, 60%, 30%, 0.18)" />
