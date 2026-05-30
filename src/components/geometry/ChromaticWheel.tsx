@@ -46,7 +46,14 @@ const buildEdges = (step: number) => {
   return segs;
 };
 
-export const ChromaticWheel = ({ interval, size = 520, onSelectInterval }: Props) => {
+export const ChromaticWheel = ({
+  interval,
+  size = 520,
+  onSelectInterval,
+  onPlanetClick,
+  onPlanetContext,
+  highlightedPlanet,
+}: Props) => {
   const [hover, setHover] = useState<number | null>(null);
   const cx = size / 2;
   const cy = size / 2;
