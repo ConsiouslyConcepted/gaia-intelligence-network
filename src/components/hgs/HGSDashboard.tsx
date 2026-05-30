@@ -189,7 +189,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-start gap-3 overflow-y-auto px-4 pb-36 pt-8 sm:px-8 lg:px-16">
+          <div className="w-full h-full flex flex-col items-center justify-start gap-3 overflow-y-auto px-4 pb-36 pt-20 sm:px-8 lg:px-16">
             <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
             <ChromaticWheel
               interval={selectedInterval}
