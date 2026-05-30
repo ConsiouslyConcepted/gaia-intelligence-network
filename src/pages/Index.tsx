@@ -262,8 +262,6 @@ const Index = () => {
       </div>
       {/* Corner brackets — sharper, longer */}
       {[
-        "top-3 left-3 border-l border-t",
-        "top-3 right-3 border-r border-t",
         "bottom-3 left-3 border-l border-b",
         "bottom-3 right-3 border-r border-b",
       ].map((pos) => (

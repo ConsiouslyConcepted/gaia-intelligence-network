@@ -248,8 +248,6 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* Corner brackets */}
       {[
-        "top-3 left-3 border-l border-t rounded-tl",
-        "top-3 right-3 border-r border-t rounded-tr",
         "bottom-3 left-3 border-l border-b rounded-bl",
         "bottom-3 right-3 border-r border-b rounded-br",
       ].map((pos) => (
