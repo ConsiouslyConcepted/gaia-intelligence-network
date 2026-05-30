@@ -220,11 +220,11 @@ function BasinMarkers({
               }}
             >
               <sphereGeometry args={[isSel ? 0.06 : 0.04, 16, 16]} />
-              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 1 : 0.85} />
+              <meshBasicMaterial color={isSel ? "#e8f1f7" : "#b8cdd9"} transparent opacity={isSel ? 1 : 0.8} />
             </mesh>
             <mesh>
               <sphereGeometry args={[isSel ? 0.11 : 0.08, 16, 16]} />
-              <meshBasicMaterial color={m.tint} transparent opacity={isSel ? 0.28 : 0.14} />
+              <meshBasicMaterial color={isSel ? "#cfe0ec" : "#8fa9b8"} transparent opacity={isSel ? 0.3 : 0.15} />
             </mesh>
           </group>
         );
