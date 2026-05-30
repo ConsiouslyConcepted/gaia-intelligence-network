@@ -144,12 +144,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             {selectedPlanet && (
               <button
                 onClick={() => setSelectedPlanet(null)}
-                className="text-[10px] uppercase tracking-wider transition-all duration-300 px-4 py-2 rounded-lg font-medium"
+                className="text-[11px] uppercase tracking-[0.18em] transition-all duration-300 px-6 py-2.5 rounded-xl font-semibold"
                 style={{
-                  color: "hsla(0,0%,100%,0.6)",
-                  background: "hsla(0,0%,100%,0.04)",
-                  border: "1px solid hsla(0,0%,100%,0.1)",
-                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06)",
+                  background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+                  color: "hsla(0,0%,100%,0.95)",
+                  border: "1.5px solid hsla(220,35%,60%,0.55)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 24px hsla(210,70%,60%,0.25), 0 0 48px hsla(210,70%,55%,0.15), 0 12px 32px rgba(0,0,0,0.5)",
                 }}
               >
                 Show All
