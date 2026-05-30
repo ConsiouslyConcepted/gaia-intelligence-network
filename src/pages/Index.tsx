@@ -78,20 +78,39 @@ const Index = () => {
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
+      {/* Aurora / nebula glow behind globe */}
+      <div className="absolute inset-0 z-0 pointer-events-none" style={{
+        background:
+          "radial-gradient(ellipse 65% 55% at 50% 58%, hsla(200,80%,40%,0.12) 0%, hsla(260,55%,30%,0.06) 42%, transparent 78%)",
+      }} />
+
       {/* Full-screen globe */}
-      <div className="absolute inset-0 z-0 translate-y-[8%]">
+      <div className="absolute inset-0 z-[1] translate-y-[8%]">
         <EarthVisualization />
       </div>
 
+      {/* Volumetric halo around the planet */}
+      <div className="absolute inset-0 z-[2] pointer-events-none mix-blend-screen" style={{
+        background:
+          "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
+      }} />
+
       {/* Vignette overlay */}
-      <div className="absolute inset-0 z-[1] pointer-events-none" style={{
-        background: "radial-gradient(ellipse at center, transparent 30%, hsla(240,30%,3%,0.6) 80%, hsla(240,30%,3%,0.9) 100%)"
+      <div className="absolute inset-0 z-[3] pointer-events-none" style={{
+        background:
+          "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
       }} />
 
       {/* Scanline overlay */}
-      <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.02]"
+      <div className="absolute inset-0 z-[4] pointer-events-none opacity-[0.025]"
         style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.08) 2px, hsl(var(--foreground) / 0.08) 4px)" }}
       />
+
+      {/* Film grain */}
+      <div className="absolute inset-0 z-[4] pointer-events-none opacity-[0.05] mix-blend-overlay"
+        style={{ backgroundImage: "url(\"data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)' opacity='0.75'/></svg>\")" }}
+      />
+
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-3">
@@ -213,15 +232,55 @@ const Index = () => {
           </div>
         </HudPanel>
       </div>
-      {/* Corner brackets */}
+      {/* Corner brackets — sharper, longer */}
       {[
-        "top-3 left-3 border-l border-t rounded-tl",
-        "top-3 right-3 border-r border-t rounded-tr",
-        "bottom-3 left-3 border-l border-b rounded-bl",
-        "bottom-3 right-3 border-r border-b rounded-br",
+        "top-3 left-3 border-l border-t",
+        "top-3 right-3 border-r border-t",
+        "bottom-3 left-3 border-l border-b",
+        "bottom-3 right-3 border-r border-b",
       ].map((pos) => (
-        <div key={pos} className={`absolute ${pos} w-5 h-5 border-border/15 z-10 pointer-events-none`} />
+        <div key={pos} className={`absolute ${pos} w-8 h-8 border-foreground/20 z-10 pointer-events-none`} />
       ))}
+
+      {/* ─── BOTTOM TELEMETRY CHROME ─── */}
+      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
+        <div
+          className="flex items-center gap-6 px-5 py-2 rounded-full backdrop-blur-2xl"
+          style={{
+            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,28%,7%,0.92) 100%)",
+            border: "1px solid hsla(0,0%,100%,0.07)",
+            boxShadow:
+              "inset 0 1px 0 hsla(0,0%,100%,0.10), 0 10px 28px rgba(0,0,0,0.65), 0 0 36px hsla(190,60%,50%,0.05)",
+          }}
+        >
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">UTC</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
+              {time.toISOString().slice(11, 19)}
+            </span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Coherence</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
+              {globalCoherence.toString().padStart(2, "0")}.{(tick % 100).toString().padStart(2, "0")}
+            </span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex flex-col items-center">
+            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Orbital V</span>
+            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">29.78 km/s</span>
+          </div>
+          <div className="w-px h-5 bg-foreground/10" />
+          <div className="flex items-center gap-1.5">
+            <span className="relative flex w-1.5 h-1.5">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/60 animate-ping" />
+              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-emerald-400/90" />
+            </span>
+            <span className="text-[9px] tracking-[0.28em] uppercase text-foreground/70 font-semibold">Nominal</span>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
