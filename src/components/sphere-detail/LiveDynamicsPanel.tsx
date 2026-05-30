@@ -31,7 +31,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const isHydro = sphere.id === "hydrosphere";
   const isCryo = sphere.id === "cryosphere";
   const isBio = sphere.id === "biosphere";
-  const isHelio = sphere.id === "heliosphere";
+  const isHelio = sphere.id === "magnetosphere"; // displayed as "Heliosphere"
   const hasRegions = isHydro || isCryo || isBio;
   const hasZones = isHelio;
 
