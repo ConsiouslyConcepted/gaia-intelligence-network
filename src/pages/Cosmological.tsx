@@ -2,7 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Activity, Signal, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 
-const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string; glow?: string }) => (
+const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
     className={`relative rounded-xl backdrop-blur-2xl ${className}`}
     style={{
@@ -16,8 +16,9 @@ const HudPanel = ({ children, className = "" }: { children: React.ReactNode; cla
     <div
       className="absolute -top-px left-4 right-4 h-px pointer-events-none"
       style={{
-        background:
-          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+        background: topBar
+          ? "hsla(220,30%,55%,0.35)"
+          : "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
       }}
     />
     <div
