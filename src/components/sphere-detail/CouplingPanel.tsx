@@ -1,4 +1,4 @@
-import { useMemo, useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Card } from "@/components/ui/card";
 import { Sphere, SPHERE_ARRAY, SphereId } from "@/types/spheres";
@@ -142,34 +142,36 @@ export function CouplingPanel({ sphere, accent }: Props) {
   const navigate = useNavigate();
   const couplings = useSphereCouplings(sphere.id);
   const [hovered, setHovered] = useState<SphereId | null>(null);
-  const [pulse, setPulse] = useState(0);
-
-  useEffect(() => {
-    const iv = setInterval(() => setPulse((p) => p + 1), 80);
-    return () => clearInterval(iv);
-  }, []);
 
   const meanStrength = useMemo(
     () => (couplings.length ? Math.round((couplings.reduce((s, c) => s + c.strength, 0) / couplings.length) * 100) : 0),
     [couplings]
   );
-  const strongest = couplings[0];
+  const strongest = useMemo(() => [...couplings].sort((a, b) => b.strength - a.strength)[0], [couplings]);
   const strongestTarget = strongest ? SPHERE_ARRAY.find((s) => s.id === strongest.target) : null;
   const leading = useMemo(() => couplings.filter((c) => c.direction === "outgoing").length, [couplings]);
   const following = useMemo(() => couplings.filter((c) => c.direction === "incoming").length, [couplings]);
 
   const hoveredLink = couplings.find((c) => c.target === hovered) ?? null;
 
-  // Radial layout
+  // FIXED radial layout — canonical sphere order, nodes never swap positions.
   const CX = 250, CY = 250, R = 175;
+  const orderedTargets = useMemo(
+    () => SPHERE_ARRAY.map((s) => s.id).filter((id) => id !== sphere.id),
+    [sphere.id]
+  );
   const positions = useMemo(
     () =>
-      couplings.map((link, i) => {
-        const angle = -Math.PI / 2 + (i / Math.max(1, couplings.length)) * Math.PI * 2;
-        return { link, x: CX + Math.cos(angle) * R, y: CY + Math.sin(angle) * R, angle };
+      orderedTargets.map((targetId, i) => {
+        const angle = -Math.PI / 2 + (i / Math.max(1, orderedTargets.length)) * Math.PI * 2;
+        const link = couplings.find((c) => c.target === targetId);
+        return { targetId, link, x: CX + Math.cos(angle) * R, y: CY + Math.sin(angle) * R, angle };
       }),
-    [couplings]
+    [orderedTargets, couplings]
   );
+
+  // Sort list view by strength (list reorders; network stays still).
+  const sortedList = useMemo(() => [...couplings].sort((a, b) => b.strength - a.strength), [couplings]);
 
   return (
     <div className="space-y-4 animate-fade-in">
@@ -209,6 +211,23 @@ export function CouplingPanel({ sphere, accent }: Props) {
           </div>
         </div>
 
+        {/* How to read */}
+        <div className="mb-4 rounded-lg border border-border/15 bg-background/30 p-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-[10px] text-muted-foreground/65 leading-relaxed">
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">Edge thickness · %</div>
+            How tightly {sphere.name}'s score moves with the other sphere. 100 = perfect co-movement, 0 = unrelated.
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">Direction · Δt</div>
+            Positive Δt means {sphere.name} <span className="text-foreground/80">leads</span>; negative means it <span className="text-foreground/80">follows</span>; near zero means in phase.
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">+ / − sign</div>
+            Positive = they rise and fall together. Negative = one rises as the other falls (inverse coupling).
+          </div>
+        </div>
+
+
         <div className="relative aspect-square w-full max-w-[600px] mx-auto">
           <svg viewBox="0 0 500 500" className="w-full h-full">
             <defs>
@@ -244,26 +263,25 @@ export function CouplingPanel({ sphere, accent }: Props) {
             <circle cx={CX} cy={CY} r={95} fill="url(#couplingCenterGlow)" />
 
             {/* Edges */}
-            {positions.map(({ link, x, y }) => {
-              const color = sphereTone(link.target);
-              const isHover = hovered === link.target;
+            {positions.map(({ targetId, link, x, y }) => {
+              if (!link) return null;
+              const color = sphereTone(targetId);
+              const isHover = hovered === targetId;
               const isDim = hovered && !isHover;
               const baseOpacity = 0.18 + link.strength * 0.7;
               const opacity = isHover ? 1 : isDim ? 0.08 : baseOpacity;
               const strokeW = 0.6 + link.strength * 2.6;
-              // Flow speed proportional to strength; sign by direction
-              const speed = link.strength * 1.2;
-              const dashOffset =
-                link.direction === "incoming"
-                  ? pulse * speed
-                  : link.direction === "outgoing"
-                  ? -pulse * speed
-                  : 0;
+              const animClass =
+                link.direction === "outgoing"
+                  ? "coupling-flow-out"
+                  : link.direction === "incoming"
+                  ? "coupling-flow-in"
+                  : "";
               const midX = (CX + x) / 2;
               const midY = (CY + y) / 2;
 
               return (
-                <g key={link.target}>
+                <g key={targetId}>
                   {isHover && (
                     <line x1={CX} y1={CY} x2={x} y2={y} stroke={color} strokeWidth={strokeW + 2.5} opacity={0.3} filter="url(#couplingGlow)" />
                   )}
@@ -276,11 +294,12 @@ export function CouplingPanel({ sphere, accent }: Props) {
                     strokeWidth={strokeW}
                     opacity={opacity}
                     strokeDasharray={link.direction === "bidirectional" ? "0" : "5 4"}
-                    strokeDashoffset={dashOffset}
                     strokeLinecap="round"
+                    className={animClass}
+                    style={{ transition: "opacity 300ms, stroke-width 300ms" }}
                   />
                   {/* Edge chip — |r| as percent */}
-                  <g opacity={isDim ? 0.3 : 1}>
+                  <g opacity={isDim ? 0.3 : 1} style={{ transition: "opacity 300ms" }}>
                     <rect
                       x={midX - 16} y={midY - 9} width={32} height={16} rx={8}
                       fill="hsla(240,25%,7%,0.9)"
@@ -299,8 +318,9 @@ export function CouplingPanel({ sphere, accent }: Props) {
             <circle
               cx={CX} cy={CY} r={44}
               fill="none" stroke={accent} strokeWidth="1"
-              opacity={0.25 + Math.sin(pulse * 0.05) * 0.2}
+              opacity={0.35}
               filter="url(#couplingGlow)"
+              className="coupling-pulse"
             />
             <text x={CX} y={CY - 3} textAnchor="middle" fill={accent} fontSize="10" fontWeight="700" letterSpacing="1">
               {sphere.name.toUpperCase()}
@@ -309,33 +329,34 @@ export function CouplingPanel({ sphere, accent }: Props) {
               SOURCE
             </text>
 
-            {/* Nodes */}
-            {positions.map(({ link, x, y }) => {
-              const color = sphereTone(link.target);
-              const target = SPHERE_ARRAY.find((s) => s.id === link.target);
-              const isHover = hovered === link.target;
+            {/* Nodes — fixed radius so layout never reflows */}
+            {positions.map(({ targetId, link, x, y }) => {
+              const color = sphereTone(targetId);
+              const target = SPHERE_ARRAY.find((s) => s.id === targetId);
+              const isHover = hovered === targetId;
               const isDim = hovered && !isHover;
-              const r = 24 + link.strength * 10;
+              const NODE_R = 28;
+              const pct = link ? Math.round(link.strength * 100) : 0;
 
               return (
                 <g
-                  key={link.target}
+                  key={targetId}
                   style={{ cursor: "pointer", transition: "opacity 200ms" }}
                   opacity={isDim ? 0.32 : 1}
-                  onMouseEnter={() => setHovered(link.target)}
+                  onMouseEnter={() => setHovered(targetId)}
                   onMouseLeave={() => setHovered(null)}
-                  onClick={() => navigate(`/sphere/${link.target}`)}
+                  onClick={() => navigate(`/sphere/${targetId}`)}
                 >
-                  {isHover && <circle cx={x} cy={y} r={r + 9} fill={color} opacity={0.2} filter="url(#couplingGlow)" />}
-                  <circle cx={x} cy={y} r={r} fill="hsla(240,30%,8%,0.92)" stroke={color} strokeWidth="1.3" />
+                  {isHover && <circle cx={x} cy={y} r={NODE_R + 9} fill={color} opacity={0.2} filter="url(#couplingGlow)" />}
+                  <circle cx={x} cy={y} r={NODE_R} fill="hsla(240,30%,8%,0.92)" stroke={color} strokeWidth="1.3" />
                   <text x={x} y={y - 4} textAnchor="middle" fill={color} fontSize="9" fontWeight="600">
                     {target?.name}
                   </text>
-                  <text x={x} y={y + 7} textAnchor="middle" fill="hsla(0,0%,100%,0.4)" fontSize="6.5" fontFamily="ui-monospace, monospace">
-                    {link.r >= 0 ? "+" : "−"}{Math.round(link.strength * 100)}%
+                  <text x={x} y={y + 7} textAnchor="middle" fill="hsla(0,0%,100%,0.5)" fontSize="6.5" fontFamily="ui-monospace, monospace">
+                    {link ? (link.r >= 0 ? "+" : "−") : ""}{pct}%
                   </text>
                   <text x={x} y={y + 16} textAnchor="middle" fill="hsla(0,0%,100%,0.3)" fontSize="6" fontFamily="ui-monospace, monospace">
-                    Δt {link.lag >= 0 ? "+" : ""}{link.lag}
+                    Δt {link && link.lag >= 0 ? "+" : ""}{link?.lag ?? 0}
                   </text>
                 </g>
               );
@@ -357,7 +378,7 @@ export function CouplingPanel({ sphere, accent }: Props) {
 
       {/* List */}
       <div className="space-y-2">
-        {couplings.map((link) => {
+        {sortedList.map((link) => {
           const color = sphereTone(link.target);
           const target = SPHERE_ARRAY.find((s) => s.id === link.target);
           const pct = Math.round(link.strength * 100);
