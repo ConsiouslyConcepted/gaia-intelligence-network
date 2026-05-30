@@ -30,16 +30,17 @@ export const GeometryGuide = ({ interval, selectedPlanet }: Props) => {
 
   return (
     <div
-      className="relative w-full max-w-[760px] rounded-xl backdrop-blur-2xl overflow-hidden"
+      className="relative w-full max-w-[760px] rounded-xl backdrop-blur-xl"
       style={{
         background:
-          "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-        border: "1px solid hsla(220,30%,55%,0.35)",
+          "linear-gradient(145deg, hsla(220,30%,16%,0.85) 0%, hsla(225,35%,10%,0.85) 100%)",
+        border: "1px solid hsla(220,40%,65%,0.55)",
         boxShadow:
-          "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(210,75%,62%,0.18), 0 8px 28px rgba(0,0,0,0.45)",
+          "inset 0 1px 0 hsla(0,0%,100%,0.15), 0 0 0 1px hsla(220,30%,30%,0.35), 0 0 32px hsla(210,75%,62%,0.22), 0 8px 28px rgba(0,0,0,0.5)",
       }}
     >
-      <div className="absolute -top-px left-4 right-4 h-px pointer-events-none bg-gradient-to-r from-transparent via-foreground/40 to-transparent" />
+      <div className="absolute -top-px left-4 right-4 h-px pointer-events-none bg-gradient-to-r from-transparent via-foreground/50 to-transparent" />
+
 
       {/* Header strip */}
       <div className="relative flex items-center gap-2 px-3.5 pt-2.5 pb-2 border-b border-border/20">
