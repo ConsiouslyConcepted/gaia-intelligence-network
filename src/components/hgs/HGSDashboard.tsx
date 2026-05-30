@@ -60,6 +60,26 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const navigate = useNavigate();
   const { play, playing, getFrequencyData } = usePlanetAudio();
   const [selectedPlanet, setSelectedPlanet] = useState<string | null>(null);
+  const [mode, setMode] = useState<UniverseMode>("harmonics");
+  const [selectedSign, setSelectedSign] = useState<string | null>(null);
+  const [astroSelected, setAstroSelected] = useState<string | null>(null);
+  const [now, setNow] = useState<Date>(new Date());
+
+  // Recompute live transits every 10 minutes
+  useEffect(() => {
+    if (mode !== "transits") return;
+    const t = setInterval(() => setNow(new Date()), 10 * 60 * 1000);
+    return () => clearInterval(t);
+  }, [mode]);
+
+  const positions = useMemo(
+    () => (mode === "transits" ? computePositions(now) : []),
+    [mode, now],
+  );
+  const aspects = useMemo(
+    () => (mode === "transits" ? computeAspects(positions) : []),
+    [mode, positions],
+  );
 
   const handlePlanetClick = (planetId: string) => {
     setSelectedPlanet(selectedPlanet === planetId ? null : planetId);
@@ -69,22 +89,28 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
     ? SOLAR_PLANETS.find((p) => p.id === selectedPlanet)
     : null;
 
-  const visiblePairs = selectedPlanet
-    ? PLANET_RESONANCE_PAIRS.filter((pair) => {
-        const p1 = SOLAR_PLANETS[pair.i];
-        const p2 = SOLAR_PLANETS[pair.j];
-        return p1.id === selectedPlanet || p2.id === selectedPlanet;
-      })
-    : PLANET_RESONANCE_PAIRS;
-
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
-      {/* Full-screen orbital field */}
+      {/* Full-screen visualization */}
       <div className="absolute inset-x-0 top-[92px] bottom-0 z-0">
-        <OrbitalResonanceField
-          selectedPlanet={selectedPlanet}
-          onPlanetClick={(id) => setSelectedPlanet(id)}
-        />
+        {mode === "harmonics" ? (
+          <OrbitalResonanceField
+            selectedPlanet={selectedPlanet}
+            onPlanetClick={(id) => setSelectedPlanet(id)}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center px-[300px]">
+            <AstrologyChart
+              positions={positions}
+              aspects={aspects}
+              selectedSign={selectedSign}
+              selectedPlanet={astroSelected}
+              onSignClick={(id) => setSelectedSign(selectedSign === id ? null : id)}
+              onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
+              onPlanetContext={(id) => play(id)}
+            />
+          </div>
+        )}
       </div>
 
       {/* Vignette */}
