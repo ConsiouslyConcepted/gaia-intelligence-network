@@ -144,25 +144,9 @@ const Index = () => {
               "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
             border: "1px solid hsla(220,40%,65%,0.5)",
             boxShadow:
-              "inset 0 1px 0 hsla(0,0%,100%,0.14), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,40%,45%,0.35), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
+              "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
-          {/* Bright top rim light */}
-          <div
-            className="absolute -top-px left-4 right-4 h-px pointer-events-none"
-            style={{
-              background:
-                "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
-            }}
-          />
-          {/* Inner edge glow */}
-          <div
-            className="absolute inset-0 rounded-xl pointer-events-none"
-            style={{
-              boxShadow:
-                "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
-            }}
-          />
           {/* Subtle bottom edge shadow */}
           <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
 
