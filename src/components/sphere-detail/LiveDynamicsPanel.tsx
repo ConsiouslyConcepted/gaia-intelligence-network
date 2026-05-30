@@ -104,7 +104,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         <BlueMarbleGlobe
           height={340}
           sphereId={sphere.id}
-          overlayUrl={live.textureUrl}
+          overlayUrl={isHydro ? undefined : live.textureUrl}
           quakes={sphere.id === "geosphere" ? live.quakes : undefined}
           basins={basinMarkers}
           selectedBasinId={isHydro ? basinId : undefined}
