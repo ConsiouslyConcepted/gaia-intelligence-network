@@ -5,6 +5,7 @@ import * as THREE from "three";
 import { TextureLoader } from "three";
 import { SphereId } from "@/types/spheres";
 import { QuakePoint } from "@/lib/liveOverlays";
+import { buildBasinMaskTexture } from "@/lib/basinMasks";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
@@ -232,6 +233,41 @@ function BasinMarkers({
   );
 }
 
+// ─── Basin highlight (lit-up ocean region) ───
+
+function BasinHighlight({ basinId, color }: { basinId: string; color: string }) {
+  const meshRef = useRef<THREE.Mesh>(null);
+  const matRef = useRef<THREE.MeshBasicMaterial>(null);
+  const texture = useMemo(() => buildBasinMaskTexture(basinId, color), [basinId, color]);
+
+  useEffect(() => () => { texture.dispose(); }, [texture]);
+
+  useFrame((state) => {
+    if (meshRef.current) {
+      meshRef.current.rotation.y = state.clock.elapsedTime * 0.08;
+    }
+    if (matRef.current) {
+      // gentle breathing pulse
+      const pulse = 0.85 + Math.sin(state.clock.elapsedTime * 1.4) * 0.15;
+      matRef.current.opacity = pulse;
+    }
+  });
+
+  return (
+    <mesh ref={meshRef}>
+      <sphereGeometry args={[1.815, 96, 96]} />
+      <meshBasicMaterial
+        ref={matRef}
+        map={texture}
+        transparent
+        opacity={1}
+        blending={THREE.AdditiveBlending}
+        depthWrite={false}
+      />
+    </mesh>
+  );
+}
+
 // ─── Main component ───
 
 interface BlueMarbleGlobeProps {
@@ -242,6 +278,8 @@ interface BlueMarbleGlobeProps {
   basins?: BasinMarker[];
   selectedBasinId?: string;
   onSelectBasin?: (id: string) => void;
+  /** Tint color used for the basin highlight shell */
+  selectedBasinColor?: string;
 }
 
 export const BlueMarbleGlobe = ({
@@ -252,8 +290,11 @@ export const BlueMarbleGlobe = ({
   basins,
   selectedBasinId,
   onSelectBasin,
+  selectedBasinColor,
 }: BlueMarbleGlobeProps) => {
   const accentColor = sphereId ? SPHERE_COLORS[sphereId] || "#4488cc" : "#4488cc";
+  const showBasinHighlight =
+    selectedBasinId && selectedBasinId !== "global" && selectedBasinColor;
 
   return (
     <div style={{ height }} className="w-full rounded-xl overflow-hidden">
@@ -273,6 +314,9 @@ export const BlueMarbleGlobe = ({
           <DynamicOverlay sphereId={sphereId} textureUrl={overlayUrl} />
         )}
         {quakes && quakes.length > 0 && <QuakePoints quakes={quakes} />}
+        {showBasinHighlight && (
+          <BasinHighlight basinId={selectedBasinId!} color={selectedBasinColor!} />
+        )}
         {basins && basins.length > 0 && onSelectBasin && (
           <BasinMarkers markers={basins} selectedId={selectedBasinId} onSelect={onSelectBasin} />
         )}
