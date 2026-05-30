@@ -9,18 +9,38 @@ import { usePlanetAudio } from "@/hooks/usePlanetAudio";
 
 type SidebarMode = "patterns" | "cymatics";
 
-const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
+const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string; glow?: string }) => (
   <div
-    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
+    className={`relative rounded-xl backdrop-blur-2xl ${className}`}
     style={{
-      background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      boxShadow: glow
-        ? `0 0 40px ${glow}15, inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`
-        : "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
+      background:
+        "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+      border: "1px solid hsla(220,40%,65%,0.5)",
+      boxShadow:
+        "inset 0 1px 0 hsla(0,0%,100%,0.14), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,40%,45%,0.35), 0 0 28px hsla(220,50%,60%,0.14), 0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
-    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
-    <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
+    <div
+      className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+      }}
+    />
+    <div
+      className="absolute inset-0 rounded-xl pointer-events-none"
+      style={{
+        boxShadow:
+          "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
+      }}
+    />
+    <div
+      className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+      }}
+    />
     {children}
   </div>
 );
@@ -108,7 +128,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 Show All
               </button>
             )}
-            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(0,0%,100%,0.06)" }}>
+            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
               <button
                 onClick={onSwitchView}
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
@@ -119,10 +139,10 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(180deg, hsla(0,0%,100%,0.10) 0%, hsla(0,0%,100%,0.04) 100%)",
+                  background: "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,28%,9%,0.96) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
-                  border: "1px solid hsla(0,0%,100%,0.14)",
-                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.12), 0 4px 14px rgba(0,0,0,0.45), 0 0 20px hsla(38,40%,60%,0.08)",
+                  border: "1px solid hsla(220,40%,65%,0.5)",
+                  boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.22), inset 0 0 10px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.5), 0 0 18px -4px hsla(210,60%,65%,0.25)",
                 }}
               >
                 Universal
