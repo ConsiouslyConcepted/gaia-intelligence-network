@@ -211,6 +211,23 @@ export function CouplingPanel({ sphere, accent }: Props) {
           </div>
         </div>
 
+        {/* How to read */}
+        <div className="mb-4 rounded-lg border border-border/15 bg-background/30 p-3 grid grid-cols-1 md:grid-cols-3 gap-3 text-[10px] text-muted-foreground/65 leading-relaxed">
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">Edge thickness · %</div>
+            How tightly {sphere.name}'s score moves with the other sphere. 100 = perfect co-movement, 0 = unrelated.
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">Direction · Δt</div>
+            Positive Δt means {sphere.name} <span className="text-foreground/80">leads</span>; negative means it <span className="text-foreground/80">follows</span>; near zero means in phase.
+          </div>
+          <div>
+            <div className="text-[9px] uppercase tracking-[0.14em] text-foreground/70 mb-1">+ / − sign</div>
+            Positive = they rise and fall together. Negative = one rises as the other falls (inverse coupling).
+          </div>
+        </div>
+
+
         <div className="relative aspect-square w-full max-w-[600px] mx-auto">
           <svg viewBox="0 0 500 500" className="w-full h-full">
             <defs>
