@@ -9,18 +9,41 @@ import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
 import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
 
-const HudPanel = ({ children, className = "", glow }: { children: React.ReactNode; className?: string; glow?: string }) => (
+const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div
-    className={`relative rounded-xl border border-border/30 backdrop-blur-2xl ${className}`}
+    className={`relative rounded-xl backdrop-blur-2xl ${className}`}
     style={{
-      background: "linear-gradient(145deg, hsla(240,20%,13%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
-      boxShadow: glow
-        ? `0 0 40px ${glow}15, inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)`
-        : "inset 0 1px 0 rgba(255,255,255,0.07), inset 0 -1px 0 rgba(0,0,0,0.3), 0 8px 32px rgba(0,0,0,0.6), 0 2px 8px rgba(0,0,0,0.4)",
+      background:
+        "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
+      border: "1px solid hsla(220,30%,55%,0.35)",
+      boxShadow:
+        "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(220,40%,50%,0.08), 0 12px 40px rgba(0,0,0,0.55)",
     }}
   >
-    <div className="absolute top-0 left-4 right-4 h-px" style={{ background: glow ? `linear-gradient(90deg, transparent, ${glow}50, transparent)` : "linear-gradient(90deg, transparent, rgba(255,255,255,0.12), transparent)" }} />
-    <div className="absolute bottom-0 left-6 right-6 h-px" style={{ background: "linear-gradient(90deg, transparent, rgba(255,255,255,0.03), transparent)" }} />
+    {/* Bright top rim light */}
+    <div
+      className="absolute -top-px left-4 right-4 h-px"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+      }}
+    />
+    {/* Outer edge glow (inset to frame the panel) */}
+    <div
+      className="absolute inset-0 rounded-xl pointer-events-none"
+      style={{
+        boxShadow:
+          "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
+      }}
+    />
+    {/* Bottom subtle accent line */}
+    <div
+      className="absolute bottom-0 left-6 right-6 h-px"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+      }}
+    />
     {children}
   </div>
 );
