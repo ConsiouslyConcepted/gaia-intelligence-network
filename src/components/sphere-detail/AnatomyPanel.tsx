@@ -66,13 +66,14 @@ const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElem
     ],
   },
   ionosphere: {
-    overview: "The charged atmospheric shell — a vertically stratified plasma layer extending from ~60 km to ~1000 km altitude. Structure is defined by electron density profiles, photochemical equilibria, and magnetic field coupling.",
+    overview: "Humanity's built infrastructure layer — a global lattice of power systems, compute, communications, transportation, and orbital assets. Structure is defined by network topology, energy intensity, throughput, and physical chokepoints.",
     elements: [
-      { name: "D/E/F Layer Stack", description: "Vertically stratified ionization regions with distinct density, composition, and solar-dependence characteristics." },
-      { name: "Auroral Belts", description: "Oval-shaped zones of intense particle precipitation around the magnetic poles, driven by magnetospheric dynamics." },
-      { name: "Polar Cap Ionization", description: "High-latitude ionization structures driven by solar wind–magnetosphere coupling and open magnetic field lines." },
-      { name: "Equatorial Anomaly", description: "The Appleton anomaly — dual crests of enhanced electron density flanking the magnetic equator, driven by E×B drift." },
-      { name: "Sporadic-E Patches", description: "Thin, dense ionization layers at ~100 km altitude caused by wind shears concentrating metallic ions." },
+      { name: "Power & Energy Grid", description: "Generation mix, high-voltage transmission, distribution, and storage that delivers ~28 TW of continuous electricity worldwide." },
+      { name: "Data Centers & Compute", description: "Hyperscale and edge facilities running the cloud, AI training, and inference workloads at ~460 TWh/yr and climbing rapidly." },
+      { name: "Submarine Cable Backbone", description: "~600+ active fiber-optic cables across the seabed carrying roughly 99% of intercontinental internet traffic." },
+      { name: "Satellite Constellations", description: "LEO mega-constellations plus MEO/GEO assets — 10,000+ active satellites for communications, GNSS, and Earth observation." },
+      { name: "Transport & Logistics Network", description: "Ports, airports, rail, road, and pipeline systems moving people, goods, and energy across the planet." },
+      { name: "Industrial Material Stock", description: "Concrete, steel, asphalt, plastics, and metals embodied in cities and infrastructure — now exceeding global dry biomass by mass." },
     ],
   },
   noosphere: {
