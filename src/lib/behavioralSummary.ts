@@ -211,30 +211,32 @@ const BUILDERS: Record<SphereId, Builder> = {
   ionosphere: (intel) => {
     const m = intel.metrics;
     const grid = pick(m, "grid");
-    const uptime = pick(m, "uptime");
-    const sats = pick(m, "sats");
+    const dc = pick(m, "dc_energy");
+    const traffic = pick(m, "traffic");
+    const sats = pick(m, "satellites");
     const r = regime(intel.score);
     const summary =
-      `Ionosphere/technosphere stability ${intel.score} (${r.tag}) — ${trendPhrase(intel.trend)}. ` +
+      `Technosphere stability ${intel.score} (${r.tag}) — ${trendPhrase(intel.trend)}. ` +
       (grid ? `Grid load ${fmt(grid)}, ` : "") +
-      (uptime ? `network uptime ${fmt(uptime)}, ` : "") +
+      (dc ? `data-center energy ${fmt(dc)}, ` : "") +
+      (traffic ? `traffic ${fmt(traffic)}, ` : "") +
       (sats ? `${fmt(sats)} active satellites. ` : "") +
-      `Infrastructure showing ${r.tone}.`;
+      `Built infrastructure showing ${r.tone}.`;
     return {
       summary,
       patterns: [
-        { name: "Shell Rippling", description: "Traveling ionospheric disturbances (TIDs) — wave perturbations in electron density propagating horizontally through the plasma.", timeScale: "Minutes → Hours",
+        { name: "Electrification Load Growth", description: "EVs, heat pumps, and AI compute are accelerating electricity demand faster than transmission and generation capacity in many regions.", timeScale: "Years → Decades",
           status: grid ? `Load ${fmt(grid)} (${signed(grid.z, 1)}σ)` : "—",
           intensity: intensityFrom(m, ["grid"]), metricKeys: ["grid"] },
-        { name: "Polar Activation", description: "Auroral zone ionization surges driven by magnetospheric particle precipitation and field-aligned currents.", timeScale: "Minutes → Hours",
-          status: uptime ? `Uptime ${fmt(uptime)}` : "—",
-          intensity: intensityFrom(m, ["uptime"]), metricKeys: ["uptime"] },
-        { name: "Atmospheric-Electric Disturbance", description: "Ionospheric storms producing enhanced TEC gradients, scintillation, and disruption of radio propagation.", timeScale: "Hours → Days",
-          status: sats ? `Sats ${fmt(sats)}` : "—",
-          intensity: intensityFrom(m, ["sats", "grid"]), metricKeys: ["sats"] },
-        { name: "Diurnal Cycling", description: "Solar-driven photochemical ionization/recombination cycle producing day-night electron density asymmetry.", timeScale: "24h cycle",
-          status: `System ${trendPhrase(intel.trend)}`,
-          intensity: intensityFrom(m, ["grid", "uptime"]), metricKeys: ["uptime"] },
+        { name: "AI Compute Surge", description: "Hyperscale training clusters and inference workloads are driving data-center electricity demand toward ~3–4% of global supply by 2030.", timeScale: "Months → Years",
+          status: dc ? `${fmt(dc)} (${signed(dc.deltaPct)}%)` : "—",
+          intensity: intensityFrom(m, ["dc_energy"]), metricKeys: ["dc_energy"] },
+        { name: "Submarine Cable Throughput", description: "Intercontinental fiber backbone carries ~99% of international internet traffic; routing, latency, and cut-risk shape global connectivity.", timeScale: "Milliseconds → Years",
+          status: traffic ? `Traffic ${fmt(traffic)}` : "—",
+          intensity: intensityFrom(m, ["traffic"]), metricKeys: ["traffic"] },
+        { name: "Orbital Congestion", description: "LEO mega-constellations have pushed the active satellite population past 10,000, increasing conjunction events and Kessler-syndrome tail risk.", timeScale: "Days → Decades",
+          status: sats ? `${fmt(sats)} active` : "—",
+          intensity: intensityFrom(m, ["satellites"]), metricKeys: ["satellites"] },
       ],
     };
   },
