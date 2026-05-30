@@ -89,21 +89,33 @@ function loadOceanMask(): Promise<Float32Array> {
   return oceanMaskPromise;
 }
 
-/** Build an RGBA equirectangular highlight texture for arbitrary boxes + surface filter. */
+/**
+ * Build BOTH a fill texture and an edge-glow texture for a region.
+ * Fill = the painted area inside the bounds (gated by surface).
+ * Edge = bright outline tracing the boundary between "inside" and "outside" pixels
+ *        (this naturally follows coastlines for ocean/land surface filters).
+ */
 export function buildRegionMaskTexture(
   boxes: [number, number, number, number][],
   color: string,
   surface: Surface = "any",
-): { texture: THREE.CanvasTexture; ready: Promise<void> } {
-  const canvas = document.createElement("canvas");
-  canvas.width = MASK_W;
-  canvas.height = MASK_H;
-  const ctx = canvas.getContext("2d")!;
-  ctx.clearRect(0, 0, MASK_W, MASK_H);
+): { texture: THREE.CanvasTexture; edgeTexture: THREE.CanvasTexture; ready: Promise<void> } {
+  const fillCanvas = document.createElement("canvas");
+  fillCanvas.width = MASK_W; fillCanvas.height = MASK_H;
+  const fillCtx = fillCanvas.getContext("2d")!;
+  fillCtx.clearRect(0, 0, MASK_W, MASK_H);
 
-  const texture = new THREE.CanvasTexture(canvas);
+  const edgeCanvas = document.createElement("canvas");
+  edgeCanvas.width = MASK_W; edgeCanvas.height = MASK_H;
+  const edgeCtx = edgeCanvas.getContext("2d")!;
+  edgeCtx.clearRect(0, 0, MASK_W, MASK_H);
+
+  const texture = new THREE.CanvasTexture(fillCanvas);
   texture.minFilter = THREE.LinearFilter;
   texture.magFilter = THREE.LinearFilter;
+  const edgeTexture = new THREE.CanvasTexture(edgeCanvas);
+  edgeTexture.minFilter = THREE.LinearFilter;
+  edgeTexture.magFilter = THREE.LinearFilter;
 
   const rgb = hexToRgb(color);
 
@@ -118,8 +130,10 @@ export function buildRegionMaskTexture(
       }
     }
 
-    const img = ctx.createImageData(MASK_W, MASK_H);
-    const data = img.data;
+    // First pass: scalar inside-mask in [0..1]
+    const inside = new Float32Array(MASK_W * MASK_H);
+    const fillImg = fillCtx.createImageData(MASK_W, MASK_H);
+    const fillData = fillImg.data;
 
     for (let y = 0; y < MASK_H; y++) {
       const lat = 90 - (y / MASK_H) * 180;
@@ -140,7 +154,6 @@ export function buildRegionMaskTexture(
         if (regionAlpha <= 0) continue;
 
         const idx = y * MASK_W + x;
-
         let surfaceMul = 1;
         if (oceanMask) {
           const ocean = oceanMask[idx];
@@ -153,20 +166,51 @@ export function buildRegionMaskTexture(
           }
         }
 
+        const v = regionAlpha * surfaceMul;
+        inside[idx] = v;
+
         const i = idx * 4;
-        const alpha = Math.round(surfaceMul * regionAlpha * 235);
-        data[i] = rgb.r;
-        data[i + 1] = rgb.g;
-        data[i + 2] = rgb.b;
-        data[i + 3] = alpha;
+        fillData[i] = rgb.r;
+        fillData[i + 1] = rgb.g;
+        fillData[i + 2] = rgb.b;
+        fillData[i + 3] = Math.round(v * 235);
       }
     }
 
-    ctx.putImageData(img, 0, 0);
+    // Second pass: edge = strong inside next to a weak/zero neighbor (traces coastline + region boundary)
+    const edgeImg = edgeCtx.createImageData(MASK_W, MASK_H);
+    const edgeData = edgeImg.data;
+    const W = MASK_W, H = MASK_H;
+    const offsets = [-1, 1, -W, W, -W - 1, -W + 1, W - 1, W + 1];
+
+    for (let y = 1; y < H - 1; y++) {
+      for (let x = 1; x < W - 1; x++) {
+        const idx = y * W + x;
+        const v = inside[idx];
+        if (v < 0.25) continue;
+        let minN = 1;
+        for (const o of offsets) {
+          const n = inside[idx + o];
+          if (n < minN) minN = n;
+        }
+        const diff = v - minN;
+        if (diff < 0.25) continue;
+        const e = Math.min(1, diff * 1.6);
+        const i = idx * 4;
+        edgeData[i] = Math.min(255, rgb.r + 70);
+        edgeData[i + 1] = Math.min(255, rgb.g + 70);
+        edgeData[i + 2] = Math.min(255, rgb.b + 70);
+        edgeData[i + 3] = Math.round(e * 255);
+      }
+    }
+
+    fillCtx.putImageData(fillImg, 0, 0);
+    edgeCtx.putImageData(edgeImg, 0, 0);
     texture.needsUpdate = true;
+    edgeTexture.needsUpdate = true;
   })();
 
-  return { texture, ready };
+  return { texture, edgeTexture, ready };
 }
 
 /** Backwards-compat wrapper for hydrosphere basins. */
