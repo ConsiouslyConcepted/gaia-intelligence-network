@@ -141,16 +141,28 @@ const Index = () => {
           className="pointer-events-auto px-4 py-2.5 flex items-center justify-between relative rounded-xl backdrop-blur-2xl"
           style={{
             background:
-              "linear-gradient(180deg, hsla(240,22%,18%,0.95) 0%, hsla(240,25%,11%,0.95) 45%, hsla(240,30%,6%,0.96) 100%)",
+              "linear-gradient(145deg, hsla(240,20%,14%,0.92) 0%, hsla(240,25%,9%,0.88) 50%, hsla(240,22%,7%,0.92) 100%)",
             border: "1px solid hsla(220,30%,55%,0.35)",
             boxShadow:
-              "inset 0 1px 0 hsla(200,60%,78%,0.25), inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.6), inset 0 -10px 24px -10px hsla(0,0%,0%,0.5), 0 12px 28px -6px rgba(0,0,0,0.75), 0 24px 60px -20px rgba(0,0,0,0.9), 0 0 24px -4px hsla(210,50%,60%,0.18)",
+              "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 24px hsla(220,40%,50%,0.08), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
-          {/* Outer edge glow */}
-          <div className="pointer-events-none absolute inset-0 rounded-xl" style={{ boxShadow: "0 0 32px -8px hsla(210,60%,65%,0.25)" }} />
-          {/* Subtle bottom edge shadow */}
-          <div className="pointer-events-none absolute -bottom-3 left-8 right-8 h-3 rounded-full blur-md" style={{ background: "hsla(0,0%,0%,0.55)" }} />
+          {/* Bright top rim light */}
+          <div
+            className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+            }}
+          />
+          {/* Inner edge glow */}
+          <div
+            className="absolute inset-0 rounded-xl pointer-events-none"
+            style={{
+              boxShadow:
+                "inset 0 0 18px hsla(210,50%,60%,0.06), inset 0 0 4px hsla(210,50%,60%,0.12)",
+            }}
+          />
 
           {/* Left: Title */}
           <div>
@@ -165,14 +177,14 @@ const Index = () => {
 
           {/* Right: View toggle + Commons icon */}
           <div className="flex items-center gap-3">
-            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 0 12px hsla(210,50%,60%,0.06), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
+            <div className="flex gap-1.5 rounded-2xl p-1.5" style={{ background: "hsla(240,25%,8%,0.7)", boxShadow: "inset 0 2px 6px rgba(0,0,0,0.5), inset 0 -1px 0 rgba(255,255,255,0.03)", border: "1px solid hsla(220,30%,55%,0.25)" }}>
               <button
                 className="min-w-[170px] text-center px-6 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
-                  background: "linear-gradient(180deg, hsla(0,0%,100%,0.10) 0%, hsla(0,0%,100%,0.04) 100%)",
-                  color: "hsla(0,0%,100%,0.95)",
-                  border: "1px solid hsla(220,30%,55%,0.35)",
-                  boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 8px hsla(210,50%,60%,0.08), 0 4px 14px rgba(0,0,0,0.45), 0 0 18px -4px hsla(210,60%,65%,0.22)",
+                  background: "linear-gradient(180deg, hsla(0,0%,100%,0.92) 0%, hsla(0,0%,96%,0.88) 100%)",
+                  color: "hsla(225,20%,8%,0.95)",
+                  border: "1px solid hsla(0,0%,100%,0.5)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.9), 0 4px 14px rgba(0,0,0,0.55), 0 0 22px -4px hsla(0,0%,100%,0.35)",
                 }}
               >
                 Planetary
