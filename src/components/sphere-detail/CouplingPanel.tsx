@@ -427,8 +427,6 @@ export function CouplingPanel({ sphere, accent }: Props) {
               link={selectedLink}
               sourceColor={accent}
               targetColor={sphereTone(selectedLink.target)}
-              mechanism={selectedMechanism}
-              onOpen={() => navigate(`/sphere/${selectedLink.target}`)}
             />
           </div>
         )}
