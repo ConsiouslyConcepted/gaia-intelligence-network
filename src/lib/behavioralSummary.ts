@@ -332,6 +332,8 @@ const BUILDERS: Record<SphereId, Builder> = {
       ],
     };
   },
+
+  crystalsphere: (intel) => {
     const m = intel.metrics;
     const lattice = pick(m, "lattice");
     const lock = pick(m, "phaseLock");
