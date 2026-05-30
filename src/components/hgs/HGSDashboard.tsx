@@ -395,63 +395,6 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               timestamp={now}
             />
-          ) : selectedData ? (
-            <div className="flex-1 flex flex-col min-h-0">
-              {/* Content */}
-              <div className="flex-1 overflow-y-auto p-3">
-                <div className="flex flex-col items-center gap-4">
-                  <h2 className="text-[11px] font-semibold text-foreground/80 tracking-wide uppercase self-start">{selectedData.name} Frequency</h2>
-                  <p className="text-[8px] text-muted-foreground/35 self-start -mt-3 tracking-wider">Cymatic pattern of {selectedData.name}'s orbital tone</p>
-
-                  <div className="relative">
-                    <LiveCymaticPattern
-                      planetColor={selectedData.color}
-                      planetId={selectedData.id}
-                      isPlaying={playing === selectedData.id}
-                      getFrequencyData={getFrequencyData}
-                      size={176}
-                    />
-                    {playing === selectedData.id && (
-                      <div className="absolute inset-0 rounded-full border-2 border-primary/40 animate-pulse" />
-                    )}
-                  </div>
-
-                  {/* Musical tone info */}
-                  {PLANET_TONES[selectedData.id] && (
-                    <div className="w-full rounded-lg px-3 py-2" style={{ background: "hsla(240,20%,15%,0.6)", border: "1px solid hsla(38,40%,50%,0.12)" }}>
-                      <div className="flex items-center justify-between">
-                        <span className="text-[9px] text-muted-foreground/50 tracking-wider uppercase">Musical Tone</span>
-                        <span className="text-[13px] font-bold tracking-wide" style={{ color: selectedData.color }}>{PLANET_TONES[selectedData.id].note}</span>
-                      </div>
-                      <div className="flex items-center justify-between mt-1">
-                        <span className="text-[8px] text-muted-foreground/40 tracking-wider">Frequency</span>
-                        <span className="text-[10px] text-foreground/60 font-medium">{PLANET_TONES[selectedData.id].freq}</span>
-                      </div>
-                    </div>
-                  )}
-
-                  <button
-                    onClick={(e) => { e.stopPropagation(); play(selectedData.id); }}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full transition-all duration-300 border ${
-                      playing === selectedData.id
-                        ? "bg-primary/15 border-primary/40 text-primary"
-                        : "bg-background/30 border-border/20 text-muted-foreground/60 hover:text-foreground/70"
-                    }`}
-                  >
-                    <Volume2 className={`w-3.5 h-3.5 ${playing === selectedData.id ? "animate-pulse" : ""}`} />
-                    <span className="text-[10px] font-medium tracking-wider">
-                      {playing === selectedData.id ? "Playing..." : `Play ${selectedData.name} Tone`}
-                    </span>
-                  </button>
-
-                  <div className="text-[8px] text-muted-foreground/30 text-center mt-1 tracking-wider">
-                    {selectedData.id === "jupiter" || selectedData.id === "mars"
-                      ? "NASA/JPL electromagnetic recording (public domain)"
-                      : "Orbital frequency tone based on Keplerian ratios"}
-                  </div>
-                </div>
-              </div>
-            </div>
           ) : (
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
