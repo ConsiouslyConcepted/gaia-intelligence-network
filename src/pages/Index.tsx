@@ -185,7 +185,7 @@ const Index = () => {
 
       {/* ─── LEFT HUD: All Spheres ─── */}
       <div className="absolute left-4 top-[58%] -translate-y-1/2 z-10 flex flex-col pointer-events-none w-[250px]">
-        <HudPanel className="pointer-events-auto p-4 pb-5 h-[620px]" glow="#5ce0d2">
+        <HudPanel className="pointer-events-auto p-4 pb-5 h-[620px] w-full">
           <div className="flex items-center justify-between mb-3">
             <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
             <span className="text-[8px] font-mono text-muted-foreground/25">01–{String(SPHERE_ARRAY.length).padStart(2, "0")}</span>
