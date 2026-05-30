@@ -112,6 +112,6 @@ export const SPHERES: Record<SphereId, Sphere> = {
 };
 
 export const SPHERE_ARRAY = Object.values(SPHERES)
-  .filter((s) => s.id !== "geosphere")
+  .filter((s) => s.id !== "geosphere" && s.id !== "magnetosphere")
   .sort((a, b) => a.orderIndex - b.orderIndex);
 
