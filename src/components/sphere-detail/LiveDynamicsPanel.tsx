@@ -6,6 +6,9 @@ import { useLiveOverlay } from "@/hooks/useLiveOverlay";
 import { useSphereIntelligence } from "@/hooks/useSphereIntelligence";
 import { buildLiveBehavior } from "@/lib/behavioralSummary";
 import { BASINS, basinById, buildBasinReading, BasinId } from "@/lib/hydrosphereBasins";
+import { CRYO_REGIONS, cryoRegionById, buildCryoReading, CryoRegionId } from "@/lib/cryosphereRegions";
+import { BIO_REGIONS, bioRegionById, buildBioReading, BioRegionId } from "@/lib/biosphereRegions";
+import { BASIN_BOUNDS, RegionDef } from "@/lib/basinMasks";
 import { useEffect, useMemo, useState } from "react";
 
 interface Props {
@@ -23,41 +26,99 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
   const intel = useSphereIntelligence(sphere.id, 3000);
   const live = useLiveOverlay(sphere.id);
 
-  // Hydrosphere basin selection
   const isHydro = sphere.id === "hydrosphere";
-  const [basinId, setBasinId] = useState<BasinId>("global");
-  const basinReading = useMemo(
-    () => (isHydro ? buildBasinReading(intel, basinById(basinId)) : null),
-    [isHydro, intel, basinId]
-  );
+  const isCryo = sphere.id === "cryosphere";
+  const isBio = sphere.id === "biosphere";
+  const hasRegions = isHydro || isCryo || isBio;
+
+  // Selected region id (string for generic globe API)
+  const [selectedId, setSelectedId] = useState<string>("global");
+
+  // Reset selection when switching spheres
+  useEffect(() => {
+    setSelectedId("global");
+  }, [sphere.id]);
+
+  // Build the per-sphere region set + reading
+  const { regions, regionTint, regionName, regionSummary, regionPatterns, regionScore, regionTrend, chips } = useMemo(() => {
+    if (isHydro) {
+      const regions: RegionDef[] = BASINS.map((b) => ({
+        id: b.id,
+        boxes: BASIN_BOUNDS[b.id]?.boxes ?? [],
+        surface: "ocean" as const,
+      }));
+      const basin = basinById(selectedId as BasinId);
+      const r = buildBasinReading(intel, basin);
+      const chips = BASINS.map((b) => ({ id: b.id, name: b.name, tint: b.tint }));
+      return {
+        regions,
+        regionTint: basin.tint,
+        regionName: basin.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
+    if (isCryo) {
+      const regions: RegionDef[] = CRYO_REGIONS.map((r) => ({
+        id: r.id, boxes: r.boxes, surface: r.surface,
+      }));
+      const cur = cryoRegionById(selectedId as CryoRegionId);
+      const r = buildCryoReading(intel, cur);
+      const chips = CRYO_REGIONS.map((c) => ({ id: c.id, name: c.name, tint: c.tint }));
+      return {
+        regions,
+        regionTint: cur.tint,
+        regionName: cur.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
+    if (isBio) {
+      const regions: RegionDef[] = BIO_REGIONS.map((r) => ({
+        id: r.id, boxes: r.boxes, surface: r.surface,
+      }));
+      const cur = bioRegionById(selectedId as BioRegionId);
+      const r = buildBioReading(intel, cur);
+      const chips = BIO_REGIONS.map((c) => ({ id: c.id, name: c.name, tint: c.tint }));
+      return {
+        regions,
+        regionTint: cur.tint,
+        regionName: cur.name,
+        regionSummary: selectedId === "global" ? null : r.summary,
+        regionPatterns: selectedId === "global" ? null : r.patterns,
+        regionScore: selectedId === "global" ? null : r.score,
+        regionTrend: selectedId === "global" ? null : r.trend,
+        chips,
+      };
+    }
+    return { regions: undefined, regionTint: undefined, regionName: undefined, regionSummary: null, regionPatterns: null, regionScore: null, regionTrend: null, chips: [] as { id: string; name: string; tint: string }[] };
+  }, [isHydro, isCryo, isBio, selectedId, intel]);
+
   const globalBehavior = useMemo(() => buildLiveBehavior(intel), [intel]);
-
-  // Use basin-specific summary/patterns when hydrosphere + basin selected
-  const displaySummary = basinReading ? basinReading.summary : globalBehavior.summary;
-  const displayPatterns = basinReading
-    ? basinReading.patterns.map((p) => ({ ...p, description: p.description }))
-    : globalBehavior.patterns;
-  const displayScore = basinReading ? basinReading.score : intel.score;
-  const displayTrend = basinReading ? basinReading.trend : intel.trend;
-
-  const basinMarkers = useMemo(
-    () => (isHydro ? BASINS.filter((b) => b.id !== "global").map((b) => ({
-      id: b.id, name: b.name, lat: b.lat, lng: b.lng, tint: b.tint,
-    })) : undefined),
-    [isHydro]
-  );
+  const displaySummary = regionSummary ?? globalBehavior.summary;
+  const displayPatterns = regionPatterns ?? globalBehavior.patterns;
+  const displayScore = regionScore ?? intel.score;
+  const displayTrend = regionTrend ?? intel.trend;
 
   // "updated Xs ago" ticker
   const [updatedAt, setUpdatedAt] = useState(() => Date.now());
   useEffect(() => {
     setUpdatedAt(Date.now());
-  }, [intel.score, intel.trend, basinId]);
+  }, [intel.score, intel.trend, selectedId]);
   const [, setNow] = useState(Date.now());
   useEffect(() => {
     const iv = setInterval(() => setNow(Date.now()), 1000);
     return () => clearInterval(iv);
   }, []);
   const secsAgo = Math.max(0, Math.floor((Date.now() - updatedAt) / 1000));
+
+  const regionLabel = isHydro ? "ocean basin" : isCryo ? "ice region" : isBio ? "bioregion" : "region";
 
   return (
     <div className="space-y-4">
@@ -83,7 +144,7 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
                 </span>
               </div>
               <p className="text-[8px] uppercase tracking-wider text-muted-foreground/40">
-                {basinReading ? `${basinReading.basin.name}` : intel.scoreLabel}
+                {hasRegions ? regionName : intel.scoreLabel}
               </p>
             </div>
             <div className="flex items-center gap-1.5">
@@ -104,45 +165,46 @@ export function LiveDynamicsPanel({ sphere, accent }: Props) {
         <BlueMarbleGlobe
           height={340}
           sphereId={sphere.id}
-          overlayUrl={isHydro ? undefined : live.textureUrl}
+          overlayUrl={hasRegions ? undefined : live.textureUrl}
           quakes={sphere.id === "geosphere" ? live.quakes : undefined}
-          basins={basinMarkers}
-          selectedBasinId={isHydro ? basinId : undefined}
-          selectedBasinColor={basinReading?.basin.tint}
-          onSelectBasin={isHydro ? ((id) => setBasinId(id as BasinId)) : undefined}
+          regions={regions}
+          selectedRegionId={hasRegions ? selectedId : undefined}
+          selectedRegionColor={regionTint}
+          onSelectRegion={hasRegions ? setSelectedId : undefined}
         />
-        {isHydro && (
+        {hasRegions && (
           <p className="text-[9px] uppercase tracking-[0.14em] text-muted-foreground/40 text-center mt-2">
-            Click an ocean basin marker · or select below
+            Click an {regionLabel} on the globe · or select below
           </p>
         )}
       </Card>
 
-      {/* Basin selector — hydrosphere only */}
-      {isHydro && (
+      {/* Region selector chips */}
+      {hasRegions && (
         <Card className="glass-panel rounded-xl px-3 py-2">
           <div className="flex items-center gap-2 overflow-x-auto">
             <Globe className="w-3.5 h-3.5 text-muted-foreground/40 shrink-0" />
-            {BASINS.map((b) => {
-              const sel = basinId === b.id;
+            {chips.map((c) => {
+              const sel = selectedId === c.id;
               return (
                 <button
-                  key={b.id}
-                  onClick={() => setBasinId(b.id)}
+                  key={c.id}
+                  onClick={() => setSelectedId(c.id)}
                   className="px-2.5 py-1 rounded-md text-[10px] font-medium uppercase tracking-wider transition-colors shrink-0 border"
                   style={{
-                    backgroundColor: sel ? `${b.tint}25` : "transparent",
-                    borderColor: sel ? b.tint : "hsl(var(--border) / 0.3)",
-                    color: sel ? b.tint : "hsl(var(--muted-foreground))",
+                    backgroundColor: sel ? `${c.tint}25` : "transparent",
+                    borderColor: sel ? c.tint : "hsl(var(--border) / 0.3)",
+                    color: sel ? c.tint : "hsl(var(--muted-foreground))",
                   }}
                 >
-                  {b.name}
+                  {c.name}
                 </button>
               );
             })}
           </div>
         </Card>
       )}
+
 
       {/* Data source info */}
       <Card className="glass-panel rounded-xl px-4 py-3">
