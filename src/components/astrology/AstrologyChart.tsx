@@ -158,8 +158,27 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               {`${sign.glyph}\uFE0E`}
             </text>
 
-            {/* constellation dots + glow */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.7)`} className="pointer-events-none" filter="url(#constellationGlow)">
+            {/* constellation dots + lines — electric look: blurred halo underlay + crisp bright stroke on top */}
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.7)`} className="pointer-events-none">
+              {/* soft halo underlay */}
+              <g filter="url(#constellationGlow)" opacity="0.55">
+                {dots.slice(0, dots.length - 1).map((d, i) => (
+                  <line
+                    key={`hl${i}`}
+                    x1={d.x}
+                    y1={d.y}
+                    x2={dots[i + 1].x}
+                    y2={dots[i + 1].y}
+                    stroke="hsla(220, 40%, 80%, 0.9)"
+                    strokeWidth="1.4"
+                    strokeLinecap="round"
+                  />
+                ))}
+                {dots.map((d, i) => (
+                  <circle key={`hd${i}`} cx={d.x} cy={d.y} r={d.r * 2.2} fill="hsla(220, 40%, 85%, 0.85)" />
+                ))}
+              </g>
+              {/* crisp electric core */}
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
                   key={`l${i}`}
@@ -167,13 +186,14 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsla(220, 25%, 96%, 0.95)"
-                  strokeWidth="0.7"
+                  stroke="hsl(0, 0%, 100%)"
+                  strokeWidth="0.45"
                   strokeLinecap="round"
+                  shapeRendering="geometricPrecision"
                 />
               ))}
               {dots.map((d, i) => (
-                <circle key={i} cx={d.x} cy={d.y} r={d.r * 1.3} fill="hsla(220, 30%, 99%, 1)" />
+                <circle key={i} cx={d.x} cy={d.y} r={d.r * 0.9} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
               ))}
             </g>
 
