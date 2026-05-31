@@ -16,53 +16,6 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
   // Store current planet positions for hit-testing
   const planetPositionsRef = useRef<Array<{ id: string; x: number; y: number; r: number }>>([]);
 
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-
-    const particleCount = 220;
-    const particles = Array.from({ length: particleCount }, (_, index) => ({
-      x: ((index * 37) % 100) / 100,
-      y: ((index * 91) % 100) / 100,
-      size: 0.4 + (((index * 17) % 100) / 100) * 1.8,
-      alpha: 0.2 + (((index * 29) % 100) / 100) * 0.6,
-      speed: 0.15 + (((index * 13) % 100) / 100) * 0.45,
-    }));
-
-    let rafId = 0;
-    let start = performance.now();
-
-    const draw = () => {
-      const now = performance.now();
-      const elapsed = (now - start) / 1000;
-      const rect = canvas.getBoundingClientRect();
-      const ctx = canvas.getContext("2d");
-      if (!ctx || rect.width === 0 || rect.height === 0) {
-        rafId = requestAnimationFrame(draw);
-        return;
-      }
-
-      ctx.save();
-      ctx.globalCompositeOperation = "destination-over";
-
-      for (const particle of particles) {
-        const x = particle.x * rect.width;
-        const y = ((particle.y + elapsed * particle.speed * 0.02) % 1) * rect.height;
-        const twinkle = 0.75 + Math.sin(elapsed * particle.speed * 3 + particle.x * 12) * 0.25;
-        ctx.fillStyle = `rgba(255,255,255,${particle.alpha * twinkle})`;
-        ctx.beginPath();
-        ctx.arc(x, y, particle.size, 0, Math.PI * 2);
-        ctx.fill();
-      }
-
-      ctx.restore();
-      rafId = requestAnimationFrame(draw);
-    };
-
-    rafId = requestAnimationFrame(draw);
-    return () => cancelAnimationFrame(rafId);
-  }, []);
-
   // Keep ref in sync so the animation loop reads the latest value
   useEffect(() => {
     selectedRef.current = selectedPlanet ?? null;
