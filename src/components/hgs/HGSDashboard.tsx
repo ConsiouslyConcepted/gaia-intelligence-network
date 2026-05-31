@@ -217,15 +217,6 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
         )}
       </div>
 
-      {/* Vignette */}
-      <div className="absolute inset-0 z-[1] pointer-events-none" style={{
-        background: "radial-gradient(ellipse at center, transparent 30%, hsla(240,30%,3%,0.6) 80%, hsla(240,30%,3%,0.9) 100%)"
-      }} />
-
-      {/* Scanlines */}
-      <div className="absolute inset-0 z-[2] pointer-events-none opacity-[0.02]"
-        style={{ backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.08) 2px, hsl(var(--foreground) / 0.08) 4px)" }}
-      />
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
