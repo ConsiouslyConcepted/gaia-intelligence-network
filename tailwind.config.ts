@@ -110,6 +110,10 @@ export default {
             height: "0",
           },
         },
+        "scanline-drift": {
+          "0%": { transform: "translateY(-25%)" },
+          "100%": { transform: "translateY(25%)" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
@@ -117,6 +121,7 @@ export default {
         "harmonic-pulse": "harmonic-pulse 3s ease-in-out infinite",
         "orbital-rotation": "orbital-rotation 120s linear infinite",
         "coherence-wave": "coherence-wave 3s ease-in-out infinite",
+        "scanline-drift": "scanline-drift 7s linear infinite",
       },
     },
   },
