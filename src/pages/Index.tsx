@@ -320,6 +320,7 @@ const Index = () => {
             <span className="text-[10px] font-mono text-foreground/80 tabular-nums">29.78 km/s</span>
           </div>
           <div className="w-px h-5 bg-foreground/10" />
+          <div className="w-px h-5 bg-foreground/10" />
           <div className="flex items-center gap-1.5">
             <span className="relative flex w-1.5 h-1.5">
               <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/60 animate-ping" />
