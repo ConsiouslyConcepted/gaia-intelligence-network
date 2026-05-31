@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Orbit } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { MilkyWayMap, GalacticFocus } from "@/components/galactic/MilkyWayMap";
 
 const HudPanel = ({
   children,
@@ -46,9 +47,15 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
     "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-// Read-only galactic-scale telemetry. Values are illustrative steady-state
-// references consistent with current astrophysical estimates.
-const METRICS = [
+type MetricKey = Exclude<GalacticFocus, null>;
+
+const METRICS: {
+  key: MetricKey;
+  label: string;
+  value: string;
+  unit: string;
+  note: string;
+}[] = [
   {
     key: "galactic-center",
     label: "Galactic Center",
@@ -88,6 +95,9 @@ const METRICS = [
 
 const Galactic = () => {
   const navigate = useNavigate();
+  const [focus, setFocus] = useState<GalacticFocus>(null);
+
+  const activeMetric = METRICS.find((m) => m.key === focus);
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
@@ -109,7 +119,7 @@ const Galactic = () => {
       />
 
       {/* Top bar */}
-      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
+      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none px-4 pt-6">
         <HudPanel
           className="pointer-events-auto px-4 py-4 flex items-center justify-between"
           topBar
@@ -181,46 +191,89 @@ const Galactic = () => {
         </HudPanel>
       </div>
 
-      {/* Center content */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none px-4 pt-32">
-        <HudPanel className="pointer-events-auto max-w-3xl w-full p-8">
-          <div className="text-center mb-6">
-            <Orbit className="w-8 h-8 mx-auto mb-4 text-foreground/60" />
-            <h2 className="text-[14px] font-semibold tracking-[0.2em] uppercase text-foreground/85 mb-3">
-              Galactic Field Observatory
-            </h2>
-            <p className="text-[11px] text-muted-foreground/60 leading-relaxed max-w-xl mx-auto">
-              Read-only telemetry on galactic processes that directly influence the
-              Solar System — position within the Milky Way, relationship to the
-              Galactic Center, cosmic ray flux, the local interstellar environment,
-              and orbital motion around the galactic barycenter.
-            </p>
-          </div>
+      {/* Center stage — interactive Milky Way map */}
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 px-4">
+        <div className="pointer-events-auto w-full max-w-[760px] aspect-square relative">
+          <MilkyWayMap focus={focus} onSelect={setFocus} />
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-            {METRICS.map((m) => (
-              <div
-                key={m.key}
-                className="rounded-lg p-4 border border-border/30"
-                style={{ background: "hsla(240,20%,10%,0.6)" }}
-              >
-                <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/50 mb-1.5">
-                  {m.label}
+          {/* Active metric callout */}
+          {activeMetric && (
+            <div
+              className="absolute top-3 left-3 max-w-[260px] rounded-lg p-3 border"
+              style={{
+                background: "hsla(228,45%,7%,0.85)",
+                borderColor: "hsla(200,60%,70%,0.45)",
+                backdropFilter: "blur(8px)",
+              }}
+            >
+              <div className="flex items-center justify-between gap-2 mb-1">
+                <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/60">
+                  {activeMetric.label}
                 </div>
-                <div className="text-[16px] font-mono font-semibold text-foreground/85 tabular-nums mb-2">
-                  {m.value}
-                  {m.unit && (
-                    <span className="text-[8px] text-muted-foreground/40 ml-1 font-normal">
-                      {m.unit}
-                    </span>
-                  )}
-                </div>
-                <p className="text-[9px] text-muted-foreground/55 leading-snug">
-                  {m.note}
-                </p>
+                <button
+                  onClick={() => setFocus(null)}
+                  className="text-[10px] text-muted-foreground/50 hover:text-foreground/80 leading-none"
+                >
+                  ×
+                </button>
               </div>
-            ))}
+              <div className="text-[15px] font-mono font-semibold text-foreground/90 tabular-nums mb-1">
+                {activeMetric.value}
+                {activeMetric.unit && (
+                  <span className="text-[8px] text-muted-foreground/50 ml-1 font-normal">
+                    {activeMetric.unit}
+                  </span>
+                )}
+              </div>
+              <p className="text-[9px] text-muted-foreground/65 leading-snug">
+                {activeMetric.note}
+              </p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* Bottom metric rail — click to focus on the map */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none px-4 pb-6">
+        <HudPanel className="pointer-events-auto p-3">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
+            {METRICS.map((m) => {
+              const isActive = focus === m.key;
+              return (
+                <button
+                  key={m.key}
+                  onClick={() => setFocus(isActive ? null : m.key)}
+                  className="text-left rounded-lg p-3 border transition-all duration-300"
+                  style={{
+                    background: isActive
+                      ? "hsla(210,50%,18%,0.75)"
+                      : "hsla(240,20%,10%,0.6)",
+                    borderColor: isActive
+                      ? "hsla(200,70%,70%,0.6)"
+                      : "hsla(220,30%,40%,0.3)",
+                    boxShadow: isActive
+                      ? "inset 0 1px 0 hsla(200,60%,80%,0.15), 0 0 20px hsla(200,70%,60%,0.25)"
+                      : undefined,
+                  }}
+                >
+                  <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/55 mb-1.5">
+                    {m.label}
+                  </div>
+                  <div className="text-[13px] font-mono font-semibold text-foreground/85 tabular-nums">
+                    {m.value}
+                    {m.unit && (
+                      <span className="text-[7px] text-muted-foreground/45 ml-1 font-normal">
+                        {m.unit}
+                      </span>
+                    )}
+                  </div>
+                </button>
+              );
+            })}
           </div>
+          <p className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 mt-2 text-center">
+            Click a metric or an element on the map to isolate · read-only telemetry
+          </p>
         </HudPanel>
       </div>
     </div>
