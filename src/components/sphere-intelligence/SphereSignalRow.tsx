@@ -1,5 +1,6 @@
 import { SphereId, SPHERES } from "@/types/spheres";
 import { useSphereIntelligence } from "@/hooks/useSphereIntelligence";
+import { SpherePanelBackdrop } from "@/components/SpherePanelBackdrop";
 
 interface Props {
   sphereId: SphereId;
@@ -10,7 +11,7 @@ interface Props {
 /**
  * One row in the right HUD "Sphere Signals" panel.
  * Pulls a live metric from `useSphereIntelligence` (single source of truth)
- * and renders it in the monochromatic glass aesthetic — no colorful accents.
+ * and renders it over a sphere-tinted glass backdrop matching the left rail.
  */
 export function SphereSignalRow({ sphereId, metricKey, label }: Props) {
   const intel = useSphereIntelligence(sphereId, 3000);
@@ -32,41 +33,43 @@ export function SphereSignalRow({ sphereId, metricKey, label }: Props) {
     .join(" ");
 
   const valueStr = metric.value.toFixed(metric.spec.precision ?? 2);
+  const accent = sphere.color;
 
   return (
-    <div>
-      <div className="flex items-baseline justify-between mb-0.5">
-        <span className="text-[8px] uppercase tracking-[0.12em] text-foreground/80">{label}</span>
-        <span
-          className="text-[12px] font-mono font-semibold tabular-nums"
-          style={{ color: metric.isAnomaly ? "#f59e0b" : "hsl(var(--foreground) / 0.85)" }}
-        >
-          {valueStr}
-          {metric.spec.unit && (
-            <span className="text-[8px] text-muted-foreground/30 ml-0.5 font-normal">
-              {metric.spec.unit}
-            </span>
-          )}
-        </span>
+    <div className="relative overflow-hidden rounded-lg px-2.5 py-2 group">
+      <SpherePanelBackdrop accent={accent} />
+      <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+        <SpherePanelBackdrop accent={accent} active />
       </div>
-      <div className="flex items-center justify-between mb-1">
-        <span className="text-[7px] tracking-[0.1em] uppercase text-muted-foreground/35">
-          {sphere.name}
-        </span>
+      <div className="relative z-10">
+        <div className="flex items-baseline justify-between mb-0.5">
+          <span className="text-[8px] uppercase tracking-[0.12em] text-foreground/80">{label}</span>
+          <span
+            className="text-[12px] font-mono font-semibold tabular-nums"
+            style={{ color: metric.isAnomaly ? "#f59e0b" : "hsl(var(--foreground) / 0.9)" }}
+          >
+            {valueStr}
+            {metric.spec.unit && (
+              <span className="text-[8px] text-muted-foreground/40 ml-0.5 font-normal">
+                {metric.spec.unit}
+              </span>
+            )}
+          </span>
+        </div>
+        <div className="flex items-center justify-between mb-1">
+          <span
+            className="text-[7px] tracking-[0.1em] uppercase"
+            style={{ color: `${accent}99` }}
+          >
+            {sphere.name}
+          </span>
+        </div>
+        <svg viewBox="0 0 60 20" className="w-full h-5">
+          <polyline fill="none" stroke={`${accent}cc`} strokeWidth="1" points={points} />
+          <polyline fill={`${accent}1f`} stroke="none" points={`0,20 ${points} 60,20`} />
+        </svg>
       </div>
-      <svg viewBox="0 0 60 20" className="w-full h-5">
-        <polyline
-          fill="none"
-          stroke="hsl(var(--foreground) / 0.4)"
-          strokeWidth="1"
-          points={points}
-        />
-        <polyline
-          fill="hsl(var(--foreground) / 0.04)"
-          stroke="none"
-          points={`0,20 ${points} 60,20`}
-        />
-      </svg>
     </div>
   );
 }
+
