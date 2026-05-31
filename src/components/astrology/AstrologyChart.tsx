@@ -97,13 +97,14 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="2.2" />
         </filter>
-        <filter id="constellationGlow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="1.2" result="halo" />
-          <feMerge>
-            <feMergeNode in="halo" />
-            <feMergeNode in="SourceGraphic" />
-          </feMerge>
+        <filter id="constellationGlow" x="-100%" y="-100%" width="300%" height="300%">
+          <feGaussianBlur stdDeviation="1.6" />
         </filter>
+        <radialGradient id="starHalo" cx="50%" cy="50%" r="50%">
+          <stop offset="0%"  stopColor="hsla(210, 60%, 98%, 0.95)" />
+          <stop offset="35%" stopColor="hsla(210, 60%, 95%, 0.35)" />
+          <stop offset="100%" stopColor="hsla(210, 60%, 95%, 0)" />
+        </radialGradient>
       </defs>
 
       {/* inner disc soft glow */}
