@@ -235,23 +235,23 @@ const Index = () => {
             <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
             <span className="text-[8px] font-mono text-muted-foreground/25">01–{String(SPHERE_ARRAY.length).padStart(2, "0")}</span>
           </div>
-          <div className="space-y-1 overflow-y-auto pr-1 -mr-1 flex-1 scrollbar-thin">
+          <div className="space-y-2 overflow-y-auto pr-1 -mr-1 flex-1 scrollbar-thin">
             {SPHERE_ARRAY.map((sphere, i) => {
               return (
                 <button
                   key={sphere.id}
                   onClick={() => navigate(`/sphere/${sphere.id}`)}
-                  className="relative overflow-hidden w-full flex items-center gap-3 px-2 py-2.5 rounded-lg transition-all duration-300 cursor-pointer group"
+                  className="relative overflow-hidden w-full flex items-center gap-3 px-2.5 py-3 rounded-lg transition-all duration-300 cursor-pointer group"
                 >
                   <SpherePanelBackdrop accent={sphere.color} />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
                     <SpherePanelBackdrop accent={sphere.color} active />
                   </div>
-                  <WireframeSphereIcon color={sphere.color} size={28} segments={12} className="relative z-10 transition-transform duration-500 group-hover:scale-110 shrink-0 -ml-0.5" />
+                  <WireframeSphereIcon color={sphere.color} size={32} segments={12} className="relative z-10 transition-transform duration-500 group-hover:scale-110 shrink-0 -ml-0.5" />
                   <div className="relative z-10 min-w-0 text-left flex-1">
                     <div className="flex items-center justify-between">
-                      <span className="text-[11px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
-                      <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
+                      <span className="text-[11px] font-semibold text-foreground/85 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
+                      <ArrowRight className="w-3 h-3 text-muted-foreground/25 group-hover:text-foreground/50 transition-all group-hover:translate-x-0.5" />
                     </div>
                     <SphereIntelligenceChip sphereId={sphere.id} accent={sphere.color} />
                   </div>
