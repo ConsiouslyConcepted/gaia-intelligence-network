@@ -21,7 +21,7 @@ export const NightSkyBackground = () => {
         className="absolute inset-0 mix-blend-screen"
         style={{
           background:
-            "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
+            "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.09) 0%, hsla(190,60%,75%,0.03) 24%, transparent 42%)",
         }}
       />
 
@@ -29,7 +29,7 @@ export const NightSkyBackground = () => {
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
+            "radial-gradient(ellipse at center, transparent 32%, hsla(240,30%,3%,0.32) 76%, hsla(240,30%,3%,0.82) 100%)",
         }}
       />
 
