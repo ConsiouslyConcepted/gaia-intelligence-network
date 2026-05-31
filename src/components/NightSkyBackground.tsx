@@ -1,6 +1,3 @@
-import { Canvas } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
-
 export const NightSkyBackground = () => {
   return (
     <div
@@ -19,25 +16,6 @@ export const NightSkyBackground = () => {
             "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
         }}
       />
-
-      {/* Moving starfield — identical params to EarthVisualization Stars */}
-      <div className="absolute inset-0">
-        <Canvas
-          camera={{ position: [0, 0, 0.1], fov: 60 }}
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2]}
-        >
-          <Stars
-            radius={80}
-            depth={60}
-            count={2000}
-            factor={3}
-            saturation={0.1}
-            fade
-            speed={0.5}
-          />
-        </Canvas>
-      </div>
 
       <div
         className="absolute inset-0"
