@@ -183,7 +183,7 @@ export const EarthVisualization = () => {
   return (
     <div className="w-full h-full relative">
       <Canvas
-        camera={{ position: [0, 0, 5.5], fov: 50 }}
+        camera={{ position: [0, 0, 7.5], fov: 50 }}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping }}
         onCreated={({ gl }) => {
           gl.toneMappingExposure = 1.2;
