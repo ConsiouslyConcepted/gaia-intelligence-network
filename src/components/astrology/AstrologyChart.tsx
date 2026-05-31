@@ -119,7 +119,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       <circle cx={C} cy={C} r={R_SIGN_IN} fill="hsla(228, 40%, 6%, 0.85)" />
 
       {/* 12 sign segments + dividers + glyphs */}
-      {segments.map(({ sign, start, end, mid, pattern }) => {
+      {segments.map(({ sign, start, end, mid, dots }) => {
         const isActive = selectedSign === sign.id;
         const fill = isActive
           ? "hsla(220, 20%, 85%, 0.15)"
