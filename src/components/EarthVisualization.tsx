@@ -1,10 +1,16 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Sphere, Html, Stars } from "@react-three/drei";
+import { OrbitControls, Sphere, Html } from "@react-three/drei";
 import { useState, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { TextureLoader } from "three";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
+import {
+  configurePlanetaryStarfieldRenderer,
+  PLANETARY_STARFIELD_CAMERA,
+  PLANETARY_STARFIELD_GL,
+  PlanetaryStars,
+} from "@/components/PlanetaryStarfield";
 
 interface SphereLayer {
   name: string;
@@ -184,10 +190,10 @@ export const EarthVisualization = () => {
   return (
     <div className="w-full h-full relative">
       <Canvas
-        camera={{ position: [0, 0, 7.5], fov: 50 }}
-        gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping }}
+        camera={PLANETARY_STARFIELD_CAMERA}
+        gl={PLANETARY_STARFIELD_GL}
         onCreated={({ gl }) => {
-          gl.toneMappingExposure = 1.2;
+          configurePlanetaryStarfieldRenderer(gl);
         }}
       >
         {/* Lighting: bright white directional for Blue Marble visibility */}
@@ -196,15 +202,7 @@ export const EarthVisualization = () => {
         <directionalLight position={[-3, -2, -4]} intensity={0.4} color="#88aaff" />
         <pointLight position={[0, 6, 2]} intensity={0.3} color="#ffffff" />
 
-        <Stars
-          radius={80}
-          depth={60}
-          count={2000}
-          factor={3}
-          saturation={0.1}
-          fade
-          speed={0.5}
-        />
+        <PlanetaryStars />
 
 
         {/* Orbital accent rings */}

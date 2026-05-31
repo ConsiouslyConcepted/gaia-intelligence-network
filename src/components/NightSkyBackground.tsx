@@ -1,5 +1,10 @@
 import { Canvas } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
+import {
+  configurePlanetaryStarfieldRenderer,
+  PLANETARY_STARFIELD_CAMERA,
+  PLANETARY_STARFIELD_GL,
+  PlanetaryStarfieldMotion,
+} from "@/components/PlanetaryStarfield";
 
 export const NightSkyBackground = () => {
   return (
@@ -20,22 +25,15 @@ export const NightSkyBackground = () => {
         }}
       />
 
-      {/* Moving starfield — identical params to EarthVisualization Stars */}
       <div className="absolute inset-0">
         <Canvas
-          camera={{ position: [0, 0, 0.1], fov: 60 }}
-          gl={{ antialias: true, alpha: true }}
-          dpr={[1, 2]}
+          camera={PLANETARY_STARFIELD_CAMERA}
+          gl={PLANETARY_STARFIELD_GL}
+          onCreated={({ gl }) => {
+            configurePlanetaryStarfieldRenderer(gl);
+          }}
         >
-          <Stars
-            radius={80}
-            depth={60}
-            count={2000}
-            factor={3}
-            saturation={0.1}
-            fade
-            speed={0.5}
-          />
+          <PlanetaryStarfieldMotion />
         </Canvas>
       </div>
 
