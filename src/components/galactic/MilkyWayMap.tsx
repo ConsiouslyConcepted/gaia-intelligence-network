@@ -89,13 +89,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
         </radialGradient>
       </defs>
 
-      {/* Halo & background stars */}
-      <circle cx="0" cy="0" r={VB} fill="url(#g-halo)" />
-      {bgStars.map((s, i) => (
-        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="hsla(0,0%,100%,0.4)" />
-      ))}
-
-      {/* Galactic disk faint glow */}
+      {/* Subtle galactic glow only — let the shared planetary sky remain the page background */}
       <circle cx="0" cy="0" r={DISK_R * 1.05} fill="hsla(220,40%,30%,0.05)" />
 
       {/* Spiral arms — always shown but brightness varies by layer */}
