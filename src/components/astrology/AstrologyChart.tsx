@@ -1,5 +1,6 @@
 import { useMemo } from "react";
 import { SIGNS, PLANET_GLYPHS, longitudeToSign } from "@/lib/astrology/constants";
+import { CONSTELLATIONS } from "@/lib/astrology/constellations";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
 
 interface Props {
@@ -42,29 +43,13 @@ function arcPath(cx: number, cy: number, rOuter: number, rInner: number, startDe
   return `M ${p1.x} ${p1.y} A ${rOuter} ${rOuter} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInner} ${rInner} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
 }
 
-// Simple star-dot constellations (procedural) per sign so we don't ship real star data
-function constellationDots(seed: number): { x: number; y: number; r: number }[] {
-  const dots: { x: number; y: number; r: number }[] = [];
-  let s = seed * 9301 + 49297;
-  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
-  const n = 5 + Math.floor(rnd() * 4);
-  for (let i = 0; i < n; i++) {
-    dots.push({
-      x: (rnd() - 0.5) * 36,
-      y: (rnd() - 0.5) * 18,
-      r: 0.8 + rnd() * 1.4,
-    });
-  }
-  return dots;
-}
-
 export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
     end: s.startDeg + 30,
     mid: s.startDeg + 15,
-    dots: constellationDots(SIGNS.indexOf(s) + 1),
+    pattern: CONSTELLATIONS[s.id],
   })), []);
 
   // Spread overlapping planets slightly along the ring so glyphs don't stack
@@ -119,7 +104,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       <circle cx={C} cy={C} r={R_SIGN_IN} fill="hsla(228, 40%, 6%, 0.85)" />
 
       {/* 12 sign segments + dividers + glyphs */}
-      {segments.map(({ sign, start, end, mid, dots }) => {
+      {segments.map(({ sign, start, end, mid, pattern }) => {
         const isActive = selectedSign === sign.id;
         const fill = isActive
           ? "hsla(220, 20%, 85%, 0.15)"
@@ -159,25 +144,29 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               {`${sign.glyph}\uFE0E`}
             </text>
 
-            {/* constellation — bright dots with hairline links */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.8)`} className="pointer-events-none">
-              {dots.slice(0, dots.length - 1).map((d, i) => (
-                <line
-                  key={`l${i}`}
-                  x1={d.x}
-                  y1={d.y}
-                  x2={dots[i + 1].x}
-                  y2={dots[i + 1].y}
-                  stroke="hsla(210, 40%, 95%, 0.6)"
-                  strokeWidth="0.3"
-                  strokeLinecap="round"
-                  shapeRendering="geometricPrecision"
-                />
-              ))}
-              {dots.map((d, i) => (
+            {/* constellation — real stick-figure with bright dots + hairline links */}
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid + 90})`} className="pointer-events-none">
+              {pattern.lines.map(([a, b], i) => {
+                const sa = pattern.stars[a];
+                const sb = pattern.stars[b];
+                return (
+                  <line
+                    key={`l${i}`}
+                    x1={sa.x}
+                    y1={sa.y}
+                    x2={sb.x}
+                    y2={sb.y}
+                    stroke="hsla(210, 40%, 95%, 0.55)"
+                    strokeWidth="0.35"
+                    strokeLinecap="round"
+                    shapeRendering="geometricPrecision"
+                  />
+                );
+              })}
+              {pattern.stars.map((s, i) => (
                 <g key={i}>
-                  <circle cx={d.x} cy={d.y} r={d.r * 2.2} fill="url(#starHalo)" opacity="0.6" />
-                  <circle cx={d.x} cy={d.y} r={d.r * 1.1} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
+                  <circle cx={s.x} cy={s.y} r={s.r * 2.4} fill="url(#starHalo)" opacity="0.55" />
+                  <circle cx={s.x} cy={s.y} r={s.r * 1.05} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
                 </g>
               ))}
             </g>
