@@ -93,15 +93,6 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       };
     });
 
-    // Stars
-    const stars: Array<{ x: number; y: number; s: number; b: number }> = [];
-    for (let k = 0; k < 500; k++) {
-      stars.push({
-        x: Math.random(), y: Math.random(),
-        s: Math.random() * 1.0 + 0.2,
-        b: Math.random() * 0.3 + 0.05,
-      });
-    }
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
@@ -124,17 +115,7 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       const scale = Math.min(w, h) * 0.42;
       const sel = selectedRef.current;
 
-      ctx.fillStyle = "rgb(4, 4, 14)";
-      ctx.fillRect(0, 0, w, h);
-
-      // Stars
-      for (const star of stars) {
-        const twinkle = star.b + Math.sin(time * 5 + star.x * 80) * 0.03;
-        ctx.fillStyle = `rgba(255,255,255,${Math.max(0, twinkle)})`;
-        ctx.beginPath();
-        ctx.arc(star.x * w, star.y * h, star.s, 0, Math.PI * 2);
-        ctx.fill();
-      }
+      ctx.clearRect(0, 0, w, h);
 
       // Draw cymatic resonance thread patterns
       const globalRotation = time * 0.15;
