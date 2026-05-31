@@ -110,6 +110,12 @@ export const SPHERE_LIVE_CONFIG: Record<SphereId, LiveOverlayConfig> = {
     description: "4-day sea surface temperature composite",
     gibsLayer: "MODIS_Terra_L3_SST_Thermal_4Day_Day",
   },
+  heliosphere: {
+    textureUrl: null,
+    fallbackUrl: "/overlays/magnetosphere-overlay.jpg",
+    source: "NOAA SWPC · NASA SDO",
+    description: "Solar activity transmission — sunspots, wind, CMEs, IMF",
+  },
 };
 
 /** Earthquake data point from USGS */

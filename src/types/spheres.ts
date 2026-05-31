@@ -7,7 +7,8 @@ export type SphereId =
   | "noosphere" 
   | "magnetosphere" 
   | "ionosphere" 
-  | "crystalsphere";
+  | "crystalsphere"
+  | "heliosphere";
 
 export interface Sphere {
   id: SphereId;
@@ -120,6 +121,17 @@ export const SPHERES: Record<SphereId, Sphere> = {
     orderIndex: 9,
     hasMapLayers: true,
     hasStellarLayers: false,
+  },
+  heliosphere: {
+    id: "heliosphere",
+    name: "Heliosphere",
+    description: "Solar transmission layer — sunspots, solar wind, CMEs, IMF; primary driver of downstream space-weather influence on Earth",
+    color: "#f6c177",
+    radius: 2.15,
+    opacity: 0.12,
+    orderIndex: 10,
+    hasMapLayers: false,
+    hasStellarLayers: true,
   },
 };
 

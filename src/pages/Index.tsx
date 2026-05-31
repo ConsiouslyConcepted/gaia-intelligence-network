@@ -93,6 +93,7 @@ const Index = () => {
     { sphereId: "ionosphere",    metricKey: "grid",      label: "Grid Load" },
     { sphereId: "noosphere",     metricKey: "flow",      label: "Information Flow" },
     { sphereId: "crystalsphere", metricKey: "lattice",   label: "Lattice Symmetry" },
+    { sphereId: "heliosphere",   metricKey: "sunspots",  label: "Sunspot Number" },
   ];
 
   if (activeView === "hgs") {

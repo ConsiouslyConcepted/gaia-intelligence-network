@@ -10,6 +10,7 @@ import { CrystalsphereLiveState } from "./live-state/CrystalsphereLiveState";
 import { HydrosphereLiveState } from "./live-state/HydrosphereLiveState";
 import { CryosphereLiveState } from "./live-state/CryosphereLiveState";
 import { AtmosphereLiveState } from "./live-state/AtmosphereLiveState";
+import { HeliosphereLiveState } from "./live-state/HeliosphereLiveState";
 
 interface Props {
   sphere: Sphere;
@@ -26,6 +27,7 @@ const DATA_COMPONENTS: Record<string, React.ComponentType<{ accent: string }>> =
   ionosphere: IonosphereLiveState,
   noosphere: NoosphereLiveState,
   crystalsphere: CrystalsphereLiveState,
+  heliosphere: HeliosphereLiveState,
 };
 
 export function DataPanel({ sphere, accent }: Props) {

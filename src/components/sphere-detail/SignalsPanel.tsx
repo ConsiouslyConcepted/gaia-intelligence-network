@@ -77,6 +77,12 @@ const SIGNALS: Record<SphereId, SignalDef[]> = {
     { key: "aod", label: "Aerosol Optical Depth", unit: "AOD", baseline: 0.16, amplitude: 0.05, frequency: 0.06, color: "#6f9cc4" },
     { key: "tempAnom", label: "Surface Temp Anomaly", unit: "°C", baseline: 1.18, amplitude: 0.15, frequency: 0.025, color: "#c0d8e8" },
   ],
+  heliosphere: [
+    { key: "ssn", label: "Sunspot Number", unit: "SSN", baseline: 128, amplitude: 24, frequency: 0.015, color: "#f6c177" },
+    { key: "solarWind", label: "Solar Wind Speed", unit: "km/s", baseline: 440, amplitude: 80, frequency: 0.06, color: "#e8a84c" },
+    { key: "xray", label: "X-Ray Flux (GOES)", unit: "W/m²", baseline: 2.4, amplitude: 0.9, frequency: 0.08, color: "#e8775d" },
+    { key: "imf", label: "IMF Bt", unit: "nT", baseline: 5.6, amplitude: 1.8, frequency: 0.07, color: "#d4904c" },
+  ],
 };
 
 function generateTimeSeries(signal: SignalDef, tick: number) {
