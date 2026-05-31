@@ -1,6 +1,7 @@
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Activity, Signal, Sparkles } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { CosmoStage, CosmoLayer } from "@/components/cosmological/CosmoStage";
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
@@ -24,16 +25,86 @@ const HudPanel = ({ children, className = "", topBar = false }: { children: Reac
     <div
       className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
       style={{
-        background:
-          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+        background: "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
       }}
     />
     {children}
   </div>
 );
 
+const TOGGLE_BTN_BASE =
+  "min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
+
+const ACTIVE_BTN_STYLE: React.CSSProperties = {
+  background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+  color: "hsla(0,0%,100%,0.95)",
+  border: "1.5px solid hsla(220,35%,60%,0.55)",
+  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
+};
+
+interface LayerSpec {
+  key: CosmoLayer;
+  card: string;
+  title: string;
+  question: string;
+  metrics: { label: string; value: string; unit?: string }[];
+}
+
+const LAYERS: LayerSpec[] = [
+  {
+    key: "cmb",
+    card: "Cosmic Background Field",
+    title: "Cosmic Microwave Background",
+    question: "What was the original pattern from which later structures emerged?",
+    metrics: [
+      { label: "Universe Age", value: "13.787", unit: "Gyr" },
+      { label: "CMB Temperature", value: "2.7255", unit: "K" },
+      { label: "ΔT / T", value: "10⁻⁵", unit: "" },
+      { label: "Acoustic Peaks", value: "5", unit: "modes" },
+    ],
+  },
+  {
+    key: "constants",
+    card: "Cosmic Laws Layer",
+    title: "Fundamental Constants",
+    question: "What underlying rules make complex structures possible?",
+    metrics: [
+      { label: "Speed of Light", value: "2.998×10⁸", unit: "m/s" },
+      { label: "Gravitational G", value: "6.674×10⁻¹¹", unit: "" },
+      { label: "Planck ℎ", value: "6.626×10⁻³⁴", unit: "J·s" },
+      { label: "Fine Structure α", value: "1/137.036", unit: "" },
+    ],
+  },
+  {
+    key: "spacetime",
+    card: "Spacetime Architecture",
+    title: "Spacetime Geometry",
+    question: "What geometric architecture supports cosmic evolution?",
+    metrics: [
+      { label: "Hubble Constant", value: "67.4", unit: "km/s/Mpc" },
+      { label: "Expansion Rate", value: "+0.7", unit: "%/Gyr" },
+      { label: "Observable Universe", value: "93", unit: "Gly" },
+      { label: "Ω_total", value: "1.000", unit: "flat" },
+    ],
+  },
+  {
+    key: "harmonics",
+    card: "Primordial Harmonic Field",
+    title: "Primordial Harmonics",
+    question: "What original resonant modes shaped large-scale organization?",
+    metrics: [
+      { label: "BAO Scale", value: "150", unit: "Mpc" },
+      { label: "Harmonic Modes", value: "5", unit: "peaks" },
+      { label: "1st Peak ℓ", value: "220", unit: "" },
+      { label: "Power Spectrum", value: "ΛCDM", unit: "" },
+    ],
+  },
+];
+
 const Cosmological = () => {
   const navigate = useNavigate();
+  const [layer, setLayer] = useState<CosmoLayer>("cmb");
+  const active = LAYERS.find((l) => l.key === layer)!;
 
   return (
     <div className="h-screen w-full relative overflow-hidden bg-background">
@@ -41,8 +112,7 @@ const Cosmological = () => {
       <div
         className="absolute inset-0 z-0"
         style={{
-          background:
-            "radial-gradient(ellipse at center, hsla(240,40%,8%,1) 0%, hsla(240,50%,3%,1) 100%)",
+          background: "radial-gradient(ellipse at center, hsla(240,40%,8%,1) 0%, hsla(240,50%,3%,1) 100%)",
         }}
       />
       <div
@@ -54,13 +124,13 @@ const Cosmological = () => {
         }}
       />
 
-      {/* Top bar with toggle */}
-      <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
-        <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" glow="#a78bfa" topBar>
+      {/* Top bar */}
+      <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none px-4 pt-6">
+        <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" topBar>
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Cosmological Intelligence</h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Galactic & Universal Field · Deep Space Observatory
+              Foundational Harmonic Architecture · Deep Structure of Reality
             </p>
           </div>
 
@@ -74,41 +144,12 @@ const Cosmological = () => {
                 backdropFilter: "blur(12px)",
               }}
             >
-              <button
-                onClick={() => navigate("/")}
-                className="min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
-                style={{ color: "hsla(0,0%,100%,0.4)" }}
-              >
-                Planetary
-              </button>
-              <button
-                onClick={() => navigate("/?view=hgs")}
-                className="min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
-                style={{ color: "hsla(0,0%,100%,0.4)" }}
-              >
-                Universal
-              </button>
-              <button
-                onClick={() => navigate("/galactic")}
-                className="min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
-                style={{ color: "hsla(0,0%,100%,0.4)" }}
-              >
-                Galactic
-              </button>
-              <button
-                className="min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
-                style={{
-                  background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
-                  color: "hsla(0,0%,100%,0.95)",
-                  border: "1.5px solid hsla(220,35%,60%,0.55)",
-                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
-                }}
-              >
-                Cosmological
-              </button>
+              <button onClick={() => navigate("/")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Planetary</button>
+              <button onClick={() => navigate("/?view=hgs")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Universal</button>
+              <button onClick={() => navigate("/galactic")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Galactic</button>
+              <button className="min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase" style={ACTIVE_BTN_STYLE}>Cosmological</button>
             </div>
 
-            {/* Commons Data icon — tucked next to the toggle */}
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
@@ -121,40 +162,109 @@ const Cosmological = () => {
         </HudPanel>
       </div>
 
-      {/* Center content */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none px-4">
-        <HudPanel className="pointer-events-auto max-w-2xl w-full p-8 text-center" glow="#a78bfa">
-          <Sparkles className="w-8 h-8 mx-auto mb-4 text-foreground/60" />
-          <h2 className="text-[14px] font-semibold tracking-[0.2em] uppercase text-foreground/85 mb-3">
-            Cosmological Field Observatory
-          </h2>
-          <p className="text-[11px] text-muted-foreground/60 leading-relaxed max-w-lg mx-auto">
-            Deep-space observability layer — galactic background radiation, interstellar
-            plasma currents, cosmic ray flux, and large-scale resonance patterns across
-            the universal field. Read-only telemetry from the cosmos beyond the heliopause.
-          </p>
+      {/* Left rail — layer selector */}
+      <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-none w-[240px] hidden lg:flex flex-col">
+        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col gap-2">
+          <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 px-2 pt-1 pb-2">
+            Cosmological Layers
+          </div>
+          {LAYERS.map((l) => {
+            const isActive = l.key === layer;
+            return (
+              <button
+                key={l.key}
+                onClick={() => setLayer(l.key)}
+                className="text-left rounded-lg p-3 border transition-all duration-300"
+                style={{
+                  background: isActive ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                  borderColor: isActive ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
+                  boxShadow: isActive ? "inset 0 1px 0 hsla(200,60%,80%,0.15), 0 0 20px hsla(200,70%,60%,0.22)" : undefined,
+                }}
+              >
+                <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">
+                  {String(LAYERS.indexOf(l) + 1).padStart(2, "0")}
+                </div>
+                <div className="text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/85">
+                  {l.card}
+                </div>
+                <div className="text-[9px] text-muted-foreground/55 mt-1">{l.title}</div>
+              </button>
+            );
+          })}
+        </HudPanel>
+      </div>
 
-          <div className="grid grid-cols-3 gap-3 mt-8">
-            {[
-              { label: "Galactic Coherence", value: "0.87", unit: "ψ" },
-              { label: "Cosmological Ray Flux", value: "1.42", unit: "p/cm²s" },
-              { label: "CMB Temp", value: "2.725", unit: "K" },
-            ].map((m) => (
+      {/* Center stage */}
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-4 px-4">
+        <div className="pointer-events-auto w-full max-w-[820px] aspect-square relative">
+          <CosmoStage layer={layer} />
+
+          {/* Title overlay */}
+          <div
+            className="absolute top-3 left-3 max-w-[300px] rounded-lg p-3 border"
+            style={{
+              background: "hsla(228,45%,7%,0.85)",
+              borderColor: "hsla(200,60%,70%,0.45)",
+              backdropFilter: "blur(8px)",
+            }}
+          >
+            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">
+              {active.card}
+            </div>
+            <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/90 mb-1.5">
+              {active.title}
+            </div>
+            <p className="text-[9px] italic text-muted-foreground/65 leading-snug">
+              "{active.question}"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      {/* Bottom metric rail */}
+      <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none px-4 pb-6">
+        <HudPanel className="pointer-events-auto p-3">
+          {/* Mobile layer pills */}
+          <div className="flex lg:hidden gap-1.5 mb-3 overflow-x-auto">
+            {LAYERS.map((l) => {
+              const isActive = l.key === layer;
+              return (
+                <button
+                  key={l.key}
+                  onClick={() => setLayer(l.key)}
+                  className="px-3 py-1.5 rounded-md text-[9px] tracking-[0.15em] uppercase whitespace-nowrap border transition-all"
+                  style={{
+                    background: isActive ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                    borderColor: isActive ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
+                    color: isActive ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.5)",
+                  }}
+                >
+                  {l.card}
+                </button>
+              );
+            })}
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+            {active.metrics.map((m) => (
               <div
                 key={m.label}
                 className="rounded-lg p-3 border border-border/30"
                 style={{ background: "hsla(240,20%,10%,0.6)" }}
               >
-                <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/50 mb-1">
+                <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/55 mb-1.5">
                   {m.label}
                 </div>
-                <div className="text-[16px] font-mono font-semibold text-foreground/85 tabular-nums">
+                <div className="text-[13px] font-mono font-semibold text-foreground/85 tabular-nums">
                   {m.value}
-                  <span className="text-[8px] text-muted-foreground/40 ml-1 font-normal">{m.unit}</span>
+                  {m.unit && <span className="text-[7px] text-muted-foreground/45 ml-1 font-normal">{m.unit}</span>}
                 </div>
               </div>
             ))}
           </div>
+          <p className="text-[8px] tracking-[0.2em] uppercase text-muted-foreground/40 mt-2 text-center">
+            Foundational architecture · read-only · {active.title}
+          </p>
         </HudPanel>
       </div>
     </div>
