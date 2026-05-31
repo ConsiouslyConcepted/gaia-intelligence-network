@@ -11,7 +11,6 @@ interface Props {
 export function SpherePanelBackdrop({ accent, active = false, intense = false }: Props) {
   const tintOpacity = intense ? 0.18 : active ? 0.12 : 0.07;
   const gridOpacity = intense ? 0.18 : active ? 0.14 : 0.09;
-  const scanOpacity = intense ? 0.06 : 0.035;
   const edgeOpacity = intense ? 0.9 : active ? 0.7 : 0.35;
 
   return (
