@@ -20,6 +20,7 @@ import { GeometryGuide } from "@/components/geometry/GeometryGuide";
 import { IntervalLegend } from "@/components/geometry/IntervalLegend";
 import { OrbitToToneBridge } from "@/components/geometry/OrbitToToneBridge";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
+import { NightSkyBackground } from "@/components/NightSkyBackground";
 
 type UniverseMode = "harmonics" | "transits" | "geometry";
 
@@ -137,6 +138,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
   return (
     <div className="h-screen w-full relative overflow-hidden">
+      <NightSkyBackground />
+
       {/* Full-screen visualization */}
       <div className={`absolute inset-x-0 top-[92px] bottom-0 z-0 ${mode === "harmonics" ? "-translate-y-10" : mode === "transits" ? "translate-y-6" : ""}`}>
         {mode === "harmonics" ? (
