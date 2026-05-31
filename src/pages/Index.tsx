@@ -3,7 +3,7 @@ import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
-import { Activity, Signal, ArrowRight, Sparkles } from "lucide-react";
+import { Activity, Signal, ArrowRight, Sparkles, Clock, Waves, Orbit, Radio, Sun } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
@@ -292,7 +292,7 @@ const Index = () => {
       {/* ─── BOTTOM TELEMETRY CHROME ─── */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
         <div
-          className="flex items-center gap-10 px-12 py-2.5 rounded-full backdrop-blur-2xl"
+          className="relative flex items-stretch gap-0 pl-6 pr-6 py-3 rounded-full backdrop-blur-2xl overflow-hidden"
           style={{
             background:
               "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
@@ -301,32 +301,107 @@ const Index = () => {
               "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
-          <div className="flex flex-col items-center">
-            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">UTC</span>
-            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
-              {time.toISOString().slice(11, 19)}
-            </span>
+          {/* Top rim highlight */}
+          <div
+            className="absolute top-0 left-12 right-12 h-px pointer-events-none"
+            style={{
+              background:
+                "linear-gradient(90deg, transparent 0%, hsla(200,60%,80%,0.45) 50%, transparent 100%)",
+            }}
+          />
+
+          {/* UTC */}
+          <div className="flex items-center gap-2.5 px-5">
+            <Clock className="w-3.5 h-3.5 text-foreground/40" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">UTC</span>
+              <span className="text-[11px] font-mono text-foreground/90 tabular-nums leading-tight tracking-wider">
+                {time.toISOString().slice(11, 19)}
+              </span>
+            </div>
           </div>
-          <div className="w-px h-5 bg-foreground/10" />
-          <div className="flex flex-col items-center">
-            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Coherence</span>
-            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">
-              {globalCoherence.toString().padStart(2, "0")}.{(tick % 100).toString().padStart(2, "0")}
-            </span>
+
+          <div className="w-px self-stretch my-1 bg-gradient-to-b from-transparent via-foreground/15 to-transparent" />
+
+          {/* Coherence with sparkline */}
+          <div className="flex items-center gap-2.5 px-5">
+            <Waves className="w-3.5 h-3.5 text-foreground/40" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">Coherence</span>
+              <div className="flex items-baseline gap-1.5">
+                <span className="text-[11px] font-mono text-foreground/90 tabular-nums leading-tight tracking-wider">
+                  {globalCoherence.toString().padStart(2, "0")}.{(tick % 100).toString().padStart(2, "0")}
+                </span>
+                <span className="text-[8px] font-mono text-muted-foreground/40 uppercase">φ</span>
+              </div>
+            </div>
+            <svg viewBox="0 0 40 14" className="w-10 h-3.5 -ml-0.5">
+              <polyline
+                fill="none"
+                stroke="hsla(150,70%,60%,0.6)"
+                strokeWidth="1"
+                strokeLinecap="round"
+                points={coherenceValues.map((v, i) => `${(i / (coherenceValues.length - 1)) * 40},${14 - (v / 100) * 12}`).join(" ")}
+              />
+            </svg>
           </div>
-          <div className="w-px h-5 bg-foreground/10" />
-          <div className="flex flex-col items-center">
-            <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/40 font-medium">Orbital V</span>
-            <span className="text-[10px] font-mono text-foreground/80 tabular-nums">29.78 km/s</span>
+
+          <div className="w-px self-stretch my-1 bg-gradient-to-b from-transparent via-foreground/15 to-transparent" />
+
+          {/* Orbital Velocity */}
+          <div className="flex items-center gap-2.5 px-5">
+            <Orbit className="w-3.5 h-3.5 text-foreground/40" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">Orbital V</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[11px] font-mono text-foreground/90 tabular-nums leading-tight tracking-wider">29.78</span>
+                <span className="text-[8px] font-mono text-muted-foreground/40 uppercase">km/s</span>
+              </div>
+            </div>
           </div>
-          <div className="w-px h-5 bg-foreground/10" />
-          <div className="w-px h-5 bg-foreground/10" />
-          <div className="flex items-center gap-1.5">
-            <span className="relative flex w-1.5 h-1.5">
-              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/60 animate-ping" />
-              <span className="relative inline-flex w-1.5 h-1.5 rounded-full bg-emerald-400/90" />
+
+          <div className="w-px self-stretch my-1 bg-gradient-to-b from-transparent via-foreground/15 to-transparent" />
+
+          {/* Schumann Resonance */}
+          <div className="flex items-center gap-2.5 px-5">
+            <Radio className="w-3.5 h-3.5 text-foreground/40" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">Schumann</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[11px] font-mono text-foreground/90 tabular-nums leading-tight tracking-wider">
+                  {(7.83 + Math.sin(tick / 30) * 0.04).toFixed(2)}
+                </span>
+                <span className="text-[8px] font-mono text-muted-foreground/40 uppercase">Hz</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-px self-stretch my-1 bg-gradient-to-b from-transparent via-foreground/15 to-transparent" />
+
+          {/* Solar Wind */}
+          <div className="flex items-center gap-2.5 px-5">
+            <Sun className="w-3.5 h-3.5 text-foreground/40" strokeWidth={1.5} />
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">Solar Wind</span>
+              <div className="flex items-baseline gap-1">
+                <span className="text-[11px] font-mono text-foreground/90 tabular-nums leading-tight tracking-wider">412</span>
+                <span className="text-[8px] font-mono text-muted-foreground/40 uppercase">km/s</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="w-px self-stretch my-1 bg-gradient-to-b from-transparent via-foreground/15 to-transparent" />
+
+          {/* Status */}
+          <div className="flex items-center gap-2 px-5">
+            <span className="relative flex w-2 h-2">
+              <span className="absolute inline-flex h-full w-full rounded-full bg-emerald-400/50 animate-ping" />
+              <span className="relative inline-flex w-2 h-2 rounded-full bg-emerald-400 shadow-[0_0_8px_hsla(150,80%,55%,0.8)]" />
             </span>
-            <span className="text-[9px] tracking-[0.28em] uppercase text-foreground/70 font-semibold">Nominal</span>
+            <div className="flex flex-col">
+              <span className="text-[7px] tracking-[0.32em] uppercase text-muted-foreground/50 font-semibold">Status</span>
+              <span className="text-[11px] tracking-[0.22em] uppercase text-emerald-300/90 font-semibold leading-tight">Nominal</span>
+            </div>
           </div>
         </div>
       </div>
