@@ -34,8 +34,9 @@ export default function SphereDetail() {
   return (
     <div className="min-h-screen w-full flex flex-col">
       {/* Header */}
-      <header className="mx-3 mt-3 glass-panel rounded-xl px-4 py-2.5 flex items-center justify-between">
-        <div className="flex items-center gap-3">
+      <header className="relative overflow-hidden mx-3 mt-3 rounded-xl px-4 py-2.5 flex items-center justify-between">
+        <SpherePanelBackdrop accent={ACCENT} active intense />
+        <div className="relative z-10 flex items-center gap-3">
           <Button
             variant="ghost"
             size="icon"
