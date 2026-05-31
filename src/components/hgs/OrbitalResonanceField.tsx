@@ -112,7 +112,7 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       const h = rect.height;
       const cx = w * 0.5;
       const cy = h * 0.5;
-      const scale = Math.min(w, h) * 0.42;
+      const scale = Math.min(w, h) * 0.35;
       const sel = selectedRef.current;
 
       ctx.clearRect(0, 0, w, h);
