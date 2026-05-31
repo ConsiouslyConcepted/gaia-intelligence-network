@@ -212,10 +212,9 @@ export const EarthVisualization = () => {
         )}
 
         <OrbitControls
-          enableZoom
+          enableZoom={false}
           enablePan={false}
-          minDistance={2.5}
-          maxDistance={10}
+          enableRotate={false}
           autoRotate
           autoRotateSpeed={0.25}
           dampingFactor={0.05}
