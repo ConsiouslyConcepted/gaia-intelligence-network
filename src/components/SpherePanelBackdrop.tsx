@@ -11,7 +11,6 @@ interface Props {
 export function SpherePanelBackdrop({ accent, active = false, intense = false }: Props) {
   const tintOpacity = intense ? 0.18 : active ? 0.12 : 0.07;
   const gridOpacity = intense ? 0.18 : active ? 0.14 : 0.09;
-  const scanOpacity = intense ? 0.06 : 0.035;
   const edgeOpacity = intense ? 0.9 : active ? 0.7 : 0.35;
 
   return (
@@ -56,13 +55,6 @@ export function SpherePanelBackdrop({ accent, active = false, intense = false }:
         }}
       />
 
-      {/* Scanlines — slow drift */}
-      <div
-        className="absolute -inset-y-1/2 inset-x-0 motion-safe:animate-scanline-drift"
-        style={{
-          backgroundImage: `repeating-linear-gradient(to bottom, hsla(0,0%,100%,${scanOpacity}) 0px, hsla(0,0%,100%,${scanOpacity}) 1px, transparent 1px, transparent 3px)`,
-        }}
-      />
 
       {/* Accent left edge */}
       <div
