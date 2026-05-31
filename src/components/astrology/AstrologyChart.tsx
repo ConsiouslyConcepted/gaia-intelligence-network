@@ -97,10 +97,14 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="2.2" />
         </filter>
-        <filter id="constellationGlow" x="-100%" y="-100%" width="300%" height="300%">
-          <feGaussianBlur stdDeviation="0.9" result="blur" />
+        <filter id="constellationGlow" x="-150%" y="-150%" width="400%" height="400%">
+          <feGaussianBlur stdDeviation="0.6" result="b1" />
+          <feGaussianBlur stdDeviation="2.4" in="SourceGraphic" result="b2" />
           <feMerge>
-            <feMergeNode in="blur" />
+            <feMergeNode in="b2" />
+            <feMergeNode in="b1" />
+            <feMergeNode in="b1" />
+            <feMergeNode in="SourceGraphic" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
@@ -159,7 +163,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             </text>
 
             {/* constellation dots + glow */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.5)`} className="pointer-events-none" filter="url(#constellationGlow)">
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.7)`} className="pointer-events-none" filter="url(#constellationGlow)">
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
                   key={`l${i}`}
@@ -167,13 +171,13 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsla(220, 20%, 85%, 0.7)"
-                  strokeWidth="0.5"
+                  stroke="hsla(220, 25%, 96%, 0.95)"
+                  strokeWidth="0.7"
                   strokeLinecap="round"
                 />
               ))}
               {dots.map((d, i) => (
-                <circle key={i} cx={d.x} cy={d.y} r={d.r * 1.1} fill="hsla(220, 25%, 96%, 1)" />
+                <circle key={i} cx={d.x} cy={d.y} r={d.r * 1.3} fill="hsla(220, 30%, 99%, 1)" />
               ))}
             </g>
 
