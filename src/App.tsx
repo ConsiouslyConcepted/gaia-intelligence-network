@@ -9,7 +9,6 @@ import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
 import NotFound from "./pages/NotFound";
-import { NightSkyBackground } from "./components/NightSkyBackground";
 
 const queryClient = new QueryClient();
 
@@ -18,8 +17,6 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* Single, canonical background mounted once for every route */}
-      <NightSkyBackground />
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
