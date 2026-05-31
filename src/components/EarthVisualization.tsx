@@ -1,5 +1,5 @@
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { OrbitControls, Sphere, Html, Stars } from "@react-three/drei";
+import { OrbitControls, Sphere, Html } from "@react-three/drei";
 import { useState, useRef, useMemo } from "react";
 import * as THREE from "three";
 import { TextureLoader } from "three";
@@ -195,9 +195,6 @@ export const EarthVisualization = () => {
         <directionalLight position={[5, 3, 5]} intensity={1.8} color="#ffffff" />
         <directionalLight position={[-3, -2, -4]} intensity={0.4} color="#88aaff" />
         <pointLight position={[0, 6, 2]} intensity={0.3} color="#ffffff" />
-
-        {/* Starfield */}
-        <Stars radius={80} depth={60} count={2000} factor={3} saturation={0.1} fade speed={0.5} />
 
         {/* Orbital accent rings */}
         <OrbitalRing radius={2.2} color="#d4a56a" />
