@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { CosmoStage, CosmoLayer } from "@/components/cosmological/CosmoStage";
-import { NightSkyBackground } from "@/components/NightSkyBackground";
+
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
@@ -109,7 +109,8 @@ const Cosmological = () => {
 
   return (
     <div className="h-screen w-full relative overflow-hidden">
-      <NightSkyBackground />
+
+
 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none px-4 pt-6">
