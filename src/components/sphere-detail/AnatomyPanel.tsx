@@ -129,6 +129,17 @@ const ANATOMY_DATA: Record<SphereId, { overview: string; elements: StructureElem
       { name: "Piezoelectric Transduction Zones", description: "Regions where crystalline mineral structures convert between mechanical stress and electromagnetic signals." },
     ],
   },
+  heliosphere: {
+    overview: "The Sun-driven plasma bubble surrounding the planetary system — the upstream transmission layer through which solar activity reaches Earth. Structure is defined by the active solar surface, the radial outflow of the solar wind, the embedded interplanetary magnetic field, and the discrete energetic events that propagate through it.",
+    elements: [
+      { name: "Active Sun & Sunspots", description: "Magnetically active regions on the photosphere; sunspot number tracks the 11-year solar cycle and predicts flare/CME productivity." },
+      { name: "Solar Wind Streams", description: "Continuous outflow of magnetized plasma at 300–800 km/s; fast streams from coronal holes drive recurrent geomagnetic disturbance." },
+      { name: "Interplanetary Magnetic Field (IMF)", description: "Sun's magnetic field carried outward by the solar wind; southward Bz at Earth opens reconnection and drives storms." },
+      { name: "Solar Flares & X-Ray Bursts", description: "Sudden electromagnetic releases that ionize the dayside upper atmosphere and disrupt HF radio within minutes." },
+      { name: "Coronal Mass Ejections", description: "Billion-ton magnetized plasma clouds ejected from the corona; the dominant driver of severe geomagnetic storms." },
+      { name: "Heliospheric Activity Index", description: "Composite measure of total solar forcing — sunspots, wind, IMF, and event rate — transmitted toward Earth." },
+    ],
+  },
 };
 
 // ── Live element telemetry helpers ─────────────────────────────────────────
