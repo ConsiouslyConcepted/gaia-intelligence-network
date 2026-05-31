@@ -8,6 +8,7 @@ import { CommonsIcon } from "@/components/CommonsIcon";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
 import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
+import { SpherePanelBackdrop } from "@/components/SpherePanelBackdrop";
 
 const HudPanel = ({ children, className = "" }: { children: React.ReactNode; className?: string }) => (
   <div
