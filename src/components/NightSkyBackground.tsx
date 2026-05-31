@@ -1,3 +1,11 @@
+import { Canvas } from "@react-three/fiber";
+import {
+  configurePlanetaryStarfieldRenderer,
+  PLANETARY_STARFIELD_CAMERA,
+  PLANETARY_STARFIELD_GL,
+  PlanetaryStars,
+} from "@/components/PlanetaryStarfield";
+
 export const NightSkyBackground = () => {
   return (
     <div
@@ -16,6 +24,18 @@ export const NightSkyBackground = () => {
             "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
         }}
       />
+
+      <div className="absolute inset-0">
+        <Canvas
+          camera={PLANETARY_STARFIELD_CAMERA}
+          gl={PLANETARY_STARFIELD_GL}
+          onCreated={({ gl }) => {
+            configurePlanetaryStarfieldRenderer(gl);
+          }}
+        >
+          <PlanetaryStars />
+        </Canvas>
+      </div>
 
       <div
         className="absolute inset-0"

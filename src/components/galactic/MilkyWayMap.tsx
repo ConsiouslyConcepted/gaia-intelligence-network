@@ -41,13 +41,6 @@ const rand = (s: number) => {
 export const MilkyWayMap = ({ layer }: Props) => {
   const [tick, setTick] = useState(0);
   const raf = useRef<number>();
-  const starSeeds = Array.from({ length: 220 }, (_, i) => ({
-    x: rand(i * 29),
-    y: rand(i * 43),
-    size: 0.002 + Math.abs(rand(i * 59)) * 0.006,
-    alpha: 0.15 + Math.abs(rand(i * 71)) * 0.55,
-    drift: 0.04 + Math.abs(rand(i * 83)) * 0.08,
-  }));
 
   useEffect(() => {
     const start = performance.now();
@@ -95,16 +88,6 @@ export const MilkyWayMap = ({ layer }: Props) => {
           <stop offset="100%" stopColor="hsla(40,95%,60%,0)" />
         </radialGradient>
       </defs>
-
-      <g>
-        {starSeeds.map((star, i) => {
-          const x = star.x * (VB * 1.75);
-          const baseY = star.y * (VB * 1.75);
-          const y = ((baseY + tick * star.drift + VB * 2) % (VB * 4)) - VB * 2;
-          const alpha = star.alpha * (0.7 + Math.sin(tick * 2 + i) * 0.3);
-          return <circle key={i} cx={x} cy={y} r={star.size} fill={`hsla(0,0%,100%,${alpha})`} />;
-        })}
-      </g>
 
       {/* Subtle galactic glow only — let the shared planetary sky remain the page background */}
       <circle cx="0" cy="0" r={DISK_R * 1.05} fill="hsla(220,40%,30%,0.05)" />
