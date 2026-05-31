@@ -365,6 +365,45 @@ const BUILDERS: Record<SphereId, Builder> = {
       ],
     };
   },
+
+  heliosphere: (intel) => {
+    const m = intel.metrics;
+    const ssn = pick(m, "sunspots");
+    const sw = pick(m, "solarWind");
+    const xray = pick(m, "xray");
+    const imf = pick(m, "imf");
+    const cme = pick(m, "cme");
+    const hai = pick(m, "hai");
+    const r = regime(intel.score);
+    const summary =
+      `Heliospheric activity ${intel.score} (${r.tag}) — ${trendPhrase(intel.trend)}. ` +
+      (ssn ? `SSN ${fmt(ssn)}, ` : "") +
+      (sw ? `solar wind ${fmt(sw)}, ` : "") +
+      (xray ? `X-ray flux ${fmt(xray)}, ` : "") +
+      (imf ? `IMF ${fmt(imf)}. ` : "") +
+      `Solar transmission layer in a ${r.tone}.`;
+    return {
+      summary,
+      patterns: [
+        { name: "Solar Cycle Phase", description: "11-year sunspot cycle modulates baseline solar output, UV flux, and the frequency of energetic events.", timeScale: "Years → Decades",
+          status: ssn ? `SSN ${fmt(ssn)} (${signed(ssn.deltaPct)}%)` : "—",
+          intensity: intensityFrom(m, ["sunspots"]), metricKeys: ["sunspots"] },
+        { name: "Solar Wind & IMF Transport", description: "Continuous plasma flow carries the interplanetary magnetic field outward, coupling the Sun to the magnetosphere.", timeScale: "Hours → Days",
+          status: sw ? `Wind ${fmt(sw)} · IMF ${imf ? fmt(imf) : "—"}` : "—",
+          intensity: intensityFrom(m, ["solarWind", "imf"]), metricKeys: ["solarWind", "imf"] },
+        { name: "Flare & X-Ray Activity", description: "Sudden bursts of electromagnetic radiation ionize the dayside upper atmosphere and disrupt HF radio.", timeScale: "Minutes → Hours",
+          status: xray ? `Flux ${fmt(xray)} (${signed(xray.z, 1)}σ)` : "—",
+          intensity: intensityFrom(m, ["xray"]), metricKeys: ["xray"] },
+        { name: "CME Propagation", description: "Coronal mass ejections inject magnetized plasma into the heliosphere, driving the strongest geomagnetic storms.", timeScale: "Hours → Days",
+          status: cme ? `CME index ${fmt(cme)}` : "—",
+          intensity: intensityFrom(m, ["cme"]), metricKeys: ["cme"] },
+        { name: "Heliospheric Activity Index", description: "Composite metric tracking total solar forcing transmitted to Earth's outer envelope.",
+          timeScale: "Hours → Months",
+          status: hai ? `HAI ${fmt(hai)} · ${trendPhrase(intel.trend)}` : "—",
+          intensity: intensityFrom(m, ["hai"]), metricKeys: ["hai"] },
+      ],
+    };
+  },
 };
 
 export function buildLiveBehavior(intel: SphereIntelligence): LiveBehavior {
