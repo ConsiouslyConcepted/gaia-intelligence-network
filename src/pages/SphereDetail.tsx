@@ -61,7 +61,7 @@ export default function SphereDetail() {
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="relative z-10 flex items-center gap-2">
           <button
             onClick={() => navigate("/commons")}
             className="hover:opacity-80 transition-opacity"
