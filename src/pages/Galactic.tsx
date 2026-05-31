@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { MilkyWayMap, GalacticLayer } from "@/components/galactic/MilkyWayMap";
-import { NightSkyBackground } from "@/components/NightSkyBackground";
+
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; glow?: string; topBar?: boolean }) => (
   <div
