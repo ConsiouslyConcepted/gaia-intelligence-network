@@ -42,13 +42,29 @@ function arcPath(cx: number, cy: number, rOuter: number, rInner: number, startDe
   return `M ${p1.x} ${p1.y} A ${rOuter} ${rOuter} 0 ${large} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInner} ${rInner} 0 ${large} 0 ${p4.x} ${p4.y} Z`;
 }
 
+// Procedural star-dot pattern per sign (seeded so each sign is stable)
+function constellationDots(seed: number): { x: number; y: number; r: number }[] {
+  const dots: { x: number; y: number; r: number }[] = [];
+  let s = seed * 9301 + 49297;
+  const rnd = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  const n = 5 + Math.floor(rnd() * 4);
+  for (let i = 0; i < n; i++) {
+    dots.push({
+      x: (rnd() - 0.5) * 36,
+      y: (rnd() - 0.5) * 18,
+      r: 0.8 + rnd() * 1.4,
+    });
+  }
+  return dots;
+}
+
 export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
     end: s.startDeg + 30,
     mid: s.startDeg + 15,
-    pattern: CONSTELLATIONS[s.id],
+    dots: constellationDots(SIGNS.indexOf(s) + 1),
   })), []);
 
   // Spread overlapping planets slightly along the ring so glyphs don't stack
