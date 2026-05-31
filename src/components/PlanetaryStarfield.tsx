@@ -1,4 +1,4 @@
-import { Stars } from "@react-three/drei";
+import { OrbitControls, Stars } from "@react-three/drei";
 import * as THREE from "three";
 
 export const PLANETARY_STARFIELD_CAMERA = {
@@ -26,4 +26,19 @@ export const PlanetaryStars = () => (
     fade
     speed={0.5}
   />
+);
+
+export const PlanetaryStarfieldMotion = () => (
+  <>
+    <PlanetaryStars />
+    <OrbitControls
+      enableZoom={false}
+      enablePan={false}
+      enableRotate={false}
+      autoRotate
+      autoRotateSpeed={0.25}
+      dampingFactor={0.05}
+      enableDamping
+    />
+  </>
 );

@@ -312,13 +312,6 @@ const HarmonicsView = ({ tick }: { tick: number }) => {
 export const CosmoStage = ({ layer }: Props) => {
   const [tick, setTick] = useState(0);
   const raf = useRef<number>();
-  const starSeeds = Array.from({ length: 220 }, (_, i) => ({
-    x: rand(i * 19),
-    y: rand(i * 31),
-    size: 0.003 + Math.abs(rand(i * 47)) * 0.007,
-    alpha: 0.15 + Math.abs(rand(i * 61)) * 0.55,
-    drift: 0.03 + Math.abs(rand(i * 73)) * 0.06,
-  }));
   useEffect(() => {
     const start = performance.now();
     const loop = (now: number) => {
@@ -330,16 +323,7 @@ export const CosmoStage = ({ layer }: Props) => {
   }, []);
 
   return (
-    <div className="w-full h-full relative overflow-hidden" style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
-      <svg viewBox="-1.1 -1.1 2.2 2.2" className="absolute inset-0 w-full h-full pointer-events-none">
-        {starSeeds.map((star, i) => {
-          const x = star.x * 1.95;
-          const baseY = star.y * 1.95;
-          const y = ((baseY + tick * star.drift + 2.2) % 4.4) - 2.2;
-          const alpha = star.alpha * (0.72 + Math.sin(tick * 2 + i * 0.5) * 0.28);
-          return <circle key={i} cx={x} cy={y} r={star.size} fill={`hsla(0,0%,100%,${alpha})`} />;
-        })}
-      </svg>
+    <div className="w-full h-full" style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
       {layer === "cmb" && <CMBView tick={tick} />}
       {layer === "constants" && <ConstantsView tick={tick} />}
       {layer === "spacetime" && <SpacetimeView tick={tick} />}

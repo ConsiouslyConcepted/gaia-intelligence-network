@@ -3,7 +3,7 @@ import {
   configurePlanetaryStarfieldRenderer,
   PLANETARY_STARFIELD_CAMERA,
   PLANETARY_STARFIELD_GL,
-  PlanetaryStars,
+  PlanetaryStarfieldMotion,
 } from "@/components/PlanetaryStarfield";
 
 export const NightSkyBackground = () => {
@@ -33,7 +33,7 @@ export const NightSkyBackground = () => {
             configurePlanetaryStarfieldRenderer(gl);
           }}
         >
-          <PlanetaryStars />
+          <PlanetaryStarfieldMotion />
         </Canvas>
       </div>
 
