@@ -75,25 +75,55 @@ export const WireframeSphereIcon = ({
       className={className}
     >
       <defs>
+        {/* Solid 3D sphere body with off-center highlight */}
+        <radialGradient id={`wf-body-${color.replace('#', '')}`} cx="35%" cy="30%" r="75%">
+          <stop offset="0%" stopColor="#1a2540" stopOpacity="1" />
+          <stop offset="45%" stopColor="#0d1424" stopOpacity="1" />
+          <stop offset="100%" stopColor="#03060d" stopOpacity="1" />
+        </radialGradient>
+        {/* Specular highlight */}
+        <radialGradient id={`wf-spec-${color.replace('#', '')}`} cx="32%" cy="26%" r="32%">
+          <stop offset="0%" stopColor="#ffffff" stopOpacity="0.35" />
+          <stop offset="60%" stopColor="#ffffff" stopOpacity="0.05" />
+          <stop offset="100%" stopColor="#ffffff" stopOpacity="0" />
+        </radialGradient>
+        {/* Bottom rim color glow */}
+        <radialGradient id={`wf-rim-${color.replace('#', '')}`} cx="50%" cy="100%" r="60%">
+          <stop offset="0%" stopColor={color} stopOpacity="0.45" />
+          <stop offset="60%" stopColor={color} stopOpacity="0.08" />
+          <stop offset="100%" stopColor={color} stopOpacity="0" />
+        </radialGradient>
+        {/* Soft outer glow */}
         <radialGradient id={`wf-glow-${color.replace('#', '')}`} cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor={color} stopOpacity="0.18" />
+          <stop offset="60%" stopColor={color} stopOpacity="0" />
+          <stop offset="85%" stopColor={color} stopOpacity="0.18" />
           <stop offset="100%" stopColor={color} stopOpacity="0" />
         </radialGradient>
       </defs>
 
-      {/* Background glow */}
-      <circle cx="22" cy="22" r="19" fill={`url(#wf-glow-${color.replace('#', '')})`} />
+      {/* Outer atmospheric glow */}
+      <circle cx="22" cy="22" r="21" fill={`url(#wf-glow-${color.replace('#', '')})`} />
 
-      {/* Outer circle */}
+      {/* Solid sphere body */}
+      <circle cx="22" cy="22" r="18" fill={`url(#wf-body-${color.replace('#', '')})`} />
+
+      {/* Bottom color rim */}
+      <circle cx="22" cy="22" r="18" fill={`url(#wf-rim-${color.replace('#', '')})`} />
+
+      {/* Specular highlight */}
+      <circle cx="22" cy="22" r="18" fill={`url(#wf-spec-${color.replace('#', '')})`} />
+
+      {/* Outer ring */}
       <circle
         cx="22"
         cy="22"
         r="18"
         fill="none"
         stroke={color}
-        strokeWidth="0.5"
-        opacity="0.5"
+        strokeWidth="0.6"
+        opacity="0.7"
       />
+
 
       {/* Latitude lines */}
       {latPaths.map((d, i) => (
