@@ -103,7 +103,42 @@ const Index = () => {
 
   return (
     <div className="h-screen w-full relative overflow-hidden">
-      {/* Full-screen globe — shared NightSkyBackground is rendered globally in App.tsx */}
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background: "radial-gradient(ellipse at 50% 40%, hsla(225,50%,8%,1) 0%, hsla(228,55%,5%,1) 55%, hsla(230,60%,3%,1) 100%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none mix-blend-screen"
+        style={{
+          background:
+            "radial-gradient(circle at 50% 58%, hsla(190,60%,75%,0.07) 0%, hsla(190,60%,75%,0.02) 22%, transparent 38%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
+        }}
+      />
+      <div
+        className="absolute inset-0 z-0 pointer-events-none opacity-[0.025]"
+        style={{
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 2px, hsl(var(--foreground) / 0.08) 2px, hsl(var(--foreground) / 0.08) 4px)",
+        }}
+      />
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-[0.05] mix-blend-overlay">
+        <svg className="w-full h-full" xmlns="http://www.w3.org/2000/svg">
+          <filter id="noiseFilter">
+            <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" />
+          </filter>
+          <rect width="100%" height="100%" filter="url(#noiseFilter)" opacity="0.75" />
+        </svg>
+      </div>
+
       <div className="absolute inset-0 z-[1] translate-y-[2%]">
         <EarthVisualization />
       </div>
