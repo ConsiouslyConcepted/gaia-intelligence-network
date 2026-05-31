@@ -55,13 +55,6 @@ export function SpherePanelBackdrop({ accent, active = false, intense = false }:
         }}
       />
 
-      {/* Scanlines — slow drift */}
-      <div
-        className="absolute -inset-y-1/2 inset-x-0 motion-safe:animate-scanline-drift"
-        style={{
-          backgroundImage: `repeating-linear-gradient(to bottom, hsla(0,0%,100%,${scanOpacity}) 0px, hsla(0,0%,100%,${scanOpacity}) 1px, transparent 1px, transparent 3px)`,
-        }}
-      />
 
       {/* Accent left edge */}
       <div
