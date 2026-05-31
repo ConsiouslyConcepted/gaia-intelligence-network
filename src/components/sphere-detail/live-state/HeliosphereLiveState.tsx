@@ -25,7 +25,7 @@ export function HeliosphereLiveState({ accent }: { accent: string }) {
   const latestKp = kpData?.[kpData.length - 1];
   const latestSW = solarWind?.[solarWind.length - 1];
   const latestMag = magField?.[magField.length - 1];
-  const latestXray = xray?.[xray.length - 1];
+  const latestXray = xray?.[0];
   const latestCycle = cycle?.[cycle.length - 1];
 
   return (
@@ -35,7 +35,7 @@ export function HeliosphereLiveState({ accent }: { accent: string }) {
         {[
           { label: "Sunspot Number", value: latestCycle?.ssn?.toFixed(0) ?? "—", unit: "SSN", loading: cycleLoading, Icon: Sun },
           { label: "Solar Wind Speed", value: latestSW?.speed?.toFixed(0) ?? "—", unit: "km/s", loading: swLoading, Icon: Wind },
-          { label: "X-Ray Flux", value: latestXray?.flux ? latestXray.flux.toExponential(1) : "—", unit: "W/m²", loading: xrayLoading, Icon: Zap },
+          { label: "X-Ray Flux", value: latestXray?.currentFlux ? Number(latestXray.currentFlux).toExponential(1) : "—", unit: latestXray?.classType ?? "W/m²", loading: xrayLoading, Icon: Zap },
           { label: "IMF Bt", value: latestMag?.bt?.toFixed(1) ?? "—", unit: "nT", loading: magLoading, Icon: Activity },
         ].map((v, i) => (
           <Card key={i} className="glass-panel rounded-xl p-4 space-y-2">
