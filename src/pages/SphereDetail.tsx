@@ -10,6 +10,7 @@ import { LiveDynamicsPanel } from "@/components/sphere-detail/LiveDynamicsPanel"
 import { SignalsPanel } from "@/components/sphere-detail/SignalsPanel";
 import { CouplingPanel } from "@/components/sphere-detail/CouplingPanel";
 import { SphereIntelligenceCard } from "@/components/sphere-intelligence/SphereIntelligenceCard";
+import { SpherePanelBackdrop } from "@/components/SpherePanelBackdrop";
 
 const ACCENT = "#5ce0d2"; // sphere accent
 
