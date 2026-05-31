@@ -167,6 +167,20 @@ export const SPHERE_INTEL: Record<SphereId, SphereIntelligenceSpec> = {
       { key: "coupling", label: "Coupling Strength", unit: "idx", baseline: 0.64, sigma: 0.07, amplitude: 0.09, frequency: 0.06, phase: 2.8, precision: 2 },
     ],
   },
+  heliosphere: {
+    id: "heliosphere",
+    purpose: "Track solar activity transmitted to Earth's outer systems.",
+    scoreLabel: "Activity",
+    polarity: "activity",
+    metrics: [
+      { key: "sunspots", label: "Sunspot Number", unit: "SSN", baseline: 128, sigma: 22, amplitude: 28, frequency: 0.02, phase: 0.0, precision: 0 },
+      { key: "solarWind", label: "Solar Wind Speed", unit: "km/s", baseline: 440, sigma: 60, amplitude: 80, frequency: 0.06, phase: 1.1, precision: 0 },
+      { key: "xray", label: "X-Ray Flux", unit: "W/m²", baseline: 2.4, sigma: 0.6, amplitude: 0.9, frequency: 0.08, phase: 2.0, precision: 2 },
+      { key: "imf", label: "IMF Bt", unit: "nT", baseline: 5.6, sigma: 1.4, amplitude: 1.8, frequency: 0.07, phase: 2.6, precision: 1 },
+      { key: "cme", label: "CME Activity", unit: "idx", baseline: 0.42, sigma: 0.12, amplitude: 0.18, frequency: 0.05, phase: 0.8, precision: 2 },
+      { key: "hai", label: "Heliospheric Activity Index", unit: "HAI", baseline: 0.55, sigma: 0.1, amplitude: 0.14, frequency: 0.04, phase: 1.7, precision: 2 },
+    ],
+  },
 };
 
 // ─────────────────────────────────────────────────────────────────────────────
