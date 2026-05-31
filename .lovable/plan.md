@@ -1,59 +1,47 @@
-## Goal
+## Current assessment
+The earlier claim was not fully accurate.
 
-Give every "sphere panel" a richer HUD-style background — layered translucent glass with a faint accent-tinted grid and slow-moving scanlines — applied consistently to:
+- **Planetary is restored**: the `/` page is visibly back to its original look.
+- **The other pages are still not using the exact same implementation**: at least `/galactic` is rendering a similar starry backdrop, but it is **not the same background stack the planetary page uses**.
 
-1. Each row in the left **Sphere Systems** rail (`src/pages/Index.tsx`)
-2. The row's hovered/active state (stronger accent edge + brighter grid)
-3. The **Sphere Detail** page header card (`src/pages/SphereDetail.tsx`)
+## Why this keeps happening
+The planetary backdrop is currently **split across two separate implementations**:
 
-The sphere's signature hue stays as the accent (per the existing rail-tint exception). Body content (icon, name, sparkline, score, chevron) is unchanged.
+1. **`src/pages/Index.tsx`** supplies the radial base, vignette, scanline, and film-grain layers.
+2. **`src/components/EarthVisualization.tsx`** supplies the moving `Stars` layer inside the planetary WebGL canvas.
 
-## Implementation
+The other pages are using **`src/components/NightSkyBackground.tsx`**, which is only a recreation of that look. Even if the numbers match, it is still a different renderer/layer stack, so it will not be pixel-identical.
 
-### 1. New reusable backdrop component
-Create `src/components/SpherePanelBackdrop.tsx`:
-- Absolutely-positioned layer rendered inside a `relative` parent
-- Layers (bottom → top):
-  - Base glass gradient: `linear-gradient(145deg, hsla(240,22%,12%,0.85) → hsla(240,28%,6%,0.92))`
-  - Accent tint wash: radial-gradient from the sphere accent at ~6–10% opacity, top-left origin
-  - Grid texture: 16px × 16px CSS background-image of two thin `accent/8%` lines, masked with a radial fade so it's strongest near the icon
-  - Scanline overlay: 2px horizontal repeating gradient at ~3% opacity, animated with a slow `translateY` keyframe (6–8s linear infinite)
-  - Top inner highlight + bottom inner shadow via `box-shadow: inset`
-  - Accent left edge: 1px vertical bar in the accent color at 40% opacity (becomes 80% when `active`)
-- Props: `accent: string`, `active?: boolean`, `intense?: boolean`
-- Pointer-events none; respects `prefers-reduced-motion` (disables scanline animation)
+That is the root cause: I kept trying to *match* the planetary background instead of making the other pages use the **same source of truth**.
 
-### 2. Tailwind keyframe
-Add to `tailwind.config.ts`:
-```
-"scanline-drift": { "0%": { transform: "translateY(-25%)" }, "100%": { transform: "translateY(25%)" } }
-```
-and `animation: "scanline-drift": "scanline-drift 7s linear infinite"`.
+## Plan
+1. **Extract the planetary background into one canonical component**
+   - Move the exact planetary backdrop stack into a dedicated shared component.
+   - Include the same radial layers, grain, scanlines, and the same moving starfield behavior.
 
-### 3. Wire into the left rail
-In `src/pages/Index.tsx` (the `SPHERE_ARRAY.map` button):
-- Wrap each button content with `relative overflow-hidden rounded-lg`
-- Render `<SpherePanelBackdrop accent={sphere.color} active={hovered} />` behind children
-- Bump row padding slightly (`py-2.5 px-2`) so the new backdrop has breathing room
-- Remove the flat `hover:bg-foreground/[0.03]` (backdrop now handles hover via `group-hover` intensifier)
+2. **Keep planetary visually unchanged**
+   - Refactor the planetary page to consume that shared component without altering its appearance.
+   - Remove duplicated backdrop code from `Index.tsx` only after the shared version produces the same result.
 
-### 4. Wire into the detail page header
-In `src/pages/SphereDetail.tsx`:
-- Replace the header `glass-panel` background with the same component:
-  ```
-  <header className="relative overflow-hidden ...">
-    <SpherePanelBackdrop accent={sphere.color} active intense />
-    <div className="relative z-10 flex items-center ...">...</div>
-  </header>
-  ```
-- Keep existing inner layout untouched.
+3. **Apply that exact shared component to Universal, Galactic, and Cosmological**
+   - Mount the same component behind those pages.
+   - Remove any route-level or visualization-level backdrop code that competes with it.
 
-### 5. QA
-- Visit `/` and confirm rail rows have grid + scanlines, hover brightens accent edge.
-- Click into a sphere; confirm header shows the same treatment with stronger accent.
-- Reduced motion: scanline animation stops.
+4. **Validate by route, visually**
+   - Compare `/`, `/?view=hgs`, `/galactic`, and `/cosmological` side by side.
+   - Confirm the background treatment is the same across routes, while the foreground visualizations remain different.
 
-## Out of scope
-- No changes to typography, icon, sparkline, or COHERENCE value rendering.
-- No global theme/token changes — colors stay HSL accent-driven.
-- No changes to right Sphere Signals rail (different surface).
+## Technical details
+- Likely files involved:
+  - `src/pages/Index.tsx`
+  - `src/components/EarthVisualization.tsx`
+  - `src/components/NightSkyBackground.tsx`
+  - `src/components/hgs/HGSDashboard.tsx`
+  - `src/pages/Galactic.tsx`
+  - `src/pages/Cosmological.tsx`
+- The key rule for the fix:
+  - **One background implementation only**
+  - **Planetary must become the source, not the reference image to imitate**
+
+## Expected outcome
+After implementation, the planetary page should look exactly as it does now, and Universal, Galactic, and Cosmological should inherit that exact same backdrop rather than a close approximation.
