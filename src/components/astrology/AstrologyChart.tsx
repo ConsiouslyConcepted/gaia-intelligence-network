@@ -159,27 +159,9 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               {`${sign.glyph}\uFE0E`}
             </text>
 
-            {/* constellation dots + lines — electric look: blurred halo underlay + crisp bright stroke on top */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.7)`} className="pointer-events-none">
-              {/* soft halo underlay */}
-              <g filter="url(#constellationGlow)" opacity="0.55">
-                {dots.slice(0, dots.length - 1).map((d, i) => (
-                  <line
-                    key={`hl${i}`}
-                    x1={d.x}
-                    y1={d.y}
-                    x2={dots[i + 1].x}
-                    y2={dots[i + 1].y}
-                    stroke="hsla(220, 40%, 80%, 0.9)"
-                    strokeWidth="1.4"
-                    strokeLinecap="round"
-                  />
-                ))}
-                {dots.map((d, i) => (
-                  <circle key={`hd${i}`} cx={d.x} cy={d.y} r={d.r * 2.2} fill="hsla(220, 40%, 85%, 0.85)" />
-                ))}
-              </g>
-              {/* crisp electric core */}
+            {/* constellation — bright pin-point stars with sparkle spikes, thin hairline links */}
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.8)`} className="pointer-events-none">
+              {/* hairline connecting lines */}
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
                   key={`l${i}`}
@@ -187,15 +169,29 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsl(0, 0%, 100%)"
-                  strokeWidth="0.45"
+                  stroke="hsla(210, 40%, 95%, 0.55)"
+                  strokeWidth="0.28"
                   strokeLinecap="round"
                   shapeRendering="geometricPrecision"
                 />
               ))}
-              {dots.map((d, i) => (
-                <circle key={i} cx={d.x} cy={d.y} r={d.r * 0.9} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
-              ))}
+              {/* stars: soft halo + cross sparkle + bright pin core */}
+              {dots.map((d, i) => {
+                const spike = d.r * 5;
+                const halo = d.r * 3.2;
+                return (
+                  <g key={i}>
+                    <circle cx={d.x} cy={d.y} r={halo} fill="url(#starHalo)" />
+                    <g filter="url(#constellationGlow)" opacity="0.85">
+                      <line x1={d.x - spike} y1={d.y} x2={d.x + spike} y2={d.y} stroke="hsl(0, 0%, 100%)" strokeWidth="0.22" strokeLinecap="round" />
+                      <line x1={d.x} y1={d.y - spike} x2={d.x} y2={d.y + spike} stroke="hsl(0, 0%, 100%)" strokeWidth="0.22" strokeLinecap="round" />
+                    </g>
+                    <line x1={d.x - spike * 0.85} y1={d.y} x2={d.x + spike * 0.85} y2={d.y} stroke="hsl(0, 0%, 100%)" strokeWidth="0.35" strokeLinecap="round" shapeRendering="geometricPrecision" />
+                    <line x1={d.x} y1={d.y - spike * 0.85} x2={d.x} y2={d.y + spike * 0.85} stroke="hsl(0, 0%, 100%)" strokeWidth="0.35" strokeLinecap="round" shapeRendering="geometricPrecision" />
+                    <circle cx={d.x} cy={d.y} r={d.r * 0.7} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
+                  </g>
+                );
+              })}
             </g>
 
             {/* constellation name */}
