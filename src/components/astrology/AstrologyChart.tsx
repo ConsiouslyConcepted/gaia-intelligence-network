@@ -97,6 +97,14 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="2.2" />
         </filter>
+        <filter id="constellationGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="1.8" result="blur" />
+          <feMerge>
+            <feMergeNode in="blur" />
+            <feMergeNode in="blur" />
+            <feMergeNode in="SourceGraphic" />
+          </feMerge>
+        </filter>
       </defs>
 
       {/* inner disc soft glow */}
@@ -151,11 +159,8 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               {`${sign.glyph}\uFE0E`}
             </text>
 
-            {/* constellation dots */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid})`} className="pointer-events-none">
-              {dots.map((d, i) => (
-                <circle key={i} cx={d.x} cy={d.y} r={d.r} fill="hsla(220, 12%, 80%, 0.5)" />
-              ))}
+            {/* constellation dots + glow */}
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid})`} className="pointer-events-none" filter="url(#constellationGlow)">
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
                   key={`l${i}`}
@@ -163,9 +168,16 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsla(220, 10%, 70%, 0.2)"
-                  strokeWidth="0.4"
+                  stroke="hsla(45, 70%, 78%, 0.55)"
+                  strokeWidth="0.5"
+                  strokeLinecap="round"
                 />
+              ))}
+              {dots.map((d, i) => (
+                <g key={i}>
+                  <circle cx={d.x} cy={d.y} r={d.r * 2.4} fill="hsla(45, 80%, 75%, 0.25)" />
+                  <circle cx={d.x} cy={d.y} r={d.r} fill="hsla(45, 90%, 92%, 0.95)" />
+                </g>
               ))}
             </g>
 
