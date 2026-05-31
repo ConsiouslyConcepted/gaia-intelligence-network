@@ -86,6 +86,16 @@ const MECHANISMS: Partial<Record<SphereId, Partial<Record<SphereId, string>>>> =
     hydrosphere: "Water mass distribution shifts resonance loading",
     cryosphere: "Cryogenic lattices anchor long-term phase memory",
   },
+  heliosphere: {
+    magnetosphere: "Solar wind and IMF compress the dayside magnetopause; southward Bz drives reconnection and geomagnetic storms",
+    atmosphere: "Solar EUV/UV flux heats and ionizes the upper atmosphere; flares trigger sudden ionospheric disturbances",
+    hydrosphere: "Solar cycle modulates total irradiance and ocean heat input; long-term forcing of SST and circulation",
+    biosphere: "UV-B variability stresses surface life; cosmic-ray modulation may influence cloud nucleation and climate",
+    ionosphere: "Geomagnetic storms induce ground currents in power grids and pipelines; flares disrupt HF radio and GNSS",
+    cryosphere: "Solar irradiance variability modulates polar energy balance and seasonal ice extent",
+    noosphere: "Space-weather events disrupt satellites, aviation routing, and global communications",
+    crystalsphere: "Solar cycle phase modulates Schumann resonance amplitudes and cavity excitation",
+  },
 };
 
 const DIR_LABEL: Record<CouplingDirection, string> = {
