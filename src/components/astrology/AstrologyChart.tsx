@@ -159,29 +159,25 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               {`${sign.glyph}\uFE0E`}
             </text>
 
-            {/* constellation — real stick-figure with bright dots + hairline links */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid + 90})`} className="pointer-events-none">
-              {pattern.lines.map(([a, b], i) => {
-                const sa = pattern.stars[a];
-                const sb = pattern.stars[b];
-                return (
-                  <line
-                    key={`l${i}`}
-                    x1={sa.x}
-                    y1={sa.y}
-                    x2={sb.x}
-                    y2={sb.y}
-                    stroke="hsla(210, 40%, 95%, 0.55)"
-                    strokeWidth="0.35"
-                    strokeLinecap="round"
-                    shapeRendering="geometricPrecision"
-                  />
-                );
-              })}
-              {pattern.stars.map((s, i) => (
+            {/* constellation — bright dots with hairline links */}
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.8)`} className="pointer-events-none">
+              {dots.slice(0, dots.length - 1).map((d, i) => (
+                <line
+                  key={`l${i}`}
+                  x1={d.x}
+                  y1={d.y}
+                  x2={dots[i + 1].x}
+                  y2={dots[i + 1].y}
+                  stroke="hsla(210, 40%, 95%, 0.6)"
+                  strokeWidth="0.3"
+                  strokeLinecap="round"
+                  shapeRendering="geometricPrecision"
+                />
+              ))}
+              {dots.map((d, i) => (
                 <g key={i}>
-                  <circle cx={s.x} cy={s.y} r={s.r * 2.4} fill="url(#starHalo)" opacity="0.55" />
-                  <circle cx={s.x} cy={s.y} r={s.r * 1.05} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
+                  <circle cx={d.x} cy={d.y} r={d.r * 2.2} fill="url(#starHalo)" opacity="0.6" />
+                  <circle cx={d.x} cy={d.y} r={d.r * 1.1} fill="hsl(0, 0%, 100%)" shapeRendering="geometricPrecision" />
                 </g>
               ))}
             </g>
