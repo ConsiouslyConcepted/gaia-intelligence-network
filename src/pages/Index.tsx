@@ -240,10 +240,14 @@ const Index = () => {
                 <button
                   key={sphere.id}
                   onClick={() => navigate(`/sphere/${sphere.id}`)}
-                  className="w-full flex items-center gap-3 px-1 py-2 rounded-lg transition-all duration-300 cursor-pointer group hover:bg-foreground/[0.03]"
+                  className="relative overflow-hidden w-full flex items-center gap-3 px-2 py-2.5 rounded-lg transition-all duration-300 cursor-pointer group"
                 >
-                  <WireframeSphereIcon color={sphere.color} size={28} segments={12} className="transition-transform duration-500 group-hover:scale-110 shrink-0 -ml-0.5" />
-                  <div className="min-w-0 text-left flex-1">
+                  <SpherePanelBackdrop accent={sphere.color} />
+                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
+                    <SpherePanelBackdrop accent={sphere.color} active />
+                  </div>
+                  <WireframeSphereIcon color={sphere.color} size={28} segments={12} className="relative z-10 transition-transform duration-500 group-hover:scale-110 shrink-0 -ml-0.5" />
+                  <div className="relative z-10 min-w-0 text-left flex-1">
                     <div className="flex items-center justify-between">
                       <span className="text-[11px] font-medium text-foreground/70 group-hover:text-foreground tracking-wide uppercase">{sphere.name}</span>
                       <ArrowRight className="w-3 h-3 text-muted-foreground/20 group-hover:text-foreground/40 transition-all group-hover:translate-x-0.5" />
