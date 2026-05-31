@@ -112,6 +112,7 @@ function sphereTone(id: SphereId): string {
     noosphere: "hsl(280 10% 76%)",
     crystalsphere: "hsl(40 12% 78%)",
     atmosphere: "hsl(195 12% 80%)",
+    heliosphere: "hsl(38 22% 78%)",
   };
   return tones[id];
 }
