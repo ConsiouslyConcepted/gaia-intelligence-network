@@ -1,35 +1,22 @@
 import { useEffect, useRef, useState } from "react";
 
-export type GalacticFocus =
-  | "galactic-center"
-  | "solar-position"
-  | "cosmic-rays"
-  | "lism"
-  | "orbital-cycle"
-  | null;
+export type GalacticLayer = "position" | "environment" | "dynamics" | "structure";
 
 interface Props {
-  focus: GalacticFocus;
-  onSelect: (id: Exclude<GalacticFocus, null>) => void;
+  layer: GalacticLayer;
 }
 
-// Milky Way top-down schematic. R in normalized units (0..1) from galactic center.
-// Sun is at ~26.7 kly which we represent at r = 0.62 of the disk radius.
 const SUN_R = 0.62;
 const DISK_R = 0.92;
-
-// Four-arm logarithmic spiral parameters (Norma, Scutum-Centaurus, Sagittarius, Perseus)
-const ARMS = [
-  { name: "Perseus", phase: 0, color: "hsla(210,70%,72%,0.85)" },
-  { name: "Sagittarius", phase: Math.PI / 2, color: "hsla(200,65%,68%,0.85)" },
-  { name: "Scutum-Centaurus", phase: Math.PI, color: "hsla(220,60%,70%,0.85)" },
-  { name: "Norma", phase: (3 * Math.PI) / 2, color: "hsla(195,60%,66%,0.85)" },
-];
-
-// Orion Spur — minor arm where the Sun sits
 const ORION_PHASE = Math.PI * 0.35;
+const PITCH = 0.22;
 
-const PITCH = 0.22; // pitch angle (rad) for log spirals
+const ARMS = [
+  { name: "Perseus", phase: 0 },
+  { name: "Sagittarius", phase: Math.PI / 2 },
+  { name: "Scutum-Centaurus", phase: Math.PI },
+  { name: "Norma", phase: (3 * Math.PI) / 2 },
+];
 
 function spiralPath(phaseOffset: number, rMin = 0.06, rMax = DISK_R, steps = 160) {
   const pts: string[] = [];
@@ -44,7 +31,14 @@ function spiralPath(phaseOffset: number, rMin = 0.06, rMax = DISK_R, steps = 160
   return pts.join(" ");
 }
 
-export const MilkyWayMap = ({ focus, onSelect }: Props) => {
+const rand = (s: number) => {
+  let t = (s + 0x6d2b79f5) | 0;
+  t = Math.imul(t ^ (t >>> 15), t | 1);
+  t ^= t + Math.imul(t ^ (t >>> 7), t | 61);
+  return (((t ^ (t >>> 14)) >>> 0) / 0xffffffff) * 2 - 1;
+};
+
+export const MilkyWayMap = ({ layer }: Props) => {
   const [tick, setTick] = useState(0);
   const raf = useRef<number>();
 
@@ -58,15 +52,19 @@ export const MilkyWayMap = ({ focus, onSelect }: Props) => {
     return () => { if (raf.current) cancelAnimationFrame(raf.current); };
   }, []);
 
-  // Sun position — rotates slowly around galactic center (orbital cycle)
-  // 225 Myr → here we just animate a slow visual sweep
+  // Sun position — slow visual sweep for orbital motion
   const orbitalAngle = ORION_PHASE + tick * 0.04;
   const sunX = Math.cos(orbitalAngle) * SUN_R;
   const sunY = Math.sin(orbitalAngle) * SUN_R;
 
-  const dim = (id: GalacticFocus) => (focus && focus !== id ? 0.22 : 1);
+  const VB = 2.2;
 
-  const VB = 2.2; // viewBox half-size
+  // Background stars for ambience
+  const bgStars = Array.from({ length: 90 }, (_, i) => ({
+    x: rand(i * 7) * VB * 0.95,
+    y: rand(i * 13 + 1) * VB * 0.95,
+    r: 0.004 + Math.abs(rand(i * 17)) * 0.006,
+  }));
 
   return (
     <svg
@@ -75,206 +73,258 @@ export const MilkyWayMap = ({ focus, onSelect }: Props) => {
       style={{ filter: "drop-shadow(0 0 24px hsla(210,70%,55%,0.18))" }}
     >
       <defs>
-        <radialGradient id="bulge" cx="50%" cy="50%" r="50%">
+        <radialGradient id="g-bulge" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="hsla(40,80%,82%,0.95)" />
           <stop offset="35%" stopColor="hsla(35,70%,70%,0.55)" />
           <stop offset="100%" stopColor="hsla(30,60%,55%,0)" />
         </radialGradient>
-        <radialGradient id="halo" cx="50%" cy="50%" r="50%">
+        <radialGradient id="g-halo" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="hsla(220,60%,40%,0.18)" />
           <stop offset="60%" stopColor="hsla(220,55%,30%,0.08)" />
           <stop offset="100%" stopColor="hsla(220,50%,20%,0)" />
         </radialGradient>
-        <radialGradient id="bubble" cx="50%" cy="50%" r="50%">
+        <radialGradient id="g-bubble" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="hsla(180,70%,70%,0.0)" />
-          <stop offset="70%" stopColor="hsla(180,70%,70%,0.18)" />
+          <stop offset="70%" stopColor="hsla(180,70%,70%,0.22)" />
           <stop offset="100%" stopColor="hsla(180,70%,70%,0)" />
         </radialGradient>
-        <radialGradient id="sun" cx="50%" cy="50%" r="50%">
+        <radialGradient id="g-sun" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="hsla(45,100%,85%,1)" />
           <stop offset="60%" stopColor="hsla(40,95%,70%,0.7)" />
           <stop offset="100%" stopColor="hsla(40,95%,60%,0)" />
         </radialGradient>
       </defs>
 
-      {/* Halo */}
-      <circle cx="0" cy="0" r={VB} fill="url(#halo)" />
+      {/* Halo & background stars */}
+      <circle cx="0" cy="0" r={VB} fill="url(#g-halo)" />
+      {bgStars.map((s, i) => (
+        <circle key={i} cx={s.x} cy={s.y} r={s.r} fill="hsla(0,0%,100%,0.4)" />
+      ))}
 
       {/* Galactic disk faint glow */}
       <circle cx="0" cy="0" r={DISK_R * 1.05} fill="hsla(220,40%,30%,0.05)" />
 
-      {/* Spiral arms */}
-      <g style={{ opacity: dim(null) }}>
+      {/* Spiral arms — always shown but brightness varies by layer */}
+      <g>
         {ARMS.map((arm, i) => (
           <path
             key={i}
             d={spiralPath(arm.phase)}
             fill="none"
-            stroke={arm.color}
-            strokeWidth={focus === "solar-position" ? 0.012 : 0.018}
+            stroke="hsla(210,70%,72%,0.85)"
+            strokeWidth={layer === "structure" ? 0.024 : 0.018}
             strokeLinecap="round"
-            opacity={focus && focus !== "solar-position" ? 0.25 : 0.65}
+            opacity={layer === "structure" ? 0.85 : 0.55}
           />
         ))}
-        {/* Orion Spur — highlighted when Solar Position focused */}
+        {/* Orion Spur */}
         <path
           d={spiralPath(ORION_PHASE, 0.45, 0.78, 80)}
           fill="none"
-          stroke={focus === "solar-position" ? "hsla(45,100%,75%,0.95)" : "hsla(210,80%,80%,0.55)"}
-          strokeWidth={focus === "solar-position" ? 0.022 : 0.012}
+          stroke={layer === "position" ? "hsla(45,100%,75%,0.95)" : "hsla(210,80%,80%,0.5)"}
+          strokeWidth={layer === "position" ? 0.022 : 0.012}
           strokeDasharray="0.04 0.025"
-          opacity={dim("solar-position")}
         />
       </g>
 
-      {/* Orbital cycle ring (Sun's path) */}
-      <g
-        style={{ cursor: "pointer", opacity: dim("orbital-cycle") }}
-        onClick={() => onSelect("orbital-cycle")}
-      >
-        <circle
-          cx="0" cy="0" r={SUN_R}
-          fill="none"
-          stroke="hsla(200,70%,75%,0.55)"
-          strokeWidth={focus === "orbital-cycle" ? 0.012 : 0.005}
-          strokeDasharray="0.02 0.02"
-        />
-        {/* moving tick marks */}
-        {focus === "orbital-cycle" && Array.from({ length: 24 }).map((_, i) => {
-          const a = (i / 24) * Math.PI * 2 + tick * 0.04;
-          return (
-            <circle
-              key={i}
+      {/* ─────────── POSITION layer ─────────── */}
+      {layer === "position" && (
+        <g>
+          {/* heliocentric vector to galactic center */}
+          <line
+            x1="0" y1="0" x2={sunX} y2={sunY}
+            stroke="hsla(45,100%,80%,0.7)"
+            strokeWidth={0.005}
+            strokeDasharray="0.025 0.018"
+          />
+          {/* longitude ticks around sun */}
+          {Array.from({ length: 12 }).map((_, i) => {
+            const a = (i / 12) * Math.PI * 2;
+            return (
+              <line
+                key={i}
+                x1={sunX + Math.cos(a) * 0.11}
+                y1={sunY + Math.sin(a) * 0.11}
+                x2={sunX + Math.cos(a) * 0.14}
+                y2={sunY + Math.sin(a) * 0.14}
+                stroke="hsla(200,60%,75%,0.55)"
+                strokeWidth={0.0035}
+              />
+            );
+          })}
+          <text x={sunX} y={sunY - 0.18} fontSize="0.045" textAnchor="middle"
+            fill="hsla(45,100%,85%,0.95)" style={{ letterSpacing: "0.1em" }}>
+            SOL · ℓ 0° · b 0°
+          </text>
+          <text x={sunX * 0.5} y={sunY * 0.5 - 0.04} fontSize="0.04" textAnchor="middle"
+            fill="hsla(0,0%,100%,0.55)" style={{ letterSpacing: "0.1em" }}>
+            26.7 kly
+          </text>
+        </g>
+      )}
+
+      {/* ─────────── ENVIRONMENT layer ─────────── */}
+      {layer === "environment" && (
+        <g>
+          {/* Cosmic ray streams */}
+          {Array.from({ length: 22 }).map((_, i) => {
+            const a = ((i * 137.5 + tick * 25) % 360) * Math.PI / 180;
+            const len = 0.5 + ((i * 17) % 40) / 100;
+            const progress = ((tick * 0.35 + i * 0.13) % 1);
+            const x1 = sunX + Math.cos(a) * len;
+            const y1 = sunY + Math.sin(a) * len;
+            const x2 = sunX + Math.cos(a) * len * (1 - progress);
+            const y2 = sunY + Math.sin(a) * len * (1 - progress);
+            return (
+              <line key={i}
+                x1={x1} y1={y1} x2={x2} y2={y2}
+                stroke="hsla(190,90%,75%,0.7)"
+                strokeWidth={0.0045}
+                strokeLinecap="round"
+              />
+            );
+          })}
+          {/* Local Bubble */}
+          <circle cx={sunX} cy={sunY} r={0.105} fill="url(#g-bubble)" />
+          <circle cx={sunX} cy={sunY} r={0.105} fill="none"
+            stroke="hsla(180,85%,75%,0.85)" strokeWidth={0.005}
+            strokeDasharray="0.018 0.014" />
+          {/* Local Interstellar Cloud — smaller inner shell */}
+          <circle cx={sunX + 0.012} cy={sunY - 0.008} r={0.035}
+            fill="none" stroke="hsla(160,70%,75%,0.8)" strokeWidth={0.004} />
+          <text x={sunX} y={sunY - 0.16} fontSize="0.042" textAnchor="middle"
+            fill="hsla(180,80%,85%,0.95)" style={{ letterSpacing: "0.1em" }}>
+            LOCAL BUBBLE · LIC
+          </text>
+        </g>
+      )}
+
+      {/* ─────────── DYNAMICS layer ─────────── */}
+      {layer === "dynamics" && (
+        <g>
+          {/* Solar orbit ring */}
+          <circle cx="0" cy="0" r={SUN_R} fill="none"
+            stroke="hsla(200,70%,75%,0.75)" strokeWidth={0.008}
+            strokeDasharray="0.022 0.018" />
+          {/* moving tick marks along orbit */}
+          {Array.from({ length: 32 }).map((_, i) => {
+            const a = (i / 32) * Math.PI * 2 + tick * 0.04;
+            return (
+              <circle key={i}
+                cx={Math.cos(a) * SUN_R}
+                cy={Math.sin(a) * SUN_R}
+                r={0.007}
+                fill="hsla(200,80%,80%,0.7)" />
+            );
+          })}
+          {/* Velocity arrow at Sun */}
+          {(() => {
+            const tx = -Math.sin(orbitalAngle);
+            const ty = Math.cos(orbitalAngle);
+            const tipX = sunX + tx * 0.18;
+            const tipY = sunY + ty * 0.18;
+            return (
+              <>
+                <line x1={sunX} y1={sunY} x2={tipX} y2={tipY}
+                  stroke="hsla(45,100%,80%,0.95)" strokeWidth={0.006} />
+                <circle cx={tipX} cy={tipY} r={0.012}
+                  fill="hsla(45,100%,80%,0.95)" />
+                <text x={tipX + 0.04} y={tipY + 0.02} fontSize="0.04"
+                  fill="hsla(45,100%,85%,0.85)" style={{ letterSpacing: "0.1em" }}>
+                  220 km/s
+                </text>
+              </>
+            );
+          })()}
+          {/* Spiral arm crossing markers along orbit */}
+          {[0.6, 1.7, 2.9, 4.1, 5.3].map((a, i) => (
+            <circle key={i}
               cx={Math.cos(a) * SUN_R}
               cy={Math.sin(a) * SUN_R}
-              r={0.008}
-              fill="hsla(200,80%,80%,0.85)"
-            />
-          );
-        })}
-      </g>
-
-      {/* Cosmic ray vectors — inbound to Sun from random galactic directions */}
-      <g style={{ opacity: dim("cosmic-rays") }}>
-        {Array.from({ length: 18 }).map((_, i) => {
-          const seed = i * 137.5;
-          const a = (seed + tick * 30) % 360 * Math.PI / 180;
-          const len = 0.55 + ((i * 17) % 40) / 100;
-          const progress = ((tick * 0.3 + i * 0.13) % 1);
-          const x1 = sunX + Math.cos(a) * len;
-          const y1 = sunY + Math.sin(a) * len;
-          const x2 = sunX + Math.cos(a) * len * (1 - progress);
-          const y2 = sunY + Math.sin(a) * len * (1 - progress);
-          return (
-            <line
-              key={i}
-              x1={x1} y1={y1} x2={x2} y2={y2}
-              stroke={focus === "cosmic-rays" ? "hsla(190,90%,75%,0.85)" : "hsla(200,70%,70%,0.25)"}
-              strokeWidth={focus === "cosmic-rays" ? 0.006 : 0.003}
-              strokeLinecap="round"
-            />
-          );
-        })}
-      </g>
-
-      {/* Local Bubble around Sun */}
-      <g
-        style={{ cursor: "pointer", opacity: dim("lism") }}
-        onClick={() => onSelect("lism")}
-      >
-        <circle
-          cx={sunX} cy={sunY} r={0.085}
-          fill="url(#bubble)"
-        />
-        <circle
-          cx={sunX} cy={sunY} r={0.085}
-          fill="none"
-          stroke={focus === "lism" ? "hsla(180,85%,75%,0.9)" : "hsla(180,70%,70%,0.45)"}
-          strokeWidth={focus === "lism" ? 0.006 : 0.003}
-          strokeDasharray="0.015 0.012"
-        />
-        {focus === "lism" && (
-          <text
-            x={sunX} y={sunY - 0.11}
-            fontSize="0.045"
-            textAnchor="middle"
-            fill="hsla(180,80%,85%,0.95)"
-            style={{ letterSpacing: "0.08em" }}
-          >
-            LOCAL BUBBLE
-          </text>
-        )}
-      </g>
-
-      {/* Galactic center bulge */}
-      <g
-        style={{ cursor: "pointer", opacity: dim("galactic-center") }}
-        onClick={() => onSelect("galactic-center")}
-      >
-        <circle cx="0" cy="0" r={0.28} fill="url(#bulge)" />
-        <circle
-          cx="0" cy="0" r={0.04}
-          fill="hsla(45,100%,90%,1)"
-          style={{
-            filter: focus === "galactic-center"
-              ? "drop-shadow(0 0 0.05px hsla(45,100%,80%,1)) drop-shadow(0 0 0.12px hsla(45,100%,70%,0.9))"
-              : "drop-shadow(0 0 0.04px hsla(45,100%,80%,0.7))",
-          }}
-        />
-        {focus === "galactic-center" && (
-          <>
-            <circle
-              cx="0" cy="0" r={0.04 + (tick % 2) * 0.12}
+              r={0.018}
               fill="none"
-              stroke="hsla(45,100%,80%,0.5)"
-              strokeWidth={0.003}
-              opacity={1 - ((tick % 2) / 2)}
-            />
-            <text
-              x="0" y="-0.35"
-              fontSize="0.05"
-              textAnchor="middle"
-              fill="hsla(45,100%,85%,0.95)"
-              style={{ letterSpacing: "0.1em" }}
-            >
-              SAGITTARIUS A*
-            </text>
-          </>
-        )}
+              stroke="hsla(45,100%,80%,0.7)"
+              strokeWidth={0.004} />
+          ))}
+          <text x="0" y={-SUN_R - 0.07} fontSize="0.04" textAnchor="middle"
+            fill="hsla(0,0%,100%,0.6)" style={{ letterSpacing: "0.1em" }}>
+            GALACTIC YEAR · 225 Myr
+          </text>
+        </g>
+      )}
+
+      {/* ─────────── STRUCTURE layer ─────────── */}
+      {layer === "structure" && (
+        <g>
+          {/* Magnetic field — concentric arcs around disk */}
+          {[0.35, 0.55, 0.78, 1.0].map((r, i) => {
+            const dash = `${0.02 + i * 0.005} ${0.04}`;
+            return (
+              <circle key={i}
+                cx="0" cy="0" r={r}
+                fill="none"
+                stroke="hsla(280,55%,75%,0.35)"
+                strokeWidth={0.0035}
+                strokeDasharray={dash}
+                transform={`rotate(${tick * 4})`} />
+            );
+          })}
+          {/* Stellar streams — sweeping arcs */}
+          {Array.from({ length: 4 }).map((_, i) => {
+            const baseA = i * Math.PI / 2 + 0.3;
+            const pts: string[] = [];
+            for (let k = 0; k <= 30; k++) {
+              const t = k / 30;
+              const r = 1.05 + Math.sin(t * Math.PI) * 0.4;
+              const a = baseA + t * 0.9;
+              pts.push(`${k === 0 ? "M" : "L"} ${(Math.cos(a) * r).toFixed(3)} ${(Math.sin(a) * r).toFixed(3)}`);
+            }
+            return (
+              <path key={i} d={pts.join(" ")}
+                fill="none"
+                stroke="hsla(45,80%,80%,0.45)"
+                strokeWidth={0.005}
+                strokeDasharray="0.012 0.018" />
+            );
+          })}
+          {/* Galactic center activity — pulsing accretion */}
+          <circle cx="0" cy="0" r={0.28} fill="url(#g-bulge)" />
+          <circle cx="0" cy="0"
+            r={0.05 + (tick % 2) * 0.15}
+            fill="none"
+            stroke="hsla(45,100%,80%,0.6)"
+            strokeWidth={0.004}
+            opacity={1 - ((tick % 2) / 2)} />
+          <circle cx="0" cy="0"
+            r={0.05 + ((tick + 1) % 2) * 0.15}
+            fill="none"
+            stroke="hsla(45,100%,80%,0.4)"
+            strokeWidth={0.003}
+            opacity={1 - (((tick + 1) % 2) / 2)} />
+          <text x="0" y="-1.15" fontSize="0.045" textAnchor="middle"
+            fill="hsla(280,60%,82%,0.85)" style={{ letterSpacing: "0.15em" }}>
+            MAGNETIC FIELD · STELLAR STREAMS
+          </text>
+        </g>
+      )}
+
+      {/* Galactic center bulge — always */}
+      <g>
+        <circle cx="0" cy="0" r={0.28} fill="url(#g-bulge)" />
+        <circle cx="0" cy="0" r={0.04} fill="hsla(45,100%,90%,1)" />
       </g>
 
-      {/* Sun marker */}
-      <g
-        style={{ cursor: "pointer", opacity: dim("solar-position") }}
-        onClick={() => onSelect("solar-position")}
-      >
-        <circle cx={sunX} cy={sunY} r={0.055} fill="url(#sun)" />
+      {/* Sun — always */}
+      <g>
+        <circle cx={sunX} cy={sunY} r={0.055} fill="url(#g-sun)" />
         <circle cx={sunX} cy={sunY} r={0.013} fill="hsla(50,100%,90%,1)" />
-        {focus === "solar-position" && (
-          <>
-            <line
-              x1="0" y1="0" x2={sunX} y2={sunY}
-              stroke="hsla(45,100%,80%,0.6)"
-              strokeWidth={0.004}
-              strokeDasharray="0.02 0.015"
-            />
-            <text
-              x={sunX} y={sunY + 0.1}
-              fontSize="0.045"
-              textAnchor="middle"
-              fill="hsla(45,100%,85%,0.95)"
-              style={{ letterSpacing: "0.08em" }}
-            >
-              SOL · 26.7 kly
-            </text>
-          </>
-        )}
       </g>
 
-      {/* Compass / scale */}
+      {/* Scale bar */}
       <g opacity="0.4" transform={`translate(${-VB + 0.18}, ${VB - 0.18})`}>
         <line x1="0" y1="0" x2="0.3" y2="0" stroke="hsla(0,0%,100%,0.5)" strokeWidth={0.005} />
-        <text x="0.15" y="-0.04" fontSize="0.04" textAnchor="middle" fill="hsla(0,0%,100%,0.6)" style={{ letterSpacing: "0.1em" }}>
+        <text x="0.15" y="-0.04" fontSize="0.04" textAnchor="middle"
+          fill="hsla(0,0%,100%,0.6)" style={{ letterSpacing: "0.1em" }}>
           ~15 kly
         </text>
       </g>
