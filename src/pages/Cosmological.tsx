@@ -108,21 +108,6 @@ const Cosmological = () => {
 
   return (
     <div className="h-screen w-full relative overflow-hidden">
-      {/* Starfield background */}
-      <div
-        className="absolute inset-0 z-0"
-        style={{
-          background: "radial-gradient(ellipse at center, hsla(240,40%,8%,1) 0%, hsla(240,50%,3%,1) 100%)",
-        }}
-      />
-      <div
-        className="absolute inset-0 z-[1] opacity-60"
-        style={{
-          backgroundImage:
-            "radial-gradient(1px 1px at 20% 30%, hsla(0,0%,100%,0.8), transparent), radial-gradient(1px 1px at 70% 60%, hsla(0,0%,100%,0.6), transparent), radial-gradient(2px 2px at 40% 80%, hsla(0,0%,100%,0.5), transparent), radial-gradient(1px 1px at 85% 20%, hsla(0,0%,100%,0.7), transparent), radial-gradient(1px 1px at 15% 70%, hsla(0,0%,100%,0.5), transparent), radial-gradient(2px 2px at 55% 15%, hsla(0,0%,100%,0.4), transparent)",
-          backgroundSize: "400px 400px",
-        }}
-      />
 
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-20 pointer-events-none px-4 pt-6">
