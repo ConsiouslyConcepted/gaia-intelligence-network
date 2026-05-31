@@ -7,7 +7,8 @@ export type SphereId =
   | "noosphere" 
   | "magnetosphere" 
   | "ionosphere" 
-  | "crystalsphere";
+  | "crystalsphere"
+  | "heliosphere";
 
 export interface Sphere {
   id: SphereId;
