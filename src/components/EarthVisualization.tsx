@@ -168,9 +168,10 @@ const OrbitalRing = ({ radius, color }: { radius: number; color: string }) => {
 export const EarthVisualization = () => {
   const navigate = useNavigate();
 
+  // Compress outer shell radii toward the core so all orbiting spheres stay fully visible
   const sphereLayers: SphereLayer[] = SPHERE_ARRAY.map((s) => ({
     name: s.name,
-    radius: s.radius,
+    radius: s.radius <= 1 ? s.radius : 1 + (s.radius - 1) * 0.6,
     color: s.color,
     opacity: s.opacity,
     id: s.id,
@@ -183,7 +184,7 @@ export const EarthVisualization = () => {
   return (
     <div className="w-full h-full relative">
       <Canvas
-        camera={{ position: [0, 0, 9.5], fov: 50 }}
+        camera={{ position: [0, 0, 7.5], fov: 50 }}
         gl={{ antialias: true, alpha: true, toneMapping: THREE.ACESFilmicToneMapping }}
         onCreated={({ gl }) => {
           gl.toneMappingExposure = 1.2;
