@@ -59,12 +59,6 @@ export const MilkyWayMap = ({ layer }: Props) => {
 
   const VB = 2.2;
 
-  // Background stars for ambience
-  const bgStars = Array.from({ length: 90 }, (_, i) => ({
-    x: rand(i * 7) * VB * 0.95,
-    y: rand(i * 13 + 1) * VB * 0.95,
-    r: 0.004 + Math.abs(rand(i * 17)) * 0.006,
-  }));
 
   return (
     <svg

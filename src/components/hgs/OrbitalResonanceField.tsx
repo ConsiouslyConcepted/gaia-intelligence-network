@@ -93,15 +93,6 @@ export const OrbitalResonanceField = ({ selectedPlanet, onPlanetClick }: Orbital
       };
     });
 
-    // Stars
-    const stars: Array<{ x: number; y: number; s: number; b: number }> = [];
-    for (let k = 0; k < 500; k++) {
-      stars.push({
-        x: Math.random(), y: Math.random(),
-        s: Math.random() * 1.0 + 0.2,
-        b: Math.random() * 0.3 + 0.05,
-      });
-    }
 
     const resize = () => {
       const dpr = window.devicePixelRatio || 1;
