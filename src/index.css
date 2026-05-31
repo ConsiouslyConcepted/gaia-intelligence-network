@@ -92,11 +92,12 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    background: hsl(228 55% 5%);
+  }
   body {
-    @apply bg-background text-foreground;
-    background: radial-gradient(ellipse at top, hsl(240 40% 8%), hsl(240 30% 5%)),
-                radial-gradient(ellipse at bottom, hsl(270 50% 10%), transparent);
-    background-attachment: fixed;
+    @apply text-foreground;
+    background: transparent;
   }
 
   /* Glassmorphism effect */

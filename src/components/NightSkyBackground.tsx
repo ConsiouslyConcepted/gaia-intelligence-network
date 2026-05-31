@@ -22,8 +22,9 @@ export const NightSkyBackground = () => {
   return (
     <div
       aria-hidden
-      className="fixed inset-0 -z-10 pointer-events-none overflow-hidden"
+      className="fixed inset-0 pointer-events-none overflow-hidden"
       style={{
+        zIndex: -1,
         background:
           "radial-gradient(ellipse at 50% 40%, hsl(225 50% 8%) 0%, hsl(228 55% 5%) 55%, hsl(230 60% 3%) 100%)",
       }}
