@@ -19,6 +19,7 @@ import { PlanetNoteLegend } from "@/components/geometry/PlanetNoteLegend";
 import { GeometryGuide } from "@/components/geometry/GeometryGuide";
 import { IntervalLegend } from "@/components/geometry/IntervalLegend";
 import { OrbitToToneBridge } from "@/components/geometry/OrbitToToneBridge";
+import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { INTERVALS, MIRROR_PAIRS, ADJACENT_PAIRS } from "@/lib/geometry/musicGeometry";
 
 
@@ -138,6 +139,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
   return (
     <div className="h-screen w-full relative overflow-hidden">
+      <NightSkyBackground />
 
 
 
