@@ -292,12 +292,13 @@ const Index = () => {
       {/* ─── BOTTOM TELEMETRY CHROME ─── */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
         <div
-          className="flex items-center gap-10 px-10 py-2 rounded-full backdrop-blur-2xl"
+          className="flex items-center gap-10 px-12 py-2.5 rounded-full backdrop-blur-2xl"
           style={{
-            background: "linear-gradient(180deg, hsla(240,22%,14%,0.85) 0%, hsla(240,28%,7%,0.92) 100%)",
-            border: "1px solid hsla(0,0%,100%,0.07)",
+            background:
+              "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+            border: "1px solid hsla(220,30%,55%,0.35)",
             boxShadow:
-              "inset 0 1px 0 hsla(0,0%,100%,0.10), 0 10px 28px rgba(0,0,0,0.65), 0 0 36px hsla(190,60%,50%,0.05)",
+              "inset 0 1px 0 hsla(0,0%,100%,0.12), inset 0 -1px 0 hsla(0,0%,0%,0.4), 0 0 0 1px hsla(220,30%,30%,0.25), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
           }}
         >
           <div className="flex flex-col items-center">
