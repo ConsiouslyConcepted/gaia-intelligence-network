@@ -25,6 +25,14 @@ export const NightSkyBackground = () => {
         }}
       />
 
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
+        }}
+      />
+
       <div className="absolute inset-0">
         <Canvas
           camera={PLANETARY_STARFIELD_CAMERA}
@@ -36,14 +44,6 @@ export const NightSkyBackground = () => {
           <PlanetaryStarfieldMotion />
         </Canvas>
       </div>
-
-      <div
-        className="absolute inset-0"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 26%, hsla(240,30%,3%,0.55) 72%, hsla(240,30%,3%,0.96) 100%)",
-        }}
-      />
 
       <div
         className="absolute inset-0 opacity-[0.025]"
