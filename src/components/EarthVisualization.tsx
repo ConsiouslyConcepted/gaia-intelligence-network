@@ -171,7 +171,7 @@ export const EarthVisualization = () => {
   // Compress outer shell radii toward the core so all orbiting spheres stay fully visible
   const sphereLayers: SphereLayer[] = SPHERE_ARRAY.map((s) => ({
     name: s.name,
-    radius: s.radius <= 1 ? s.radius : 1 + (s.radius - 1) * 0.6,
+    radius: s.radius <= 1 ? s.radius : 1 + (s.radius - 1) * 0.85,
     color: s.color,
     opacity: s.opacity,
     id: s.id,
