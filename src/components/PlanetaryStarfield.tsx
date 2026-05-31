@@ -15,7 +15,7 @@ export const PLANETARY_STARFIELD_GL = {
 };
 
 export const configurePlanetaryStarfieldRenderer = (gl: THREE.WebGLRenderer) => {
-  gl.toneMappingExposure = 1.2;
+  gl.toneMappingExposure = 1.35;
 };
 
 /**
@@ -43,8 +43,8 @@ export const PlanetaryStars = () => {
         <Stars
           radius={120}
           depth={40}
-          count={3500}
-          factor={2}
+          count={4200}
+          factor={2.6}
           saturation={0}
           fade
           speed={0}
@@ -54,8 +54,8 @@ export const PlanetaryStars = () => {
       <Stars
         radius={80}
         depth={60}
-        count={2000}
-        factor={3}
+        count={2400}
+        factor={3.6}
         saturation={0.1}
         fade
         speed={0.5}
