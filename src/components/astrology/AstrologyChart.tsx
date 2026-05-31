@@ -97,14 +97,10 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         <filter id="softGlow">
           <feGaussianBlur stdDeviation="2.2" />
         </filter>
-        <filter id="constellationGlow" x="-150%" y="-150%" width="400%" height="400%">
-          <feGaussianBlur stdDeviation="0.6" result="b1" />
-          <feGaussianBlur stdDeviation="2.4" in="SourceGraphic" result="b2" />
+        <filter id="constellationGlow" x="-50%" y="-50%" width="200%" height="200%">
+          <feGaussianBlur stdDeviation="1.2" result="halo" />
           <feMerge>
-            <feMergeNode in="b2" />
-            <feMergeNode in="b1" />
-            <feMergeNode in="b1" />
-            <feMergeNode in="SourceGraphic" />
+            <feMergeNode in="halo" />
             <feMergeNode in="SourceGraphic" />
           </feMerge>
         </filter>
