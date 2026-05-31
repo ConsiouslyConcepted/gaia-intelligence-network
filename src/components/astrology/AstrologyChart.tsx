@@ -159,7 +159,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             </text>
 
             {/* constellation dots + glow */}
-            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid})`} className="pointer-events-none" filter="url(#constellationGlow)">
+            <g transform={`translate(${constPos.x} ${constPos.y}) rotate(${mid}) scale(1.5)`} className="pointer-events-none" filter="url(#constellationGlow)">
               {dots.slice(0, dots.length - 1).map((d, i) => (
                 <line
                   key={`l${i}`}
@@ -167,16 +167,13 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                   y1={d.y}
                   x2={dots[i + 1].x}
                   y2={dots[i + 1].y}
-                  stroke="hsla(45, 70%, 78%, 0.55)"
+                  stroke="hsla(220, 20%, 85%, 0.7)"
                   strokeWidth="0.5"
                   strokeLinecap="round"
                 />
               ))}
               {dots.map((d, i) => (
-                <g key={i}>
-                  <circle cx={d.x} cy={d.y} r={d.r * 2.4} fill="hsla(45, 80%, 75%, 0.25)" />
-                  <circle cx={d.x} cy={d.y} r={d.r} fill="hsla(45, 90%, 92%, 0.95)" />
-                </g>
+                <circle key={i} cx={d.x} cy={d.y} r={d.r * 1.1} fill="hsla(220, 25%, 96%, 1)" />
               ))}
             </g>
 
