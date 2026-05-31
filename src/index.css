@@ -92,6 +92,9 @@ All colors MUST be HSL.
     @apply border-border;
   }
 
+  html {
+    background: hsl(228 55% 5%);
+  }
   body {
     @apply text-foreground;
     background: transparent;
