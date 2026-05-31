@@ -102,7 +102,7 @@ const Index = () => {
   }
 
   return (
-    <div className="h-screen w-full relative overflow-hidden bg-background">
+    <div className="h-screen w-full relative overflow-hidden">
       {/* Aurora / nebula glow behind globe */}
       <div className="absolute inset-0 z-0 pointer-events-none" style={{
         background:

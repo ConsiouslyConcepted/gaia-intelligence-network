@@ -105,7 +105,7 @@ const Galactic = () => {
   const active = LAYERS.find((l) => l.key === layer)!;
 
   return (
-    <div className="h-screen w-full relative overflow-hidden bg-background">
+    <div className="h-screen w-full relative overflow-hidden">
       {/* Starfield background */}
       <div
         className="absolute inset-0 z-0"
