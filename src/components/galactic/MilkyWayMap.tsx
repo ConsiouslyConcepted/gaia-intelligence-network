@@ -356,11 +356,17 @@ export const MilkyWayMap = ({ layer }: Props) => {
           Galactic-scale ISM features + a circular magnifier centered on the Sun
           showing the Local Bubble at proper scale (~600 ly → mag radius). */}
       {layer === "environment" && (() => {
-        const MAG_R = 0.78;                  // magnifier radius (canvas units)
-        const MAG_CX = -0.78;                // place magnifier to upper-left
-        const MAG_CY = -0.55;
-        const SCALE_LY = 800;                // magnifier shows ~±400 ly around Sun
-        const lyToMag = (ly: number) => (ly / (SCALE_LY / 2)) * MAG_R;
+        const MAG_R = 0.52;                  // smaller corner inset
+        const MAG_CX = -VB + MAG_R + 0.08;   // tuck into upper-left corner
+        const MAG_CY = -VB + MAG_R + 0.08;
+        // Log distance mapping so 4 ly → inner, 300 ly → outer edge
+        const LY_MIN = 3, LY_MAX = 320;
+        const lyToMag = (ly: number) => {
+          const clamped = Math.max(LY_MIN, Math.min(LY_MAX, Math.abs(ly)));
+          const t = Math.log(clamped / LY_MIN) / Math.log(LY_MAX / LY_MIN);
+          return t * (MAG_R - 0.04) * Math.sign(ly || 1);
+        };
+        const lyToMagR = (ly: number) => Math.abs(lyToMag(ly));
 
         // Real-ish bearings (galactic longitude ℓ) and distances of bright nearby stars
         const NEARBY = [
