@@ -141,7 +141,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
   const orbitalAngle = -Math.PI / 2 + tick * 0.035;
   const [sunX, sunY] = polar(SUN_R, orbitalAngle);
 
-  const VB = 1.85;
+  const VB = 2.1;
 
   /* Per-layer disk opacity emphasis */
   const armOpacity = {
