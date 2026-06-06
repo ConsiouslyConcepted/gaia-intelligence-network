@@ -359,8 +359,9 @@ export const MilkyWayMap = ({ layer }: Props) => {
         const MAG_R = 0.68;                  // larger inset radius for readable local structures
         const MAG_CX = -1.24;                // lower-left negative space beside galaxy
         const MAG_CY = 0.28;
-        // Log distance mapping so 4 ly → inner, 300 ly → outer edge
-        const LY_MIN = 3, LY_MAX = 320;
+        // Tighter local-neighborhood mapping so the inset reads clearly at dashboard scale
+        const LY_MIN = 3, LY_MAX = 90;
+        const MAG_DETAIL_SCALE = 1.42;
         const lyToMag = (ly: number) => {
           const clamped = Math.max(LY_MIN, Math.min(LY_MAX, Math.abs(ly)));
           const t = Math.log(clamped / LY_MIN) / Math.log(LY_MAX / LY_MIN);
@@ -376,12 +377,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
           { name: "Procyon",     ly: 11.4,  ell: 213, hue: 50,  mag: 0.9 },
           { name: "Altair",      ly: 16.7,  ell: 47,  hue: 200, mag: 0.8 },
           { name: "Vega",        ly: 25.0,  ell: 67,  hue: 210, mag: 1.1 },
-          { name: "Fomalhaut",   ly: 25.1,  ell: 20,  hue: 200, mag: 0.9 },
-          { name: "Pollux",      ly: 33.7,  ell: 192, hue: 25,  mag: 0.9 },
           { name: "Arcturus",    ly: 36.7,  ell: 15,  hue: 30,  mag: 1.0 },
           { name: "Aldebaran",   ly: 65.0,  ell: 181, hue: 18,  mag: 1.0 },
-          { name: "Regulus",     ly: 79.0,  ell: 226, hue: 215, mag: 1.0 },
-          { name: "Spica",       ly: 250.0, ell: 316, hue: 220, mag: 1.2 },
         ];
 
         // Polar helper: (galactic longitude °, distance ly) → (x, y) in mag frame
@@ -398,7 +395,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
             + Math.sin(a * 3 + 0.6) * 0.18
             + Math.sin(a * 5 - 1.2) * 0.10
             + Math.cos(a * 2 + 2.1) * 0.12;
-          const r = lyToMagR(150 * wob);
+          const r = lyToMagR(72 * wob);
           return `${i === 0 ? "M" : "L"}${(Math.cos(a) * r).toFixed(3)},${(Math.sin(a) * r).toFixed(3)}`;
         }).join(" ") + " Z";
 
