@@ -216,7 +216,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 highlightedPlanet={selectedPlanet}
               />
               <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
-              <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} />
+              <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} playingPlanet={playing} />
             </div>
 
           </div>
