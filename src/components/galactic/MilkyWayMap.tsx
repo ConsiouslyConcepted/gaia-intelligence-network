@@ -384,6 +384,13 @@ export const MilkyWayMap = ({ layer }: Props) => {
           { name: "Spica",       ly: 250.0, ell: 316, hue: 220, mag: 1.2 },
         ];
 
+        // Polar helper: (galactic longitude °, distance ly) → (x, y) in mag frame
+        const polarLy = (ell: number, ly: number): [number, number] => {
+          const a = ((90 - ell) * Math.PI) / 180;
+          const r = lyToMagR(ly);
+          return [Math.cos(a) * r, -Math.sin(a) * r];
+        };
+
         // Irregular Local Bubble outline (cavity ~300 ly across, asymmetric)
         const bubblePts = Array.from({ length: 48 }).map((_, i) => {
           const a = (i / 48) * Math.PI * 2;
@@ -391,7 +398,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
             + Math.sin(a * 3 + 0.6) * 0.18
             + Math.sin(a * 5 - 1.2) * 0.10
             + Math.cos(a * 2 + 2.1) * 0.12;
-          const r = lyToMag(150 * wob);
+          const r = lyToMagR(150 * wob);
           return `${i === 0 ? "M" : "L"}${(Math.cos(a) * r).toFixed(3)},${(Math.sin(a) * r).toFixed(3)}`;
         }).join(" ") + " Z";
 
