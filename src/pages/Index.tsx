@@ -67,8 +67,16 @@ const MiniGraph = ({ color, data }: { color: string; data: number[] }) => (
 );
 
 const Index = () => {
-  const [activeView, setActiveView] = useState<"planetary" | "hgs">("planetary");
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [activeView, setActiveView] = useState<"planetary" | "hgs">(
+    searchParams.get("view") === "hgs" ? "hgs" : "planetary"
+  );
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const v = searchParams.get("view");
+    setActiveView(v === "hgs" ? "hgs" : "planetary");
+  }, [searchParams]);
   const [time, setTime] = useState(new Date());
   const [tick, setTick] = useState(0);
 
