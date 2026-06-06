@@ -185,24 +185,6 @@ const Galactic = () => {
         <div className="pointer-events-auto w-full max-w-[820px] aspect-square relative">
           <MilkyWayMap layer={layer} />
 
-          <div
-            className="absolute top-3 left-3 max-w-[300px] rounded-lg p-3 border"
-            style={{
-              background: "hsla(228,45%,7%,0.85)",
-              borderColor: "hsla(200,60%,70%,0.45)",
-              backdropFilter: "blur(8px)",
-            }}
-          >
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">
-              {active.card}
-            </div>
-            <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/90 mb-1.5">
-              {active.title}
-            </div>
-            <p className="text-[9px] italic text-muted-foreground/65 leading-snug">
-              "{active.question}"
-            </p>
-          </div>
         </div>
       </div>
 
