@@ -201,9 +201,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <h2 className="text-base font-bold text-white/85 tracking-[0.32em]">GEOMETRY OF PLANETARY HARMONICS</h2>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
             </div>
-            <div className="w-full max-w-5xl flex flex-col items-center gap-6">
-              {/* Always-visible planetary tone player */}
-              <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} playingPlanet={playing} />
+            <div className="w-full max-w-5xl flex flex-col items-center gap-10">
               {/* Side-by-side panels */}
               <div className="w-full flex flex-col sm:flex-row gap-3">
                 <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
@@ -218,6 +216,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
                 highlightedPlanet={selectedPlanet}
               />
               <IntervalLegend selected={selectedIntervalId} onSelect={setSelectedIntervalId} />
+              <PlanetNoteLegend selectedPlanet={selectedPlanet} onSelect={handlePlanetClick} onPlay={handleTonePlay} playingPlanet={playing} />
             </div>
 
           </div>
