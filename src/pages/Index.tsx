@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import { useSearchParams } from "react-router-dom";
 import { EarthVisualization } from "@/components/EarthVisualization";
 import { SPHERE_ARRAY } from "@/types/spheres";
 import { useNavigate } from "react-router-dom";
