@@ -91,7 +91,7 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "harmonics",
-    card: "Primordial Harmonic Field",
+    card: "Primordial Harmonics",
     title: "Primordial Harmonics",
     question: "What original resonant modes shaped large-scale organization?",
     metrics: [
