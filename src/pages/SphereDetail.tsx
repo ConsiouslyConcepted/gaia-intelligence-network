@@ -72,12 +72,18 @@ export default function SphereDetail() {
           <div className="glass-panel rounded-lg px-3 py-1.5 border border-border/15">
             <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/40 font-medium">Domain</div>
             <div className="text-xs font-semibold font-mono leading-none mt-0.5 text-foreground/80">
-              {sphere.id === "geosphere" ? "Solid Earth" :
-               sphere.id === "biosphere" ? "Living Systems" :
-               sphere.id === "magnetosphere" ? "Field Shield" :
-               sphere.id === "ionosphere" ? "Plasma Layer" :
-               sphere.id === "noosphere" ? "Collective" :
-               "Resonance"}
+              {({
+                geosphere: "Solid Earth",
+                hydrosphere: "Water Cycle",
+                cryosphere: "Frozen Realm",
+                atmosphere: "Air & Climate",
+                biosphere: "Living Systems",
+                noosphere: "Collective Mind",
+                magnetosphere: "Field Shield",
+                ionosphere: "Technosphere",
+                crystalsphere: "Resonance Lattice",
+                heliosphere: "Solar Domain",
+              } as Record<SphereId, string>)[sphere.id]}
             </div>
           </div>
         </div>
