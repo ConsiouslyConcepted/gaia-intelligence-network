@@ -55,7 +55,7 @@ interface LayerSpec {
 const LAYERS: LayerSpec[] = [
   {
     key: "cmb",
-    card: "Cosmic Background Field",
+    card: "Cosmic Background",
     title: "Cosmic Microwave Background",
     question: "What was the original pattern from which later structures emerged?",
     metrics: [
@@ -67,7 +67,7 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "constants",
-    card: "Cosmic Laws Layer",
+    card: "Cosmic Laws",
     title: "Fundamental Constants",
     question: "What underlying rules make complex structures possible?",
     metrics: [
@@ -91,7 +91,7 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "harmonics",
-    card: "Primordial Harmonic Field",
+    card: "Primordial Harmonics",
     title: "Primordial Harmonics",
     question: "What original resonant modes shaped large-scale organization?",
     metrics: [
