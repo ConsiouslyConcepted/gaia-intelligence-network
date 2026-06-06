@@ -563,34 +563,46 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 {/* G-Cloud — symbolic shell around Sun (~15 ly extent) */}
                 <ellipse cx={0} cy={0}
                   rx={lyToMagR(15)} ry={lyToMagR(11)}
-                  fill="hsla(155,60%,55%,0.10)"
-                  stroke="hsla(155,75%,78%,0.55)" strokeWidth={0.0025}
+                  fill="hsla(155,60%,55%,0.18)"
+                  stroke="hsla(155,78%,82%,0.82)" strokeWidth={0.0045}
                   strokeDasharray="0.008 0.010" />
                 {/* LIC — Local Interstellar Cloud (~7 ly, touching Sun) */}
                 <ellipse cx={lyToMagR(3.5)} cy={lyToMagR(2)}
                   rx={lyToMagR(8)} ry={lyToMagR(5)}
-                  fill="hsla(190,60%,55%,0.12)"
-                  stroke="hsla(190,80%,80%,0.7)" strokeWidth={0.0025} />
+                  fill="hsla(190,60%,55%,0.2)"
+                  stroke="hsla(190,82%,84%,0.9)" strokeWidth={0.0045} />
+                <text x={0} y={-0.055} fontSize="0.048" textAnchor="middle"
+                  fill="hsla(50,96%,90%,0.96)" style={{ letterSpacing: "0.06em" }}>
+                  SUN
+                </text>
+                <text x={0} y={0.082} fontSize="0.04" textAnchor="middle"
+                  fill="hsla(155,78%,84%,0.9)" style={{ letterSpacing: "0.04em" }}>
+                  G-CLOUD
+                </text>
+                <text x={lyToMagR(3.5)} y={lyToMagR(2) + 0.072} fontSize="0.036" textAnchor="middle"
+                  fill="hsla(190,82%,86%,0.92)" style={{ letterSpacing: "0.04em" }}>
+                  LIC
+                </text>
 
                 {/* Nearby star scatter — accurate longitude, log distance */}
                 {NEARBY.map((s, i) => {
                   const [x, y] = polarLy(s.ell, s.ly);
                   return (
                     <g key={i}>
-                      <circle cx={x} cy={y} r={0.015 * s.mag}
-                        fill={`hsla(${s.hue},85%,88%,0.45)`} />
-                      <circle cx={x} cy={y} r={0.0065}
+                      <circle cx={x} cy={y} r={0.022 * s.mag}
+                        fill={`hsla(${s.hue},85%,88%,0.58)`} />
+                      <circle cx={x} cy={y} r={0.009}
                         fill={`hsla(${s.hue},90%,92%,1)`} />
                       <text x={x + 0.016} y={y - 0.009}
-                        fontSize="0.026"
+                        fontSize="0.046"
                         fill={`hsla(${s.hue},70%,90%,0.95)`}
-                        style={{ letterSpacing: "0.08em" }}>
+                        style={{ letterSpacing: "0.04em" }}>
                         {s.name}
                       </text>
                       <text x={x + 0.016} y={y + 0.018}
-                        fontSize="0.019"
-                        fill="hsla(0,0%,100%,0.62)"
-                        style={{ letterSpacing: "0.08em" }}>
+                        fontSize="0.032"
+                        fill="hsla(0,0%,100%,0.78)"
+                        style={{ letterSpacing: "0.04em" }}>
                         {s.ly} ly
                       </text>
                     </g>
@@ -598,8 +610,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 })}
 
                 {/* Sun — center of magnifier */}
-                <circle cx={0} cy={0} r={0.018} fill="url(#g-sun)" />
-                <circle cx={0} cy={0} r={0.006} fill="hsla(50,100%,95%,1)" />
+                <circle cx={0} cy={0} r={0.028} fill="url(#g-sun)" />
+                <circle cx={0} cy={0} r={0.01} fill="hsla(50,100%,95%,1)" />
 
                 {/* → Galactic Center direction (ℓ=0° = right in our frame) */}
                 <g>
