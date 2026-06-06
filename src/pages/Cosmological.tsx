@@ -79,8 +79,8 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "spacetime",
-    card: "Spacetime Architecture",
-    title: "Spacetime Geometry",
+    card: "Cosmic Web",
+    title: "Large-Scale Structure",
     question: "What geometric architecture supports cosmic evolution?",
     metrics: [
       { label: "Hubble Constant", value: "67.4", unit: "km/s/Mpc" },
