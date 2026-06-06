@@ -356,9 +356,9 @@ export const MilkyWayMap = ({ layer }: Props) => {
           Galactic-scale ISM features + a circular magnifier centered on the Sun
           showing the Local Bubble at proper scale (~600 ly → mag radius). */}
       {layer === "environment" && (() => {
-        const MAG_R = 0.52;                  // smaller corner inset
-        const MAG_CX = -VB + MAG_R + 0.08;   // tuck into upper-left corner
-        const MAG_CY = -VB + MAG_R + 0.08;
+        const MAG_R = 0.50;                  // inset radius
+        const MAG_CX = -1.45;                // middle-left of SVG, beside galaxy
+        const MAG_CY = 0;
         // Log distance mapping so 4 ly → inner, 300 ly → outer edge
         const LY_MIN = 3, LY_MAX = 320;
         const lyToMag = (ly: number) => {
