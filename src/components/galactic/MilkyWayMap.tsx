@@ -499,13 +499,13 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 {/* faint backdrop field */}
                 <circle cx={0} cy={0} r={MAG_R} fill="url(#g-disk)" opacity={0.4} />
 
-                {/* distance rings (50, 100, 200, 400 ly) */}
-                {[50, 100, 200, 400].map((d) => (
+                {/* distance rings — log-spaced (10, 30, 100, 300 ly) */}
+                {[10, 30, 100, 300].map((d) => (
                   <g key={d}>
-                    <circle cx={0} cy={0} r={lyToMag(d)} fill="none"
+                    <circle cx={0} cy={0} r={lyToMagR(d)} fill="none"
                       stroke="hsla(200,55%,70%,0.18)" strokeWidth={0.002}
-                      strokeDasharray="0.012 0.014" />
-                    <text x={lyToMag(d) + 0.012} y={0.012} fontSize="0.018"
+                      strokeDasharray="0.010 0.012" />
+                    <text x={lyToMagR(d) + 0.008} y={0.012} fontSize="0.018"
                       fill="hsla(200,55%,75%,0.45)" style={{ letterSpacing: "0.15em" }}>
                       {d} ly
                     </text>
@@ -515,9 +515,9 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 {/* galactic longitude radial ticks */}
                 {Array.from({ length: 12 }).map((_, i) => {
                   const ell = i * 30;
-                  const a = ((90 - ell) * Math.PI) / 180; // ℓ=0 toward GC (right)
-                  const r1 = MAG_R - 0.04;
-                  const r2 = MAG_R - 0.02;
+                  const a = ((90 - ell) * Math.PI) / 180;
+                  const r1 = MAG_R - 0.038;
+                  const r2 = MAG_R - 0.020;
                   return (
                     <g key={i}>
                       <line
@@ -525,8 +525,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
                         x2={Math.cos(a) * r2} y2={-Math.sin(a) * r2}
                         stroke="hsla(180,60%,75%,0.4)" strokeWidth={0.0025} />
                       <text
-                        x={Math.cos(a) * (MAG_R - 0.055)}
-                        y={-Math.sin(a) * (MAG_R - 0.055)}
+                        x={Math.cos(a) * (MAG_R - 0.058)}
+                        y={-Math.sin(a) * (MAG_R - 0.058)}
                         fontSize="0.018" textAnchor="middle" dominantBaseline="middle"
                         fill="hsla(180,55%,80%,0.55)"
                         style={{ letterSpacing: "0.1em" }}>
@@ -536,69 +536,61 @@ export const MilkyWayMap = ({ layer }: Props) => {
                   );
                 })}
 
-                {/* Local Bubble — irregular cavity */}
+                {/* Local Bubble — irregular cavity (~150 ly radius) */}
                 <path d={bubblePts} fill="hsla(180,70%,55%,0.06)"
                   stroke="hsla(180,85%,80%,0.75)" strokeWidth={0.0045}
                   strokeDasharray="0.018 0.014" />
 
-                {/* Loop I superbubble overlap */}
-                <circle cx={lyToMag(-130)} cy={lyToMag(60)} r={lyToMag(150)}
-                  fill="hsla(265,60%,55%,0.05)"
-                  stroke="hsla(265,70%,82%,0.55)" strokeWidth={0.003}
-                  strokeDasharray="0.014 0.014" />
-                <text x={lyToMag(-130)} y={lyToMag(60) - lyToMag(150) - 0.012}
-                  fontSize="0.022" textAnchor="middle"
-                  fill="hsla(265,65%,85%,0.8)" style={{ letterSpacing: "0.18em" }}>
-                  LOOP I
-                </text>
-
-                {/* G-Cloud — outer local cloud (Sun currently here) */}
-                <ellipse cx={lyToMag(2)} cy={lyToMag(-1)} rx={lyToMag(15)} ry={lyToMag(10)}
-                  fill="hsla(155,60%,55%,0.10)"
-                  stroke="hsla(155,75%,78%,0.7)" strokeWidth={0.003} />
-                {/* LIC — Local Interstellar Cloud (touching Sun) */}
-                <ellipse cx={lyToMag(4)} cy={lyToMag(2)} rx={lyToMag(8)} ry={lyToMag(6)}
-                  transform={`rotate(20 ${lyToMag(4)} ${lyToMag(2)})`}
-                  fill="hsla(190,60%,55%,0.12)"
-                  stroke="hsla(190,80%,80%,0.75)" strokeWidth={0.003} />
-
-                {/* Heliosphere — bow shock around Sun (interstellar wind from ℓ≈5°) */}
+                {/* Loop I superbubble — center ℓ≈329°, ~130 pc (425 ly) */}
                 {(() => {
-                  const heliopause = lyToMag(0.0023); // ~120 AU
-                  const wind = ((90 - 5) * Math.PI) / 180; // ℓ=5° direction
-                  const wx = Math.cos(wind), wy = -Math.sin(wind);
-                  // teardrop oriented opposite wind
+                  const [lx, ly] = polarLy(329, 220);
+                  const rr = lyToMagR(180);
                   return (
-                    <g transform={`rotate(${(Math.atan2(-wy, -wx) * 180) / Math.PI})`}>
-                      <ellipse cx={0.012} cy={0} rx={0.04} ry={0.022}
-                        fill="hsla(48,90%,75%,0.10)"
-                        stroke="hsla(48,95%,82%,0.6)" strokeWidth={0.0028} />
+                    <g>
+                      <circle cx={lx} cy={ly} r={rr}
+                        fill="hsla(265,60%,55%,0.05)"
+                        stroke="hsla(265,70%,82%,0.55)" strokeWidth={0.003}
+                        strokeDasharray="0.014 0.014" />
+                      <text x={lx} y={ly - rr - 0.012}
+                        fontSize="0.020" textAnchor="middle"
+                        fill="hsla(265,65%,85%,0.8)" style={{ letterSpacing: "0.18em" }}>
+                        LOOP I
+                      </text>
                     </g>
                   );
                 })()}
 
-                {/* Nearby star scatter — accurate distance/longitude */}
+                {/* G-Cloud — symbolic shell around Sun (~15 ly extent) */}
+                <ellipse cx={0} cy={0}
+                  rx={lyToMagR(15)} ry={lyToMagR(11)}
+                  fill="hsla(155,60%,55%,0.10)"
+                  stroke="hsla(155,75%,78%,0.55)" strokeWidth={0.0025}
+                  strokeDasharray="0.008 0.010" />
+                {/* LIC — Local Interstellar Cloud (~7 ly, touching Sun) */}
+                <ellipse cx={lyToMagR(3.5)} cy={lyToMagR(2)}
+                  rx={lyToMagR(8)} ry={lyToMagR(5)}
+                  fill="hsla(190,60%,55%,0.12)"
+                  stroke="hsla(190,80%,80%,0.7)" strokeWidth={0.0025} />
+
+                {/* Nearby star scatter — accurate longitude, log distance */}
                 {NEARBY.map((s, i) => {
-                  const a = ((90 - s.ell) * Math.PI) / 180;
-                  const r = lyToMag(s.ly);
-                  const x = Math.cos(a) * r;
-                  const y = -Math.sin(a) * r;
+                  const [x, y] = polarLy(s.ell, s.ly);
                   return (
                     <g key={i}>
-                      <circle cx={x} cy={y} r={0.012 * s.mag}
-                        fill={`hsla(${s.hue},85%,88%,0.35)`} />
-                      <circle cx={x} cy={y} r={0.005}
+                      <circle cx={x} cy={y} r={0.011 * s.mag}
+                        fill={`hsla(${s.hue},85%,88%,0.30)`} />
+                      <circle cx={x} cy={y} r={0.0045}
                         fill={`hsla(${s.hue},90%,92%,1)`} />
-                      <text x={x + 0.012} y={y - 0.008}
-                        fontSize="0.020"
-                        fill={`hsla(${s.hue},70%,88%,0.9)`}
-                        style={{ letterSpacing: "0.1em" }}>
+                      <text x={x + 0.010} y={y - 0.006}
+                        fontSize="0.019"
+                        fill={`hsla(${s.hue},70%,90%,0.95)`}
+                        style={{ letterSpacing: "0.08em" }}>
                         {s.name}
                       </text>
-                      <text x={x + 0.012} y={y + 0.012}
-                        fontSize="0.015"
+                      <text x={x + 0.010} y={y + 0.012}
+                        fontSize="0.014"
                         fill="hsla(0,0%,100%,0.45)"
-                        style={{ letterSpacing: "0.1em" }}>
+                        style={{ letterSpacing: "0.08em" }}>
                         {s.ly} ly
                       </text>
                     </g>
@@ -606,22 +598,17 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 })}
 
                 {/* Sun — center of magnifier */}
-                <circle cx={0} cy={0} r={0.022} fill="url(#g-sun)" />
-                <circle cx={0} cy={0} r={0.008} fill="hsla(50,100%,95%,1)" />
+                <circle cx={0} cy={0} r={0.018} fill="url(#g-sun)" />
+                <circle cx={0} cy={0} r={0.006} fill="hsla(50,100%,95%,1)" />
 
-                {/* Direction → Galactic Center arrow */}
+                {/* → Galactic Center direction (ℓ=0° = right in our frame) */}
                 <g>
-                  <line x1={0.04} y1={0} x2={MAG_R - 0.10} y2={0}
+                  <line x1={0.03} y1={0} x2={MAG_R - 0.08} y2={0}
                     stroke="hsla(48,95%,82%,0.55)" strokeWidth={0.003}
-                    strokeDasharray="0.014 0.012" />
+                    strokeDasharray="0.012 0.010" />
                   <polygon
-                    points={`${MAG_R - 0.10},0 ${MAG_R - 0.13},-0.012 ${MAG_R - 0.13},0.012`}
-                    fill="hsla(48,95%,82%,0.65)" />
-                  <text x={MAG_R - 0.16} y={-0.018} fontSize="0.020"
-                    textAnchor="end" fill="hsla(48,90%,85%,0.7)"
-                    style={{ letterSpacing: "0.18em" }}>
-                    → GC
-                  </text>
+                    points={`${MAG_R - 0.08},0 ${MAG_R - 0.105},-0.010 ${MAG_R - 0.105},0.010`}
+                    fill="hsla(48,95%,82%,0.7)" />
                 </g>
               </g>
 
