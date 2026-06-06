@@ -90,7 +90,7 @@ const CONSTANTS = [
 ];
 
 const ConstantsView = ({ tick }: { tick: number }) => {
-  const R = 0.72;
+  const R = 0.55;
   const nodes = CONSTANTS.map((c, i) => {
     const a = (i / CONSTANTS.length) * Math.PI * 2 - Math.PI / 2;
     return { ...c, x: Math.cos(a) * R, y: Math.sin(a) * R };
