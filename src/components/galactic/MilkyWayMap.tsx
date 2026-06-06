@@ -495,11 +495,11 @@ export const MilkyWayMap = ({ layer }: Props) => {
               {/* clip everything inside the magnifier */}
               <defs>
                 <clipPath id="mag-clip">
-                  <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R - 0.005} />
+                  <circle cx={0} cy={0} r={MAG_R - 0.005} />
                 </clipPath>
               </defs>
 
-              <g clipPath="url(#mag-clip)" transform={`translate(${MAG_CX},${MAG_CY})`}>
+              <g transform={`translate(${MAG_CX},${MAG_CY})`} clipPath="url(#mag-clip)">
                 <circle cx={0} cy={0} r={MAG_R} fill="hsla(222,42%,10%,0.98)" />
                 <circle cx={0} cy={0} r={MAG_R * 0.9} fill="hsla(196,48%,16%,0.14)" />
 
