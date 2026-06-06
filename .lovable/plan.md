@@ -1,47 +1,81 @@
-## Current assessment
-The earlier claim was not fully accurate.
+# Seasons & Cycles — Implementation Plan
 
-- **Planetary is restored**: the `/` page is visibly back to its original look.
-- **The other pages are still not using the exact same implementation**: at least `/galactic` is rendering a similar starry backdrop, but it is **not the same background stack the planetary page uses**.
+Tie Earth's seasonal cycle into the live ephemeris already powering Transits, then surface the ecological consequences on the Biosphere page. Both panels read from the same `astronomy-engine` source — no new data dependencies.
 
-## Why this keeps happening
-The planetary backdrop is currently **split across two separate implementations**:
+## 1. Shared seasonal engine
 
-1. **`src/pages/Index.tsx`** supplies the radial base, vignette, scanline, and film-grain layers.
-2. **`src/components/EarthVisualization.tsx`** supplies the moving `Stars` layer inside the planetary WebGL canvas.
+New file: `src/lib/astrology/seasons.ts`
 
-The other pages are using **`src/components/NightSkyBackground.tsx`**, which is only a recreation of that look. Even if the numbers match, it is still a different renderer/layer stack, so it will not be pixel-identical.
+Pure functions derived from the Sun's geocentric ecliptic longitude (already computed in `src/lib/astrology/ephemeris.ts`):
 
-That is the root cause: I kept trying to *match* the planetary background instead of making the other pages use the **same source of truth**.
+- `getSolarLongitude(date)` — reuses ephemeris Sun position
+- `getSeasonalPhase(date)` — returns `{ season, hemisphere, nextStation, daysUntil, progressInSeason }` where stations are the 8 wheel-of-the-year points (4 cardinal + 4 cross-quarter)
+- `getDayLength(date, latitude)` — civil day length at a reference latitude (default 0°, user-toggleable to 45°N/S)
+- `getSunDeclination(date)` — for visualising axial tilt effect
+- `getEarthOrbitalPosition(date)` — true anomaly + distance to perihelion/aphelion
+- `getCarbonFluxSign(date, hemisphere)` — sign-only proxy: NH drawdown Apr–Sep, release Oct–Mar; inverse for SH
 
-## Plan
-1. **Extract the planetary background into one canonical component**
-   - Move the exact planetary backdrop stack into a dedicated shared component.
-   - Include the same radial layers, grain, scanlines, and the same moving starfield behavior.
+Station table (longitude-based, not date-based, so it stays correct across years):
+- 0° Aries → March Equinox (Ostara)
+- 45° Taurus → Beltane
+- 90° Cancer → June Solstice (Litha)
+- 135° Leo → Lughnasadh
+- 180° Libra → September Equinox (Mabon)
+- 225° Scorpio → Samhain
+- 270° Capricorn → December Solstice (Yule)
+- 315° Aquarius → Imbolc
 
-2. **Keep planetary visually unchanged**
-   - Refactor the planetary page to consume that shared component without altering its appearance.
-   - Remove duplicated backdrop code from `Index.tsx` only after the shared version produces the same result.
+## 2. Wheel of the Year ring — HGS Transits view
 
-3. **Apply that exact shared component to Universal, Galactic, and Cosmological**
-   - Mount the same component behind those pages.
-   - Remove any route-level or visualization-level backdrop code that competes with it.
+Edit: `src/components/astrology/AstrologyChart.tsx` (or wrap it; pick whichever is cleaner once read)
 
-4. **Validate by route, visually**
-   - Compare `/`, `/?view=hgs`, `/galactic`, and `/cosmological` side by side.
-   - Confirm the background treatment is the same across routes, while the foreground visualizations remain different.
+Add a concentric ring outside the existing zodiac band:
 
-## Technical details
-- Likely files involved:
-  - `src/pages/Index.tsx`
-  - `src/components/EarthVisualization.tsx`
-  - `src/components/NightSkyBackground.tsx`
-  - `src/components/hgs/HGSDashboard.tsx`
-  - `src/pages/Galactic.tsx`
-  - `src/pages/Cosmological.tsx`
-- The key rule for the fix:
-  - **One background implementation only**
-  - **Planetary must become the source, not the reference image to imitate**
+- 8 tick marks at the station longitudes with glyph + name on hover
+- Highlighted arc between previous and next station showing current position
+- Subtle seasonal tint to the arc segment (spring/summer/autumn/winter) — kept within the monochromatic palette using opacity rather than hue, except the existing astrology cream/gold (per memory exception)
+- Small marker on the Sun's current longitude that doubles as a "you are here" indicator
 
-## Expected outcome
-After implementation, the planetary page should look exactly as it does now, and Universal, Galactic, and Cosmological should inherit that exact same backdrop rather than a close approximation.
+New sidebar block in `src/components/astrology/TransitsPanel.tsx` or `ZodiacSidebar.tsx`:
+- Current season, hemisphere selector (N/S)
+- Solar longitude (e.g. "76° 12′")
+- Next station + days until
+- Day length at selected reference latitude
+
+## 3. Seasonal Response card — Biosphere page
+
+New file: `src/components/sphere-detail/SeasonalResponseCard.tsx`
+
+Rendered inside the Biosphere live state (`src/components/sphere-detail/live-state/BiosphereLiveState.tsx`) as an additional card.
+
+Contents:
+- Mini wheel-of-year strip (linear, not circular) showing current position between stations
+- Hemispheric NDVI phase indicator (growing / peak / senescing / dormant) derived from solar longitude + hemisphere
+- Carbon flux sign chip ("Drawdown" vs "Release") with caveat that it's a phase proxy, not a measured value
+- Day length at 45°N and 45°S side by side
+- Sun declination + Earth–Sun distance (perihelion/aphelion context)
+- One-line caption tying it back: "Axial tilt + orbital position → insolation → photosynthesis phase"
+
+## 4. Cross-quarter cultural layer
+
+Stations include both astronomical name (e.g. "June Solstice") and traditional name (e.g. "Litha"). Cultural names appear on hover/secondary text so the primary read stays scientific. No separate UI.
+
+## 5. Honesty & observability
+
+- Everything computed locally from `astronomy-engine` — consistent with the Transits panel
+- Carbon flux and NDVI phase are labelled as **phase proxies** (derived from solar geometry, not measured), matching the project's read-only observability stance
+- No new external API dependencies
+
+## Technical notes
+
+- `astronomy-engine` already in deps; `Astronomy.Seasons(year)` gives exact equinox/solstice timestamps — use as ground truth for the 4 cardinal points and interpolate cross-quarters from solar longitude
+- Reuse existing color tokens; no new palette entries
+- Hemisphere toggle persists in component state only (no global store change)
+
+## Files touched
+
+- New: `src/lib/astrology/seasons.ts`
+- New: `src/components/sphere-detail/SeasonalResponseCard.tsx`
+- Edit: `src/components/astrology/AstrologyChart.tsx` — add outer ring
+- Edit: `src/components/astrology/TransitsPanel.tsx` or `ZodiacSidebar.tsx` — add seasonal block
+- Edit: `src/components/sphere-detail/live-state/BiosphereLiveState.tsx` — mount new card
