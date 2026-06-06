@@ -367,7 +367,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
       {/* ─── LEFT SIDEBAR ─── */}
       {mode === "transits" ? (
-        <div className="absolute left-4 top-1/2 -translate-y-[43%] z-10 pointer-events-none w-[250px] h-[620px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[40%] z-10 pointer-events-none w-[250px] h-[620px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <ZodiacSidebar
               positions={positions}
@@ -377,7 +377,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           </HudPanel>
         </div>
       ) : mode === "geometry" ? (
-        <div className="absolute left-4 top-1/2 -translate-y-[43%] z-10 pointer-events-none w-[250px] h-[620px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[40%] z-10 pointer-events-none w-[250px] h-[620px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <IntervalsSidebar
               selected={selectedIntervalId}
@@ -386,7 +386,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           </HudPanel>
         </div>
       ) : (
-        <div className="absolute left-4 top-1/2 -translate-y-[43%] z-10 pointer-events-none w-[250px] h-[620px]">
+        <div className="absolute left-4 top-1/2 -translate-y-[40%] z-10 pointer-events-none w-[250px] h-[620px]">
           <HudPanel className="pointer-events-auto h-full flex flex-col" glow="#d4a56a">
             <div className="flex-1 overflow-y-auto flex flex-col">
               {/* Header */}
@@ -470,7 +470,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
 
       {/* ─── RIGHT SIDEBAR ─── */}
-      <div className="absolute right-4 top-1/2 -translate-y-[43%] z-10 pointer-events-none w-[250px] h-[620px]">
+      <div className="absolute right-4 top-1/2 -translate-y-[40%] z-10 pointer-events-none w-[250px] h-[620px]">
         <HudPanel className="pointer-events-auto h-full flex flex-col" glow={selectedData ? selectedData.color : "#d4a56a"}>
           {mode === "transits" ? (
             <TransitsPanel
