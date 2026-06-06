@@ -352,54 +352,281 @@ export const MilkyWayMap = ({ layer }: Props) => {
         </g>
       )}
 
-      {/* ─────────── ENVIRONMENT layer ─────────── */}
-      {layer === "environment" && (
-        <g>
-          {/* Local Bubble shell */}
-          <circle cx={sunX} cy={sunY} r={0.12} fill="url(#g-bubble)" />
-          <circle cx={sunX} cy={sunY} r={0.12} fill="none"
-            stroke="hsla(180,85%,78%,0.85)" strokeWidth={0.005}
-            strokeDasharray="0.02 0.016" />
-          {/* Local Interstellar Cloud */}
-          <circle cx={sunX + 0.014} cy={sunY - 0.01} r={0.038}
-            fill="hsla(160,70%,60%,0.10)"
-            stroke="hsla(160,75%,78%,0.8)" strokeWidth={0.004} />
-          {/* Cosmic ray streamers */}
-          {Array.from({ length: 26 }).map((_, i) => {
-            const a = ((i * 137.5 + tick * 22) % 360) * Math.PI / 180;
-            const len = 0.55 + ((i * 13) % 35) / 100;
-            const prog = ((tick * 0.32 + i * 0.13) % 1);
-            const x1 = sunX + Math.cos(a) * len;
-            const y1 = sunY + Math.sin(a) * len;
-            const x2 = sunX + Math.cos(a) * len * (1 - prog);
-            const y2 = sunY + Math.sin(a) * len * (1 - prog);
-            return (
-              <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
-                stroke="hsla(195,90%,78%,0.6)" strokeWidth={0.0042}
-                strokeLinecap="round" />
-            );
-          })}
-          {/* Nearby star markers (visible to naked eye / within 30 ly) */}
-          {[
-            { dx: 0.022, dy: 0.014, name: "α Cen" },
-            { dx: -0.018, dy: 0.026, name: "Sirius" },
-            { dx: 0.030, dy: -0.020, name: "Procyon" },
-            { dx: -0.028, dy: -0.018, name: "Vega" },
-          ].map((p, i) => (
-            <g key={i}>
-              <circle cx={sunX + p.dx} cy={sunY + p.dy} r={0.005}
-                fill="hsla(200,90%,90%,1)" />
-              <text x={sunX + p.dx + 0.012} y={sunY + p.dy + 0.005}
-                fontSize="0.022" fill="hsla(200,70%,85%,0.7)"
-                style={{ letterSpacing: "0.1em" }}>{p.name}</text>
+      {/* ─────────── ENVIRONMENT layer ───────────
+          Galactic-scale ISM features + a circular magnifier centered on the Sun
+          showing the Local Bubble at proper scale (~600 ly → mag radius). */}
+      {layer === "environment" && (() => {
+        const MAG_R = 0.78;                  // magnifier radius (canvas units)
+        const MAG_CX = -0.78;                // place magnifier to upper-left
+        const MAG_CY = -0.55;
+        const SCALE_LY = 800;                // magnifier shows ~±400 ly around Sun
+        const lyToMag = (ly: number) => (ly / (SCALE_LY / 2)) * MAG_R;
+
+        // Real-ish bearings (galactic longitude ℓ) and distances of bright nearby stars
+        const NEARBY = [
+          { name: "α Cen",       ly: 4.4,   ell: 316, hue: 45,  mag: 1.0 },
+          { name: "Barnard's",   ly: 6.0,   ell: 31,  hue: 18,  mag: 0.5 },
+          { name: "Sirius",      ly: 8.6,   ell: 227, hue: 210, mag: 1.4 },
+          { name: "Procyon",     ly: 11.4,  ell: 213, hue: 50,  mag: 0.9 },
+          { name: "Altair",      ly: 16.7,  ell: 47,  hue: 200, mag: 0.8 },
+          { name: "Vega",        ly: 25.0,  ell: 67,  hue: 210, mag: 1.1 },
+          { name: "Fomalhaut",   ly: 25.1,  ell: 20,  hue: 200, mag: 0.9 },
+          { name: "Pollux",      ly: 33.7,  ell: 192, hue: 25,  mag: 0.9 },
+          { name: "Arcturus",    ly: 36.7,  ell: 15,  hue: 30,  mag: 1.0 },
+          { name: "Aldebaran",   ly: 65.0,  ell: 181, hue: 18,  mag: 1.0 },
+          { name: "Regulus",     ly: 79.0,  ell: 226, hue: 215, mag: 1.0 },
+          { name: "Spica",       ly: 250.0, ell: 316, hue: 220, mag: 1.2 },
+        ];
+
+        // Irregular Local Bubble outline (cavity ~300 ly across, asymmetric)
+        const bubblePts = Array.from({ length: 48 }).map((_, i) => {
+          const a = (i / 48) * Math.PI * 2;
+          const wob = 1
+            + Math.sin(a * 3 + 0.6) * 0.18
+            + Math.sin(a * 5 - 1.2) * 0.10
+            + Math.cos(a * 2 + 2.1) * 0.12;
+          const r = lyToMag(150 * wob);
+          return `${i === 0 ? "M" : "L"}${(Math.cos(a) * r).toFixed(3)},${(Math.sin(a) * r).toFixed(3)}`;
+        }).join(" ") + " Z";
+
+        return (
+          <g>
+            {/* ─── Galactic-scale ISM context ─── */}
+            {/* Gould Belt (ring of nearby OB associations, tilted) */}
+            <g opacity={0.6} transform={`translate(${sunX},${sunY}) rotate(18)`}>
+              <ellipse cx={0} cy={0} rx={0.13} ry={0.07} fill="none"
+                stroke="hsla(195,80%,80%,0.55)" strokeWidth={0.0035}
+                strokeDasharray="0.015 0.012" />
+              <text x={0} y={-0.085} fontSize="0.022" textAnchor="middle"
+                fill="hsla(195,70%,85%,0.7)" style={{ letterSpacing: "0.18em" }}>
+                GOULD BELT
+              </text>
             </g>
-          ))}
-          <text x={sunX} y={sunY - 0.16} fontSize="0.035" textAnchor="middle"
-            fill="hsla(180,85%,88%,0.95)" style={{ letterSpacing: "0.18em" }}>
-            LOCAL BUBBLE · G-CLOUD
-          </text>
-        </g>
-      )}
+            {/* Nearby giant molecular clouds (Aquila Rift, Taurus, Orion) */}
+            {[
+              { dx:  0.10, dy:  0.05, rx: 0.05, ry: 0.025, rot: -25, name: "AQUILA RIFT" },
+              { dx: -0.13, dy: -0.02, rx: 0.04, ry: 0.018, rot:  18, name: "TAURUS MC" },
+              { dx: -0.06, dy:  0.13, rx: 0.045, ry: 0.022, rot: -10, name: "ORION MC" },
+            ].map((c, i) => (
+              <g key={i} transform={`translate(${sunX + c.dx},${sunY + c.dy}) rotate(${c.rot})`}>
+                <ellipse cx={0} cy={0} rx={c.rx} ry={c.ry}
+                  fill="hsla(18,55%,18%,0.55)"
+                  stroke="hsla(18,50%,40%,0.5)" strokeWidth={0.0025} />
+                <text x={0} y={c.ry + 0.02} fontSize="0.018" textAnchor="middle"
+                  fill="hsla(20,55%,70%,0.7)" style={{ letterSpacing: "0.18em" }}>
+                  {c.name}
+                </text>
+              </g>
+            ))}
+            {/* Interstellar magnetic field — flowing arcs across the local region */}
+            {Array.from({ length: 7 }).map((_, i) => {
+              const off = (i - 3) * 0.07;
+              const pts: string[] = [];
+              for (let k = 0; k <= 30; k++) {
+                const t = k / 30;
+                const x = sunX - 0.35 + t * 0.7;
+                const y = sunY + off + Math.sin(t * Math.PI * 2 + tick * 0.4 + i) * 0.012;
+                pts.push(`${k === 0 ? "M" : "L"}${x.toFixed(3)},${y.toFixed(3)}`);
+              }
+              return (
+                <path key={i} d={pts.join(" ")}
+                  fill="none"
+                  stroke="hsla(280,60%,75%,0.30)"
+                  strokeWidth={0.0028}
+                  strokeDasharray="0.012 0.018" />
+              );
+            })}
+            {/* Cosmic ray streamers from nearby supernova remnants */}
+            {Array.from({ length: 18 }).map((_, i) => {
+              const a = ((i * 137.5 + tick * 18) % 360) * Math.PI / 180;
+              const len = 0.42 + ((i * 11) % 30) / 100;
+              const prog = ((tick * 0.28 + i * 0.13) % 1);
+              const x1 = sunX + Math.cos(a) * len;
+              const y1 = sunY + Math.sin(a) * len;
+              const x2 = sunX + Math.cos(a) * len * (1 - prog);
+              const y2 = sunY + Math.sin(a) * len * (1 - prog);
+              return (
+                <line key={i} x1={x1} y1={y1} x2={x2} y2={y2}
+                  stroke="hsla(195,85%,78%,0.45)" strokeWidth={0.0035}
+                  strokeLinecap="round" />
+              );
+            })}
+            {/* Loop I superbubble (adjacent to Local Bubble, Sco-Cen origin) */}
+            <circle cx={sunX - 0.085} cy={sunY + 0.04} r={0.075}
+              fill="hsla(265,55%,55%,0.10)"
+              stroke="hsla(265,65%,80%,0.45)" strokeWidth={0.003}
+              strokeDasharray="0.012 0.014" />
+            <text x={sunX - 0.085} y={sunY + 0.13} fontSize="0.020" textAnchor="middle"
+              fill="hsla(265,60%,82%,0.75)" style={{ letterSpacing: "0.18em" }}>
+              LOOP I
+            </text>
+            {/* Sun marker indicator on galactic view */}
+            <line
+              x1={sunX} y1={sunY}
+              x2={MAG_CX + MAG_R * 0.78} y2={MAG_CY + MAG_R * 0.62}
+              stroke="hsla(180,85%,78%,0.35)" strokeWidth={0.003}
+              strokeDasharray="0.012 0.012" />
+
+            {/* ─── MAGNIFIER: zoomed Local Bubble inset ─── */}
+            <g>
+              {/* outer ring + scale */}
+              <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R}
+                fill="hsla(228,55%,5%,0.92)"
+                stroke="hsla(180,75%,75%,0.45)" strokeWidth={0.006} />
+              <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R + 0.02}
+                fill="none" stroke="hsla(180,70%,70%,0.18)" strokeWidth={0.003} />
+              {/* clip everything inside the magnifier */}
+              <defs>
+                <clipPath id="mag-clip">
+                  <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R - 0.005} />
+                </clipPath>
+              </defs>
+
+              <g clipPath="url(#mag-clip)" transform={`translate(${MAG_CX},${MAG_CY})`}>
+                {/* faint backdrop field */}
+                <circle cx={0} cy={0} r={MAG_R} fill="url(#g-disk)" opacity={0.4} />
+
+                {/* distance rings (50, 100, 200, 400 ly) */}
+                {[50, 100, 200, 400].map((d) => (
+                  <g key={d}>
+                    <circle cx={0} cy={0} r={lyToMag(d)} fill="none"
+                      stroke="hsla(200,55%,70%,0.18)" strokeWidth={0.002}
+                      strokeDasharray="0.012 0.014" />
+                    <text x={lyToMag(d) + 0.012} y={0.012} fontSize="0.018"
+                      fill="hsla(200,55%,75%,0.45)" style={{ letterSpacing: "0.15em" }}>
+                      {d} ly
+                    </text>
+                  </g>
+                ))}
+
+                {/* galactic longitude radial ticks */}
+                {Array.from({ length: 12 }).map((_, i) => {
+                  const ell = i * 30;
+                  const a = ((90 - ell) * Math.PI) / 180; // ℓ=0 toward GC (right)
+                  const r1 = MAG_R - 0.04;
+                  const r2 = MAG_R - 0.02;
+                  return (
+                    <g key={i}>
+                      <line
+                        x1={Math.cos(a) * r1} y1={-Math.sin(a) * r1}
+                        x2={Math.cos(a) * r2} y2={-Math.sin(a) * r2}
+                        stroke="hsla(180,60%,75%,0.4)" strokeWidth={0.0025} />
+                      <text
+                        x={Math.cos(a) * (MAG_R - 0.055)}
+                        y={-Math.sin(a) * (MAG_R - 0.055)}
+                        fontSize="0.018" textAnchor="middle" dominantBaseline="middle"
+                        fill="hsla(180,55%,80%,0.55)"
+                        style={{ letterSpacing: "0.1em" }}>
+                        ℓ{ell}°
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Local Bubble — irregular cavity */}
+                <path d={bubblePts} fill="hsla(180,70%,55%,0.06)"
+                  stroke="hsla(180,85%,80%,0.75)" strokeWidth={0.0045}
+                  strokeDasharray="0.018 0.014" />
+
+                {/* Loop I superbubble overlap */}
+                <circle cx={lyToMag(-130)} cy={lyToMag(60)} r={lyToMag(150)}
+                  fill="hsla(265,60%,55%,0.05)"
+                  stroke="hsla(265,70%,82%,0.55)" strokeWidth={0.003}
+                  strokeDasharray="0.014 0.014" />
+                <text x={lyToMag(-130)} y={lyToMag(60) - lyToMag(150) - 0.012}
+                  fontSize="0.022" textAnchor="middle"
+                  fill="hsla(265,65%,85%,0.8)" style={{ letterSpacing: "0.18em" }}>
+                  LOOP I
+                </text>
+
+                {/* G-Cloud — outer local cloud (Sun currently here) */}
+                <ellipse cx={lyToMag(2)} cy={lyToMag(-1)} rx={lyToMag(15)} ry={lyToMag(10)}
+                  fill="hsla(155,60%,55%,0.10)"
+                  stroke="hsla(155,75%,78%,0.7)" strokeWidth={0.003} />
+                {/* LIC — Local Interstellar Cloud (touching Sun) */}
+                <ellipse cx={lyToMag(4)} cy={lyToMag(2)} rx={lyToMag(8)} ry={lyToMag(6)}
+                  transform={`rotate(20 ${lyToMag(4)} ${lyToMag(2)})`}
+                  fill="hsla(190,60%,55%,0.12)"
+                  stroke="hsla(190,80%,80%,0.75)" strokeWidth={0.003} />
+
+                {/* Heliosphere — bow shock around Sun (interstellar wind from ℓ≈5°) */}
+                {(() => {
+                  const heliopause = lyToMag(0.0023); // ~120 AU
+                  const wind = ((90 - 5) * Math.PI) / 180; // ℓ=5° direction
+                  const wx = Math.cos(wind), wy = -Math.sin(wind);
+                  // teardrop oriented opposite wind
+                  return (
+                    <g transform={`rotate(${(Math.atan2(-wy, -wx) * 180) / Math.PI})`}>
+                      <ellipse cx={0.012} cy={0} rx={0.04} ry={0.022}
+                        fill="hsla(48,90%,75%,0.10)"
+                        stroke="hsla(48,95%,82%,0.6)" strokeWidth={0.0028} />
+                    </g>
+                  );
+                })()}
+
+                {/* Nearby star scatter — accurate distance/longitude */}
+                {NEARBY.map((s, i) => {
+                  const a = ((90 - s.ell) * Math.PI) / 180;
+                  const r = lyToMag(s.ly);
+                  const x = Math.cos(a) * r;
+                  const y = -Math.sin(a) * r;
+                  return (
+                    <g key={i}>
+                      <circle cx={x} cy={y} r={0.012 * s.mag}
+                        fill={`hsla(${s.hue},85%,88%,0.35)`} />
+                      <circle cx={x} cy={y} r={0.005}
+                        fill={`hsla(${s.hue},90%,92%,1)`} />
+                      <text x={x + 0.012} y={y - 0.008}
+                        fontSize="0.020"
+                        fill={`hsla(${s.hue},70%,88%,0.9)`}
+                        style={{ letterSpacing: "0.1em" }}>
+                        {s.name}
+                      </text>
+                      <text x={x + 0.012} y={y + 0.012}
+                        fontSize="0.015"
+                        fill="hsla(0,0%,100%,0.45)"
+                        style={{ letterSpacing: "0.1em" }}>
+                        {s.ly} ly
+                      </text>
+                    </g>
+                  );
+                })}
+
+                {/* Sun — center of magnifier */}
+                <circle cx={0} cy={0} r={0.022} fill="url(#g-sun)" />
+                <circle cx={0} cy={0} r={0.008} fill="hsla(50,100%,95%,1)" />
+
+                {/* Direction → Galactic Center arrow */}
+                <g>
+                  <line x1={0.04} y1={0} x2={MAG_R - 0.10} y2={0}
+                    stroke="hsla(48,95%,82%,0.55)" strokeWidth={0.003}
+                    strokeDasharray="0.014 0.012" />
+                  <polygon
+                    points={`${MAG_R - 0.10},0 ${MAG_R - 0.13},-0.012 ${MAG_R - 0.13},0.012`}
+                    fill="hsla(48,95%,82%,0.65)" />
+                  <text x={MAG_R - 0.16} y={-0.018} fontSize="0.020"
+                    textAnchor="end" fill="hsla(48,90%,85%,0.7)"
+                    style={{ letterSpacing: "0.18em" }}>
+                    → GC
+                  </text>
+                </g>
+              </g>
+
+              {/* Magnifier title */}
+              <text x={MAG_CX} y={MAG_CY - MAG_R - 0.025}
+                fontSize="0.032" textAnchor="middle"
+                fill="hsla(180,85%,88%,0.95)" style={{ letterSpacing: "0.22em" }}>
+                LOCAL BUBBLE · SOLAR NEIGHBORHOOD
+              </text>
+              <text x={MAG_CX} y={MAG_CY + MAG_R + 0.04}
+                fontSize="0.022" textAnchor="middle"
+                fill="hsla(0,0%,100%,0.5)" style={{ letterSpacing: "0.2em" }}>
+                ZOOM ×{Math.round((DISK_R / lyToMag(50_000)))}  ·  Sun in G-Cloud / LIC interface
+              </text>
+            </g>
+          </g>
+        );
+      })()}
 
       {/* ─────────── DYNAMICS layer ─────────── */}
       {layer === "dynamics" && (
