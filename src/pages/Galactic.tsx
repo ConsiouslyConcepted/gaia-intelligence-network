@@ -116,7 +116,7 @@ const Galactic = () => {
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Galactic Intelligence</h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Milky Way Context · Solar System in Galactic Frame
+              Heliocentric Frame in Galactic Coordinates · Local Stellar Neighborhood &amp; Orion Arm
             </p>
           </div>
 
