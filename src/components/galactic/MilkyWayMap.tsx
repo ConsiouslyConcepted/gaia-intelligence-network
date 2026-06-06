@@ -356,9 +356,9 @@ export const MilkyWayMap = ({ layer }: Props) => {
           Galactic-scale ISM features + a circular magnifier centered on the Sun
           showing the Local Bubble at proper scale (~600 ly → mag radius). */}
       {layer === "environment" && (() => {
-        const MAG_R = 0.50;                  // inset radius
-        const MAG_CX = -1.45;                // middle-left of SVG, beside galaxy
-        const MAG_CY = 0;
+        const MAG_R = 0.68;                  // larger inset radius for readable local structures
+        const MAG_CX = -1.24;                // lower-left negative space beside galaxy
+        const MAG_CY = 0.28;
         // Log distance mapping so 4 ly → inner, 300 ly → outer edge
         const LY_MIN = 3, LY_MAX = 320;
         const lyToMag = (ly: number) => {
@@ -476,16 +476,16 @@ export const MilkyWayMap = ({ layer }: Props) => {
             {/* Sun marker indicator on galactic view */}
             <line
               x1={sunX} y1={sunY}
-              x2={MAG_CX + MAG_R * 0.78} y2={MAG_CY + MAG_R * 0.62}
-              stroke="hsla(180,85%,78%,0.35)" strokeWidth={0.003}
-              strokeDasharray="0.012 0.012" />
+              x2={MAG_CX + MAG_R * 0.74} y2={MAG_CY - MAG_R * 0.48}
+              stroke="hsla(180,85%,78%,0.4)" strokeWidth={0.004}
+              strokeDasharray="0.016 0.014" />
 
             {/* ─── MAGNIFIER: zoomed Local Bubble inset ─── */}
             <g>
               {/* outer ring + scale */}
-              <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R}
-                fill="hsla(228,55%,5%,0.92)"
-                stroke="hsla(180,75%,75%,0.45)" strokeWidth={0.006} />
+                <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R}
+                  fill="hsla(224,48%,8%,0.97)"
+                  stroke="hsla(180,78%,78%,0.58)" strokeWidth={0.008} />
               <circle cx={MAG_CX} cy={MAG_CY} r={MAG_R + 0.02}
                 fill="none" stroke="hsla(180,70%,70%,0.18)" strokeWidth={0.003} />
               {/* clip everything inside the magnifier */}
