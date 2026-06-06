@@ -674,7 +674,7 @@ export default function PlanetaryCommons() {
         {/* Quick Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Data Sources", value: "7", sub: "APIs connected" },
+            { label: "Data Sources", value: String(APIS.length), sub: "Live endpoints" },
             { label: "Auth Required", value: "0", sub: "All open access" },
             { label: "Update Freq", value: "~60s", sub: "Fastest refresh" },
           ].map((stat) => (
