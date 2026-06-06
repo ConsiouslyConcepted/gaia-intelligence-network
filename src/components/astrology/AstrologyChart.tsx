@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { SIGNS, PLANET_GLYPHS, longitudeToSign } from "@/lib/astrology/constants";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
+import { STATIONS } from "@/lib/astrology/seasons";
 
 interface Props {
   positions: PlanetPosition[];
@@ -201,6 +202,51 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
           </g>
         );
       })}
+
+      {/* Wheel-of-the-Year ring — 8 station ticks at solar longitudes */}
+      {(() => {
+        const R_STATION_IN = R_OUTER + 22;
+        const R_STATION_OUT = R_OUTER + 36;
+        const sunPos = positions.find((p) => p.id === "sun");
+        return (
+          <g>
+            <circle cx={C} cy={C} r={R_STATION_IN} fill="none" stroke="hsla(220, 15%, 75%, 0.08)" strokeWidth="0.4" />
+            <circle cx={C} cy={C} r={R_STATION_OUT} fill="none" stroke="hsla(220, 15%, 75%, 0.10)" strokeWidth="0.4" />
+            {STATIONS.map((s) => {
+              const isCardinal = s.type === "equinox" || s.type === "solstice";
+              const p1 = polar(C, C, R_STATION_IN, s.longitude);
+              const p2 = polar(C, C, R_STATION_OUT, s.longitude);
+              const dotPos = polar(C, C, (R_STATION_IN + R_STATION_OUT) / 2, s.longitude);
+              return (
+                <g key={s.id}>
+                  <title>{`${s.astroName} · ${s.traditionalName}`}</title>
+                  <line
+                    x1={p1.x}
+                    y1={p1.y}
+                    x2={p2.x}
+                    y2={p2.y}
+                    stroke={isCardinal ? "hsla(40, 60%, 75%, 0.55)" : "hsla(220, 15%, 80%, 0.30)"}
+                    strokeWidth={isCardinal ? 1.2 : 0.7}
+                  />
+                  {isCardinal && (
+                    <circle cx={dotPos.x} cy={dotPos.y} r={2.2} fill="hsla(40, 60%, 80%, 0.85)" />
+                  )}
+                </g>
+              );
+            })}
+            {sunPos && (() => {
+              const m = polar(C, C, (R_STATION_IN + R_STATION_OUT) / 2, sunPos.longitude);
+              return (
+                <g>
+                  <title>Sun · current position</title>
+                  <circle cx={m.x} cy={m.y} r={5} fill="hsla(45, 90%, 65%, 0.18)" />
+                  <circle cx={m.x} cy={m.y} r={2.6} fill="hsl(45, 90%, 70%)" />
+                </g>
+              );
+            })()}
+          </g>
+        );
+      })()}
 
       {/* Degree ticks: 1° and 5° */}
       {Array.from({ length: 360 }, (_, d) => {

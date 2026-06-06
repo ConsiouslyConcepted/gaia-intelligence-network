@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { useNASAEONET } from "@/hooks/usePlanetaryData";
 import { Loader2 } from "lucide-react";
+import { SeasonalResponseCard } from "../SeasonalResponseCard";
 
 export function BiosphereLiveState({ accent }: { accent: string }) {
   const { data: events, isLoading, error } = useNASAEONET();
@@ -12,7 +13,7 @@ export function BiosphereLiveState({ accent }: { accent: string }) {
 
   return (
     <div className="space-y-4">
-      {/* Category Summary */}
+      <SeasonalResponseCard accent={accent} />
       <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
         {Object.entries(categoryCounts).slice(0, 3).map(([cat, count], i) => (
           <Card key={i} className="glass-panel rounded-xl p-4 space-y-2">
