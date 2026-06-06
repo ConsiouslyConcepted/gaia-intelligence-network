@@ -20,7 +20,7 @@ export function SpherePanelBackdrop({ accent, active = false, intense = false }:
         className="absolute inset-0"
         style={{
           background:
-            "linear-gradient(145deg, hsla(240,22%,12%,0.88) 0%, hsla(240,26%,8%,0.92) 55%, hsla(240,30%,5%,0.95) 100%)",
+            "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
           boxShadow:
             "inset 0 1px 0 hsla(0,0%,100%,0.06), inset 0 -1px 0 hsla(0,0%,0%,0.35)",
         }}
