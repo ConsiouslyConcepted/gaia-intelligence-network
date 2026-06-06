@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { SIGNS, PLANET_GLYPHS, longitudeToSign } from "@/lib/astrology/constants";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
+import { STATIONS } from "@/lib/astrology/seasons";
 
 interface Props {
   positions: PlanetPosition[];
