@@ -67,7 +67,7 @@ const MiniGraph = ({ color, data }: { color: string; data: number[] }) => (
 );
 
 const Index = () => {
-  const [searchParams, setSearchParams] = useSearchParams();
+  const [searchParams] = useSearchParams();
   const [activeView, setActiveView] = useState<"planetary" | "hgs">(
     searchParams.get("view") === "hgs" ? "hgs" : "planetary"
   );
