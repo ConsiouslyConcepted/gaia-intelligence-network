@@ -10,6 +10,7 @@ import {
   Radio,
   Waves,
   Zap,
+  Sun,
   ExternalLink,
   Copy,
   CheckCircle2,
@@ -225,6 +226,252 @@ const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
     authRequired: false,
     icon: <Waves className="w-5 h-5" />,
   },
+  {
+    id: "noaa-solar-wind-plasma",
+    name: "NOAA Solar Wind Plasma (ACE/DSCOVR)",
+    provider: "NOAA Space Weather Prediction Center",
+    description: "Real-time solar wind plasma measurements: proton density, bulk speed, and temperature from L1 spacecraft. Drives the magnetosphere panel.",
+    sphere: "Heliosphere",
+    sphereColor: "#e8c86a",
+    baseUrl: "https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json",
+    docsUrl: "https://www.swpc.noaa.gov/products/real-time-solar-wind",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/products/solar-wind/plasma-7-day.json")
+  .then(res => res.json())
+  .then(rows => {
+    const [, ...data] = rows; // skip header
+    const latest = data[data.length - 1];
+    const [time, density, speed, temperature] = latest;
+    console.log(\`\${speed} km/s · \${density} p/cm³ · \${temperature} K\`);
+  });`,
+    exampleResponse: `[
+  ["time_tag","density","speed","temperature"],
+  ["2026-06-06 17:55:00.000","6.42","412.8","85432"],
+  ["2026-06-06 17:56:00.000","6.51","415.1","86120"]
+]`,
+    updateFrequency: "Every 1 minute",
+    format: "JSON (CSV-shaped)",
+    authRequired: false,
+    icon: <Activity className="w-5 h-5" />,
+  },
+  {
+    id: "noaa-solar-wind-mag",
+    name: "NOAA Interplanetary Magnetic Field",
+    provider: "NOAA Space Weather Prediction Center",
+    description: "IMF vector components (Bx, By, Bz) and total field magnitude (Bt) in GSM coordinates from L1 magnetometer. Bz southward drives geomagnetic storms.",
+    sphere: "Magnetosphere",
+    sphereColor: "#4466dd",
+    baseUrl: "https://services.swpc.noaa.gov/products/solar-wind/mag-7-day.json",
+    docsUrl: "https://www.swpc.noaa.gov/products/real-time-solar-wind",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/products/solar-wind/mag-7-day.json")
+  .then(res => res.json())
+  .then(rows => {
+    const [, ...data] = rows;
+    const latest = data[data.length - 1];
+    const [time, bx, by, bz, lon, lat, bt] = latest;
+    console.log(\`Bz: \${bz} nT — \${parseFloat(bz) < -5 ? "⚠️ Southward" : "✓ Northward"}\`);
+  });`,
+    exampleResponse: `[
+  ["time_tag","bx_gsm","by_gsm","bz_gsm","lon_gsm","lat_gsm","bt"],
+  ["2026-06-06 17:55:00.000","-2.31","4.12","-1.88","118.4","-21.5","5.04"]
+]`,
+    updateFrequency: "Every 1 minute",
+    format: "JSON (CSV-shaped)",
+    authRequired: false,
+    icon: <Radio className="w-5 h-5" />,
+  },
+  {
+    id: "noaa-dst",
+    name: "Kyoto Dst Index (via NOAA)",
+    provider: "NOAA SWPC / Kyoto WDC",
+    description: "Disturbance Storm-Time index. Measures equatorial ring-current strength — the canonical metric for geomagnetic storm intensity.",
+    sphere: "Magnetosphere",
+    sphereColor: "#4466dd",
+    baseUrl: "https://services.swpc.noaa.gov/products/kyoto-dst.json",
+    docsUrl: "https://wdc.kugi.kyoto-u.ac.jp/dstdir/",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/products/kyoto-dst.json")
+  .then(res => res.json())
+  .then(rows => {
+    const latest = rows[rows.length - 1];
+    const [time, dst] = latest;
+    const v = parseFloat(dst);
+    console.log(v < -100 ? "🌩 Major storm" : v < -50 ? "Moderate storm" : "Quiet");
+  });`,
+    exampleResponse: `[
+  ["time_tag","dst"],
+  ["2026-06-06 17:00:00","-18"]
+]`,
+    updateFrequency: "Hourly",
+    format: "JSON (CSV-shaped)",
+    authRequired: false,
+    icon: <Activity className="w-5 h-5" />,
+  },
+  {
+    id: "noaa-xray",
+    name: "GOES X-Ray Flare Catalog",
+    provider: "NOAA / GOES Primary",
+    description: "Latest solar X-ray flare events with classification (A/B/C/M/X), peak flux, and timing. Source of ionospheric SID events.",
+    sphere: "Heliosphere",
+    sphereColor: "#e8c86a",
+    baseUrl: "https://services.swpc.noaa.gov/json/goes/primary/xray-flares-latest.json",
+    docsUrl: "https://www.swpc.noaa.gov/products/goes-x-ray-flux",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/json/goes/primary/xray-flares-latest.json")
+  .then(res => res.json())
+  .then(flares => {
+    flares.forEach(f => {
+      console.log(\`\${f.max_class} flare peaked at \${f.max_time}\`);
+    });
+  });`,
+    exampleResponse: `[
+  {
+    "begin_time": "2026-06-06T14:21:00Z",
+    "max_time":   "2026-06-06T14:42:00Z",
+    "end_time":   "2026-06-06T15:08:00Z",
+    "max_class":  "M2.4",
+    "max_xray_flux": 2.4e-5
+  }
+]`,
+    updateFrequency: "Every 5 minutes",
+    format: "JSON",
+    authRequired: false,
+    icon: <Zap className="w-5 h-5" />,
+  },
+  {
+    id: "noaa-solar-cycle",
+    name: "NOAA Solar Cycle Indices",
+    provider: "NOAA SWPC",
+    description: "Monthly observed Sunspot Number (SSN), smoothed SSN, and F10.7 cm radio flux. Defines the 11-year solar cycle envelope.",
+    sphere: "Heliosphere",
+    sphereColor: "#e8c86a",
+    baseUrl: "https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json",
+    docsUrl: "https://www.swpc.noaa.gov/products/solar-cycle-progression",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/json/solar-cycle/observed-solar-cycle-indices.json")
+  .then(res => res.json())
+  .then(months => {
+    const latest = months[months.length - 1];
+    console.log(\`\${latest["time-tag"]}: SSN=\${latest.ssn}, F10.7=\${latest.f10_7}\`);
+  });`,
+    exampleResponse: `[
+  { "time-tag": "2026-05", "ssn": 142.1, "smoothed_ssn": 138.7, "f10_7": 168.2 }
+]`,
+    updateFrequency: "Monthly",
+    format: "JSON",
+    authRequired: false,
+    icon: <Sun className="w-5 h-5" />,
+  },
+  {
+    id: "noaa-alerts",
+    name: "NOAA SWPC Alerts & Bulletins",
+    provider: "NOAA Space Weather Prediction Center",
+    description: "Live stream of space-weather alerts, watches, warnings, and summaries (geomagnetic storms, radio blackouts, radiation events).",
+    sphere: "Heliosphere",
+    sphereColor: "#e8c86a",
+    baseUrl: "https://services.swpc.noaa.gov/products/alerts.json",
+    docsUrl: "https://www.swpc.noaa.gov/products/alerts-watches-and-warnings",
+    exampleRequest: `fetch("https://services.swpc.noaa.gov/products/alerts.json")
+  .then(res => res.json())
+  .then(alerts => alerts.slice(0, 5).forEach(a => {
+    console.log(\`[\${a.product_id}] \${a.issue_datetime}\`);
+    console.log(a.message);
+  }));`,
+    exampleResponse: `[
+  {
+    "product_id": "K04",
+    "issue_datetime": "2026-06-06 09:12:00",
+    "message": "ALERT: Geomagnetic K-index of 4..."
+  }
+]`,
+    updateFrequency: "As issued",
+    format: "JSON",
+    authRequired: false,
+    icon: <Radio className="w-5 h-5" />,
+  },
+  {
+    id: "nasa-eonet",
+    name: "NASA EONET — Natural Events",
+    provider: "NASA Goddard / EONET",
+    description: "Earth Observatory Natural Event Tracker: open wildfires, severe storms, volcanic eruptions, icebergs, dust plumes, and more — geolocated and time-stamped.",
+    sphere: "Biosphere",
+    sphereColor: "#7ecbcb",
+    baseUrl: "https://eonet.gsfc.nasa.gov/api/v3/events",
+    docsUrl: "https://eonet.gsfc.nasa.gov/docs/v3",
+    exampleRequest: `fetch("https://eonet.gsfc.nasa.gov/api/v3/events?status=open&limit=20")
+  .then(res => res.json())
+  .then(data => data.events.forEach(e => {
+    const cat = e.categories[0]?.title;
+    const [lng, lat] = e.geometry[0]?.coordinates ?? [];
+    console.log(\`\${cat}: \${e.title} @ (\${lat}, \${lng})\`);
+  }));`,
+    exampleResponse: `{
+  "events": [
+    {
+      "id": "EONET_6543",
+      "title": "Wildfire — British Columbia",
+      "categories": [{ "title": "Wildfires" }],
+      "geometry": [{ "date": "2026-06-05T18:00:00Z", "coordinates": [-123.1, 53.4] }]
+    }
+  ]
+}`,
+    updateFrequency: "Continuous",
+    format: "JSON",
+    authRequired: false,
+    icon: <Activity className="w-5 h-5" />,
+  },
+  {
+    id: "nasa-jpl-cad",
+    name: "NASA JPL Close-Approach Data",
+    provider: "NASA JPL Solar System Dynamics",
+    description: "Near-Earth object close approaches within 0.2 AU over the next 30 days. Designation, date, distance (AU & lunar distances), and relative velocity.",
+    sphere: "Crystalsphere",
+    sphereColor: "#e8c86a",
+    baseUrl: "https://ssd-api.jpl.nasa.gov/cad.api",
+    docsUrl: "https://ssd-api.jpl.nasa.gov/doc/cad.html",
+    exampleRequest: `const url = "https://ssd-api.jpl.nasa.gov/cad.api"
+  + "?date_min=now&date_max=%2B30&dist-max=0.2&sort=dist";
+fetch(url)
+  .then(r => r.json())
+  .then(({ fields, data }) => data.slice(0, 5).forEach(row => {
+    const o = Object.fromEntries(fields.map((f,i) => [f, row[i]]));
+    console.log(\`\${o.des}: \${o.cd} @ \${o.dist} AU, v=\${o.v_rel} km/s\`);
+  }));`,
+    exampleResponse: `{
+  "fields": ["des","cd","dist","v_rel","h",...],
+  "data":   [ ["2024 PT5","2026-06-12 03:14","0.0028","6.42","23.1"] ]
+}`,
+    updateFrequency: "Daily",
+    format: "JSON",
+    authRequired: false,
+    icon: <Satellite className="w-5 h-5" />,
+  },
+  {
+    id: "wikipedia-pageviews",
+    name: "Wikimedia Pageviews (Top)",
+    provider: "Wikimedia Foundation",
+    description: "Top viewed Wikipedia articles per day — used as a noospheric proxy for global collective attention and emergent topical interest.",
+    sphere: "Noosphere",
+    sphereColor: "#d4a56a",
+    baseUrl: "https://wikimedia.org/api/rest_v1/metrics/pageviews/top",
+    docsUrl: "https://wikimedia.org/api/rest_v1/",
+    exampleRequest: `const d = new Date(Date.now() - 86400000); // yesterday
+const y = d.getFullYear();
+const m = String(d.getMonth()+1).padStart(2,"0");
+const day = String(d.getDate()).padStart(2,"0");
+fetch(\`https://wikimedia.org/api/rest_v1/metrics/pageviews/top/en.wikipedia/all-access/\${y}/\${m}/\${day}\`)
+  .then(r => r.json())
+  .then(d => d.items[0].articles.slice(0,10)
+    .forEach(a => console.log(\`#\${a.rank} \${a.article}: \${a.views.toLocaleString()}\`)));`,
+    exampleResponse: `{
+  "items": [{
+    "articles": [
+      { "article": "Main_Page", "views": 4821091, "rank": 1 },
+      { "article": "Special:Search", "views": 1284401, "rank": 2 }
+    ]
+  }]
+}`,
+    updateFrequency: "Daily",
+    format: "JSON",
+    authRequired: false,
+    icon: <Globe className="w-5 h-5" />,
+  },
 ];
 
 function ApiCard({ api }: { api: ApiEndpoint }) {
@@ -427,7 +674,7 @@ export default function PlanetaryCommons() {
         {/* Quick Stats */}
         <div className="grid grid-cols-3 gap-3">
           {[
-            { label: "Data Sources", value: "7", sub: "APIs connected" },
+            { label: "Data Sources", value: String(APIS.length), sub: "Live endpoints" },
             { label: "Auth Required", value: "0", sub: "All open access" },
             { label: "Update Freq", value: "~60s", sub: "Fastest refresh" },
           ].map((stat) => (
