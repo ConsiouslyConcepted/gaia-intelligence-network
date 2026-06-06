@@ -55,7 +55,7 @@ interface LayerSpec {
 const LAYERS: LayerSpec[] = [
   {
     key: "cmb",
-    card: "Cosmic Background Field",
+    card: "Cosmic Background",
     title: "Cosmic Microwave Background",
     question: "What was the original pattern from which later structures emerged?",
     metrics: [
