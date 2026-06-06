@@ -499,10 +499,10 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 {/* distance rings — log-spaced (10, 30, 100, 300 ly) */}
                 {[10, 30, 100, 300].map((d) => (
                   <g key={d}>
-                      <circle cx={0} cy={0} r={lyToMagR(d)} fill="none"
+                    <circle cx={0} cy={0} r={lyToMagR(d) * MAG_DETAIL_SCALE} fill="none"
                         stroke="hsla(200,60%,76%,0.34)" strokeWidth={0.0045}
                       strokeDasharray="0.010 0.012" />
-                      <text x={lyToMagR(d) + 0.02} y={0.026} fontSize="0.045"
+                      <text x={lyToMagR(d) * MAG_DETAIL_SCALE + 0.02} y={0.026} fontSize="0.045"
                         fill="hsla(200,72%,88%,0.9)" style={{ letterSpacing: "0.08em" }}>
                       {d} ly
                     </text>
@@ -534,7 +534,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 })}
 
                 {/* Local Bubble — irregular cavity (~150 ly radius) */}
-                <path d={bubblePts} fill="hsla(180,70%,55%,0.12)"
+                <path d={bubblePts} transform={`scale(${MAG_DETAIL_SCALE})`} fill="hsla(180,70%,55%,0.12)"
                   stroke="hsla(180,88%,84%,0.92)" strokeWidth={0.007}
                   strokeDasharray="0.018 0.014" />
 
@@ -583,7 +583,9 @@ export const MilkyWayMap = ({ layer }: Props) => {
 
                 {/* Nearby star scatter — accurate longitude, log distance */}
                 {NEARBY.map((s, i) => {
-                  const [x, y] = polarLy(s.ell, s.ly);
+                  const [px, py] = polarLy(s.ell, s.ly);
+                  const x = px * MAG_DETAIL_SCALE;
+                  const y = py * MAG_DETAIL_SCALE;
                   return (
                     <g key={i}>
                       <circle cx={x} cy={y} r={0.022 * s.mag}
