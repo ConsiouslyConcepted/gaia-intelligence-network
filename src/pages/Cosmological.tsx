@@ -120,7 +120,7 @@ const Cosmological = () => {
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Cosmological Intelligence</h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Foundational Harmonic Architecture · Deep Structure of Reality
+              ΛCDM Framework · Initial Conditions of the Observable Universe
             </p>
           </div>
 
