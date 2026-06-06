@@ -196,7 +196,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
             />
           </div>
         ) : (
-          <div className="w-full h-full flex flex-col items-center justify-start gap-3 overflow-y-auto px-4 pb-36 pt-20 sm:px-8 lg:px-16">
+          <div className="w-full h-full flex flex-col items-center justify-start gap-3 overflow-y-auto px-4 pb-48 pt-20 sm:px-8 lg:px-16">
             <div className="text-center">
               <h2 className="text-base font-bold text-white/85 tracking-[0.32em]">GEOMETRY OF PLANETARY HARMONICS</h2>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
