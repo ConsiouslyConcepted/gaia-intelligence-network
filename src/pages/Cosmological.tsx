@@ -67,7 +67,7 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "constants",
-    card: "Cosmic Laws Layer",
+    card: "Cosmic Laws",
     title: "Fundamental Constants",
     question: "What underlying rules make complex structures possible?",
     metrics: [
