@@ -1,6 +1,7 @@
 import { Card } from "@/components/ui/card";
 import { useNASAEONET } from "@/hooks/usePlanetaryData";
 import { Loader2 } from "lucide-react";
+import { SeasonalResponseCard } from "../SeasonalResponseCard";
 
 export function BiosphereLiveState({ accent }: { accent: string }) {
   const { data: events, isLoading, error } = useNASAEONET();
