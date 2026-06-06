@@ -10,6 +10,7 @@ import {
   Radio,
   Waves,
   Zap,
+  Sun,
   ExternalLink,
   Copy,
   CheckCircle2,
