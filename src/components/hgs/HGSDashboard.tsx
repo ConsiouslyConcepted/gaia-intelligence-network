@@ -201,7 +201,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               <h2 className="text-base font-bold text-white/85 tracking-[0.32em]">GEOMETRY OF PLANETARY HARMONICS</h2>
               <p className="text-[10px] text-white/45 tracking-[0.32em] mt-1">12-TONE CHROMATIC WHEEL · KEPLERIAN HARMONICS</p>
             </div>
-            <div className="w-full max-w-5xl flex flex-col items-center gap-3">
+            <div className="w-full max-w-5xl flex flex-col items-center gap-10">
               {/* Side-by-side panels at top */}
               <div className="w-full flex flex-col sm:flex-row gap-3">
                 <GeometryGuide interval={selectedInterval} selectedPlanet={selectedPlanet} />
