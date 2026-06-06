@@ -209,7 +209,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               </div>
               <ChromaticWheel
                 interval={selectedInterval}
-                size={620}
+                size={820}
                 onSelectInterval={setSelectedIntervalId}
                 onPlanetClick={(id) => handlePlanetClick(id)}
                 onPlanetContext={(id) => handleTonePlay(id)}
