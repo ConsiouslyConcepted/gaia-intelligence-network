@@ -505,8 +505,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
                     <circle cx={0} cy={0} r={lyToMagR(d)} fill="none"
                       stroke="hsla(200,55%,70%,0.18)" strokeWidth={0.002}
                       strokeDasharray="0.010 0.012" />
-                    <text x={lyToMagR(d) + 0.008} y={0.012} fontSize="0.018"
-                      fill="hsla(200,55%,75%,0.45)" style={{ letterSpacing: "0.15em" }}>
+                      <text x={lyToMagR(d) + 0.014} y={0.018} fontSize="0.024"
+                        fill="hsla(200,65%,82%,0.72)" style={{ letterSpacing: "0.15em" }}>
                       {d} ly
                     </text>
                   </g>
@@ -527,8 +527,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
                       <text
                         x={Math.cos(a) * (MAG_R - 0.058)}
                         y={-Math.sin(a) * (MAG_R - 0.058)}
-                        fontSize="0.018" textAnchor="middle" dominantBaseline="middle"
-                        fill="hsla(180,55%,80%,0.55)"
+                        fontSize="0.024" textAnchor="middle" dominantBaseline="middle"
+                        fill="hsla(180,62%,84%,0.74)"
                         style={{ letterSpacing: "0.1em" }}>
                         ℓ{ell}°
                       </text>
@@ -577,19 +577,19 @@ export const MilkyWayMap = ({ layer }: Props) => {
                   const [x, y] = polarLy(s.ell, s.ly);
                   return (
                     <g key={i}>
-                      <circle cx={x} cy={y} r={0.011 * s.mag}
-                        fill={`hsla(${s.hue},85%,88%,0.30)`} />
-                      <circle cx={x} cy={y} r={0.0045}
+                      <circle cx={x} cy={y} r={0.015 * s.mag}
+                        fill={`hsla(${s.hue},85%,88%,0.45)`} />
+                      <circle cx={x} cy={y} r={0.0065}
                         fill={`hsla(${s.hue},90%,92%,1)`} />
-                      <text x={x + 0.010} y={y - 0.006}
-                        fontSize="0.019"
+                      <text x={x + 0.016} y={y - 0.009}
+                        fontSize="0.026"
                         fill={`hsla(${s.hue},70%,90%,0.95)`}
                         style={{ letterSpacing: "0.08em" }}>
                         {s.name}
                       </text>
-                      <text x={x + 0.010} y={y + 0.012}
-                        fontSize="0.014"
-                        fill="hsla(0,0%,100%,0.45)"
+                      <text x={x + 0.016} y={y + 0.018}
+                        fontSize="0.019"
+                        fill="hsla(0,0%,100%,0.62)"
                         style={{ letterSpacing: "0.08em" }}>
                         {s.ly} ly
                       </text>
@@ -613,14 +613,14 @@ export const MilkyWayMap = ({ layer }: Props) => {
               </g>
 
               {/* Magnifier title */}
-              <text x={MAG_CX} y={MAG_CY - MAG_R - 0.025}
-                fontSize="0.032" textAnchor="middle"
+              <text x={MAG_CX} y={MAG_CY - MAG_R - 0.04}
+                fontSize="0.04" textAnchor="middle"
                 fill="hsla(180,85%,88%,0.95)" style={{ letterSpacing: "0.22em" }}>
                 LOCAL BUBBLE · SOLAR NEIGHBORHOOD
               </text>
-              <text x={MAG_CX} y={MAG_CY + MAG_R + 0.04}
-                fontSize="0.022" textAnchor="middle"
-                fill="hsla(0,0%,100%,0.5)" style={{ letterSpacing: "0.2em" }}>
+              <text x={MAG_CX} y={MAG_CY + MAG_R + 0.055}
+                fontSize="0.028" textAnchor="middle"
+                fill="hsla(0,0%,100%,0.64)" style={{ letterSpacing: "0.2em" }}>
                 ZOOM ×{Math.round((DISK_R / lyToMag(50_000)))}  ·  Sun in G-Cloud / LIC interface
               </text>
             </g>
