@@ -91,8 +91,8 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "harmonics",
-    card: "Primordial Harmonics",
-    title: "Primordial Harmonics",
+    card: "Acoustic Oscillations",
+    title: "Baryon Acoustic Oscillations",
     question: "What original resonant modes shaped large-scale organization?",
     metrics: [
       { label: "BAO Scale", value: "150", unit: "Mpc" },
