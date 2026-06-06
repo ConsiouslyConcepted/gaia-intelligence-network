@@ -287,13 +287,8 @@ const Index = () => {
           </div>
         </HudPanel>
       </div>
-      {/* Corner brackets — sharper, longer */}
-      {[
-        "bottom-3 left-3 border-l border-b",
-        "bottom-3 right-3 border-r border-b",
-      ].map((pos) => (
-        <div key={pos} className={`absolute ${pos} w-8 h-8 border-foreground/20 z-10 pointer-events-none`} />
-      ))}
+      {/* Corner brackets removed */}
+
 
       {/* ─── BOTTOM TELEMETRY CHROME ─── */}
       <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 pointer-events-none">
