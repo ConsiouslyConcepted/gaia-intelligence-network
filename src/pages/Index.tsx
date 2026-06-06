@@ -235,10 +235,7 @@ const Index = () => {
       </div>
 
       {/* ─── LEFT HUD: All Spheres ─── */}
-      <div
-        className="absolute top-1/2 -translate-y-[44%] z-10 flex flex-col pointer-events-none w-[250px]"
-        style={{ left: "max(1rem, calc((100vw - 1600px) / 2 + 1rem))" }}
-      >
+      <div className="absolute left-4 top-1/2 -translate-y-[44%] z-10 flex flex-col pointer-events-none w-[250px]">
         <HudPanel className="pointer-events-auto p-4 pb-5 h-[620px] w-full flex flex-col">
           <div className="flex items-center justify-between mb-3 shrink-0">
             <span className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/40 font-medium">Sphere Systems</span>
