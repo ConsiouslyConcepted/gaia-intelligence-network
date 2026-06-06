@@ -182,7 +182,7 @@ const Galactic = () => {
 
       {/* Center stage */}
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-4 px-4">
-        <div className="pointer-events-auto relative aspect-square w-full max-w-[760px] xl:max-w-[780px] 2xl:max-w-[800px]">
+        <div className="pointer-events-auto relative aspect-square w-full max-w-[760px] xl:w-[min(760px,calc(100vh-320px),100%)] 2xl:w-[min(780px,calc(100vh-320px),100%)]">
           <MilkyWayMap layer={layer} />
         </div>
       </div>
