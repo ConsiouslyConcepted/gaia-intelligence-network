@@ -186,7 +186,7 @@ const SpacetimeView = ({ tick }: { tick: number }) => {
   const shells = [0.28, 0.5, 0.72, 0.92];
 
   return (
-    <svg viewBox="-1.1 -1.1 2.2 2.2" className="w-full h-full">
+    <svg viewBox="-1.4 -1.4 2.8 2.8" className="w-full h-full">
       {/* expansion shells */}
       {shells.map((r, i) => {
         const breathe = 1 + Math.sin(tick * 0.6 + i * 0.5) * 0.015;
