@@ -540,8 +540,10 @@ export const MilkyWayMap = ({ layer }: Props) => {
 
                 {/* Loop I superbubble — center ℓ≈329°, ~130 pc (425 ly) */}
                 {(() => {
-                  const [lx, ly] = polarLy(329, 220);
-                  const rr = lyToMagR(180);
+                  const [baseX, baseY] = polarLy(329, 78);
+                  const lx = baseX * MAG_DETAIL_SCALE;
+                  const ly = baseY * MAG_DETAIL_SCALE;
+                  const rr = lyToMagR(42) * MAG_DETAIL_SCALE;
                   return (
                     <g>
                       <circle cx={lx} cy={ly} r={rr}
@@ -559,13 +561,13 @@ export const MilkyWayMap = ({ layer }: Props) => {
 
                 {/* G-Cloud — symbolic shell around Sun (~15 ly extent) */}
                 <ellipse cx={0} cy={0}
-                  rx={lyToMagR(15)} ry={lyToMagR(11)}
+                  rx={lyToMagR(15) * MAG_DETAIL_SCALE} ry={lyToMagR(11) * MAG_DETAIL_SCALE}
                   fill="hsla(155,60%,55%,0.18)"
                   stroke="hsla(155,78%,82%,0.82)" strokeWidth={0.0045}
                   strokeDasharray="0.008 0.010" />
                 {/* LIC — Local Interstellar Cloud (~7 ly, touching Sun) */}
-                <ellipse cx={lyToMagR(3.5)} cy={lyToMagR(2)}
-                  rx={lyToMagR(8)} ry={lyToMagR(5)}
+                <ellipse cx={lyToMagR(3.5) * MAG_DETAIL_SCALE} cy={lyToMagR(2) * MAG_DETAIL_SCALE}
+                  rx={lyToMagR(8) * MAG_DETAIL_SCALE} ry={lyToMagR(5) * MAG_DETAIL_SCALE}
                   fill="hsla(190,60%,55%,0.2)"
                   stroke="hsla(190,82%,84%,0.9)" strokeWidth={0.0045} />
                 <text x={0} y={-0.055} fontSize="0.048" textAnchor="middle"
@@ -576,7 +578,7 @@ export const MilkyWayMap = ({ layer }: Props) => {
                   fill="hsla(155,78%,84%,0.9)" style={{ letterSpacing: "0.04em" }}>
                   G-CLOUD
                 </text>
-                <text x={lyToMagR(3.5)} y={lyToMagR(2) + 0.072} fontSize="0.036" textAnchor="middle"
+                <text x={lyToMagR(3.5) * MAG_DETAIL_SCALE} y={lyToMagR(2) * MAG_DETAIL_SCALE + 0.072} fontSize="0.036" textAnchor="middle"
                   fill="hsla(190,82%,86%,0.92)" style={{ letterSpacing: "0.04em" }}>
                   LIC
                 </text>
