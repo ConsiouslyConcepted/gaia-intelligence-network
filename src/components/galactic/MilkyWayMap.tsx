@@ -497,16 +497,16 @@ export const MilkyWayMap = ({ layer }: Props) => {
 
               <g clipPath="url(#mag-clip)" transform={`translate(${MAG_CX},${MAG_CY})`}>
                 {/* faint backdrop field */}
-                <circle cx={0} cy={0} r={MAG_R} fill="url(#g-disk)" opacity={0.4} />
+                <circle cx={0} cy={0} r={MAG_R} fill="url(#g-disk)" opacity={0.72} />
 
                 {/* distance rings — log-spaced (10, 30, 100, 300 ly) */}
                 {[10, 30, 100, 300].map((d) => (
                   <g key={d}>
-                    <circle cx={0} cy={0} r={lyToMagR(d)} fill="none"
-                      stroke="hsla(200,55%,70%,0.18)" strokeWidth={0.002}
+                      <circle cx={0} cy={0} r={lyToMagR(d)} fill="none"
+                        stroke="hsla(200,60%,76%,0.34)" strokeWidth={0.0045}
                       strokeDasharray="0.010 0.012" />
-                      <text x={lyToMagR(d) + 0.014} y={0.018} fontSize="0.024"
-                        fill="hsla(200,65%,82%,0.72)" style={{ letterSpacing: "0.15em" }}>
+                      <text x={lyToMagR(d) + 0.02} y={0.026} fontSize="0.045"
+                        fill="hsla(200,72%,88%,0.9)" style={{ letterSpacing: "0.08em" }}>
                       {d} ly
                     </text>
                   </g>
@@ -523,13 +523,13 @@ export const MilkyWayMap = ({ layer }: Props) => {
                       <line
                         x1={Math.cos(a) * r1} y1={-Math.sin(a) * r1}
                         x2={Math.cos(a) * r2} y2={-Math.sin(a) * r2}
-                        stroke="hsla(180,60%,75%,0.4)" strokeWidth={0.0025} />
+                        stroke="hsla(180,65%,80%,0.58)" strokeWidth={0.004} />
                       <text
                         x={Math.cos(a) * (MAG_R - 0.058)}
                         y={-Math.sin(a) * (MAG_R - 0.058)}
-                        fontSize="0.024" textAnchor="middle" dominantBaseline="middle"
-                        fill="hsla(180,62%,84%,0.74)"
-                        style={{ letterSpacing: "0.1em" }}>
+                        fontSize="0.038" textAnchor="middle" dominantBaseline="middle"
+                        fill="hsla(180,72%,88%,0.88)"
+                        style={{ letterSpacing: "0.04em" }}>
                         ℓ{ell}°
                       </text>
                     </g>
@@ -537,8 +537,8 @@ export const MilkyWayMap = ({ layer }: Props) => {
                 })}
 
                 {/* Local Bubble — irregular cavity (~150 ly radius) */}
-                <path d={bubblePts} fill="hsla(180,70%,55%,0.06)"
-                  stroke="hsla(180,85%,80%,0.75)" strokeWidth={0.0045}
+                <path d={bubblePts} fill="hsla(180,70%,55%,0.12)"
+                  stroke="hsla(180,88%,84%,0.92)" strokeWidth={0.007}
                   strokeDasharray="0.018 0.014" />
 
                 {/* Loop I superbubble — center ℓ≈329°, ~130 pc (425 ly) */}
@@ -548,12 +548,12 @@ export const MilkyWayMap = ({ layer }: Props) => {
                   return (
                     <g>
                       <circle cx={lx} cy={ly} r={rr}
-                        fill="hsla(265,60%,55%,0.05)"
-                        stroke="hsla(265,70%,82%,0.55)" strokeWidth={0.003}
+                        fill="hsla(265,60%,55%,0.1)"
+                        stroke="hsla(265,72%,84%,0.75)" strokeWidth={0.005}
                         strokeDasharray="0.014 0.014" />
-                      <text x={lx} y={ly - rr - 0.012}
-                        fontSize="0.020" textAnchor="middle"
-                        fill="hsla(265,65%,85%,0.8)" style={{ letterSpacing: "0.18em" }}>
+                      <text x={lx} y={ly - rr - 0.022}
+                        fontSize="0.042" textAnchor="middle"
+                        fill="hsla(265,72%,88%,0.94)" style={{ letterSpacing: "0.06em" }}>
                         LOOP I
                       </text>
                     </g>
