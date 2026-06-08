@@ -48,11 +48,8 @@ export function longitudeToSign(lon: number): { sign: SignMeta; degInSign: numbe
   return { sign: SIGNS[idx], degInSign: norm - idx * 30 };
 }
 
-// Major aspects with standard orbs
-export const ASPECTS = [
-  { name: "conjunction", angle:   0, orb: 8, color: "hsl(45, 80%, 70%)"  },
-  { name: "sextile",     angle:  60, orb: 4, color: "hsl(180, 50%, 65%)" },
-  { name: "square",      angle:  90, orb: 6, color: "hsl(0, 60%, 55%)"   },
-  { name: "trine",       angle: 120, orb: 6, color: "hsl(140, 45%, 60%)" },
-  { name: "opposition",  angle: 180, orb: 8, color: "hsl(280, 40%, 65%)" },
-] as const;
+// Keplerian aspect set — re-exported from harmonics.ts so the chart and
+// ephemeris stay in sync. Includes the classical 5 plus Kepler's minor
+// aspects derived from harmonic polygons (quintile, biquintile, semi-sextile,
+// quincunx, semi-square, sesquiquadrate).
+export { KEPLER_ASPECTS as ASPECTS } from "./harmonics";

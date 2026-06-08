@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { SIGNS, PLANET_GLYPHS, longitudeToSign } from "@/lib/astrology/constants";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
+import { polygonAngles } from "@/lib/astrology/harmonics";
 import { STATIONS } from "@/lib/astrology/seasons";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
   onSignClick: (id: string) => void;
   onPlanetClick: (id: string) => void;
   onPlanetContext?: (id: string) => void;
+  /** When true, draws the regular/star polygon that generates each active aspect. */
+  showPolygons?: boolean;
 }
 
 const SIZE = 720;
@@ -59,7 +62,7 @@ function constellationDots(seed: number): { x: number; y: number; r: number }[] 
   return dots;
 }
 
-export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext }: Props) {
+export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
@@ -267,6 +270,35 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
           />
         );
       })}
+
+      {/* Keplerian polygon overlay — generating polygon for each active aspect */}
+      {showPolygons && (
+        <g opacity={0.55}>
+          {aspects.map((asp, i) => {
+            if (asp.polygonSides < 2) return null;
+            const a = placed.get(asp.a);
+            if (!a) return null;
+            const angles = polygonAngles(a.angle, asp.angle);
+            if (angles.length < 2) return null;
+            const pts = angles.map((deg) => polar(C, C, R_ASPECT, deg));
+            const d = pts.map((p, idx) => `${idx === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
+            const highlight = selectedPlanet === asp.a || selectedPlanet === asp.b;
+            const exactness = Math.max(0, 1 - asp.orb / 8);
+            return (
+              <path
+                key={`poly-${i}`}
+                d={d}
+                fill="none"
+                stroke={asp.color}
+                strokeWidth={highlight ? 1.1 : 0.55}
+                strokeOpacity={highlight ? 0.85 : 0.18 + 0.22 * exactness}
+                strokeLinejoin="round"
+                strokeDasharray={asp.tier === "minor" ? "2 3" : undefined}
+              />
+            );
+          })}
+        </g>
+      )}
 
       {/* Aspect lines */}
       <g opacity={selectedPlanet ? 0.25 : 0.55}>
