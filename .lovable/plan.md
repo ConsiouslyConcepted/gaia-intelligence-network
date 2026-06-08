@@ -1,81 +1,39 @@
-# Seasons & Cycles — Implementation Plan
+# Keplerian Harmonic Configurations on the Transits Page
 
-Tie Earth's seasonal cycle into the live ephemeris already powering Transits, then surface the ecological consequences on the Biosphere page. Both panels read from the same `astronomy-engine` source — no new data dependencies.
+Make Book IV of *Harmonice Mundi* legible on the live astrology view: aspects shown as the **polygons that generate them**, tagged with their **musical-interval equivalents**, and ranked by **harmonic consonance**.
 
-## 1. Shared seasonal engine
+## What this adds
 
-New file: `src/lib/astrology/seasons.ts`
+1. **Expanded Keplerian aspect set** — beyond the classical 5, include the aspects Kepler derived from harmonic polygons: semi-sextile (30°), semi-square (45°), quintile (72°), sesquiquadrate (135°), biquintile (144°), and quincunx (150°). Each carries: generating polygon, musical-interval ID, consonance weight, and tighter orbs for "minor" aspects.
+2. **Polygon overlay on the wheel** — toggle-able layer that, for each active aspect, draws the generating regular polygon (triangle for trine, square for square, pentagon for quintile, hexagon for sextile, etc.) inscribed in the chart, anchored to the two planets forming the aspect.
+3. **Musical-interval mapping in the sidebar** — each active aspect row shows its corresponding interval glyph + ratio (e.g. *Trine · △ · P5 · 3:2*), with consonant/dissonant tinting.
+4. **Harmonic Field readout** — small panel in `TransitsPanel` showing aggregate consonance score, most-consonant active aspect, most-dissonant active aspect, and applying/separating indicator per aspect.
 
-Pure functions derived from the Sun's geocentric ecliptic longitude (already computed in `src/lib/astrology/ephemeris.ts`):
+## Files
 
-- `getSolarLongitude(date)` — reuses ephemeris Sun position
-- `getSeasonalPhase(date)` — returns `{ season, hemisphere, nextStation, daysUntil, progressInSeason }` where stations are the 8 wheel-of-the-year points (4 cardinal + 4 cross-quarter)
-- `getDayLength(date, latitude)` — civil day length at a reference latitude (default 0°, user-toggleable to 45°N/S)
-- `getSunDeclination(date)` — for visualising axial tilt effect
-- `getEarthOrbitalPosition(date)` — true anomaly + distance to perihelion/aphelion
-- `getCarbonFluxSign(date, hemisphere)` — sign-only proxy: NH drawdown Apr–Sep, release Oct–Mar; inverse for SH
+**New**
+- `src/lib/astrology/harmonics.ts` — Keplerian aspect catalog with polygon sides, interval mapping (links to `INTERVALS` in `musicGeometry.ts`), consonance weights, and helper `scoreHarmonicField(aspects)`.
 
-Station table (longitude-based, not date-based, so it stays correct across years):
-- 0° Aries → March Equinox (Ostara)
-- 45° Taurus → Beltane
-- 90° Cancer → June Solstice (Litha)
-- 135° Leo → Lughnasadh
-- 180° Libra → September Equinox (Mabon)
-- 225° Scorpio → Samhain
-- 270° Capricorn → December Solstice (Yule)
-- 315° Aquarius → Imbolc
-
-## 2. Wheel of the Year ring — HGS Transits view
-
-Edit: `src/components/astrology/AstrologyChart.tsx` (or wrap it; pick whichever is cleaner once read)
-
-Add a concentric ring outside the existing zodiac band:
-
-- 8 tick marks at the station longitudes with glyph + name on hover
-- Highlighted arc between previous and next station showing current position
-- Subtle seasonal tint to the arc segment (spring/summer/autumn/winter) — kept within the monochromatic palette using opacity rather than hue, except the existing astrology cream/gold (per memory exception)
-- Small marker on the Sun's current longitude that doubles as a "you are here" indicator
-
-New sidebar block in `src/components/astrology/TransitsPanel.tsx` or `ZodiacSidebar.tsx`:
-- Current season, hemisphere selector (N/S)
-- Solar longitude (e.g. "76° 12′")
-- Next station + days until
-- Day length at selected reference latitude
-
-## 3. Seasonal Response card — Biosphere page
-
-New file: `src/components/sphere-detail/SeasonalResponseCard.tsx`
-
-Rendered inside the Biosphere live state (`src/components/sphere-detail/live-state/BiosphereLiveState.tsx`) as an additional card.
-
-Contents:
-- Mini wheel-of-year strip (linear, not circular) showing current position between stations
-- Hemispheric NDVI phase indicator (growing / peak / senescing / dormant) derived from solar longitude + hemisphere
-- Carbon flux sign chip ("Drawdown" vs "Release") with caveat that it's a phase proxy, not a measured value
-- Day length at 45°N and 45°S side by side
-- Sun declination + Earth–Sun distance (perihelion/aphelion context)
-- One-line caption tying it back: "Axial tilt + orbital position → insolation → photosynthesis phase"
-
-## 4. Cross-quarter cultural layer
-
-Stations include both astronomical name (e.g. "June Solstice") and traditional name (e.g. "Litha"). Cultural names appear on hover/secondary text so the primary read stays scientific. No separate UI.
-
-## 5. Honesty & observability
-
-- Everything computed locally from `astronomy-engine` — consistent with the Transits panel
-- Carbon flux and NDVI phase are labelled as **phase proxies** (derived from solar geometry, not measured), matching the project's read-only observability stance
-- No new external API dependencies
+**Edited**
+- `src/lib/astrology/constants.ts` — extend `ASPECTS` array with Keplerian additions (kept backward-compatible via additional metadata fields).
+- `src/lib/astrology/ephemeris.ts` — `computeAspects` returns the richer aspect record (polygon, intervalId, applying/separating flag computed from a +1h sample).
+- `src/components/astrology/AstrologyChart.tsx` — add an `<PolygonOverlay>` group rendered when `showPolygons` is true; draws the generating polygon for each active aspect using planet positions as polygon vertices (rotated copies around the chart center).
+- `src/components/astrology/TransitsPanel.tsx` — add (a) a "Polygons" toggle, (b) a "Harmonic Field" block with aggregate score and best/worst aspect, and (c) per-aspect rows beneath the planet list showing aspect · polygon glyph · interval · orb · applying/separating arrow.
 
 ## Technical notes
 
-- `astronomy-engine` already in deps; `Astronomy.Seasons(year)` gives exact equinox/solstice timestamps — use as ground truth for the 4 cardinal points and interpolate cross-quarters from solar longitude
-- Reuse existing color tokens; no new palette entries
-- Hemisphere toggle persists in component state only (no global store change)
+- **Aspect catalog shape:** `{ name, angle, orb, color, polygonSides, intervalId, consonance: 0..1 }`. Orbs: majors keep current values; minors get tighter orbs (1.5–2°) so the chart doesn't get noisy.
+- **Polygon rendering:** for an aspect at angle θ between planets A and B, the generating polygon has `n = 360/θ` sides; render the n-gon inscribed at `R_ASPECT` rotated so one vertex sits on planet A. Stroke uses the aspect color at low opacity (~0.25) with the active pair highlighted brighter.
+- **Applying/separating:** sample positions at `t` and `t + 1h`; if |Δlongitude − exact aspect angle| shrinks, the aspect is applying.
+- **Interval mapping** (initial table): conjunction→unison, opposition→P8 (2:1), trine→P5 (3:2), square→P4 (4:3), sextile→M6 (5:3), quintile→M3 (5:4), biquintile→m6 (8:5), semi-sextile→M2 (9:8), sesquiquadrate→tritone, quincunx→m7. Pulls ratio strings from existing `INTERVALS`.
+- **Consonance weights** drive both the aggregate "Harmonic Field" score and a subtle tint (consonant = neutral warm, dissonant = cooler/desaturated) — stays within the monochromatic + cream/gold astrology palette.
+- **Performance:** polygon overlay renders only for aspects within orb; capped to top-N tightest if needed.
+- **No new dependencies.** No backend changes. Pure presentation layer on top of existing ephemeris.
 
-## Files touched
+## Out of scope (deferred)
 
-- New: `src/lib/astrology/seasons.ts`
-- New: `src/components/sphere-detail/SeasonalResponseCard.tsx`
-- Edit: `src/components/astrology/AstrologyChart.tsx` — add outer ring
-- Edit: `src/components/astrology/TransitsPanel.tsx` or `ZodiacSidebar.tsx` — add seasonal block
-- Edit: `src/components/sphere-detail/live-state/BiosphereLiveState.tsx` — mount new card
+- Right-click-to-play dyad audio on aspect lines (would extend `useChordPlayer`).
+- "Today's chord" stacked-interval summary card.
+- Polygon-of-the-day historical timeline.
+
+Confirm and I'll implement.
