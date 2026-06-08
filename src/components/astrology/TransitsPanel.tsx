@@ -1,7 +1,7 @@
 import { useMemo, useState } from "react";
 import { PLANET_GLYPHS, SIGNS } from "@/lib/astrology/constants";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
-import { scoreHarmonicField } from "@/lib/astrology/harmonics";
+import { KEPLER_ASPECTS, scoreHarmonicField } from "@/lib/astrology/harmonics";
 import { getSeasonalPhase, getDayLength, formatDegMin, type Hemisphere } from "@/lib/astrology/seasons";
 
 interface Props {
@@ -13,19 +13,38 @@ interface Props {
   timestamp: Date;
   showPolygons: boolean;
   onTogglePolygons: () => void;
+  selectedAspectKey: string | null;
+  onAspectClick: (key: string | null) => void;
 }
 
-export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet, onPlanetClick, timestamp, showPolygons, onTogglePolygons }: Props) {
+type TierFilter = "all" | "major" | "minor";
+
+export const aspectKey = (a: string, b: string, name: string) => `${a}-${b}-${name}`;
+
+export function TransitsPanel({
+  positions,
+  aspects,
+  selectedSign,
+  selectedPlanet,
+  onPlanetClick,
+  timestamp,
+  showPolygons,
+  onTogglePolygons,
+  selectedAspectKey,
+  onAspectClick,
+}: Props) {
   const visible = selectedSign
     ? positions.filter((p) => p.signId === selectedSign)
     : positions;
 
   const signMeta = selectedSign ? SIGNS.find((s) => s.id === selectedSign) : null;
   const [hemi, setHemi] = useState<Hemisphere>("N");
+  const [tier, setTier] = useState<TierFilter>("all");
+  const [legendOpen, setLegendOpen] = useState<boolean>(false);
   const phase = useMemo(() => getSeasonalPhase(timestamp, hemi), [timestamp, hemi]);
   const dayLen = useMemo(() => getDayLength(timestamp, hemi === "N" ? 45 : -45), [timestamp, hemi]);
 
-  // Aspects relevant to the current selection (planet > sign > all).
+  // Aspects relevant to current selection + tier filter.
   const visibleAspects = useMemo(() => {
     let list = aspects;
     if (selectedPlanet) {
@@ -34,8 +53,9 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
       const signPlanets = new Set(positions.filter((p) => p.signId === selectedSign).map((p) => p.id));
       list = list.filter((x) => signPlanets.has(x.a) || signPlanets.has(x.b));
     }
+    if (tier !== "all") list = list.filter((x) => x.tier === tier);
     return [...list].sort((a, b) => a.orb - b.orb);
-  }, [aspects, selectedPlanet, selectedSign, positions]);
+  }, [aspects, selectedPlanet, selectedSign, positions, tier]);
 
   const field = useMemo(() => scoreHarmonicField(aspects), [aspects]);
 
@@ -50,7 +70,7 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
         </p>
       </div>
 
-      {/* Harmonic Field — aggregate Keplerian consonance */}
+      {/* Harmonic Field */}
       <div className="px-3 py-2.5 border-b border-border/15 space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-foreground/70">Harmonic Field</span>
@@ -82,7 +102,6 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
             <div className="text-muted-foreground/45 font-mono">{field.count} active</div>
           </div>
         </div>
-        {/* Consonance bar */}
         <div className="h-[3px] rounded-full overflow-hidden" style={{ background: "hsla(220, 15%, 30%, 0.4)" }}>
           <div
             className="h-full transition-all"
@@ -92,9 +111,29 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
             }}
           />
         </div>
+
+        {/* Polygon legend — collapsible */}
+        <button
+          onClick={() => setLegendOpen((v) => !v)}
+          className="w-full flex items-center justify-between text-[8.5px] uppercase tracking-wider text-muted-foreground/55 hover:text-foreground/75 pt-1.5"
+        >
+          <span>Polygon legend</span>
+          <span>{legendOpen ? "−" : "+"}</span>
+        </button>
+        {legendOpen && (
+          <div className="grid grid-cols-2 gap-x-2 gap-y-0.5 pt-1">
+            {KEPLER_ASPECTS.map((a) => (
+              <div key={a.name} className="flex items-center gap-1.5 text-[8.5px]">
+                <span style={{ color: a.color, width: 10, textAlign: "center", fontSize: "10px" }}>{a.polygonGlyph}</span>
+                <span className="text-foreground/70 uppercase tracking-wider truncate">{a.name}</span>
+                <span className="text-muted-foreground/40 font-mono ml-auto">{a.angle}°</span>
+              </div>
+            ))}
+          </div>
+        )}
       </div>
 
-      {/* Wheel of the Year — seasonal context */}
+      {/* Wheel of the Year */}
       <div className="px-3 py-2.5 border-b border-border/15 space-y-1.5">
         <div className="flex items-center justify-between">
           <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-foreground/70">Wheel of the Year</span>
@@ -177,13 +216,30 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
         })}
       </div>
 
-      {/* Aspects — Keplerian configurations as musical intervals */}
+      {/* Aspects */}
       <div className="px-3 py-2 flex-1">
         <div className="flex items-center justify-between mb-1.5">
           <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-foreground/70">
             {selectedPlanet ? "Selected Aspects" : selectedSign ? "Sign Aspects" : "Active Aspects"}
           </span>
-          <span className="text-[8.5px] text-muted-foreground/45 font-mono">{visibleAspects.length}</span>
+          <div className="flex items-center gap-1.5">
+            <div className="flex rounded overflow-hidden border border-border/20 text-[8px] uppercase tracking-wider">
+              {(["all","major","minor"] as TierFilter[]).map((t) => (
+                <button
+                  key={t}
+                  onClick={() => setTier(t)}
+                  className="px-1.5 py-0.5 transition-colors"
+                  style={{
+                    background: tier === t ? "hsla(40, 60%, 70%, 0.18)" : "transparent",
+                    color: tier === t ? "hsl(40, 60%, 80%)" : "hsla(220, 10%, 65%, 0.7)",
+                  }}
+                >
+                  {t}
+                </button>
+              ))}
+            </div>
+            <span className="text-[8.5px] text-muted-foreground/45 font-mono">{visibleAspects.length}</span>
+          </div>
         </div>
         {visibleAspects.length === 0 && (
           <div className="text-[10px] text-muted-foreground/45 px-1 py-2">
@@ -191,17 +247,27 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
           </div>
         )}
         <div className="space-y-0.5">
-          {visibleAspects.slice(0, 18).map((x, i) => {
+          {visibleAspects.slice(0, 24).map((x) => {
             const aMeta = PLANET_GLYPHS[x.a];
             const bMeta = PLANET_GLYPHS[x.b];
             if (!aMeta || !bMeta) return null;
             const orbDeg = Math.floor(x.orb);
             const orbMin = Math.floor((x.orb - orbDeg) * 60);
+            const key = aspectKey(x.a, x.b, x.name);
+            const isSel = selectedAspectKey === key;
             return (
-              <div
-                key={i}
-                className="flex items-center gap-2 px-1.5 py-1 rounded text-[9px]"
-                style={{ background: x.tier === "major" ? "hsla(220, 15%, 50%, 0.05)" : "transparent" }}
+              <button
+                key={key}
+                onClick={() => onAspectClick(isSel ? null : key)}
+                className="w-full flex items-center gap-2 px-1.5 py-1 rounded text-[9px] text-left transition-colors"
+                style={{
+                  background: isSel
+                    ? "hsla(40, 60%, 65%, 0.16)"
+                    : x.tier === "major"
+                      ? "hsla(220, 15%, 50%, 0.05)"
+                      : "transparent",
+                  border: `1px solid ${isSel ? "hsla(40, 60%, 70%, 0.35)" : "transparent"}`,
+                }}
               >
                 <span style={{ color: x.color, fontSize: "11px", width: 10, textAlign: "center" }}>{x.polygonGlyph}</span>
                 <span style={{ color: aMeta.color, fontFamily: "serif", fontSize: "12px" }}>{aMeta.glyph}</span>
@@ -220,7 +286,7 @@ export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet
                     {x.applying ? "↗ apply" : "↘ sep"}
                   </div>
                 </div>
-              </div>
+              </button>
             );
           })}
         </div>
