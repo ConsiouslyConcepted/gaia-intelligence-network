@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { SIGNS, PLANET_GLYPHS, longitudeToSign } from "@/lib/astrology/constants";
 import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
+import { polygonAngles } from "@/lib/astrology/harmonics";
 import { STATIONS } from "@/lib/astrology/seasons";
 
 interface Props {
@@ -11,6 +12,8 @@ interface Props {
   onSignClick: (id: string) => void;
   onPlanetClick: (id: string) => void;
   onPlanetContext?: (id: string) => void;
+  /** When true, draws the regular/star polygon that generates each active aspect. */
+  showPolygons?: boolean;
 }
 
 const SIZE = 720;
@@ -59,7 +62,7 @@ function constellationDots(seed: number): { x: number; y: number; r: number }[] 
   return dots;
 }
 
-export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext }: Props) {
+export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
