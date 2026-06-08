@@ -14,6 +14,8 @@ interface Props {
   onPlanetContext?: (id: string) => void;
   /** When true, draws the regular/star polygon that generates each active aspect. */
   showPolygons?: boolean;
+  /** Key from TransitsPanel.aspectKey — isolates that one aspect on the wheel. */
+  selectedAspectKey?: string | null;
 }
 
 const SIZE = 720;
@@ -62,7 +64,7 @@ function constellationDots(seed: number): { x: number; y: number; r: number }[] 
   return dots;
 }
 
-export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false }: Props) {
+export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false, selectedAspectKey = null }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
