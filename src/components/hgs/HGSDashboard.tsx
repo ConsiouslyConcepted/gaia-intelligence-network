@@ -196,6 +196,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               onPlanetContext={() => { /* tone playback disabled */ }}
               showPolygons={showPolygons}
+              selectedAspectKey={selectedAspectKey}
             />
           </div>
         ) : (
