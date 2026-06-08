@@ -271,6 +271,35 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })}
 
+      {/* Keplerian polygon overlay — generating polygon for each active aspect */}
+      {showPolygons && (
+        <g opacity={0.55}>
+          {aspects.map((asp, i) => {
+            if (asp.polygonSides < 2) return null;
+            const a = placed.get(asp.a);
+            if (!a) return null;
+            const angles = polygonAngles(a.angle, asp.angle);
+            if (angles.length < 2) return null;
+            const pts = angles.map((deg) => polar(C, C, R_ASPECT, deg));
+            const d = pts.map((p, idx) => `${idx === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
+            const highlight = selectedPlanet === asp.a || selectedPlanet === asp.b;
+            const exactness = Math.max(0, 1 - asp.orb / 8);
+            return (
+              <path
+                key={`poly-${i}`}
+                d={d}
+                fill="none"
+                stroke={asp.color}
+                strokeWidth={highlight ? 1.1 : 0.55}
+                strokeOpacity={highlight ? 0.85 : 0.18 + 0.22 * exactness}
+                strokeLinejoin="round"
+                strokeDasharray={asp.tier === "minor" ? "2 3" : undefined}
+              />
+            );
+          })}
+        </g>
+      )}
+
       {/* Aspect lines */}
       <g opacity={selectedPlanet ? 0.25 : 0.55}>
         {aspects.map((asp, i) => {
