@@ -486,6 +486,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               timestamp={now}
               showPolygons={showPolygons}
               onTogglePolygons={() => setShowPolygons((v) => !v)}
+              selectedAspectKey={selectedAspectKey}
+              onAspectClick={setSelectedAspectKey}
             />
           ) : mode === "geometry" ? (
             <PairsPanel
