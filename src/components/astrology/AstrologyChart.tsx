@@ -14,6 +14,8 @@ interface Props {
   onPlanetContext?: (id: string) => void;
   /** When true, draws the regular/star polygon that generates each active aspect. */
   showPolygons?: boolean;
+  /** Key from TransitsPanel.aspectKey — isolates that one aspect on the wheel. */
+  selectedAspectKey?: string | null;
 }
 
 const SIZE = 720;
@@ -62,7 +64,7 @@ function constellationDots(seed: number): { x: number; y: number; r: number }[] 
   return dots;
 }
 
-export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false }: Props) {
+export function AstrologyChart({ positions, aspects, selectedSign, selectedPlanet, onSignClick, onPlanetClick, onPlanetContext, showPolygons = false, selectedAspectKey = null }: Props) {
   const segments = useMemo(() => SIGNS.map((s) => ({
     sign: s,
     start: s.startDeg,
@@ -282,7 +284,10 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
             if (angles.length < 2) return null;
             const pts = angles.map((deg) => polar(C, C, R_ASPECT, deg));
             const d = pts.map((p, idx) => `${idx === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ") + " Z";
-            const highlight = selectedPlanet === asp.a || selectedPlanet === asp.b;
+            const key = `${asp.a}-${asp.b}-${asp.name}`;
+            const isSel = selectedAspectKey === key;
+            const dimmed = selectedAspectKey && !isSel;
+            const highlight = isSel || selectedPlanet === asp.a || selectedPlanet === asp.b;
             const exactness = Math.max(0, 1 - asp.orb / 8);
             return (
               <path
@@ -290,8 +295,8 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
                 d={d}
                 fill="none"
                 stroke={asp.color}
-                strokeWidth={highlight ? 1.1 : 0.55}
-                strokeOpacity={highlight ? 0.85 : 0.18 + 0.22 * exactness}
+                strokeWidth={isSel ? 1.6 : highlight ? 1.1 : 0.55}
+                strokeOpacity={dimmed ? 0.05 : isSel ? 1 : highlight ? 0.85 : 0.18 + 0.22 * exactness}
                 strokeLinejoin="round"
                 strokeDasharray={asp.tier === "minor" ? "2 3" : undefined}
               />
@@ -301,14 +306,17 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       )}
 
       {/* Aspect lines */}
-      <g opacity={selectedPlanet ? 0.25 : 0.55}>
+      <g opacity={selectedPlanet || selectedAspectKey ? 0.25 : 0.55}>
         {aspects.map((asp, i) => {
           const a = placed.get(asp.a);
           const b = placed.get(asp.b);
           if (!a || !b) return null;
           const pa = polar(C, C, R_ASPECT, a.angle);
           const pb = polar(C, C, R_ASPECT, b.angle);
-          const highlight = selectedPlanet === asp.a || selectedPlanet === asp.b;
+          const key = `${asp.a}-${asp.b}-${asp.name}`;
+          const isSel = selectedAspectKey === key;
+          const dimmed = selectedAspectKey && !isSel;
+          const highlight = isSel || selectedPlanet === asp.a || selectedPlanet === asp.b;
           return (
             <line
               key={i}
@@ -317,8 +325,8 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               x2={pb.x}
               y2={pb.y}
               stroke={asp.color}
-              strokeWidth={highlight ? 1.4 : 0.7}
-              strokeOpacity={highlight ? 0.9 : 0.55}
+              strokeWidth={isSel ? 1.8 : highlight ? 1.4 : 0.7}
+              strokeOpacity={dimmed ? 0.08 : isSel ? 1 : highlight ? 0.9 : 0.55}
               strokeDasharray={asp.name === "square" || asp.name === "opposition" ? "3 3" : undefined}
             />
           );

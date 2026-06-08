@@ -96,6 +96,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
   const [selectedIntervalId, setSelectedIntervalId] = useState<string>("P5");
   const [selectedPairId, setSelectedPairId] = useState<string>("jup-mars");
   const [showPolygons, setShowPolygons] = useState<boolean>(false);
+  const [selectedAspectKey, setSelectedAspectKey] = useState<string | null>(null);
 
   const selectedInterval = useMemo(
     () => INTERVALS.find((i) => i.id === selectedIntervalId) ?? INTERVALS[1],
@@ -195,6 +196,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               onPlanetClick={(id) => setAstroSelected(astroSelected === id ? null : id)}
               onPlanetContext={() => { /* tone playback disabled */ }}
               showPolygons={showPolygons}
+              selectedAspectKey={selectedAspectKey}
             />
           </div>
         ) : (
@@ -484,6 +486,8 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               timestamp={now}
               showPolygons={showPolygons}
               onTogglePolygons={() => setShowPolygons((v) => !v)}
+              selectedAspectKey={selectedAspectKey}
+              onAspectClick={setSelectedAspectKey}
             />
           ) : mode === "geometry" ? (
             <PairsPanel
