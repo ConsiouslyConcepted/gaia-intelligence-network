@@ -1,17 +1,21 @@
 import { useMemo, useState } from "react";
 import { PLANET_GLYPHS, SIGNS } from "@/lib/astrology/constants";
-import type { PlanetPosition } from "@/lib/astrology/ephemeris";
+import type { PlanetPosition, AspectLink } from "@/lib/astrology/ephemeris";
+import { scoreHarmonicField } from "@/lib/astrology/harmonics";
 import { getSeasonalPhase, getDayLength, formatDegMin, type Hemisphere } from "@/lib/astrology/seasons";
 
 interface Props {
   positions: PlanetPosition[];
+  aspects: AspectLink[];
   selectedSign: string | null;
   selectedPlanet: string | null;
   onPlanetClick: (id: string) => void;
   timestamp: Date;
+  showPolygons: boolean;
+  onTogglePolygons: () => void;
 }
 
-export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlanetClick, timestamp }: Props) {
+export function TransitsPanel({ positions, aspects, selectedSign, selectedPlanet, onPlanetClick, timestamp, showPolygons, onTogglePolygons }: Props) {
   const visible = selectedSign
     ? positions.filter((p) => p.signId === selectedSign)
     : positions;
@@ -20,6 +24,20 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
   const [hemi, setHemi] = useState<Hemisphere>("N");
   const phase = useMemo(() => getSeasonalPhase(timestamp, hemi), [timestamp, hemi]);
   const dayLen = useMemo(() => getDayLength(timestamp, hemi === "N" ? 45 : -45), [timestamp, hemi]);
+
+  // Aspects relevant to the current selection (planet > sign > all).
+  const visibleAspects = useMemo(() => {
+    let list = aspects;
+    if (selectedPlanet) {
+      list = list.filter((x) => x.a === selectedPlanet || x.b === selectedPlanet);
+    } else if (selectedSign) {
+      const signPlanets = new Set(positions.filter((p) => p.signId === selectedSign).map((p) => p.id));
+      list = list.filter((x) => signPlanets.has(x.a) || signPlanets.has(x.b));
+    }
+    return [...list].sort((a, b) => a.orb - b.orb);
+  }, [aspects, selectedPlanet, selectedSign, positions]);
+
+  const field = useMemo(() => scoreHarmonicField(aspects), [aspects]);
 
   return (
     <div className="flex-1 overflow-y-auto flex flex-col">
@@ -30,6 +48,50 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
         <p className="text-[9px] text-muted-foreground/50 leading-snug">
           {timestamp.toUTCString().replace("GMT", "UTC")}
         </p>
+      </div>
+
+      {/* Harmonic Field — aggregate Keplerian consonance */}
+      <div className="px-3 py-2.5 border-b border-border/15 space-y-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-foreground/70">Harmonic Field</span>
+          <button
+            onClick={onTogglePolygons}
+            className="text-[8.5px] uppercase tracking-wider px-1.5 py-0.5 rounded border transition-colors"
+            style={{
+              background: showPolygons ? "hsla(40, 60%, 70%, 0.18)" : "transparent",
+              borderColor: "hsla(220, 15%, 60%, 0.25)",
+              color: showPolygons ? "hsl(40, 60%, 80%)" : "hsla(220, 10%, 70%, 0.75)",
+            }}
+            title="Toggle generating polygons on the wheel"
+          >
+            ▲ Polygons
+          </button>
+        </div>
+        <div className="flex items-end justify-between">
+          <div>
+            <div className="text-muted-foreground/45 uppercase tracking-wider text-[9px]">Consonance</div>
+            <div className="font-mono text-base leading-none text-foreground/90">{field.score}<span className="text-[10px] text-muted-foreground/55">/100</span></div>
+          </div>
+          <div className="text-right text-[9px] space-y-0.5">
+            {field.mostConsonant && (
+              <div className="text-foreground/75">▲ {field.mostConsonant.name}</div>
+            )}
+            {field.mostDissonant && field.mostDissonant.name !== field.mostConsonant?.name && (
+              <div className="text-muted-foreground/55">▼ {field.mostDissonant.name}</div>
+            )}
+            <div className="text-muted-foreground/45 font-mono">{field.count} active</div>
+          </div>
+        </div>
+        {/* Consonance bar */}
+        <div className="h-[3px] rounded-full overflow-hidden" style={{ background: "hsla(220, 15%, 30%, 0.4)" }}>
+          <div
+            className="h-full transition-all"
+            style={{
+              width: `${field.score}%`,
+              background: "linear-gradient(90deg, hsla(220, 15%, 70%, 0.7), hsla(40, 60%, 75%, 0.85))",
+            }}
+          />
+        </div>
       </div>
 
       {/* Wheel of the Year — seasonal context */}
@@ -65,8 +127,8 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
         </div>
       </div>
 
-      <div className="flex-1 px-2 py-2 space-y-0.5">
-
+      {/* Planets */}
+      <div className="px-2 py-2 space-y-0.5 border-b border-border/15">
         {visible.length === 0 && (
           <div className="text-[10px] text-muted-foreground/45 px-2 py-3">
             No planets currently in this sign.
@@ -113,6 +175,55 @@ export function TransitsPanel({ positions, selectedSign, selectedPlanet, onPlane
             </button>
           );
         })}
+      </div>
+
+      {/* Aspects — Keplerian configurations as musical intervals */}
+      <div className="px-3 py-2 flex-1">
+        <div className="flex items-center justify-between mb-1.5">
+          <span className="text-[9px] font-bold tracking-[0.15em] uppercase text-foreground/70">
+            {selectedPlanet ? "Selected Aspects" : selectedSign ? "Sign Aspects" : "Active Aspects"}
+          </span>
+          <span className="text-[8.5px] text-muted-foreground/45 font-mono">{visibleAspects.length}</span>
+        </div>
+        {visibleAspects.length === 0 && (
+          <div className="text-[10px] text-muted-foreground/45 px-1 py-2">
+            No aspects within orb.
+          </div>
+        )}
+        <div className="space-y-0.5">
+          {visibleAspects.slice(0, 18).map((x, i) => {
+            const aMeta = PLANET_GLYPHS[x.a];
+            const bMeta = PLANET_GLYPHS[x.b];
+            if (!aMeta || !bMeta) return null;
+            const orbDeg = Math.floor(x.orb);
+            const orbMin = Math.floor((x.orb - orbDeg) * 60);
+            return (
+              <div
+                key={i}
+                className="flex items-center gap-2 px-1.5 py-1 rounded text-[9px]"
+                style={{ background: x.tier === "major" ? "hsla(220, 15%, 50%, 0.05)" : "transparent" }}
+              >
+                <span style={{ color: x.color, fontSize: "11px", width: 10, textAlign: "center" }}>{x.polygonGlyph}</span>
+                <span style={{ color: aMeta.color, fontFamily: "serif", fontSize: "12px" }}>{aMeta.glyph}</span>
+                <span style={{ color: bMeta.color, fontFamily: "serif", fontSize: "12px" }}>{bMeta.glyph}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="text-foreground/80 uppercase tracking-wider truncate" style={{ fontSize: "9px" }}>
+                    {x.name}
+                  </div>
+                  <div className="text-muted-foreground/55 font-mono truncate" style={{ fontSize: "8.5px" }}>
+                    {x.intervalLabel}
+                  </div>
+                </div>
+                <div className="text-right font-mono text-muted-foreground/55" style={{ fontSize: "8.5px" }}>
+                  <div>{orbDeg}°{orbMin.toString().padStart(2, "0")}′</div>
+                  <div style={{ color: x.applying ? "hsla(140, 40%, 65%, 0.85)" : "hsla(220, 10%, 55%, 0.7)" }}>
+                    {x.applying ? "↗ apply" : "↘ sep"}
+                  </div>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       </div>
     </div>
   );
