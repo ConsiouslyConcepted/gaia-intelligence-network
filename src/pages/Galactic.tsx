@@ -33,7 +33,8 @@ const HudPanel = ({ children, className = "", topBar = false }: { children: Reac
 );
 
 const TOGGLE_BTN_BASE =
-  "min-w-[140px] text-center px-5 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
+  "min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
+
 
 const ACTIVE_BTN_STYLE: React.CSSProperties = {
   background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
