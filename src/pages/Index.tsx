@@ -152,8 +152,9 @@ const Index = () => {
       </div>
 
       <div className="absolute inset-0 z-[1] translate-y-[2%]">
-        <EarthVisualization />
+        <EarthVisualization activeSphereId={activeSphereId} hoveredSphereId={hoveredSphereId} />
       </div>
+
 
       {/* ─── TOP BAR ─── */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none px-4 pt-6">
