@@ -79,8 +79,7 @@ const Index = () => {
   }, [searchParams]);
   const [time, setTime] = useState(new Date());
   const [tick, setTick] = useState(0);
-  const [activeSphereId, setActiveSphereId] = useState<string | null>(null);
-  const [hoveredSphereId, setHoveredSphereId] = useState<string | null>(null);
+
 
 
   useEffect(() => {
