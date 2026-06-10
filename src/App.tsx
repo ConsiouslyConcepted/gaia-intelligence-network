@@ -8,6 +8,8 @@ import SphereDetail from "./pages/SphereDetail";
 import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
+import Universal from "./pages/Universal";
+
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -24,7 +26,9 @@ const App = () => (
           <Route path="/commons" element={<PlanetaryCommons />} />
           <Route path="/galactic" element={<Galactic />} />
           <Route path="/cosmological" element={<Cosmological />} />
+          <Route path="/universal" element={<Universal />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>
