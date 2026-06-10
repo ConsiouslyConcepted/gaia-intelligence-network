@@ -171,13 +171,7 @@ const OrbitalRing = ({ radius, color }: { radius: number; color: string }) => {
   );
 };
 
-export const EarthVisualization = ({
-  activeSphereId,
-  hoveredSphereId,
-}: {
-  activeSphereId?: string | null;
-  hoveredSphereId?: string | null;
-} = {}) => {
+export const EarthVisualization = () => {
   const navigate = useNavigate();
 
   // Compress outer shell radii toward the core so all orbiting spheres stay fully visible
@@ -192,10 +186,6 @@ export const EarthVisualization = ({
   const handleSphereClick = (id: string) => {
     navigate(`/sphere/${id}`);
   };
-
-  // Show shell only for the active or hovered sphere (active wins)
-  const focusedId = activeSphereId ?? hoveredSphereId ?? null;
-  const isPreview = !activeSphereId && !!hoveredSphereId;
 
   return (
     <div className="w-full h-full relative">
@@ -219,17 +209,15 @@ export const EarthVisualization = ({
         <OrbitalRing radius={2.2} color="#d4a56a" />
         <OrbitalRing radius={1.45} color="#4488cc" />
 
-        {/* Render Blue Marble core always; shells only for the focused sphere */}
-        {sphereLayers.map((layer) => {
-          if (layer.radius <= 1) {
-            return <CoreSphere key={layer.name} layer={layer} onClick={handleSphereClick} />;
-          }
-          if (layer.id !== focusedId) return null;
-          const shellLayer = isPreview
-            ? { ...layer, opacity: layer.opacity * 0.55 }
-            : layer;
-          return <ShellSphere key={layer.name} layer={shellLayer} onClick={handleSphereClick} />;
-        })}
+        {/* Render spheres */}
+        {sphereLayers.map((layer) =>
+          layer.radius <= 1 ? (
+            <CoreSphere key={layer.name} layer={layer} onClick={handleSphereClick} />
+          ) : (
+            <ShellSphere key={layer.name} layer={layer} onClick={handleSphereClick} />
+          )
+        )}
+
 
 
         <OrbitControls
