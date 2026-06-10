@@ -235,11 +235,12 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
           <div className="flex items-center gap-5">
             <div>
               <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">
-                Universal Intelligence
+                Solar Intelligence
               </h1>
               <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
                 Harmonic Guidance System · Celestial Mechanics
               </p>
+
             </div>
           </div>
 
