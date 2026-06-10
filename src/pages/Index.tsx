@@ -259,12 +259,10 @@ const Index = () => {
               return (
                 <button
                   key={sphere.id}
-                  onClick={() => setActiveSphereId((cur) => (cur === sphere.id ? null : sphere.id))}
-                  onDoubleClick={() => navigate(`/sphere/${sphere.id}`)}
-                  onMouseEnter={() => setHoveredSphereId(sphere.id)}
-                  onMouseLeave={() => setHoveredSphereId((cur) => (cur === sphere.id ? null : cur))}
+                  onClick={() => navigate(`/sphere/${sphere.id}`)}
                   className="relative overflow-hidden w-full flex items-center gap-3 px-2.5 py-3 rounded-lg transition-all duration-300 cursor-pointer group"
                 >
+
 
                   <SpherePanelBackdrop accent={sphere.color} />
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none">
