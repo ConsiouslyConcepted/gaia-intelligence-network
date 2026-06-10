@@ -8,6 +8,8 @@ import SphereDetail from "./pages/SphereDetail";
 import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
+import Universal from "./pages/Universal";
+
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
