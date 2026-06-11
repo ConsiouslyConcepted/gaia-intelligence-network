@@ -96,6 +96,18 @@ const LAYERS: LayerSpec[] = [
       { label: "Prediction", value: "Discrete scales", unit: "" },
     ],
   },
+  {
+    key: "harmonics",
+    card: "Spherical Harmonics",
+    title: "Yₗᵐ — Modes of the Sphere",
+    question: "What are the resonant modes of a 3D sphere?",
+    metrics: [
+      { label: "Family", value: "Yₗᵐ(θ,φ)", unit: "" },
+      { label: "Degree ℓ", value: "0 → ∞", unit: "" },
+      { label: "Order m", value: "−ℓ → +ℓ", unit: "" },
+      { label: "Multiplicity", value: "2ℓ + 1", unit: "modes" },
+    ],
+  },
 ];
 
 // ───────── Cosmic Address ─────────
