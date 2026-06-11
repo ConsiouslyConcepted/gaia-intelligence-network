@@ -551,7 +551,25 @@ const Universal = () => {
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-4 px-4">
         <div className="pointer-events-auto relative aspect-square w-full max-w-[880px] lg:w-[min(880px,calc(100vh-180px),100%)]"
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
-          <LayerStage layer={layer} tick={tick} />
+          <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
+          {layer === "harmonics" && (
+            <div className="absolute top-3 left-3 flex flex-col gap-2 rounded-lg p-2.5 border"
+              style={{ background: "hsla(228,40%,5%,0.7)", borderColor: "hsla(220,30%,55%,0.35)", backdropFilter: "blur(8px)" }}>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">ℓ</span>
+                <button onClick={() => setL(sphL - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
+                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphL}</span>
+                <button onClick={() => setL(sphL + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">m</span>
+                <button onClick={() => setM(sphM - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
+                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphM}</span>
+                <button onClick={() => setM(sphM + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
+              </div>
+              <div className="text-[8px] text-muted-foreground/45 tracking-wider">|m| ≤ ℓ ≤ 6</div>
+            </div>
+          )}
         </div>
       </div>
 
