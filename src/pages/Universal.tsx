@@ -69,7 +69,6 @@ const LAYERS: LayerSpec[] = [
     metrics: [
       { label: "Foundational Period", value: "17.75", unit: "yr" },
       { label: "Sunspot Cycle", value: "11.08", unit: "yr" },
-      { label: "Wheat Price Cycle", value: "5.54", unit: "yr" },
       { label: "Common Multipliers", value: "×2 ×3", unit: "" },
     ],
   },
