@@ -38,7 +38,7 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-type UniversalLayer = "address" | "cycles" | "ratios" | "wave";
+type UniversalLayer = "address" | "cycles" | "ratios" | "wave" | "harmonics";
 
 interface LayerSpec {
   key: UniversalLayer;
@@ -94,6 +94,18 @@ const LAYERS: LayerSpec[] = [
       { label: "Cascade Steps", value: "n × (2,3,5,7)", unit: "" },
       { label: "Field", value: "Non-linear", unit: "" },
       { label: "Prediction", value: "Discrete scales", unit: "" },
+    ],
+  },
+  {
+    key: "harmonics",
+    card: "Spherical Harmonics",
+    title: "Yₗᵐ — Modes of the Sphere",
+    question: "What are the resonant modes of a 3D sphere?",
+    metrics: [
+      { label: "Family", value: "Yₗᵐ(θ,φ)", unit: "" },
+      { label: "Degree ℓ", value: "0 → ∞", unit: "" },
+      { label: "Order m", value: "−ℓ → +ℓ", unit: "" },
+      { label: "Multiplicity", value: "2ℓ + 1", unit: "modes" },
     ],
   },
 ];
@@ -298,16 +310,148 @@ const WaveView = ({ tick }: { tick: number }) => {
   );
 };
 
-const LayerStage = ({ layer, tick }: { layer: UniversalLayer; tick: number }) => {
+// ───────── Spherical Harmonics Yₗᵐ ─────────
+function legendreP(l: number, m: number, x: number): number {
+  const am = Math.abs(m);
+  let pmm = 1;
+  if (am > 0) {
+    const somx2 = Math.sqrt(Math.max(0, (1 - x) * (1 + x)));
+    let fact = 1;
+    for (let i = 1; i <= am; i++) { pmm *= -fact * somx2; fact += 2; }
+  }
+  if (l === am) return pmm;
+  let pmmp1 = x * (2 * am + 1) * pmm;
+  if (l === am + 1) return pmmp1;
+  let pll = 0;
+  for (let ll = am + 2; ll <= l; ll++) {
+    pll = ((2 * ll - 1) * x * pmmp1 - (ll + am - 1) * pmm) / (ll - am);
+    pmm = pmmp1;
+    pmmp1 = pll;
+  }
+  return pll;
+}
+function Ylm(l: number, m: number, theta: number, phi: number): number {
+  const p = legendreP(l, Math.abs(m), Math.cos(theta));
+  if (m === 0) return p;
+  if (m > 0) return p * Math.cos(m * phi);
+  return p * Math.sin(-m * phi);
+}
+
+const SphHarmView = ({ tick, l, m }: { tick: number; l: number; m: number }) => {
+  const spin = tick * 0.35;
+  const NMer = 36; // meridians (phi)
+  const NPar = 24; // parallels (theta)
+
+  // Precompute max |Y| over a coarse grid for normalization
+  let maxAbs = 1e-6;
+  const SAMP = 40;
+  for (let i = 0; i <= SAMP; i++) {
+    const th = (i / SAMP) * Math.PI;
+    for (let j = 0; j < SAMP; j++) {
+      const ph = (j / SAMP) * 2 * Math.PI;
+      const v = Math.abs(Ylm(l, m, th, ph));
+      if (v > maxAbs) maxAbs = v;
+    }
+  }
+
+  const project = (theta: number, phi: number) => {
+    const y = Ylm(l, m, theta, phi);
+    const r = 0.78 * (Math.abs(y) / maxAbs);
+    const sx = Math.sin(theta) * Math.cos(phi);
+    const sy = Math.cos(theta);
+    const sz = Math.sin(theta) * Math.sin(phi);
+    const rx = sx * Math.cos(spin) + sz * Math.sin(spin);
+    const rz = -sx * Math.sin(spin) + sz * Math.cos(spin);
+    return { x: r * rx, y: r * sy, z: rz, sign: y >= 0 ? 1 : -1, mag: Math.abs(y) / maxAbs };
+  };
+
+  // Build meridian paths (constant phi)
+  const meridians: { d: string; sign: number; depth: number }[] = [];
+  for (let j = 0; j < NMer; j++) {
+    const phi = (j / NMer) * 2 * Math.PI;
+    const pts: string[] = [];
+    let signSum = 0;
+    let depthSum = 0;
+    let count = 0;
+    for (let i = 0; i <= NPar; i++) {
+      const theta = (i / NPar) * Math.PI;
+      const p = project(theta, phi);
+      pts.push(`${i === 0 ? "M" : "L"} ${p.x.toFixed(4)} ${(-p.y).toFixed(4)}`);
+      signSum += p.sign * p.mag;
+      depthSum += p.z;
+      count++;
+    }
+    meridians.push({ d: pts.join(" "), sign: signSum / count, depth: depthSum / count });
+  }
+
+  // Build parallel paths (constant theta)
+  const parallels: { d: string; sign: number; depth: number }[] = [];
+  for (let i = 1; i < NPar; i++) {
+    const theta = (i / NPar) * Math.PI;
+    const pts: string[] = [];
+    let signSum = 0;
+    let depthSum = 0;
+    let count = 0;
+    for (let j = 0; j <= NMer; j++) {
+      const phi = (j / NMer) * 2 * Math.PI;
+      const p = project(theta, phi);
+      pts.push(`${j === 0 ? "M" : "L"} ${p.x.toFixed(4)} ${(-p.y).toFixed(4)}`);
+      signSum += p.sign * p.mag;
+      depthSum += p.z;
+      count++;
+    }
+    parallels.push({ d: pts.join(" "), sign: signSum / count, depth: depthSum / count });
+  }
+
+  const colorFor = (sign: number, depth: number) => {
+    // sign: +1 warm (cream), -1 cool (blue); depth: -1 back .. +1 front
+    const alpha = 0.25 + 0.55 * ((depth + 1) / 2);
+    if (sign >= 0) return `hsla(45,80%,78%,${alpha.toFixed(3)})`;
+    return `hsla(205,75%,72%,${alpha.toFixed(3)})`;
+  };
+
+  // Sort back-to-front for proper layering
+  const all = [
+    ...meridians.map((x) => ({ ...x, w: 0.0035 })),
+    ...parallels.map((x) => ({ ...x, w: 0.0028 })),
+  ].sort((a, b) => a.depth - b.depth);
+
+  return (
+    <svg viewBox="-1.1 -1.1 2.2 2.2" className="w-full h-full">
+      {/* Subtle reference sphere */}
+      <circle cx="0" cy="0" r="0.82" fill="none" stroke="hsla(220,30%,55%,0.08)" strokeWidth="0.002" strokeDasharray="0.01 0.012" />
+      {all.map((p, idx) => (
+        <path key={idx} d={p.d} fill="none" stroke={colorFor(p.sign, p.depth)} strokeWidth={p.w} strokeLinecap="round" />
+      ))}
+      <text x="0" y="-0.95" fontSize="0.045" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.2em" }}>
+        Y{<tspan baselineShift="sub" fontSize="0.028">ℓ={l}</tspan>}{<tspan baselineShift="super" fontSize="0.028">m={m}</tspan>}(θ,φ)
+      </text>
+      <text x="0" y="0.98" fontSize="0.032" fill="hsla(0,0%,100%,0.45)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+        STANDING WAVES ON THE SPHERE · 2ℓ+1 = {2 * l + 1} MODES
+      </text>
+    </svg>
+  );
+};
+
+const LayerStage = ({ layer, tick, sphL, sphM }: { layer: UniversalLayer; tick: number; sphL: number; sphM: number }) => {
   if (layer === "address") return <AddressView tick={tick} />;
   if (layer === "cycles") return <CyclesView tick={tick} />;
   if (layer === "ratios") return <RatiosView tick={tick} />;
+  if (layer === "harmonics") return <SphHarmView tick={tick} l={sphL} m={sphM} />;
   return <WaveView tick={tick} />;
 };
 
 const Universal = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<UniversalLayer>("address");
+  const [sphL, setSphL] = useState(3);
+  const [sphM, setSphM] = useState(2);
+  const setL = (v: number) => {
+    const nl = Math.max(0, Math.min(6, v));
+    setSphL(nl);
+    if (Math.abs(sphM) > nl) setSphM(nl);
+  };
+  const setM = (v: number) => setSphM(Math.max(-sphL, Math.min(sphL, v)));
   const active = LAYERS.find((l) => l.key === layer)!;
 
   const [tick, setTick] = useState(0);
@@ -407,7 +551,25 @@ const Universal = () => {
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-4 px-4">
         <div className="pointer-events-auto relative aspect-square w-full max-w-[880px] lg:w-[min(880px,calc(100vh-180px),100%)]"
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
-          <LayerStage layer={layer} tick={tick} />
+          <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
+          {layer === "harmonics" && (
+            <div className="absolute top-3 left-3 flex flex-col gap-2 rounded-lg p-2.5 border"
+              style={{ background: "hsla(228,40%,5%,0.7)", borderColor: "hsla(220,30%,55%,0.35)", backdropFilter: "blur(8px)" }}>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">ℓ</span>
+                <button onClick={() => setL(sphL - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
+                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphL}</span>
+                <button onClick={() => setL(sphL + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
+              </div>
+              <div className="flex items-center gap-2">
+                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">m</span>
+                <button onClick={() => setM(sphM - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
+                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphM}</span>
+                <button onClick={() => setM(sphM + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
+              </div>
+              <div className="text-[8px] text-muted-foreground/45 tracking-wider">|m| ≤ ℓ ≤ 6</div>
+            </div>
+          )}
         </div>
       </div>
 
