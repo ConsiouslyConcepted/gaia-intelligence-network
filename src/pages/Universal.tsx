@@ -38,7 +38,7 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-type UniversalLayer = "address" | "cycles" | "ratios" | "wave";
+type UniversalLayer = "address" | "cycles" | "ratios" | "wave" | "harmonics";
 
 interface LayerSpec {
   key: UniversalLayer;
