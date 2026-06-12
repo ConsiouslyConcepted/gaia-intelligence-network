@@ -118,32 +118,33 @@ const LAYERS: LayerSpec[] = [
 // ───────── Cosmic Address (3D) ─────────
 const AddressView = () => <CosmicAddress3D />;
 
-// ───────── Harmonic Cycles (Dewey table) ─────────
-const DEWEY_ROWS: { years: number[]; emphasis?: boolean }[] = [
-  { years: [142.0, 213.9, 319.5, 479.3] },
-  { years: [71.0, 106.5, 159.8] },
-  { years: [35.5, 53.3] },
-  { years: [17.75], emphasis: true },
-  { years: [5.92, 8.88] },
-  { years: [1.97, 2.96, 4.44] },
-  { years: [0.66, 0.99, 1.48, 2.22] },
-  { years: [0.22, 0.33, 0.49, 0.74, 1.11] },
+// ───────── Harmonic Cycles (Dewey table) with cross-references ─────────
+const DEWEY_ROWS: { years: number[]; emphasis?: boolean; note?: string }[] = [
+  { years: [142.0, 213.9, 319.5, 479.3], note: "Gleissberg solar envelope" },
+  { years: [71.0, 106.5, 159.8], note: "Climate / drought clusters" },
+  { years: [35.5, 53.3], note: "Brückner climate cycle" },
+  { years: [17.75], emphasis: true, note: "Foundation · Lunar nodal 18.6 · Saros 18.03" },
+  { years: [5.92, 8.88], note: "ENSO band · sunspot fraction" },
+  { years: [1.97, 2.96, 4.44], note: "QBO 2.2 yr · ENSO 3-5 yr" },
+  { years: [0.66, 0.99, 1.48, 2.22], note: "Annual · biennial" },
+  { years: [0.22, 0.33, 0.49, 0.74, 1.11], note: "Seasonal · lunar 0.075" },
 ];
 
 const CyclesView = ({ tick }: { tick: number }) => {
+  const { data: solarCycle } = useNOAASolarCycle();
+  const latestSSN = solarCycle?.[solarCycle.length - 1]?.ssn;
   const W = 2.0;
   return (
     <svg viewBox={`${-W / 2 - 0.08} -1 ${W + 0.16} 2`} className="w-full h-full">
-      {/* Central anchor period */}
       <line x1={-W / 2} y1="0" x2={W / 2} y2="0" stroke="hsla(220,30%,50%,0.15)" strokeWidth={0.004} strokeDasharray="0.02 0.015" />
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.85 + (i / (DEWEY_ROWS.length - 1)) * 1.7;
+        const y = -0.78 + (i / (DEWEY_ROWS.length - 1)) * 1.6;
         return (
           <g key={i}>
             {row.years.map((yr, k) => {
-              const x = -0.85 + (k / 5) * 1.7;
+              const x = -0.78 + (k / 5) * 1.55;
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.035 + Math.min(yr, 100) * 0.0008;
+              const size = 0.032 + Math.min(yr, 100) * 0.0007;
               return (
                 <g key={k}>
                   <circle
@@ -152,7 +153,7 @@ const CyclesView = ({ tick }: { tick: number }) => {
                     stroke="hsla(200,50%,80%,0.4)"
                     strokeWidth={0.002}
                   />
-                  <text x={x} y={y + 0.075} fontSize="0.038" textAnchor="middle"
+                  <text x={x} y={y + 0.07} fontSize="0.034" textAnchor="middle"
                     fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(0,0%,100%,0.7)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.05em" }}>
                     {yr < 1 ? yr.toFixed(2) : yr.toFixed(yr < 10 ? 2 : 1)}
@@ -160,62 +161,96 @@ const CyclesView = ({ tick }: { tick: number }) => {
                 </g>
               );
             })}
+            {row.note && (
+              <text x={0.86} y={y + 0.015} fontSize="0.03" textAnchor="start"
+                fill="hsla(200,40%,75%,0.55)"
+                style={{ letterSpacing: "0.08em", textTransform: "uppercase" }}>
+                {row.note}
+              </text>
+            )}
           </g>
         );
       })}
       <text x="0" y="-0.93" fontSize="0.04" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x="0" y="0.97" fontSize="0.034" fill="hsla(45,70%,75%,0.65)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x="0" y="0.93" fontSize="0.034" fill="hsla(45,70%,75%,0.65)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
+      {latestSSN !== undefined && (
+        <text x="0" y="0.985" fontSize="0.03" fill="hsla(200,70%,80%,0.7)" textAnchor="middle"
+          style={{ letterSpacing: "0.18em" }}>
+          LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
+        </text>
+      )}
     </svg>
   );
 };
 
-// ───────── Musical Ratios ─────────
+// ───────── Musical Ratios (clickable, audible) ─────────
 const RATIOS = [
-  { label: "Unison", ratio: "1:1", value: 1 },
-  { label: "Octave", ratio: "2:1", value: 2 },
-  { label: "Fifth", ratio: "3:2", value: 1.5 },
-  { label: "Fourth", ratio: "4:3", value: 1.333 },
-  { label: "Maj 3rd", ratio: "5:4", value: 1.25 },
-  { label: "Min 3rd", ratio: "6:5", value: 1.2 },
-  { label: "Harm 7th", ratio: "7:4", value: 1.75 },
+  { label: "Unison", ratio: "1:1", value: 1, link: "Self-resonance" },
+  { label: "Octave", ratio: "2:1", value: 2, link: "Saturn ↔ Neptune ≈ 1:2" },
+  { label: "Fifth", ratio: "3:2", value: 1.5, link: "Jupiter ↔ Saturn 5:2 · planetary spine" },
+  { label: "Fourth", ratio: "4:3", value: 1.333, link: "Earth-day vs lunar tide" },
+  { label: "Maj 3rd", ratio: "5:4", value: 1.25, link: "Venus ↔ Earth pent-symmetry" },
+  { label: "Min 3rd", ratio: "6:5", value: 1.2, link: "Mercury ↔ Venus ≈ 5:2" },
+  { label: "Harm 7th", ratio: "7:4", value: 1.75, link: "Blue note · cosmic dissonance" },
 ];
 
+const BASE_FREQ = 220; // A3 anchor
+
 const RatiosView = ({ tick }: { tick: number }) => {
+  const { play, stop, chordId, isPlaying } = useChordPlayer();
   const W = 2.0;
   return (
     <svg viewBox={`${-W / 2 - 0.08} -1 ${W + 0.16} 2`} className="w-full h-full">
-      {/* string vibrations */}
       {RATIOS.map((r, i) => {
-        const y = -0.75 + i * 0.22;
+        const y = -0.72 + i * 0.21;
         const freq = r.value * 4;
         const pts: string[] = [];
         const N = 120;
         for (let k = 0; k <= N; k++) {
           const x = k / N;
-          const px = -0.85 + x * 1.7;
-          const amp = 0.07 * Math.sin(x * Math.PI);
+          const px = -0.78 + x * 1.55;
+          const amp = 0.065 * Math.sin(x * Math.PI);
           const py = y + Math.sin(x * Math.PI * freq + tick * 1.8) * amp;
           pts.push(`${k === 0 ? "M" : "L"} ${px.toFixed(4)} ${py.toFixed(4)}`);
         }
+        const id = `ratio-${r.label}`;
+        const playing = isPlaying && chordId === id;
+        const handle = () => {
+          if (playing) { stop(); return; }
+          play(id, [BASE_FREQ, BASE_FREQ * r.value], 4);
+        };
         return (
-          <g key={r.label}>
-            <line x1={-0.88} y1={y} x2={0.88} y2={y} stroke="hsla(220,30%,40%,0.2)" strokeWidth={0.0025} />
-            <path d={pts.join(" ")} fill="none" stroke={`hsla(${45 + i * 4},80%,75%,0.85)`} strokeWidth={0.005} />
-            <text x={-0.93} y={y + 0.015} fontSize="0.038" textAnchor="end" fill="hsla(0,0%,100%,0.75)" style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}>
+          <g key={r.label} onClick={handle} style={{ cursor: "pointer" }}>
+            <rect x={-0.95} y={y - 0.09} width={1.9} height={0.18} fill={playing ? "hsla(45,80%,70%,0.08)" : "transparent"} rx={0.02} />
+            <line x1={-0.78} y1={y} x2={0.77} y2={y} stroke="hsla(220,30%,40%,0.2)" strokeWidth={0.0025} />
+            <path d={pts.join(" ")} fill="none"
+              stroke={playing ? `hsla(45,95%,80%,0.95)` : `hsla(${45 + i * 4},80%,75%,0.85)`}
+              strokeWidth={playing ? 0.0065 : 0.005} />
+            <text x={-0.94} y={y + 0.015} fontSize="0.036" textAnchor="end" fill="hsla(0,0%,100%,0.78)" style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}>
               {r.label}
             </text>
-            <text x={0.93} y={y + 0.015} fontSize="0.038" textAnchor="start" fill="hsla(45,80%,80%,0.8)" style={{ fontFamily: "monospace" }}>
+            <text x={0.79} y={y + 0.015} fontSize="0.036" textAnchor="start" fill="hsla(45,80%,80%,0.85)" style={{ fontFamily: "monospace" }}>
               {r.ratio}
             </text>
+            <text x={0.79} y={y + 0.058} fontSize="0.024" textAnchor="start" fill="hsla(200,40%,75%,0.55)" style={{ letterSpacing: "0.08em", textTransform: "uppercase" }}>
+              {r.link}
+            </text>
+            <g transform={`translate(-0.92, ${y - 0.055})`}>
+              {playing ? (
+                <rect x={0} y={0} width={0.05} height={0.05} fill="hsla(45,90%,80%,0.9)" rx={0.008} />
+              ) : (
+                <polygon points={`0,0 0.05,0.025 0,0.05`} fill="hsla(0,0%,100%,0.55)" />
+              )}
+            </g>
           </g>
         );
       })}
-      <text x="0" y="-0.93" fontSize="0.04" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
-        PYTHAGOREAN · GALILEI · TOMES INTERVAL SET
+      <text x="0" y="-0.92" fontSize="0.04" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+        PYTHAGOREAN · GALILEI · TOMES · CLICK A ROW TO HEAR
       </text>
     </svg>
   );
