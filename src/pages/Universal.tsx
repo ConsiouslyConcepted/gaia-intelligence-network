@@ -390,10 +390,10 @@ const SphHarmView = ({ tick, l, m }: { tick: number; l: number; m: number }) => 
 };
 
 const LayerStage = ({ layer, tick, sphL, sphM }: { layer: UniversalLayer; tick: number; sphL: number; sphM: number }) => {
-  if (layer === "address") return <AddressView tick={tick} />;
+  if (layer === "address") return <AddressView />;
   if (layer === "cycles") return <CyclesView tick={tick} />;
   if (layer === "ratios") return <RatiosView tick={tick} />;
-  if (layer === "harmonics") return <SphHarmView tick={tick} l={sphL} m={sphM} />;
+  if (layer === "harmonics") return <SphericalHarmonics3D l={sphL} m={sphM} />;
   return <WaveView tick={tick} />;
 };
 
