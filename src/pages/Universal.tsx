@@ -115,57 +115,8 @@ const LAYERS: LayerSpec[] = [
   },
 ];
 
-// ───────── Cosmic Address ─────────
-const ADDRESS_LEVELS = [
-  { name: "Earth", scale: "12,742 km" },
-  { name: "Solar System", scale: "~9 billion km" },
-  { name: "Local Interstellar Cloud", scale: "~30 ly" },
-  { name: "Local Bubble", scale: "~300 ly" },
-  { name: "Orion Arm", scale: "~3,500 ly wide" },
-  { name: "Milky Way", scale: "~100,000 ly" },
-  { name: "Local Group", scale: "~10 Mly" },
-  { name: "Virgo Supercluster", scale: "~110 Mly" },
-  { name: "Laniakea Supercluster", scale: "~520 Mly" },
-  { name: "Observable Universe", scale: "~93 Gly" },
-];
-
-const AddressView = ({ tick }: { tick: number }) => {
-  return (
-    <svg viewBox="-1.1 -1.1 2.2 2.2" className="w-full h-full">
-      {ADDRESS_LEVELS.map((lvl, i) => {
-        const r = 0.06 + i * 0.105;
-        const breathe = 1 + Math.sin(tick * 0.5 + i * 0.4) * 0.012;
-        const opacity = 0.18 + (i / ADDRESS_LEVELS.length) * 0.35;
-        return (
-          <g key={lvl.name}>
-            <circle
-              cx="0" cy="0" r={r * breathe}
-              fill="none"
-              stroke={`hsla(${210 + i * 4},55%,${75 - i * 3}%,${opacity})`}
-              strokeWidth={0.0035}
-              strokeDasharray={i === 0 ? undefined : "0.012 0.01"}
-            />
-            <text
-              x={r * Math.cos(-Math.PI / 2 + i * 0.18) * 1.02}
-              y={r * Math.sin(-Math.PI / 2 + i * 0.18) * 1.02 + 0.012}
-              fontSize="0.032"
-              fill={`hsla(45,75%,80%,${0.55 + (i / ADDRESS_LEVELS.length) * 0.4})`}
-              textAnchor="middle"
-              style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}
-            >
-              {lvl.name}
-            </text>
-          </g>
-        );
-      })}
-      {/* Earth pinpoint */}
-      <circle cx="0" cy="0" r={0.022} fill="hsla(200,80%,75%,0.95)" />
-      <text x="0" y="-0.95" fontSize="0.045" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
-        YOU ARE HERE
-      </text>
-    </svg>
-  );
-};
+// ───────── Cosmic Address (3D) ─────────
+const AddressView = () => <CosmicAddress3D />;
 
 // ───────── Harmonic Cycles (Dewey table) ─────────
 const DEWEY_ROWS: { years: number[]; emphasis?: boolean }[] = [
