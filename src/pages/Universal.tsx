@@ -202,57 +202,84 @@ const BASE_FREQ = 220; // A3 anchor
 
 const RatiosView = ({ tick }: { tick: number }) => {
   const { play, stop, chordId, isPlaying } = useChordPlayer();
-  const W = 2.0;
   return (
-    <svg viewBox={`${-W / 2 - 0.08} -1 ${W + 0.16} 2`} className="w-full h-full">
-      {RATIOS.map((r, i) => {
-        const y = -0.72 + i * 0.21;
-        const freq = r.value * 4;
-        const pts: string[] = [];
-        const N = 120;
-        for (let k = 0; k <= N; k++) {
-          const x = k / N;
-          const px = -0.78 + x * 1.55;
-          const amp = 0.065 * Math.sin(x * Math.PI);
-          const py = y + Math.sin(x * Math.PI * freq + tick * 1.8) * amp;
-          pts.push(`${k === 0 ? "M" : "L"} ${px.toFixed(4)} ${py.toFixed(4)}`);
-        }
-        const id = `ratio-${r.label}`;
-        const playing = isPlaying && chordId === id;
-        const handle = () => {
-          if (playing) { stop(); return; }
-          play(id, [BASE_FREQ, BASE_FREQ * r.value], 4);
-        };
-        return (
-          <g key={r.label} onClick={handle} style={{ cursor: "pointer" }}>
-            <rect x={-0.95} y={y - 0.09} width={1.9} height={0.18} fill={playing ? "hsla(45,80%,70%,0.08)" : "transparent"} rx={0.02} />
-            <line x1={-0.78} y1={y} x2={0.77} y2={y} stroke="hsla(220,30%,40%,0.2)" strokeWidth={0.0025} />
-            <path d={pts.join(" ")} fill="none"
-              stroke={playing ? `hsla(45,95%,80%,0.95)` : `hsla(${45 + i * 4},80%,75%,0.85)`}
-              strokeWidth={playing ? 0.0065 : 0.005} />
-            <text x={-0.94} y={y + 0.015} fontSize="0.036" textAnchor="end" fill="hsla(0,0%,100%,0.78)" style={{ letterSpacing: "0.1em", textTransform: "uppercase" }}>
-              {r.label}
-            </text>
-            <text x={0.79} y={y + 0.015} fontSize="0.036" textAnchor="start" fill="hsla(45,80%,80%,0.85)" style={{ fontFamily: "monospace" }}>
-              {r.ratio}
-            </text>
-            <text x={0.79} y={y + 0.058} fontSize="0.024" textAnchor="start" fill="hsla(200,40%,75%,0.55)" style={{ letterSpacing: "0.08em", textTransform: "uppercase" }}>
-              {r.link}
-            </text>
-            <g transform={`translate(-0.92, ${y - 0.055})`}>
-              {playing ? (
-                <rect x={0} y={0} width={0.05} height={0.05} fill="hsla(45,90%,80%,0.9)" rx={0.008} />
-              ) : (
-                <polygon points={`0,0 0.05,0.025 0,0.05`} fill="hsla(0,0%,100%,0.55)" />
-              )}
-            </g>
-          </g>
-        );
-      })}
-      <text x="0" y="-0.92" fontSize="0.04" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
-        PYTHAGOREAN · GALILEI · TOMES · CLICK A ROW TO HEAR
-      </text>
-    </svg>
+    <div className="w-full h-full flex flex-col px-5 py-6 overflow-hidden">
+      <div className="text-center mb-3 shrink-0">
+        <div className="text-[11px] tracking-[0.22em] uppercase text-foreground/80 font-semibold">
+          Harmonic Ratios · Click a Row to Hear
+        </div>
+        <div className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/55 mt-1">
+          Base A3 · 220 Hz — base tone plus ratio interval play together
+        </div>
+      </div>
+      <div className="flex-1 min-h-0 flex flex-col justify-center gap-1.5 w-full max-w-[760px] mx-auto">
+        {RATIOS.map((r, i) => {
+          const id = `ratio-${r.label}`;
+          const playing = isPlaying && chordId === id;
+          const freq = r.value * 4;
+          const handle = () => { if (playing) { stop(); return; } play(id, [BASE_FREQ, BASE_FREQ * r.value], 4); };
+          const pts: string[] = [];
+          const N = 80;
+          for (let k = 0; k <= N; k++) {
+            const x = k / N;
+            const px = x * 100;
+            const amp = 14 * Math.sin(x * Math.PI);
+            const py = 20 + Math.sin(x * Math.PI * freq + tick * 1.8) * amp;
+            pts.push(`${k === 0 ? "M" : "L"} ${px.toFixed(2)} ${py.toFixed(2)}`);
+          }
+          return (
+            <button
+              key={r.label}
+              onClick={handle}
+              className="grid items-center rounded-lg px-3 py-2 border transition-all duration-300 text-left w-full"
+              style={{
+                gridTemplateColumns: "28px 96px 52px minmax(0,1fr) minmax(0,1.4fr)",
+                gap: "12px",
+                background: playing ? "hsla(45,60%,40%,0.14)" : "hsla(240,20%,10%,0.45)",
+                borderColor: playing ? "hsla(45,80%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
+                boxShadow: playing ? "0 0 22px hsla(45,80%,60%,0.18)" : undefined,
+              }}
+            >
+              <span className="flex items-center justify-center w-6 h-6 rounded-full border"
+                style={{
+                  borderColor: playing ? "hsla(45,90%,75%,0.7)" : "hsla(220,30%,55%,0.4)",
+                  background: playing ? "hsla(45,80%,60%,0.25)" : "hsla(228,40%,8%,0.6)",
+                }}>
+                {playing
+                  ? <span className="block w-1.5 h-2 rounded-sm" style={{ background: "hsla(45,90%,82%,0.95)" }} />
+                  : <span className="block w-0 h-0" style={{
+                      borderLeft: "6px solid hsla(0,0%,100%,0.75)",
+                      borderTop: "4px solid transparent",
+                      borderBottom: "4px solid transparent",
+                      marginLeft: "2px",
+                    }} />}
+              </span>
+              <span className="text-[11px] font-semibold tracking-[0.15em] uppercase truncate"
+                style={{ color: playing ? "hsla(45,90%,88%,0.98)" : "hsla(0,0%,100%,0.88)" }}>
+                {r.label}
+              </span>
+              <span className="text-[12px] font-mono tabular-nums"
+                style={{ color: playing ? "hsla(45,85%,82%,0.95)" : "hsla(200,60%,80%,0.85)" }}>
+                {r.ratio}
+              </span>
+              <svg viewBox="0 0 100 40" preserveAspectRatio="none" className="w-full h-7">
+                <line x1="0" y1="20" x2="100" y2="20" stroke="hsla(220,30%,40%,0.25)" strokeWidth="0.3" />
+                <path d={pts.join(" ")} fill="none"
+                  stroke={playing ? "hsla(45,95%,80%,0.95)" : `hsla(${200 + i * 8},65%,72%,0.7)`}
+                  strokeWidth={playing ? "1.2" : "0.9"} />
+              </svg>
+              <span className="text-[10px] tracking-[0.1em] uppercase leading-tight truncate"
+                style={{ color: "hsla(200,40%,78%,0.7)" }}>
+                {r.link}
+              </span>
+            </button>
+          );
+        })}
+      </div>
+      <div className="text-center mt-3 text-[9px] tracking-[0.2em] uppercase text-muted-foreground/45 shrink-0">
+        Pythagoras · Galilei · Tomes — small-integer ratios echo across orbital pairs
+      </div>
+    </div>
   );
 };
 
