@@ -445,30 +445,96 @@ const Universal = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-4 px-4">
-        <div className="pointer-events-auto relative aspect-square w-full max-w-[880px] lg:w-[min(880px,calc(100vh-180px),100%)]"
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
+        <div className="pointer-events-auto relative aspect-square w-[min(880px,calc(100vh-260px),100%)]"
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
           <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
-          {layer === "harmonics" && (
-            <div className="absolute top-3 left-3 flex flex-col gap-2 rounded-lg p-2.5 border"
-              style={{ background: "hsla(228,40%,5%,0.7)", borderColor: "hsla(220,30%,55%,0.35)", backdropFilter: "blur(8px)" }}>
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">ℓ</span>
-                <button onClick={() => setL(sphL - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
-                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphL}</span>
-                <button onClick={() => setL(sphL + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
-              </div>
-              <div className="flex items-center gap-2">
-                <span className="text-[9px] tracking-[0.18em] uppercase text-muted-foreground/60 w-10">m</span>
-                <button onClick={() => setM(sphM - 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">−</button>
-                <span className="text-[11px] font-mono text-foreground/90 w-6 text-center tabular-nums">{sphM}</span>
-                <button onClick={() => setM(sphM + 1)} className="w-6 h-6 rounded text-[11px] text-foreground/80 border border-foreground/15 hover:bg-foreground/10">+</button>
-              </div>
-              <div className="text-[8px] text-muted-foreground/45 tracking-wider">|m| ≤ ℓ ≤ 6</div>
-            </div>
-          )}
         </div>
       </div>
+
+      {/* Right rail — context + controls for Spherical Harmonics */}
+      {layer === "harmonics" && (
+        <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+          <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
+            <div>
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
+              <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Spherical Harmonics Yₗᵐ</div>
+              <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">
+                The vibration modes of a sphere — the 3D analogue of standing waves on a string. Any field on a sphere (gravity, temperature, sound pressure, the cosmic microwave background, an atom's electron cloud) can be decomposed into a sum of these modes.
+              </p>
+            </div>
+
+            <div className="border-t border-border/30 pt-3">
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it belongs here</div>
+              <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                <li>The CMB — the universe's baby-picture — is published as a Yₗᵐ power spectrum.</li>
+                <li>Earth's gravity and magnetic fields are mapped as Yₗᵐ coefficients.</li>
+                <li>Atoms (s, p, d, f orbitals) are Yₗᵐ shapes.</li>
+                <li>Each (ℓ, m) is one "note" in the harmonic alphabet of the cosmos.</li>
+              </ul>
+            </div>
+
+            <div className="border-t border-border/30 pt-3">
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+              <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
+                <li><span className="text-foreground/85">Drag</span> to rotate · <span className="text-foreground/85">scroll</span> to zoom.</li>
+                <li><span className="text-foreground/85">ℓ</span> (degree) sets total nodal lines — higher ℓ, finer pattern.</li>
+                <li><span className="text-foreground/85">m</span> (order) shifts the balance from latitudinal to longitudinal.</li>
+                <li>Warm lobes are positive, cool lobes negative — wave peaks and troughs.</li>
+              </ul>
+            </div>
+
+            <div className="border-t border-border/30 pt-3">
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Mode (ℓ, m)</div>
+              <div className="flex flex-col gap-2">
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">ℓ deg</span>
+                  <button onClick={() => setL(sphL - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
+                  <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphL}</span>
+                  <button onClick={() => setL(sphL + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">m ord</span>
+                  <button onClick={() => setM(sphM - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
+                  <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphM}</span>
+                  <button onClick={() => setM(sphM + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
+                </div>
+                <div className="text-[9px] text-muted-foreground/50 tracking-wider">constraint: |m| ≤ ℓ ≤ 6</div>
+              </div>
+            </div>
+
+            <div className="border-t border-border/30 pt-3">
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Famous modes</div>
+              <div className="grid grid-cols-2 gap-1.5">
+                {[
+                  { l: 0, m: 0, label: "Y₀₀ · Monopole" },
+                  { l: 1, m: 0, label: "Y₁₀ · Dipole" },
+                  { l: 2, m: 0, label: "Y₂₀ · Oblate" },
+                  { l: 2, m: 2, label: "Y₂₂ · Tidal" },
+                  { l: 3, m: 2, label: "Y₃₂ · f-orbital" },
+                  { l: 4, m: 3, label: "Y₄₃ · Schumann-like" },
+                ].map((p) => {
+                  const active = sphL === p.l && sphM === p.m;
+                  return (
+                    <button
+                      key={p.label}
+                      onClick={() => { setSphL(p.l); setSphM(p.m); }}
+                      className="text-[9px] tracking-[0.05em] uppercase py-1.5 px-1.5 rounded border transition-all text-left leading-tight"
+                      style={{
+                        background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                        borderColor: active ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
+                        color: active ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
+                      }}
+                    >
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          </HudPanel>
+        </div>
+      )}
 
       {/* Bottom metric rail */}
       <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none px-4 pb-6">
