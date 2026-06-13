@@ -115,6 +115,88 @@ const LAYERS: LayerSpec[] = [
   },
 ];
 
+interface LayerInfo {
+  title: string;
+  seeing: string;
+  why: string[];
+  interact: string[];
+}
+
+const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
+  address: {
+    title: "Cosmic Address",
+    seeing: "Ten nested wireframe shells showing Earth's position from our planet (innermost) out to the Observable Universe — each shell is a real astronomical scale, logarithmically spaced.",
+    why: [
+      "Harmonics only makes sense once you know the instrument: knowing the scale of the resonator sets the frequency of every mode that can live on it.",
+      "Earth, the Sun, the Galaxy, and the cosmic web each have their own resonant signature — the same Yₗᵐ math, just at different sizes.",
+      "Placing yourself in the cosmos turns abstract ratios into something physically situated.",
+    ],
+    interact: [
+      "Drag to orbit · scroll to zoom in and out of scales.",
+      "Hover a shell to surface its name and characteristic size.",
+      "Outer shells rotate slower — a visual reminder that period scales with size.",
+    ],
+  },
+  cycles: {
+    title: "Harmonic Cycles",
+    seeing: "Edward Dewey's catalog of natural cycle periods — earthquakes, climate, biology, markets — plotted as luminous dots. The gold pulsing row at 17.75 years is the foundation period; every other row is a small-integer multiple of it.",
+    why: [
+      "Unrelated natural phenomena cluster at the same periods — exactly what you'd expect from a single underlying harmonic series.",
+      "Multipliers ×2, ×3, ×5, ×7 — the same small integers that produce musical consonance — appear all over the catalog.",
+      "Live sunspot data anchors the abstract pattern to a system you can verify today.",
+    ],
+    interact: [
+      "Each row pulses gently with the live frame clock.",
+      "Right-column labels cross-reference each row to a known geophysical or solar cycle.",
+      "Compare with the Musical Ratios layer — the multipliers are the same numbers.",
+    ],
+  },
+  ratios: {
+    title: "Musical Ratios",
+    seeing: "Pythagorean intervals rendered as live waveforms. Each row is a small-integer ratio over a 220 Hz base — click the play button to hear the base note and the interval ring together.",
+    why: [
+      "Consonance in music comes from the same arithmetic that governs orbital resonance: 2:1, 3:2, 4:3, 5:4.",
+      "Tomes and Scafetta show planet-pair distance ratios collapse to these same intervals — labeled in the rightmost column.",
+      "Hearing the chord is the most direct way to grasp why the universe 'prefers' some ratios over others.",
+    ],
+    interact: [
+      "Click any row to toggle its chord — base tone plus interval play together.",
+      "Click again to stop; click a different row to switch chords.",
+      "Live waveforms animate at the actual frequency ratio so the eye and ear stay synchronized.",
+    ],
+  },
+  wave: {
+    title: "Wave Structure",
+    seeing: "A cascade of nested waves — the fundamental at the top, then harmonic 1, 2, 3, 4 — each developing finer waves on top of the previous, drawn under a soft amplitude envelope.",
+    why: [
+      "Ray Tomes' Harmonics Theory proposes the entire universe is one non-linear standing wave whose harmonics nest indefinitely.",
+      "It predicts discrete preferred scales — galaxies, stars, planets, cells, atoms — at integer multiples instead of a smooth continuum, which matches observation.",
+      "The same cascade explains why cycles, ratios, and spherical modes recur identically at every scale you zoom to.",
+    ],
+    interact: [
+      "Watch the cascade animate — higher harmonics oscillate faster, like sub-octaves of a single root tone.",
+      "Note the labels n=1, 2, 4, 8 — each doubling corresponds to one musical octave.",
+      "This layer is the conceptual bridge between the Ratios layer (the math) and the Harmonics layer (the modes).",
+    ],
+  },
+  harmonics: {
+    title: "Spherical Harmonics Yₗᵐ",
+    seeing: "The vibration modes of a sphere — the 3D analogue of standing waves on a string. Any field on a sphere (gravity, temperature, sound pressure, the cosmic microwave background, an atom's electron cloud) can be decomposed into a sum of these modes.",
+    why: [
+      "The CMB — the universe's baby-picture — is published as a Yₗᵐ power spectrum.",
+      "Earth's gravity and magnetic fields are mapped as Yₗᵐ coefficients.",
+      "Atoms (s, p, d, f orbitals) are Yₗᵐ shapes.",
+      "Each (ℓ, m) is one 'note' in the harmonic alphabet of the cosmos.",
+    ],
+    interact: [
+      "Drag to rotate · scroll to zoom.",
+      "ℓ (degree) sets total nodal lines — higher ℓ, finer pattern.",
+      "m (order) shifts the balance from latitudinal to longitudinal.",
+      "Warm lobes are positive, cool lobes negative — wave peaks and troughs.",
+    ],
+  },
+};
+
 // ───────── Cosmic Address (3D) ─────────
 const AddressView = () => <CosmicAddress3D />;
 
@@ -452,89 +534,91 @@ const Universal = () => {
         </div>
       </div>
 
-      {/* Right rail — context + controls for Spherical Harmonics */}
-      {layer === "harmonics" && (
-        <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
-          <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
-            <div>
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
-              <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Spherical Harmonics Yₗᵐ</div>
-              <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">
-                The vibration modes of a sphere — the 3D analogue of standing waves on a string. Any field on a sphere (gravity, temperature, sound pressure, the cosmic microwave background, an atom's electron cloud) can be decomposed into a sum of these modes.
-              </p>
-            </div>
-
-            <div className="border-t border-border/30 pt-3">
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it belongs here</div>
-              <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
-                <li>The CMB — the universe's baby-picture — is published as a Yₗᵐ power spectrum.</li>
-                <li>Earth's gravity and magnetic fields are mapped as Yₗᵐ coefficients.</li>
-                <li>Atoms (s, p, d, f orbitals) are Yₗᵐ shapes.</li>
-                <li>Each (ℓ, m) is one "note" in the harmonic alphabet of the cosmos.</li>
-              </ul>
-            </div>
-
-            <div className="border-t border-border/30 pt-3">
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
-              <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
-                <li><span className="text-foreground/85">Drag</span> to rotate · <span className="text-foreground/85">scroll</span> to zoom.</li>
-                <li><span className="text-foreground/85">ℓ</span> (degree) sets total nodal lines — higher ℓ, finer pattern.</li>
-                <li><span className="text-foreground/85">m</span> (order) shifts the balance from latitudinal to longitudinal.</li>
-                <li>Warm lobes are positive, cool lobes negative — wave peaks and troughs.</li>
-              </ul>
-            </div>
-
-            <div className="border-t border-border/30 pt-3">
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Mode (ℓ, m)</div>
-              <div className="flex flex-col gap-2">
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">ℓ deg</span>
-                  <button onClick={() => setL(sphL - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                  <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphL}</span>
-                  <button onClick={() => setL(sphL + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
+      {/* Right rail — context for every layer (+ controls for Spherical Harmonics) */}
+      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+        <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
+          {(() => {
+            const info = LAYER_INFO[layer];
+            return (
+              <>
+                <div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
+                  <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{info.title}</div>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">{info.seeing}</p>
                 </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">m ord</span>
-                  <button onClick={() => setM(sphM - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                  <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphM}</span>
-                  <button onClick={() => setM(sphM + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
-                </div>
-                <div className="text-[9px] text-muted-foreground/50 tracking-wider">constraint: |m| ≤ ℓ ≤ 6</div>
-              </div>
-            </div>
 
-            <div className="border-t border-border/30 pt-3">
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Famous modes</div>
-              <div className="grid grid-cols-2 gap-1.5">
-                {[
-                  { l: 0, m: 0, label: "Y₀₀ · Monopole" },
-                  { l: 1, m: 0, label: "Y₁₀ · Dipole" },
-                  { l: 2, m: 0, label: "Y₂₀ · Oblate" },
-                  { l: 2, m: 2, label: "Y₂₂ · Tidal" },
-                  { l: 3, m: 2, label: "Y₃₂ · f-orbital" },
-                  { l: 4, m: 3, label: "Y₄₃ · Schumann-like" },
-                ].map((p) => {
-                  const active = sphL === p.l && sphM === p.m;
-                  return (
-                    <button
-                      key={p.label}
-                      onClick={() => { setSphL(p.l); setSphM(p.m); }}
-                      className="text-[9px] tracking-[0.05em] uppercase py-1.5 px-1.5 rounded border transition-all text-left leading-tight"
-                      style={{
-                        background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                        borderColor: active ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
-                        color: active ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
-                      }}
-                    >
-                      {p.label}
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          </HudPanel>
-        </div>
-      )}
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it matters for cosmic harmonics</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                    {info.why.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
+                    {info.interact.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+
+                {layer === "harmonics" && (
+                  <>
+                    <div className="border-t border-border/30 pt-3">
+                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Mode (ℓ, m)</div>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">ℓ deg</span>
+                          <button onClick={() => setL(sphL - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
+                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphL}</span>
+                          <button onClick={() => setL(sphL + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">m ord</span>
+                          <button onClick={() => setM(sphM - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
+                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphM}</span>
+                          <button onClick={() => setM(sphM + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
+                        </div>
+                        <div className="text-[9px] text-muted-foreground/50 tracking-wider">constraint: |m| ≤ ℓ ≤ 6</div>
+                      </div>
+                    </div>
+
+                    <div className="border-t border-border/30 pt-3">
+                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Famous modes</div>
+                      <div className="grid grid-cols-2 gap-1.5">
+                        {[
+                          { l: 0, m: 0, label: "Y₀₀ · Monopole" },
+                          { l: 1, m: 0, label: "Y₁₀ · Dipole" },
+                          { l: 2, m: 0, label: "Y₂₀ · Oblate" },
+                          { l: 2, m: 2, label: "Y₂₂ · Tidal" },
+                          { l: 3, m: 2, label: "Y₃₂ · f-orbital" },
+                          { l: 4, m: 3, label: "Y₄₃ · Schumann-like" },
+                        ].map((p) => {
+                          const active = sphL === p.l && sphM === p.m;
+                          return (
+                            <button
+                              key={p.label}
+                              onClick={() => { setSphL(p.l); setSphM(p.m); }}
+                              className="text-[9px] tracking-[0.05em] uppercase py-1.5 px-1.5 rounded border transition-all text-left leading-tight"
+                              style={{
+                                background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                                borderColor: active ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
+                                color: active ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
+                              }}
+                            >
+                              {p.label}
+                            </button>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  </>
+                )}
+              </>
+            );
+          })()}
+        </HudPanel>
+      </div>
+
 
       {/* Bottom metric rail */}
       <div className="absolute bottom-0 left-0 right-0 z-10 pointer-events-none px-4 pb-6">
