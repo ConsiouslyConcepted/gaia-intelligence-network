@@ -102,6 +102,69 @@ const LAYERS: LayerSpec[] = [
   },
 ];
 
+interface LayerInfo {
+  seeing: string;
+  why: string[];
+  interact: string[];
+}
+
+const LAYER_INFO: Record<GalacticLayer, LayerInfo> = {
+  position: {
+    seeing: "The Sun's location in the Milky Way: ~26,700 light-years from Sagittarius A*, on the inner edge of the Orion Spur between the Sagittarius and Perseus arms.",
+    why: [
+      "Distance from the galactic center sets the local gravitational potential — the lowest harmonic the Solar System sits inside.",
+      "Position between arms keeps the Sun in a lower-density region, which stabilizes long-term planetary cycles.",
+      "Galactic coordinates anchor every smaller-scale resonance to a single reference frame.",
+    ],
+    interact: [
+      "Highlight marks the Sun's position on the spiral map.",
+      "Cross-reference Distance to Sgr A* in the metric rail.",
+      "Switch to Dynamics to see how this position moves.",
+    ],
+  },
+  environment: {
+    seeing: "The Local Bubble — a ~300 ly cavity of hot, low-density gas carved by past supernovae — with the Sun currently inside the smaller G-Cloud.",
+    why: [
+      "Low ambient density lets cosmic-ray and magnetic flux reach the heliosphere with minimal scattering.",
+      "Cloud transitions modulate the heliosphere's size, which shifts cosmic-ray flux at Earth.",
+      "The local medium is the boundary condition for every solar and planetary field.",
+    ],
+    interact: [
+      "Bubble outline shows the cavity around the Sun.",
+      "Cosmic Ray Flux and ISM Density in the metric rail track the current state.",
+      "Compare with Position to see scale relative to the spiral arms.",
+    ],
+  },
+  dynamics: {
+    seeing: "The Sun's orbit around the galactic center at ~220 km/s, completing one Galactic Year every ~225 million years.",
+    why: [
+      "Orbital period is the longest harmonic in the planetary stack — every shorter cycle nests inside it.",
+      "Arm crossings (~4 per orbit) correlate with episodes of increased star formation and climate shifts.",
+      "Vertical oscillation through the disk modulates cosmic-ray exposure on a ~30 Myr cycle.",
+    ],
+    interact: [
+      "Orbit ring shows the Sun's path around Sgr A*.",
+      "Galactic Year metric anchors the timescale.",
+      "Compare with Structure to see what the Sun is orbiting.",
+    ],
+  },
+  structure: {
+    seeing: "The full Milky Way: four major spiral arms, a central bar, the supermassive black hole Sgr A*, and the large-scale magnetic field threading the disk.",
+    why: [
+      "The bar and arms set the dominant density waves — galactic-scale standing modes.",
+      "Sgr A* anchors the gravitational potential that every star orbits.",
+      "Stellar streams trace past mergers and the galaxy's resonant scaffolding.",
+    ],
+    interact: [
+      "Spiral arms and Sgr A* are marked on the map.",
+      "Metric rail lists structural counts and the disk magnetic field.",
+      "Zoom out conceptually — this is the largest scale the dashboard tracks before Cosmological.",
+    ],
+  },
+};
+
+
+
 const Galactic = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<GalacticLayer>("position");
@@ -184,10 +247,40 @@ const Galactic = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-4 px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-[300px] px-4">
         <div className="pointer-events-auto relative aspect-square w-full max-w-[880px] lg:w-[min(880px,calc(100vh-180px),100%)]">
           <MilkyWayMap layer={layer} />
         </div>
+      </div>
+
+      {/* Right rail — context */}
+      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+        <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
+          {(() => {
+            const info = LAYER_INFO[layer];
+            return (
+              <>
+                <div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
+                  <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{active.card}</div>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">{info.seeing}</p>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it matters for cosmic harmonics</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                    {info.why.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
+                    {info.interact.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+              </>
+            );
+          })()}
+        </HudPanel>
       </div>
 
       {/* Bottom metric rail */}

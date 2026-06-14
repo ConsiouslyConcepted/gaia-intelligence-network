@@ -104,6 +104,69 @@ const LAYERS: LayerSpec[] = [
   },
 ];
 
+interface LayerInfo {
+  seeing: string;
+  why: string[];
+  interact: string[];
+}
+
+const LAYER_INFO: Record<CosmoLayer, LayerInfo> = {
+  cmb: {
+    seeing: "The Cosmic Microwave Background — light released 380,000 years after the Big Bang. Tiny temperature variations (ΔT/T ≈ 10⁻⁵) mark the seeds of every later structure.",
+    why: [
+      "The CMB power spectrum is a literal Yₗᵐ decomposition of the early universe.",
+      "Its acoustic peaks are standing-wave modes frozen into the plasma — the universe's first chord.",
+      "Every later harmonic — galactic, solar, planetary — inherits this initial pattern.",
+    ],
+    interact: [
+      "Patches show the dipole and small-scale anisotropies.",
+      "Acoustic Peaks metric counts the resonant modes detected.",
+      "Compare with Acoustic Oscillations to see the same peaks at galaxy scale.",
+    ],
+  },
+  constants: {
+    seeing: "The fixed numerical values — c, G, ℎ, α — that set the strength of every interaction.",
+    why: [
+      "Constants set which harmonic ratios are stable enough to form atoms, stars, and planets.",
+      "Small shifts in α or G would erase the resonances that life depends on.",
+      "They define the tuning of the universal instrument before any note is played.",
+    ],
+    interact: [
+      "Values listed in the metric rail are the current measured constants.",
+      "Each constant gates one class of structure (atomic, gravitational, electromagnetic).",
+      "Compare with Cosmic Web to see what these constants build.",
+    ],
+  },
+  spacetime: {
+    seeing: "The cosmic web — filaments, walls, and voids of galaxy clusters spanning hundreds of millions of light-years.",
+    why: [
+      "The web is the largest standing-wave pattern in the observable universe.",
+      "Its geometry is set by the BAO scale and dark-matter dynamics.",
+      "Every galaxy sits on a node of this resonant scaffold.",
+    ],
+    interact: [
+      "Filament strands trace the densest regions.",
+      "Hubble Constant and Observable Universe metrics anchor the scale.",
+      "Cross-reference with Acoustic Oscillations — the web inherits the BAO peak.",
+    ],
+  },
+  harmonics: {
+    seeing: "Baryon Acoustic Oscillations — the same acoustic peaks visible in the CMB, frozen into the present-day distribution of galaxies at a characteristic ~150 Mpc scale.",
+    why: [
+      "BAO is the direct fossil of the early universe's standing-wave modes.",
+      "It links the CMB's Yₗᵐ peaks to the geometry of the cosmic web.",
+      "Confirms that the universe carries its harmonic signature forward at every epoch.",
+    ],
+    interact: [
+      "Concentric rings show the BAO standard ruler.",
+      "BAO Scale and 1st Peak ℓ in the metric rail.",
+      "Compare with Cosmic Background — same peaks, different epoch.",
+    ],
+  },
+};
+
+
+
 const Cosmological = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<CosmoLayer>("cmb");
@@ -188,11 +251,40 @@ const Cosmological = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-4 px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
         <div className="pointer-events-auto w-full max-w-[820px] aspect-square relative">
           <CosmoStage layer={layer} />
-
         </div>
+      </div>
+
+      {/* Right rail — context */}
+      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+        <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
+          {(() => {
+            const info = LAYER_INFO[layer];
+            return (
+              <>
+                <div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
+                  <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{active.card}</div>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">{info.seeing}</p>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it matters for cosmic harmonics</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                    {info.why.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
+                    {info.interact.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+              </>
+            );
+          })()}
+        </HudPanel>
       </div>
 
       {/* Bottom metric rail */}
