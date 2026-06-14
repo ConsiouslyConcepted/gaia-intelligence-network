@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
-import { CosmicAddress3D } from "@/components/universal/CosmicAddress3D";
+import milkyWayAddress from "@/assets/milky-way-earth-location.jpg.asset.json";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
@@ -198,7 +198,15 @@ const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
 };
 
 // ───────── Cosmic Address (3D) ─────────
-const AddressView = () => <CosmicAddress3D />;
+const AddressView = () => (
+  <div className="w-full h-full flex items-center justify-center p-4">
+    <img
+      src={milkyWayAddress.url}
+      alt="Milky Way galaxy showing the location of our Solar System in the Local/Orion Arm, with labeled spiral arms (Perseus, Carina-Sagittarius, Norma, Crux-Scutum, Cygnus) and distance rings in light-years"
+      className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
+    />
+  </div>
+);
 
 // ───────── Harmonic Cycles (Dewey table) with cross-references ─────────
 const DEWEY_ROWS: { years: number[]; emphasis?: boolean; note?: string }[] = [
