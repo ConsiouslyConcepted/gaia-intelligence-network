@@ -251,11 +251,40 @@ const Cosmological = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-4 px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-28 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
         <div className="pointer-events-auto w-full max-w-[820px] aspect-square relative">
           <CosmoStage layer={layer} />
-
         </div>
+      </div>
+
+      {/* Right rail — context */}
+      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+        <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
+          {(() => {
+            const info = LAYER_INFO[layer];
+            return (
+              <>
+                <div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">What you're seeing</div>
+                  <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{active.card}</div>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">{info.seeing}</p>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it matters for cosmic harmonics</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                    {info.why.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+                <div className="border-t border-border/30 pt-3">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                  <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1 list-disc list-inside marker:text-foreground/40">
+                    {info.interact.map((w, i) => <li key={i}>{w}</li>)}
+                  </ul>
+                </div>
+              </>
+            );
+          })()}
+        </HudPanel>
       </div>
 
       {/* Bottom metric rail */}
