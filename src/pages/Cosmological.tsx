@@ -104,6 +104,69 @@ const LAYERS: LayerSpec[] = [
   },
 ];
 
+interface LayerInfo {
+  seeing: string;
+  why: string[];
+  interact: string[];
+}
+
+const LAYER_INFO: Record<CosmoLayer, LayerInfo> = {
+  cmb: {
+    seeing: "The Cosmic Microwave Background — light released 380,000 years after the Big Bang. Tiny temperature variations (ΔT/T ≈ 10⁻⁵) mark the seeds of every later structure.",
+    why: [
+      "The CMB power spectrum is a literal Yₗᵐ decomposition of the early universe.",
+      "Its acoustic peaks are standing-wave modes frozen into the plasma — the universe's first chord.",
+      "Every later harmonic — galactic, solar, planetary — inherits this initial pattern.",
+    ],
+    interact: [
+      "Patches show the dipole and small-scale anisotropies.",
+      "Acoustic Peaks metric counts the resonant modes detected.",
+      "Compare with Acoustic Oscillations to see the same peaks at galaxy scale.",
+    ],
+  },
+  constants: {
+    seeing: "The fixed numerical values — c, G, ℎ, α — that set the strength of every interaction.",
+    why: [
+      "Constants set which harmonic ratios are stable enough to form atoms, stars, and planets.",
+      "Small shifts in α or G would erase the resonances that life depends on.",
+      "They define the tuning of the universal instrument before any note is played.",
+    ],
+    interact: [
+      "Values listed in the metric rail are the current measured constants.",
+      "Each constant gates one class of structure (atomic, gravitational, electromagnetic).",
+      "Compare with Cosmic Web to see what these constants build.",
+    ],
+  },
+  spacetime: {
+    seeing: "The cosmic web — filaments, walls, and voids of galaxy clusters spanning hundreds of millions of light-years.",
+    why: [
+      "The web is the largest standing-wave pattern in the observable universe.",
+      "Its geometry is set by the BAO scale and dark-matter dynamics.",
+      "Every galaxy sits on a node of this resonant scaffold.",
+    ],
+    interact: [
+      "Filament strands trace the densest regions.",
+      "Hubble Constant and Observable Universe metrics anchor the scale.",
+      "Cross-reference with Acoustic Oscillations — the web inherits the BAO peak.",
+    ],
+  },
+  harmonics: {
+    seeing: "Baryon Acoustic Oscillations — the same acoustic peaks visible in the CMB, frozen into the present-day distribution of galaxies at a characteristic ~150 Mpc scale.",
+    why: [
+      "BAO is the direct fossil of the early universe's standing-wave modes.",
+      "It links the CMB's Yₗᵐ peaks to the geometry of the cosmic web.",
+      "Confirms that the universe carries its harmonic signature forward at every epoch.",
+    ],
+    interact: [
+      "Concentric rings show the BAO standard ruler.",
+      "BAO Scale and 1st Peak ℓ in the metric rail.",
+      "Compare with Cosmic Background — same peaks, different epoch.",
+    ],
+  },
+};
+
+
+
 const Cosmological = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<CosmoLayer>("cmb");
