@@ -9,6 +9,7 @@ import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
 import Universal from "./pages/Universal";
+import Stellar from "./pages/Stellar";
 
 import NotFound from "./pages/NotFound";
 
