@@ -28,6 +28,7 @@ const App = () => (
           <Route path="/galactic" element={<Galactic />} />
           <Route path="/cosmological" element={<Cosmological />} />
           <Route path="/universal" element={<Universal />} />
+          <Route path="/stellar" element={<Stellar />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 
           <Route path="*" element={<NotFound />} />
