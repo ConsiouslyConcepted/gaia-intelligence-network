@@ -623,7 +623,7 @@ export default function PlanetaryCommons() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/planetary")}
             className="h-8 w-8 hover:bg-muted/20 rounded-lg"
           >
             <ArrowLeft className="w-4 h-4" />
