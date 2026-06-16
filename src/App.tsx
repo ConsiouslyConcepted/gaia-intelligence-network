@@ -23,7 +23,8 @@ const App = () => (
       <Sonner />
       <BrowserRouter>
         <Routes>
-          <Route path="/" element={<Index />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/planetary" element={<Index />} />
           <Route path="/sphere/:sphereId" element={<SphereDetail />} />
           <Route path="/commons" element={<PlanetaryCommons />} />
           <Route path="/galactic" element={<Galactic />} />
