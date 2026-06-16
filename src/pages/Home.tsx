@@ -140,7 +140,7 @@ const Home = () => {
         </div>
 
         <p className="mt-6 text-[9px] tracking-[0.32em] uppercase text-muted-foreground/35">
-          Digital Twin · Read-only Observation
+          Digital Twin · Live Telemetry · Observation Only
         </p>
       </div>
     </div>
