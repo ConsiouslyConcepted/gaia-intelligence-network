@@ -25,7 +25,7 @@ export default function SphereDetail() {
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Sphere Not Found</h1>
-          <Button onClick={() => navigate("/")}>Return to Overview</Button>
+          <Button onClick={() => navigate("/planetary")}>Return to Overview</Button>
         </div>
       </div>
     );
@@ -40,7 +40,7 @@ export default function SphereDetail() {
           <Button
             variant="ghost"
             size="icon"
-            onClick={() => navigate("/")}
+            onClick={() => navigate("/planetary")}
             className="h-8 w-8 hover:bg-muted/20 rounded-lg"
           >
             <ArrowLeft className="w-4 h-4" />
