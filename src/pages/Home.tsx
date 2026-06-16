@@ -140,7 +140,7 @@ const Home = () => {
         </div>
 
         <p className="mt-6 text-[9px] tracking-[0.32em] uppercase text-muted-foreground/35">
-          Digital Twin · Read-only Observation
+          Digital Twin · Live Telemetry · Observation Only
         </p>
       </div>
     </div>
@@ -164,7 +164,7 @@ const ScaleButton = ({
         "linear-gradient(145deg, hsla(225,45%,11%,0.9) 0%, hsla(228,55%,5%,0.9) 100%)",
       border: "1px solid hsla(220,30%,55%,0.35)",
       boxShadow:
-        "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 24px hsla(210,70%,60%,0.12), 0 8px 24px rgba(0,0,0,0.4)",
+        "inset 0 1px 0 hsla(0,0%,100%,0.08), inset 0 -1px 0 rgba(0,0,0,0.4), 0 0 24px hsla(210,70%,60%,0.28), 0 0 48px hsla(210,70%,55%,0.18), 0 12px 32px rgba(0,0,0,0.5)",
       textAlign: align === "right" ? "right" : "left",
     }}
   >
