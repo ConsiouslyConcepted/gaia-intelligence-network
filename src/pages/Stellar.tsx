@@ -431,7 +431,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "lifecycle") {
     return (
-      <div className="w-full h-full flex flex-col justify-center gap-3 px-2">
+      <div className="w-full h-full flex flex-col justify-start gap-3 px-2 py-2 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
           Stellar Lifecycle — Sun-mass track
         </div>
