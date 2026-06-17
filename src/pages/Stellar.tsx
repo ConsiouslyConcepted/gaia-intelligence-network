@@ -1,7 +1,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
+
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; topBar?: boolean }) => (
   <div
@@ -245,7 +247,10 @@ const Stellar = () => {
 
       {/* Center stage — simple stellar neighborhood diagram */}
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-[300px] px-4">
-        <div className="pointer-events-auto relative aspect-square w-full max-w-[760px] lg:w-[min(760px,calc(100vh-180px),100%)]">
+        <div className={cn(
+          "pointer-events-auto relative w-full max-w-[760px] h-auto max-h-[calc(100vh-224px)]",
+          layer === "neighborhood" && "aspect-square lg:w-[min(760px,calc(100vh-240px),100%)]"
+        )}>
           <StellarStage layer={layer} />
         </div>
       </div>
@@ -401,12 +406,12 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "classification") {
     return (
-      <div className="w-full h-full flex flex-col justify-center gap-3 px-2">
+      <div className="w-full h-full flex flex-col justify-start gap-2 px-2 py-2 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
           OBAFGKM Spectral Sequence — hot ⟶ cool
         </div>
         {SPECTRAL.map((s) => (
-          <div key={s.cls} className="flex items-center gap-4 rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div key={s.cls} className="flex items-center gap-4 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
             <div
               className="flex items-center justify-center rounded-full font-bold font-mono text-foreground/90"
               style={{ width: 56, height: 56, background: s.color, color: "#101428", boxShadow: `0 0 24px ${s.color}88` }}
@@ -426,7 +431,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "lifecycle") {
     return (
-      <div className="w-full h-full flex flex-col justify-center gap-3 px-2">
+      <div className="w-full h-full flex flex-col justify-start gap-3 px-2 py-2 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
           Stellar Lifecycle — Sun-mass track
         </div>
@@ -445,7 +450,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   // exoplanets
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-4 px-2">
+    <div className="w-full h-full flex flex-col justify-start gap-4 px-2 py-2 overflow-y-auto">
       <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
         Exoplanetary Systems — confirmed detections (NASA Exoplanet Archive)
       </div>
