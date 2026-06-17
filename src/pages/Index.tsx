@@ -184,7 +184,7 @@ const Index = () => {
               Planetary Intelligence
             </h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Gaia Observatory · Digital Twin
+              Earth Systems · Live Telemetry · Observation Only
             </p>
           </div>
 
