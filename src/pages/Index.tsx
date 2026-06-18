@@ -192,7 +192,7 @@ const Index = () => {
           {/* Right: View toggle + Commons icon */}
             <div className="flex items-center gap-3">
             <div
-              className="flex gap-1.5 rounded-2xl p-1.5"
+              className="flex gap-1 xl:gap-1.5 rounded-2xl p-1 xl:p-1.5 overflow-x-auto max-w-full"
               style={{
                 background: "hsla(228,40%,5%,0.6)",
                 border: "1px solid hsla(220,40%,65%,0.5)",
@@ -201,7 +201,7 @@ const Index = () => {
               }}
             >
               <button
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase transition-all duration-300"
                 style={{
                   background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
                   color: "hsla(0,0%,100%,0.95)",
@@ -213,35 +213,35 @@ const Index = () => {
               </button>
               <button
                 onClick={() => setActiveView("hgs")}
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Solar
               </button>
               <button
                 onClick={() => navigate("/stellar")}
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Stellar
               </button>
               <button
                 onClick={() => navigate("/galactic")}
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Galactic
               </button>
               <button
                 onClick={() => navigate("/universal")}
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Universal
               </button>
               <button
                 onClick={() => navigate("/cosmological")}
-                className="min-w-[120px] text-center px-4 py-2.5 rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70"
                 style={{ color: "hsla(0,0%,100%,0.4)" }}
               >
                 Cosmological
