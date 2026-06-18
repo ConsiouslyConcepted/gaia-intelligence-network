@@ -253,6 +253,122 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })()}
 
+      {/* Lunar phase ring + tide ring — outside the Wheel-of-the-Year */}
+      {(() => {
+        const sun = positions.find((p) => p.id === "sun");
+        const moon = positions.find((p) => p.id === "moon");
+        if (!sun || !moon) return null;
+        const phase = ((moon.longitude - sun.longitude) + 360) % 360; // 0 new, 180 full
+        const R_MOON = R_OUTER + 56;       // moon glyph ring center
+        const R_TIDE_IN = R_OUTER + 78;
+        const R_TIDE_OUT = R_OUTER + 96;
+        const moonR = 7.5;
+        const COUNT = 28;
+
+        const moonPath = (cx: number, cy: number, r: number, p: number) => {
+          const cosP = Math.cos((p * Math.PI) / 180);
+          const rx = Math.max(0.001, Math.abs(r * cosP));
+          const litRight = p < 180;
+          const top = `${cx} ${cy - r}`;
+          const bot = `${cx} ${cy + r}`;
+          const outerSweep = litRight ? 1 : 0;
+          const innerSweep = cosP >= 0 ? (litRight ? 0 : 1) : (litRight ? 1 : 0);
+          return `M ${top} A ${r} ${r} 0 0 ${outerSweep} ${bot} A ${rx} ${r} 0 0 ${innerSweep} ${top} Z`;
+        };
+
+        // Tide arcs: relative to Sun's longitude (phase=0 spring/new, 90 neap, 180 spring/full, 270 neap)
+        const tideArc = (centerPhase: number, span: number) => {
+          const startLon = sun.longitude + centerPhase - span / 2;
+          const endLon = sun.longitude + centerPhase + span / 2;
+          return arcPath(C, C, R_TIDE_OUT, R_TIDE_IN, startLon, endLon);
+        };
+
+        // Label along an arc using textPath
+        const labelArcId = (key: string) => `tide-arc-${key}`;
+        const labelArcPath = (centerPhase: number) => {
+          const r = (R_TIDE_IN + R_TIDE_OUT) / 2;
+          const startLon = sun.longitude + centerPhase - 25;
+          const endLon = sun.longitude + centerPhase + 25;
+          const p1 = polar(C, C, r, startLon);
+          const p2 = polar(C, C, r, endLon);
+          return `M ${p1.x} ${p1.y} A ${r} ${r} 0 0 1 ${p2.x} ${p2.y}`;
+        };
+
+        return (
+          <g>
+            {/* concentric guide rings */}
+            <circle cx={C} cy={C} r={R_MOON - 10} fill="none" stroke="hsla(220,15%,75%,0.08)" strokeWidth="0.3" />
+            <circle cx={C} cy={C} r={R_MOON + 10} fill="none" stroke="hsla(220,15%,75%,0.08)" strokeWidth="0.3" />
+            <circle cx={C} cy={C} r={R_TIDE_IN} fill="none" stroke="hsla(220,15%,75%,0.10)" strokeWidth="0.4" />
+            <circle cx={C} cy={C} r={R_TIDE_OUT} fill="none" stroke="hsla(220,15%,75%,0.10)" strokeWidth="0.4" />
+
+            {/* Tide arcs — Spring (new + full), Neap (quarters) */}
+            <defs>
+              <path id={labelArcId("spring-new")} d={labelArcPath(0)} />
+              <path id={labelArcId("neap-1q")} d={labelArcPath(90)} />
+              <path id={labelArcId("spring-full")} d={labelArcPath(180)} />
+              <path id={labelArcId("neap-3q")} d={labelArcPath(270)} />
+            </defs>
+            {[0, 180].map((cp) => (
+              <path key={`spring-${cp}`} d={tideArc(cp, 50)} fill="hsla(210,55%,70%,0.10)" stroke="hsla(210,55%,80%,0.35)" strokeWidth="0.5" />
+            ))}
+            {[90, 270].map((cp) => (
+              <path key={`neap-${cp}`} d={tideArc(cp, 50)} fill="hsla(220,12%,75%,0.04)" stroke="hsla(220,12%,75%,0.20)" strokeWidth="0.4" />
+            ))}
+
+            <text fontSize="9" letterSpacing="0.32em" fill="hsla(220,15%,90%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+              <textPath href={`#${labelArcId("spring-new")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
+            </text>
+            <text fontSize="9" letterSpacing="0.32em" fill="hsla(220,12%,82%,0.75)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+              <textPath href={`#${labelArcId("neap-1q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
+            </text>
+            <text fontSize="9" letterSpacing="0.32em" fill="hsla(220,15%,90%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+              <textPath href={`#${labelArcId("spring-full")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
+            </text>
+            <text fontSize="9" letterSpacing="0.32em" fill="hsla(220,12%,82%,0.75)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+              <textPath href={`#${labelArcId("neap-3q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
+            </text>
+
+            {/* Current tide indicator — marker on the tide ring at the Moon's longitude */}
+            {(() => {
+              const isSpring = phase < 25 || phase > 335 || (phase > 155 && phase < 205);
+              const isNeap = (phase > 65 && phase < 115) || (phase > 245 && phase < 295);
+              const tideLabel = isSpring ? "Spring Tide" : isNeap ? "Neap Tide" : phase < 180 ? "Tide Flooding" : "Tide Ebbing";
+              const mk = polar(C, C, (R_TIDE_IN + R_TIDE_OUT) / 2, moon.longitude);
+              const mkOuter = polar(C, C, R_TIDE_OUT + 14, moon.longitude);
+              return (
+                <g>
+                  <title>{`Current: ${tideLabel} · lunar phase ${phase.toFixed(0)}°`}</title>
+                  <circle cx={mk.x} cy={mk.y} r={3} fill="hsla(210,60%,85%,0.95)" />
+                  <line x1={mk.x} y1={mk.y} x2={mkOuter.x} y2={mkOuter.y} stroke="hsla(210,60%,85%,0.6)" strokeWidth="0.6" />
+                </g>
+              );
+            })()}
+
+            {/* 28 daily moon phases */}
+            {Array.from({ length: COUNT }, (_, i) => {
+              // Each day = 360/28 ≈ 12.86° elongation; placed at sun + that elongation around the wheel
+              const dayPhase = (i / COUNT) * 360;
+              const lon = sun.longitude + dayPhase;
+              const pos = polar(C, C, R_MOON, lon);
+              const isCurrent = Math.abs(((dayPhase - phase + 540) % 360) - 180) > 180 - (360 / COUNT) / 2;
+              return (
+                <g key={`m${i}`} transform={`translate(${pos.x} ${pos.y})`}>
+                  {/* dark disc */}
+                  <circle cx={0} cy={0} r={moonR} fill="hsla(228, 40%, 6%, 0.95)" stroke="hsla(220,15%,85%,0.45)" strokeWidth="0.5" />
+                  {/* lit portion */}
+                  <path d={moonPath(0, 0, moonR - 0.4, dayPhase)} fill="hsla(45, 30%, 95%, 0.95)" />
+                  {isCurrent && (
+                    <circle cx={0} cy={0} r={moonR + 3} fill="none" stroke="hsla(45, 90%, 75%, 0.9)" strokeWidth="0.9" />
+                  )}
+                </g>
+              );
+            })}
+          </g>
+        );
+      })()}
+
+
       {/* Degree ticks: 1° and 5° */}
       {Array.from({ length: 360 }, (_, d) => {
         const isFive = d % 5 === 0;
