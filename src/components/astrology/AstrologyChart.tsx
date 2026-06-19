@@ -392,28 +392,6 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
       })()}
 
 
-            {/* 28 daily moon phases */}
-            {Array.from({ length: COUNT }, (_, i) => {
-              // Each day = 360/28 ≈ 12.86° elongation; placed at sun + that elongation around the wheel
-              const dayPhase = (i / COUNT) * 360;
-              const lon = sun.longitude + dayPhase;
-              const pos = polar(C, C, R_MOON, lon);
-              const isCurrent = Math.abs(((dayPhase - phase + 540) % 360) - 180) > 180 - (360 / COUNT) / 2;
-              return (
-                <g key={`m${i}`} transform={`translate(${pos.x} ${pos.y})`}>
-                  {/* dark disc */}
-                  <circle cx={0} cy={0} r={moonR} fill="hsla(228, 40%, 6%, 0.95)" stroke="hsla(220,15%,85%,0.45)" strokeWidth="0.5" />
-                  {/* lit portion */}
-                  <path d={moonPath(0, 0, moonR - 0.4, dayPhase)} fill="hsla(45, 30%, 95%, 0.95)" />
-                  {isCurrent && (
-                    <circle cx={0} cy={0} r={moonR + 3} fill="none" stroke="hsla(45, 90%, 75%, 0.9)" strokeWidth="0.9" />
-                  )}
-                </g>
-              );
-            })}
-          </g>
-        );
-      })()}
 
 
       {/* Degree ticks: 1° and 5° */}
