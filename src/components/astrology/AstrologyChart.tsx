@@ -28,9 +28,10 @@ const R_SIGN_OUT = 305;    // sign band outer
 const R_SIGN_IN = 255;     // sign band inner
 const R_DEG_OUT = 252;     // degree tick outer
 const R_DEG_IN = 240;      // degree tick inner (1°)
-const R_DEG_IN_5 = 232;    // 5° tick
-const R_PLANET = 200;      // planet glyph ring
-const R_ASPECT = 175;      // inner disc where aspect lines live
+R_DEG_IN_5 = 232;    // 5° tick
+const R_PLANET = 178;      // planet glyph ring (moved inward to make room for inner moon+tide rings)
+const R_ASPECT = 152;      // inner disc where aspect lines live
+
 
 function polar(cx: number, cy: number, r: number, deg: number) {
   // 0° at left (Aries on the AC/east in traditional charts), increasing counter-clockwise
