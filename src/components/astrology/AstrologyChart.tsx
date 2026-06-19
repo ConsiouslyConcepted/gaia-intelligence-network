@@ -29,8 +29,9 @@ const R_SIGN_IN = 255;     // sign band inner
 const R_DEG_OUT = 252;     // degree tick outer
 const R_DEG_IN = 240;      // degree tick inner (1°)
 const R_DEG_IN_5 = 232;    // 5° tick
-const R_PLANET = 200;      // planet glyph ring
-const R_ASPECT = 175;      // inner disc where aspect lines live
+const R_PLANET = 178;      // planet glyph ring (moved inward to make room for inner moon+tide rings)
+const R_ASPECT = 152;      // inner disc where aspect lines live
+
 
 function polar(cx: number, cy: number, r: number, deg: number) {
   // 0° at left (Aries on the AC/east in traditional charts), increasing counter-clockwise
@@ -253,24 +254,25 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })()}
 
-      {/* Exterior Moon-phase ring + adjacent Tide ring */}
+      {/* Inner Tide ring + Moon-phase ring — sit inside the wheel, just under the degree ticks */}
       {(() => {
         const sun = positions.find((p) => p.id === "sun");
         const moon = positions.find((p) => p.id === "moon");
         if (!sun || !moon) return null;
         const phase = ((moon.longitude - sun.longitude) + 360) % 360;
 
-        // Moon band — dedicated rails so moons don't blend with constellations/stars
-        const R_MOON_IN = R_OUTER + 30;
-        const R_MOON_OUT = R_OUTER + 60;
+        // Tide band — outer of the two inner rings, just inside the degree ticks
+        const R_TIDE_OUT = 236;
+        const R_TIDE_IN = 220;
+        const R_TIDE_MID = (R_TIDE_IN + R_TIDE_OUT) / 2;
+
+        // Moon band — inside the tide band
+        const R_MOON_OUT = 217;
+        const R_MOON_IN = 200;
         const R_MOON = (R_MOON_IN + R_MOON_OUT) / 2;
-        const moonR = 7;
+        const moonR = 5.5;
         const COUNT = 28;
 
-        // Tide band — sits flush against the moon band, just outside
-        const R_TIDE_IN = R_MOON_OUT + 4;
-        const R_TIDE_OUT = R_TIDE_IN + 18;
-        const R_TIDE_MID = (R_TIDE_IN + R_TIDE_OUT) / 2;
 
         const moonPath = (cx: number, cy: number, r: number, p: number) => {
           const cosP = Math.cos((p * Math.PI) / 180);
@@ -314,12 +316,11 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               <path id={labelArcId("neap-3q")} d={labelArcPath(270)} />
             </defs>
 
-            {/* Moon band — solid dark fill so phases pop, with bright rails */}
-            <circle cx={C} cy={C} r={R_MOON_OUT} fill="hsla(228, 45%, 7%, 0.92)" />
-            <circle cx={C} cy={C} r={R_MOON_IN} fill="hsla(228, 40%, 5%, 0)" />
-            <circle cx={C} cy={C} r={R_MOON_IN} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
-            <circle cx={C} cy={C} r={R_MOON_OUT} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
+            {/* Moon band rails (no opaque fill — keeps inner wheel visible) */}
+            <circle cx={C} cy={C} r={R_MOON_IN} fill="none" stroke="hsla(220,15%,80%,0.32)" strokeWidth="0.6" />
+            <circle cx={C} cy={C} r={R_MOON_OUT} fill="none" stroke="hsla(220,15%,80%,0.32)" strokeWidth="0.6" />
             <circle cx={C} cy={C} r={R_MOON} fill="none" stroke="hsla(220,15%,80%,0.08)" strokeWidth="0.3" strokeDasharray="1 3" />
+
 
             {/* 28 daily moon phases */}
             {Array.from({ length: COUNT }, (_, i) => {
