@@ -254,24 +254,25 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })()}
 
-      {/* Exterior Moon-phase ring + adjacent Tide ring */}
+      {/* Inner Tide ring + Moon-phase ring — sit inside the wheel, just under the degree ticks */}
       {(() => {
         const sun = positions.find((p) => p.id === "sun");
         const moon = positions.find((p) => p.id === "moon");
         if (!sun || !moon) return null;
         const phase = ((moon.longitude - sun.longitude) + 360) % 360;
 
-        // Moon band — dedicated rails so moons don't blend with constellations/stars
-        const R_MOON_IN = R_OUTER + 30;
-        const R_MOON_OUT = R_OUTER + 60;
+        // Tide band — outer of the two inner rings, just inside the degree ticks
+        const R_TIDE_OUT = 236;
+        const R_TIDE_IN = 220;
+        const R_TIDE_MID = (R_TIDE_IN + R_TIDE_OUT) / 2;
+
+        // Moon band — inside the tide band
+        const R_MOON_OUT = 217;
+        const R_MOON_IN = 200;
         const R_MOON = (R_MOON_IN + R_MOON_OUT) / 2;
-        const moonR = 7;
+        const moonR = 5.5;
         const COUNT = 28;
 
-        // Tide band — sits flush against the moon band, just outside
-        const R_TIDE_IN = R_MOON_OUT + 4;
-        const R_TIDE_OUT = R_TIDE_IN + 18;
-        const R_TIDE_MID = (R_TIDE_IN + R_TIDE_OUT) / 2;
 
         const moonPath = (cx: number, cy: number, r: number, p: number) => {
           const cosP = Math.cos((p * Math.PI) / 180);
