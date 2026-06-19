@@ -316,12 +316,11 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               <path id={labelArcId("neap-3q")} d={labelArcPath(270)} />
             </defs>
 
-            {/* Moon band — solid dark fill so phases pop, with bright rails */}
-            <circle cx={C} cy={C} r={R_MOON_OUT} fill="hsla(228, 45%, 7%, 0.92)" />
-            <circle cx={C} cy={C} r={R_MOON_IN} fill="hsla(228, 40%, 5%, 0)" />
-            <circle cx={C} cy={C} r={R_MOON_IN} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
-            <circle cx={C} cy={C} r={R_MOON_OUT} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
+            {/* Moon band rails (no opaque fill — keeps inner wheel visible) */}
+            <circle cx={C} cy={C} r={R_MOON_IN} fill="none" stroke="hsla(220,15%,80%,0.32)" strokeWidth="0.6" />
+            <circle cx={C} cy={C} r={R_MOON_OUT} fill="none" stroke="hsla(220,15%,80%,0.32)" strokeWidth="0.6" />
             <circle cx={C} cy={C} r={R_MOON} fill="none" stroke="hsla(220,15%,80%,0.08)" strokeWidth="0.3" strokeDasharray="1 3" />
+
 
             {/* 28 daily moon phases */}
             {Array.from({ length: COUNT }, (_, i) => {
