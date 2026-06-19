@@ -253,15 +253,35 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })()}
 
-      {/* Exterior tide ring — refined glass band with gradient arcs */}
+      {/* Exterior Moon-phase ring + adjacent Tide ring */}
       {(() => {
         const sun = positions.find((p) => p.id === "sun");
         const moon = positions.find((p) => p.id === "moon");
         if (!sun || !moon) return null;
         const phase = ((moon.longitude - sun.longitude) + 360) % 360;
-        const R_TIDE_IN = R_OUTER + 56;
-        const R_TIDE_OUT = R_OUTER + 78;
+
+        // Moon band — dedicated rails so moons don't blend with constellations/stars
+        const R_MOON_IN = R_OUTER + 30;
+        const R_MOON_OUT = R_OUTER + 60;
+        const R_MOON = (R_MOON_IN + R_MOON_OUT) / 2;
+        const moonR = 7;
+        const COUNT = 28;
+
+        // Tide band — sits flush against the moon band, just outside
+        const R_TIDE_IN = R_MOON_OUT + 4;
+        const R_TIDE_OUT = R_TIDE_IN + 18;
         const R_TIDE_MID = (R_TIDE_IN + R_TIDE_OUT) / 2;
+
+        const moonPath = (cx: number, cy: number, r: number, p: number) => {
+          const cosP = Math.cos((p * Math.PI) / 180);
+          const rx = Math.max(0.001, Math.abs(r * cosP));
+          const litRight = p < 180;
+          const top = `${cx} ${cy - r}`;
+          const bot = `${cx} ${cy + r}`;
+          const outerSweep = litRight ? 1 : 0;
+          const innerSweep = cosP >= 0 ? (litRight ? 0 : 1) : (litRight ? 1 : 0);
+          return `M ${top} A ${r} ${r} 0 0 ${outerSweep} ${bot} A ${rx} ${r} 0 0 ${innerSweep} ${top} Z`;
+        };
 
         const tideArc = (centerPhase: number, span: number) => {
           const startLon = sun.longitude + centerPhase - span / 2;
@@ -294,9 +314,33 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               <path id={labelArcId("neap-3q")} d={labelArcPath(270)} />
             </defs>
 
-            {/* Inner & outer rails of the tide band */}
-            <circle cx={C} cy={C} r={R_TIDE_IN} fill="none" stroke="hsla(220,15%,80%,0.22)" strokeWidth="0.6" />
-            <circle cx={C} cy={C} r={R_TIDE_OUT} fill="none" stroke="hsla(220,15%,80%,0.22)" strokeWidth="0.6" />
+            {/* Moon band — solid dark fill so phases pop, with bright rails */}
+            <circle cx={C} cy={C} r={R_MOON_OUT} fill="hsla(228, 45%, 7%, 0.92)" />
+            <circle cx={C} cy={C} r={R_MOON_IN} fill="hsla(228, 40%, 5%, 0)" />
+            <circle cx={C} cy={C} r={R_MOON_IN} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
+            <circle cx={C} cy={C} r={R_MOON_OUT} fill="none" stroke="hsla(220,15%,80%,0.35)" strokeWidth="0.7" />
+            <circle cx={C} cy={C} r={R_MOON} fill="none" stroke="hsla(220,15%,80%,0.08)" strokeWidth="0.3" strokeDasharray="1 3" />
+
+            {/* 28 daily moon phases */}
+            {Array.from({ length: COUNT }, (_, i) => {
+              const dayPhase = (i / COUNT) * 360;
+              const lon = sun.longitude + dayPhase;
+              const pos = polar(C, C, R_MOON, lon);
+              const isCurrent = Math.abs(((dayPhase - phase + 540) % 360) - 180) > 180 - (360 / COUNT) / 2;
+              return (
+                <g key={`m${i}`} transform={`translate(${pos.x} ${pos.y})`}>
+                  <circle cx={0} cy={0} r={moonR} fill="hsla(228, 50%, 4%, 1)" stroke="hsla(220,15%,85%,0.55)" strokeWidth="0.6" />
+                  <path d={moonPath(0, 0, moonR - 0.4, dayPhase)} fill="hsla(45, 30%, 96%, 0.98)" />
+                  {isCurrent && (
+                    <circle cx={0} cy={0} r={moonR + 3} fill="none" stroke="hsla(45, 90%, 75%, 0.95)" strokeWidth="1" />
+                  )}
+                </g>
+              );
+            })}
+
+            {/* Tide band rails */}
+            <circle cx={C} cy={C} r={R_TIDE_IN} fill="none" stroke="hsla(220,15%,80%,0.28)" strokeWidth="0.6" />
+            <circle cx={C} cy={C} r={R_TIDE_OUT} fill="none" stroke="hsla(220,15%,80%,0.28)" strokeWidth="0.6" />
             <circle cx={C} cy={C} r={R_TIDE_MID} fill="none" stroke="hsla(220,15%,80%,0.06)" strokeWidth="0.3" strokeDasharray="1 3" />
 
             {/* Tide arcs */}
@@ -313,16 +357,16 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               return <circle key={`node-${cp}`} cx={pt.x} cy={pt.y} r={1.6} fill="hsla(220,15%,90%,0.55)" />;
             })}
 
-            <text fontSize="10" letterSpacing="0.42em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-new")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="10" letterSpacing="0.42em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-1q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
-            <text fontSize="10" letterSpacing="0.42em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-full")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="10" letterSpacing="0.42em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-3q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
 
@@ -331,7 +375,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               const isSpring = phase < 25 || phase > 335 || (phase > 155 && phase < 205);
               const isNeap = (phase > 65 && phase < 115) || (phase > 245 && phase < 295);
               const tideLabel = isSpring ? "Spring Tide" : isNeap ? "Neap Tide" : phase < 180 ? "Tide Flooding" : "Tide Ebbing";
-              const mkIn = polar(C, C, R_TIDE_IN - 3, moon.longitude);
+              const mkIn = polar(C, C, R_TIDE_IN - 2, moon.longitude);
               const mkMid = polar(C, C, R_TIDE_MID, moon.longitude);
               const mkOut = polar(C, C, R_TIDE_OUT + 8, moon.longitude);
               return (
@@ -347,49 +391,6 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         );
       })()}
 
-      {/* Interior 28-day Moon phase ring — placed inside the wheel just inside the degree ticks */}
-      {(() => {
-        const sun = positions.find((p) => p.id === "sun");
-        const moon = positions.find((p) => p.id === "moon");
-        if (!sun || !moon) return null;
-        const phase = ((moon.longitude - sun.longitude) + 360) % 360;
-        const R_MOON = 222;
-        const moonR = 7;
-        const COUNT = 28;
-
-        const moonPath = (cx: number, cy: number, r: number, p: number) => {
-          const cosP = Math.cos((p * Math.PI) / 180);
-          const rx = Math.max(0.001, Math.abs(r * cosP));
-          const litRight = p < 180;
-          const top = `${cx} ${cy - r}`;
-          const bot = `${cx} ${cy + r}`;
-          const outerSweep = litRight ? 1 : 0;
-          const innerSweep = cosP >= 0 ? (litRight ? 0 : 1) : (litRight ? 1 : 0);
-          return `M ${top} A ${r} ${r} 0 0 ${outerSweep} ${bot} A ${rx} ${r} 0 0 ${innerSweep} ${top} Z`;
-        };
-
-        return (
-          <g>
-            <circle cx={C} cy={C} r={R_MOON + 10} fill="none" stroke="hsla(220,15%,75%,0.10)" strokeWidth="0.3" />
-            <circle cx={C} cy={C} r={R_MOON - 10} fill="none" stroke="hsla(220,15%,75%,0.10)" strokeWidth="0.3" />
-            {Array.from({ length: COUNT }, (_, i) => {
-              const dayPhase = (i / COUNT) * 360;
-              const lon = sun.longitude + dayPhase;
-              const pos = polar(C, C, R_MOON, lon);
-              const isCurrent = Math.abs(((dayPhase - phase + 540) % 360) - 180) > 180 - (360 / COUNT) / 2;
-              return (
-                <g key={`m${i}`} transform={`translate(${pos.x} ${pos.y})`}>
-                  <circle cx={0} cy={0} r={moonR} fill="hsla(228, 40%, 6%, 0.95)" stroke="hsla(220,15%,85%,0.4)" strokeWidth="0.5" />
-                  <path d={moonPath(0, 0, moonR - 0.4, dayPhase)} fill="hsla(45, 30%, 95%, 0.95)" />
-                  {isCurrent && (
-                    <circle cx={0} cy={0} r={moonR + 3} fill="none" stroke="hsla(45, 90%, 75%, 0.9)" strokeWidth="0.9" />
-                  )}
-                </g>
-              );
-            })}
-          </g>
-        );
-      })()}
 
 
 
