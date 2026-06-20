@@ -294,7 +294,9 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
         const labelArcPath = (centerPhase: number) => {
           const startLon = sun.longitude + centerPhase - 26;
           const endLon = sun.longitude + centerPhase + 26;
-          const R_LABEL = R_TIDE_OUT - 2; // baseline near outer edge; glyphs extend inward into band center
+          // Text on this arc has glyphs extending outward from center, so place baseline
+          // below the band's midline so the cap height lands on it — visually centering text.
+          const R_LABEL = R_TIDE_MID - 3.2;
           const p1 = polar(C, C, R_LABEL, startLon);
           const p2 = polar(C, C, R_LABEL, endLon);
           return `M ${p1.x} ${p1.y} A ${R_LABEL} ${R_LABEL} 0 0 1 ${p2.x} ${p2.y}`;
