@@ -227,6 +227,73 @@ const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
     icon: <Waves className="w-5 h-5" />,
   },
   {
+    id: "nasa-gibs-mur-sst",
+    name: "NASA GIBS — MUR Sea Surface Temperature",
+    provider: "NASA Earthdata / GIBS (JPL MUR)",
+    description: "L4 Multi-scale Ultra-high Resolution (MUR) SST analysis from JPL. 1km daily global ocean thermal field — powers the Hydrosphere live overlay.",
+    sphere: "Hydrosphere",
+    sphereColor: "#2d7fb8",
+    baseUrl: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi",
+    docsUrl: "https://nasa-gibs.github.io/gibs-api-docs/",
+    exampleRequest: `const date = "2026-03-20";
+const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
+  + \`?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0\`
+  + \`&LAYERS=GHRSST_L4_MUR_Sea_Surface_Temperature\`
+  + \`&CRS=EPSG:4326&BBOX=-90,-180,90,180\`
+  + \`&WIDTH=2048&HEIGHT=1024\`
+  + \`&FORMAT=image/png&TIME=\${date}\`;`,
+    exampleResponse: `// Returns PNG — 1km daily ocean temperature mosaic
+// Cool blues → warm reds, full global coverage`,
+    updateFrequency: "Daily",
+    format: "WMS (PNG tiles)",
+    authRequired: false,
+    icon: <Waves className="w-5 h-5" />,
+  },
+  {
+    id: "nasa-gibs-snow-cover",
+    name: "NASA GIBS — MODIS Snow Cover (NDSI)",
+    provider: "NASA Earthdata / GIBS",
+    description: "Normalized Difference Snow Index from MODIS Terra. Maps global snow and ice cover extent, updated daily — powers the Cryosphere live overlay.",
+    sphere: "Cryosphere",
+    sphereColor: "#bcdfe8",
+    baseUrl: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi",
+    docsUrl: "https://nasa-gibs.github.io/gibs-api-docs/",
+    exampleRequest: `const date = "2026-03-20";
+const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
+  + \`?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0\`
+  + \`&LAYERS=MODIS_Terra_NDSI_Snow_Cover\`
+  + \`&CRS=EPSG:4326&BBOX=-90,-180,90,180\`
+  + \`&WIDTH=2048&HEIGHT=1024\`
+  + \`&FORMAT=image/png&TIME=\${date}\`;`,
+    exampleResponse: `// Returns PNG — white = snow/ice, dark = snow-free`,
+    updateFrequency: "Daily",
+    format: "WMS (PNG tiles)",
+    authRequired: false,
+    icon: <Waves className="w-5 h-5" />,
+  },
+  {
+    id: "nasa-gibs-surface-temp",
+    name: "NASA GIBS — AIRS Surface Air Temperature",
+    provider: "NASA Earthdata / GIBS",
+    description: "Daily surface air temperature from AIRS on Aqua satellite. Maps the global thermal state of the lower atmosphere — powers the Atmosphere live overlay.",
+    sphere: "Atmosphere",
+    sphereColor: "#a8c8dd",
+    baseUrl: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi",
+    docsUrl: "https://nasa-gibs.github.io/gibs-api-docs/",
+    exampleRequest: `const date = "2026-03-20";
+const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
+  + \`?SERVICE=WMS&REQUEST=GetMap&VERSION=1.3.0\`
+  + \`&LAYERS=AIRS_L3_Surface_Air_Temperature_Daily_Day\`
+  + \`&CRS=EPSG:4326&BBOX=-90,-180,90,180\`
+  + \`&WIDTH=2048&HEIGHT=1024\`
+  + \`&FORMAT=image/png&TIME=\${date}\`;`,
+    exampleResponse: `// Returns PNG — cool blues → warm reds, daily global temperature field`,
+    updateFrequency: "Daily",
+    format: "WMS (PNG tiles)",
+    authRequired: false,
+    icon: <Sun className="w-5 h-5" />,
+  },
+  {
     id: "noaa-solar-wind-plasma",
     name: "NOAA Solar Wind Plasma (ACE/DSCOVR)",
     provider: "NOAA Space Weather Prediction Center",
