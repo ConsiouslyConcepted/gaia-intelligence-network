@@ -154,7 +154,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               x={labelPos.x}
               y={labelPos.y}
               textAnchor="middle"
-              dominantBaseline="central"
+             
               fontSize="28"
               fill={isActive ? "hsla(220, 15%, 96%, 0.98)" : "hsla(220, 10%, 85%, 0.82)"}
               style={{
@@ -194,7 +194,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               x={constLabel.x}
               y={constLabel.y}
               textAnchor="middle"
-              dominantBaseline="central"
+             
               fontSize="13"
               letterSpacing="0.22em"
               fontWeight={500}
@@ -359,16 +359,16 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               return <circle key={`node-${cp}`} cx={pt.x} cy={pt.y} r={1.6} fill="hsla(220,15%,90%,0.55)" />;
             })}
 
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-new")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-1q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-full")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-3q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
 
@@ -518,7 +518,7 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               x={pos.x}
               y={pos.y}
               textAnchor="middle"
-              dominantBaseline="central"
+             
               fontSize="16"
               fill={meta.color}
               fillOpacity={isActive ? 1 : 0.85}
