@@ -46,7 +46,7 @@ const APIS: ApiEndpoint[] = [
     name: "USGS Earthquake Feed",
     provider: "U.S. Geological Survey",
     description: "Real-time earthquake data including location, magnitude, depth, and metadata for all events M2.5+ globally.",
-    sphere: "Geosphere",
+    sphere: "Lithosphere",
     sphereColor: "#cc5533",
     baseUrl: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/summary",
     docsUrl: "https://earthquake.usgs.gov/earthquakes/feed/v1.0/geojson.php",
