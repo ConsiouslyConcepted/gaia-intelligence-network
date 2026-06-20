@@ -185,8 +185,8 @@ const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
     name: "NASA GIBS — AIRS Water Vapor",
     provider: "NASA Earthdata / GIBS",
     description: "Daily atmospheric water vapor (H₂O mixing ratio) from AIRS on Aqua satellite. Shows moisture distribution in the upper atmosphere.",
-    sphere: "Ionosphere",
-    sphereColor: "#4488cc",
+    sphere: "Atmosphere",
+    sphereColor: "#a8c8dd",
     baseUrl: "https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi",
     docsUrl: "https://nasa-gibs.github.io/gibs-api-docs/",
     exampleRequest: `const date = "2026-03-20";
