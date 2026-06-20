@@ -358,16 +358,16 @@ export function AstrologyChart({ positions, aspects, selectedSign, selectedPlane
               return <circle key={`node-${cp}`} cx={pt.x} cy={pt.y} r={1.6} fill="hsla(220,15%,90%,0.55)" />;
             })}
 
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-new")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-1q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(210,55%,92%,0.95)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("spring-full")}`} startOffset="50%" textAnchor="middle">Spring Tide</textPath>
             </text>
-            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
+            <text fontSize="9" letterSpacing="0.4em" fill="hsla(220,15%,85%,0.85)" fontWeight={500} dominantBaseline="central" className="uppercase select-none pointer-events-none" style={{ fontFamily: "ui-sans-serif, system-ui" }}>
               <textPath href={`#${labelArcId("neap-3q")}`} startOffset="50%" textAnchor="middle">Neap Tide</textPath>
             </text>
 
