@@ -421,8 +421,8 @@ const url = \`https://gibs.earthdata.nasa.gov/wms/epsg4326/best/wms.cgi\`
     name: "NASA JPL Close-Approach Data",
     provider: "NASA JPL Solar System Dynamics",
     description: "Near-Earth object close approaches within 0.2 AU over the next 30 days. Designation, date, distance (AU & lunar distances), and relative velocity.",
-    sphere: "Crystalsphere",
-    sphereColor: "#e8c86a",
+    sphere: "Heliosphere",
+    sphereColor: "#f6c177",
     baseUrl: "https://ssd-api.jpl.nasa.gov/cad.api",
     docsUrl: "https://ssd-api.jpl.nasa.gov/doc/cad.html",
     exampleRequest: `const url = "https://ssd-api.jpl.nasa.gov/cad.api"
