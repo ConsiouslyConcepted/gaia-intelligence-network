@@ -199,14 +199,11 @@ const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
 
 // ───────── Cosmic Address (3D) ─────────
 const AddressView = () => (
-  <div className="w-full h-full flex items-center justify-center p-4">
-    <img
-      src={milkyWayAddress.url}
-      alt="Milky Way galaxy showing the location of our Solar System in the Local/Orion Arm, with labeled spiral arms (Perseus, Carina-Sagittarius, Norma, Crux-Scutum, Cygnus) and distance rings in light-years"
-      className="max-w-full max-h-full object-contain rounded-lg shadow-2xl"
-    />
+  <div className="w-full h-full">
+    <CosmicAddress3D />
   </div>
 );
+
 
 // ───────── Harmonic Cycles (Dewey table) with cross-references ─────────
 const DEWEY_ROWS: { years: number[]; emphasis?: boolean; note?: string }[] = [
