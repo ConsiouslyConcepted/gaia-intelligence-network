@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
-import milkyWayAddress from "@/assets/milky-way-earth-location.jpg.asset.json";
+import { CosmicAddress3D } from "@/components/universal/CosmicAddress3D";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
