@@ -1,322 +1,480 @@
-import { useMemo, useRef, useState } from "react";
+import { useMemo, useRef } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Billboard, Text, Line } from "@react-three/drei";
+import { OrbitControls, Line, Text } from "@react-three/drei";
 import * as THREE from "three";
 
 /**
- * Procedural recreation of the reference Milky Way illustration:
- * tilted top-down view with a bright yellow galactic bulge, blue spiral
- * arms of dust + stars, distance rings labeled in light-years from the
- * galactic center, and a marker for our Solar System on the Orion Arm.
- * Fully interactive — drag to orbit, scroll to zoom.
+ * Interactive recreation of the "A Safe Location" Milky Way plate:
+ * tilted three-quarter view of a barred spiral galaxy with labeled arms,
+ * distance rings, degree ring, solar-system marker and orbit arc.
+ * Fully procedural — no textures, no info boxes.
  */
 
-// Galactic disk: ~50,000 ly radius mapped to scene units.
-const DISK_R = 2.4;
+// ─── Scale: galactic disk ~50,000 ly maps to scene units ───
+const DISK_R = 2.6;
 const LY = DISK_R / 50000;
 
-// ───────── Arm definitions ─────────
+// Overall galaxy tilt (matches the plate's bar orientation)
+const GAL_ROT = -0.35;
+
+// ─── Spiral arms (barred-spiral, logarithmic) ───
 type ArmDef = {
   id: string;
   name: string;
-  color: string;
-  phase: number;        // starting angle offset
-  labelR: number;       // ly from center
-  labelAngle: number;   // radians (on-disk angle)
-  bright?: boolean;     // cyan accent like "Cygnus Arm" in the reference
+  phase: number;         // starting angle of arm root at bar tip
+  spin: 1 | -1;          // which bar tip it comes off
+  pitchDeg: number;
+  brightness: number;    // particle alpha multiplier
+  label: string;
+  labelTheta: number;    // theta along arm where label center sits
+  labelSize: number;
+  labelColor: string;
+  reverseLabel?: boolean;
 };
 
-// Arm placements approximated from the reference plate.
 const ARMS: ArmDef[] = [
-  { id: "perseus", name: "Perseus Arm",            color: "#cfe0ff", phase: 0.0,                labelR: 44000, labelAngle: Math.PI * 1.04 },
-  { id: "carina",  name: "Carina-Sagittarius Arm", color: "#d6e6ff", phase: Math.PI * 0.55,     labelR: 42000, labelAngle: Math.PI * 0.78 },
-  { id: "cygnus",  name: "Cygnus Arm",             color: "#6fe3ff", phase: Math.PI * 1.05,     labelR: 46000, labelAngle: Math.PI * 0.32, bright: true },
-  { id: "norma",   name: "Norma Arm",              color: "#bcd4ff", phase: Math.PI * 1.45,     labelR: 30000, labelAngle: Math.PI * 0.08 },
-  { id: "crux",    name: "Crux-Scutum Arm",        color: "#cfe0ff", phase: Math.PI * 0.25,     labelR: 36000, labelAngle: Math.PI * 1.92 },
-  { id: "orion",   name: "Local or Orion Arm",     color: "#e8d29a", phase: Math.PI * 0.78,     labelR: 32000, labelAngle: Math.PI * 1.55 },
+  { id: "perseus",     name: "Perseus",       phase: 0.00,             spin:  1, pitchDeg: 12.5, brightness: 1.00, label: "P E R S E U S   A R M",                   labelTheta: 2.30, labelSize: 0.085, labelColor: "#bfe6ff" },
+  { id: "outer",       name: "Outer",         phase: 0.55,             spin:  1, pitchDeg: 13.5, brightness: 0.70, label: "O U T E R   A R M",                       labelTheta: 2.55, labelSize: 0.085, labelColor: "#bfe6ff" },
+  { id: "sagittarius", name: "Sagittarius",   phase: Math.PI,          spin: -1, pitchDeg: 12.5, brightness: 1.00, label: "S A G I T T A R I U S   A R M",           labelTheta: 2.15, labelSize: 0.080, labelColor: "#bfe6ff", reverseLabel: true },
+  { id: "scutum",      name: "Scutum-Cent.",  phase: Math.PI + 0.55,   spin: -1, pitchDeg: 13.0, brightness: 0.95, label: "S C U T U M – C E N T A U R U S   A R M", labelTheta: 2.45, labelSize: 0.070, labelColor: "#bfe6ff", reverseLabel: true },
+  { id: "norma",       name: "Norma",         phase: 0.30,             spin:  1, pitchDeg: 14.5, brightness: 0.55, label: "N O R M A   A R M",                       labelTheta: 1.65, labelSize: 0.075, labelColor: "#bfe6ff" },
+  { id: "orion",       name: "Orion Spur",    phase: Math.PI + 0.30,   spin: -1, pitchDeg: 16.5, brightness: 0.55, label: "O R I O N   S P U R",                     labelTheta: 1.65, labelSize: 0.070, labelColor: "#bfe6ff", reverseLabel: true },
 ];
 
-// Logarithmic spiral helper. r = A * e^(B * θ).
-const PITCH = (12 * Math.PI) / 180;
-const B_COEF = 1 / Math.tan(PITCH);
-const A_COEF = 2200;
-
-function spiralPoint(theta: number, phase: number) {
-  const rLy = A_COEF * Math.exp((theta * B_COEF) / 22);
-  const ang = theta + phase;
-  return { rLy, x: Math.cos(ang) * rLy * LY, z: Math.sin(ang) * rLy * LY };
+// r(θ) = r0 * exp(B θ)
+function armPoint(theta: number, arm: ArmDef, r0Ly = 4000) {
+  const B = 1 / Math.tan((arm.pitchDeg * Math.PI) / 180);
+  const rLy = r0Ly * Math.exp(theta / B);
+  const ang = arm.phase + arm.spin * theta + GAL_ROT;
+  return {
+    rLy,
+    x: Math.cos(ang) * rLy * LY,
+    z: Math.sin(ang) * rLy * LY,
+    tangent: ang + arm.spin * Math.PI / 2,
+  };
 }
 
-// ───────── Galactic core: white-hot center, yellow bulge, soft halo ─────────
-const GalacticCore = () => {
-  const haloRef = useRef<THREE.Mesh>(null);
-  useFrame((_, dt) => { if (haloRef.current) haloRef.current.rotation.y += dt * 0.03; });
+// ─────────── Background star field ───────────
+function BackgroundStars() {
+  const geom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    const N = 1200;
+    const pos = new Float32Array(N * 3);
+    const col = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const r = 18 + Math.random() * 22;
+      const t = Math.random() * Math.PI * 2;
+      const p = Math.acos(2 * Math.random() - 1);
+      pos[i * 3] = r * Math.sin(p) * Math.cos(t);
+      pos[i * 3 + 1] = r * Math.sin(p) * Math.sin(t);
+      pos[i * 3 + 2] = r * Math.cos(p);
+      const c = 0.55 + Math.random() * 0.45;
+      col[i * 3] = c; col[i * 3 + 1] = c; col[i * 3 + 2] = c;
+    }
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    return g;
+  }, []);
   return (
-    <group>
-      {/* White-hot nucleus */}
-      <mesh>
-        <sphereGeometry args={[0.14, 32, 32]} />
-        <meshBasicMaterial color="#ffffff" />
+    <points geometry={geom}>
+      <pointsMaterial size={0.035} sizeAttenuation vertexColors transparent opacity={0.85} depthWrite={false} />
+    </points>
+  );
+}
+
+// ─────────── Galactic core: bar + bulge halo ───────────
+function GalacticCore() {
+  return (
+    <group rotation={[0, GAL_ROT, 0]}>
+      {/* soft outermost golden disc haze */}
+      <mesh rotation={[-Math.PI / 2, 0, 0]}>
+        <circleGeometry args={[0.95, 64]} />
+        <meshBasicMaterial color="#f1c98a" transparent opacity={0.08} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* Yellow bulge (flattened ellipsoid) */}
-      <mesh scale={[1, 0.35, 1]}>
-        <sphereGeometry args={[0.34, 48, 32]} />
-        <meshBasicMaterial color="#fde08a" transparent opacity={0.78} blending={THREE.AdditiveBlending} depthWrite={false} />
+      {/* golden outer bulge */}
+      <mesh scale={[0.78, 0.16, 0.42]}>
+        <sphereGeometry args={[1, 48, 48]} />
+        <meshBasicMaterial color="#e7a24a" transparent opacity={0.45} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* Orange outer bulge */}
-      <mesh scale={[1, 0.28, 1]}>
-        <sphereGeometry args={[0.55, 48, 32]} />
-        <meshBasicMaterial color="#e9a44a" transparent opacity={0.38} blending={THREE.AdditiveBlending} depthWrite={false} />
+      {/* yellow inner bulge */}
+      <mesh scale={[0.55, 0.13, 0.30]}>
+        <sphereGeometry args={[1, 48, 48]} />
+        <meshBasicMaterial color="#fde08a" transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* Soft disc halo */}
-      <mesh ref={haloRef} rotation={[-Math.PI / 2, 0, 0]}>
-        <ringGeometry args={[0, 1.05, 96]} />
-        <meshBasicMaterial color="#f3c97a" transparent opacity={0.09} side={THREE.DoubleSide} blending={THREE.AdditiveBlending} depthWrite={false} />
+      {/* white-hot bar core */}
+      <mesh scale={[0.36, 0.10, 0.13]}>
+        <sphereGeometry args={[1, 48, 48]} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.95} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
+      {/* hot tips of bar */}
+      {[-1, 1].map((s) => (
+        <mesh key={s} position={[s * 0.28, 0, 0]} scale={[0.10, 0.07, 0.08]}>
+          <sphereGeometry args={[1, 32, 32]} />
+          <meshBasicMaterial color="#ffe9b8" transparent opacity={0.9} depthWrite={false} blending={THREE.AdditiveBlending} />
+        </mesh>
+      ))}
     </group>
   );
-};
+}
 
-// ───────── Spiral arm: bright lane + dust + scattered stars ─────────
-const Arm = ({ arm, hovered, setHovered }: { arm: ArmDef; hovered: string | null; setHovered: (id: string | null) => void }) => {
-  const { positions, colors } = useMemo(() => {
-    const COUNT = 1700;
-    const pos = new Float32Array(COUNT * 3);
-    const col = new Float32Array(COUNT * 3);
-    const base = new THREE.Color(arm.color);
-    for (let i = 0; i < COUNT; i++) {
-      // theta sampled with bias toward outer disk (so arms read clearly outside the bulge)
-      const t = 1.2 + Math.pow(Math.random(), 0.55) * 14;
-      const { x, z, rLy } = spiralPoint(t, arm.phase);
-      // perpendicular jitter — wider with radius
-      const tangentAng = t + arm.phase + Math.PI / 2;
-      const spread = (1 - Math.exp(-rLy / 18000)) * 0.22 + 0.025;
-      const j = (Math.random() - 0.5) * spread;
-      const jx = Math.cos(tangentAng) * j;
-      const jz = Math.sin(tangentAng) * j;
-      // Thin disk
-      const y = (Math.random() - 0.5) * 0.045;
-      pos[i * 3 + 0] = x + jx;
-      pos[i * 3 + 1] = y;
-      pos[i * 3 + 2] = z + jz;
-      // Color: brighter near arm core, dimmer at edges
-      const edgeDist = Math.abs(j) / (spread / 2 + 1e-3);
-      const brightness = (1 - edgeDist * 0.55) * (0.55 + Math.random() * 0.45);
-      col[i * 3 + 0] = base.r * brightness;
-      col[i * 3 + 1] = base.g * brightness;
-      col[i * 3 + 2] = base.b * brightness;
-    }
-    return { positions: pos, colors: col };
-  }, [arm.color, arm.phase]);
+// ─────────── Spiral arm particles ───────────
+function Arms() {
+  const geom = useMemo(() => {
+    const positions: number[] = [];
+    const colors: number[] = [];
+    const sizes: number[] = [];
 
-  const isHover = hovered === arm.id;
-  const dim = hovered !== null && !isHover;
+    ARMS.forEach((arm) => {
+      const N = 2400;
+      const thetaMax = 3.2;
+      for (let i = 0; i < N; i++) {
+        // bias samples outward for thicker outer arms
+        const t = Math.pow(Math.random(), 0.55) * thetaMax;
+        const p = armPoint(t, arm);
+        if (p.rLy > 52000) continue;
+
+        // perpendicular jitter (arm thickness grows with radius)
+        const armWidth = 0.04 + p.rLy * LY * 0.10;
+        const j1 = (Math.random() - 0.5) * armWidth;
+        const j2 = (Math.random() - 0.5) * armWidth;
+        const perpAng = p.tangent + Math.PI / 2;
+
+        const x = p.x + Math.cos(perpAng) * j1 + (Math.random() - 0.5) * 0.015;
+        const z = p.z + Math.sin(perpAng) * j1 + (Math.random() - 0.5) * 0.015;
+        const y = (Math.random() - 0.5) * 0.025 + j2 * 0.05;
+
+        positions.push(x, y, z);
+
+        // color: cool blue-white in main body, warmer near core, dusty tint sometimes
+        const rNorm = p.rLy / 50000;
+        const warm = Math.max(0, 1 - rNorm * 2.4);
+        const dust = Math.random() < 0.18;
+        let r = 0.78 + warm * 0.22;
+        let g = 0.86 + warm * 0.10;
+        let b = 1.0;
+        if (dust) { r *= 0.45; g *= 0.45; b *= 0.55; }
+        const bMul = arm.brightness * (0.7 + Math.random() * 0.3);
+        colors.push(r * bMul, g * bMul, b * bMul);
+
+        sizes.push(0.012 + Math.random() * 0.022);
+      }
+    });
+
+    const g = new THREE.BufferGeometry();
+    g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
+    g.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
+    return g;
+  }, []);
+
   return (
-    <group
-      onPointerOver={(e) => { e.stopPropagation(); setHovered(arm.id); }}
-      onPointerOut={() => setHovered(null)}
-    >
-      <points>
-        <bufferGeometry>
-          <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-          <bufferAttribute attach="attributes-color" args={[colors, 3]} />
-        </bufferGeometry>
+    <group rotation={[0, 0, 0]}>
+      <points geometry={geom}>
         <pointsMaterial
-          size={isHover ? 0.03 : 0.02}
+          size={0.032}
+          sizeAttenuation
           vertexColors
           transparent
-          opacity={dim ? 0.28 : isHover ? 1 : 0.9}
-          sizeAttenuation
+          opacity={0.85}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
         />
       </points>
     </group>
   );
-};
+}
 
-// ───────── Distance ring (10k–40k ly) ─────────
-const DistanceRing = ({ ly, label, labelAngle = Math.PI * 0.5 }: { ly: number; label: string; labelAngle?: number }) => {
-  const r = ly * LY;
-  const points = useMemo(() => {
-    const pts: [number, number, number][] = [];
-    for (let i = 0; i <= 160; i++) {
-      const a = (i / 160) * Math.PI * 2;
-      pts.push([Math.cos(a) * r, 0, Math.sin(a) * r]);
+// ─────────── Disk haze (soft bluish wash across the disk) ───────────
+function DiskHaze() {
+  const geom = useMemo(() => {
+    const g = new THREE.BufferGeometry();
+    const N = 3000;
+    const pos = new Float32Array(N * 3);
+    const col = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      const r = Math.sqrt(Math.random()) * DISK_R * 0.95;
+      const a = Math.random() * Math.PI * 2;
+      pos[i * 3] = Math.cos(a) * r;
+      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.03;
+      pos[i * 3 + 2] = Math.sin(a) * r;
+      const c = 0.18 + Math.random() * 0.12;
+      col[i * 3] = c * 0.7; col[i * 3 + 1] = c * 0.85; col[i * 3 + 2] = c;
     }
-    return pts;
-  }, [r]);
-  const lx = Math.cos(labelAngle) * r;
-  const lz = Math.sin(labelAngle) * r;
+    g.setAttribute("position", new THREE.BufferAttribute(pos, 3));
+    g.setAttribute("color", new THREE.BufferAttribute(col, 3));
+    return g;
+  }, []);
+  return (
+    <points geometry={geom}>
+      <pointsMaterial size={0.04} sizeAttenuation vertexColors transparent opacity={0.45} depthWrite={false} blending={THREE.AdditiveBlending} />
+    </points>
+  );
+}
+
+// ─────────── Curved arm label (per-character along the spiral) ───────────
+function ArmLabel({ arm }: { arm: ArmDef }) {
+  const chars = arm.label.split("");
+  // Sample positions along arm centered at arm.labelTheta
+  const total = chars.length;
+  // characters use a small fixed angular step; compute step from labelSize and radius
+  const center = armPoint(arm.labelTheta, arm);
+  const stepRadial = arm.labelSize * 0.95;
+  // angular step at this radius
+  const dTheta = stepRadial / Math.max(0.2, Math.hypot(center.x, center.z));
+  const startIdx = -(total - 1) / 2;
+
   return (
     <group>
-      <Line points={points} color="#9fc0e8" transparent opacity={0.35} lineWidth={0.8} />
-      <Billboard position={[lx, 0.015, lz]}>
-        <Text fontSize={0.072} color="#b8ccea" anchorX="center" anchorY="middle" fillOpacity={0.75} outlineWidth={0.003} outlineColor="#000">
-          {label}
-        </Text>
-      </Billboard>
+      {chars.map((ch, i) => {
+        const idx = startIdx + i;
+        const t = arm.labelTheta + idx * dTheta * 0.85;
+        const p = armPoint(t, arm);
+        const ang = Math.atan2(p.z, p.x);
+        // text lies flat on disk; rotate around Z so +X (text right) aligns with tangent.
+        // Tangent direction at (cosA,sinA): (-sinA, cosA). After rotation [-PI/2,0,Z]:
+        // local +X maps to (cosZ, 0, -sinZ). Match → Z = ang + π/2 (or + 3π/2 if reversed).
+        const zRot = arm.reverseLabel ? ang - Math.PI / 2 : ang + Math.PI / 2;
+        return (
+          <Text
+            key={i}
+            position={[p.x, 0.02, p.z]}
+            rotation={[-Math.PI / 2, 0, zRot]}
+            fontSize={arm.labelSize}
+            color={arm.labelColor}
+            anchorX="center"
+            anchorY="middle"
+            outlineWidth={0.002}
+            outlineColor="#000"
+            outlineOpacity={0.5}
+          >
+            {ch}
+          </Text>
+        );
+      })}
     </group>
   );
-};
+}
 
-// ───────── Solar System marker on the Orion Arm (~26,000 ly out) ─────────
-const SolarMarker = () => {
-  const pulse = useRef<THREE.Mesh>(null);
-  useFrame((s) => {
-    if (pulse.current) {
-      const t = s.clock.elapsedTime;
-      pulse.current.scale.setScalar(1 + Math.sin(t * 2.2) * 0.35);
+// ─────────── "CORE" label ───────────
+function CoreLabel() {
+  return (
+    <Text
+      position={[Math.cos(GAL_ROT) * 0.18, 0.05, Math.sin(GAL_ROT) * 0.18]}
+      rotation={[-Math.PI / 2, 0, GAL_ROT]}
+      fontSize={0.07}
+      color="#ffffff"
+      anchorX="center"
+      anchorY="middle"
+      letterSpacing={0.25}
+      outlineWidth={0.002}
+      outlineColor="#000"
+      outlineOpacity={0.6}
+    >
+      CORE
+    </Text>
+  );
+}
+
+// ─────────── Distance ring ───────────
+function DistanceRing({ ly, label }: { ly: number; label: string }) {
+  const r = ly * LY;
+  const pts = useMemo(() => {
+    const arr: [number, number, number][] = [];
+    const N = 128;
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      arr.push([Math.cos(a) * r, 0, Math.sin(a) * r]);
     }
-  });
-  // Snap a point on the Orion arm to ~26,000 ly
-  const { x, z } = spiralPoint(7.0, Math.PI * 0.78);
-  const len = Math.hypot(x, z) || 1;
-  const targetR = 26000 * LY;
-  const px = (x / len) * targetR;
-  const pz = (z / len) * targetR;
+    return arr;
+  }, [r]);
   return (
-    <group position={[px, 0.02, pz]}>
-      <mesh ref={pulse}>
-        <sphereGeometry args={[0.05, 16, 16]} />
-        <meshBasicMaterial color="#74b6e8" transparent opacity={0.5} blending={THREE.AdditiveBlending} depthWrite={false} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[0.022, 24, 24]} />
-        <meshBasicMaterial color="#ffffff" />
-      </mesh>
-      <Billboard position={[0.18, 0.05, 0]}>
-        <Text fontSize={0.082} color="#ffffff" anchorX="left" anchorY="middle" outlineWidth={0.004} outlineColor="#000">
-          ← Our Solar System
-        </Text>
-      </Billboard>
-    </group>
-  );
-};
-
-// ───────── Arm label ─────────
-const ArmLabel = ({ arm, hovered, setHovered }: { arm: ArmDef; hovered: string | null; setHovered: (id: string | null) => void }) => {
-  const r = arm.labelR * LY;
-  const x = Math.cos(arm.labelAngle) * r;
-  const z = Math.sin(arm.labelAngle) * r;
-  const isHover = hovered === arm.id;
-  return (
-    <Billboard position={[x, 0.06, z]}>
+    <group>
+      <Line points={pts} color="#7a8aa3" lineWidth={0.6} transparent opacity={0.35} />
       <Text
-        fontSize={isHover ? 0.11 : 0.09}
-        color={arm.bright ? "#5ee3ff" : "#ffffff"}
+        position={[0, 0.01, r + 0.05]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        fontSize={0.065}
+        color="#a8b6cc"
         anchorX="center"
         anchorY="middle"
-        outlineWidth={0.005}
+        outlineWidth={0.002}
         outlineColor="#000"
-        fillOpacity={hovered && !isHover ? 0.5 : 1}
-        onPointerOver={(e) => { e.stopPropagation(); setHovered(arm.id); }}
-        onPointerOut={() => setHovered(null)}
+        outlineOpacity={0.6}
       >
-        {arm.name}
+        {label}
       </Text>
-    </Billboard>
+    </group>
   );
-};
+}
 
-// ───────── Background dust haze inside the disk ─────────
-const DiskHaze = () => {
-  const positions = useMemo(() => {
-    const COUNT = 2400;
-    const pos = new Float32Array(COUNT * 3);
-    for (let i = 0; i < COUNT; i++) {
-      const r = Math.pow(Math.random(), 0.7) * DISK_R * 1.05;
-      const a = Math.random() * Math.PI * 2;
-      pos[i * 3 + 0] = Math.cos(a) * r;
-      pos[i * 3 + 1] = (Math.random() - 0.5) * 0.06;
-      pos[i * 3 + 2] = Math.sin(a) * r;
-    }
-    return pos;
-  }, []);
-  return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial size={0.012} color="#9fb8d8" transparent opacity={0.35} sizeAttenuation depthWrite={false} blending={THREE.AdditiveBlending} />
-    </points>
+// ─────────── Degree ring (outer edge ticks + labels) ───────────
+function DegreeRing() {
+  const r = DISK_R * 1.05;
+  const labels = useMemo(
+    () =>
+      Array.from({ length: 12 }, (_, i) => {
+        const deg = i * 30;
+        const a = (deg * Math.PI) / 180;
+        return { deg, x: Math.cos(a) * r, z: Math.sin(a) * r };
+      }),
+    [r]
   );
-};
-
-// ───────── Far background stars ─────────
-const Backdrop = () => {
-  const positions = useMemo(() => {
-    const COUNT = 900;
-    const pos = new Float32Array(COUNT * 3);
-    for (let i = 0; i < COUNT; i++) {
-      // Spread across a large sphere shell
-      const u = Math.random() * 2 - 1;
-      const t = Math.random() * Math.PI * 2;
-      const r = 9 + Math.random() * 4;
-      const s = Math.sqrt(1 - u * u);
-      pos[i * 3 + 0] = Math.cos(t) * s * r;
-      pos[i * 3 + 1] = u * r;
-      pos[i * 3 + 2] = Math.sin(t) * s * r;
-    }
-    return pos;
-  }, []);
   return (
-    <points>
-      <bufferGeometry>
-        <bufferAttribute attach="attributes-position" args={[positions, 3]} />
-      </bufferGeometry>
-      <pointsMaterial size={0.018} color="#dde6f5" transparent opacity={0.8} sizeAttenuation depthWrite={false} />
-    </points>
-  );
-};
-
-const Scene = () => {
-  const [hovered, setHovered] = useState<string | null>(null);
-  return (
-    <>
-      <ambientLight intensity={0.7} />
-      <Backdrop />
-      <DiskHaze />
-      <GalacticCore />
-      {ARMS.map((arm) => (
-        <Arm key={arm.id} arm={arm} hovered={hovered} setHovered={setHovered} />
+    <group>
+      {labels.map(({ deg, x, z }) => (
+        <Text
+          key={deg}
+          position={[x, 0.005, z]}
+          rotation={[-Math.PI / 2, 0, 0]}
+          fontSize={0.06}
+          color="#6e7a90"
+          anchorX="center"
+          anchorY="middle"
+        >
+          {`${deg}°`}
+        </Text>
       ))}
-
-      {/* Distance rings — light-years from galactic center */}
-      <DistanceRing ly={10000} label="10,000" labelAngle={Math.PI * 1.55} />
-      <DistanceRing ly={20000} label="20,000" labelAngle={Math.PI * 1.5} />
-      <DistanceRing ly={30000} label="30,000" labelAngle={Math.PI * 1.48} />
-      <DistanceRing ly={40000} label="40,000" labelAngle={Math.PI * 1.46} />
-
-      <SolarMarker />
-
-      {ARMS.map((arm) => (
-        <ArmLabel key={arm.id + "-label"} arm={arm} hovered={hovered} setHovered={setHovered} />
-      ))}
-    </>
+    </group>
   );
-};
+}
 
-export const CosmicAddress3D = () => {
+// ─────────── Solar system marker + orbit arc ───────────
+function SolarSystem() {
+  // Place on Orion Spur at ~26,000 ly
+  const sunR = 26000 * LY;
+  const sunAng = GAL_ROT + Math.PI * 0.55; // bottom-center area
+  const sx = Math.cos(sunAng) * sunR;
+  const sz = Math.sin(sunAng) * sunR;
+
+  const orbitPts = useMemo(() => {
+    const arr: [number, number, number][] = [];
+    const start = sunAng + 0.05;
+    const end = sunAng + Math.PI * 0.85;
+    const N = 96;
+    for (let i = 0; i <= N; i++) {
+      const a = start + ((end - start) * i) / N;
+      arr.push([Math.cos(a) * sunR, 0, Math.sin(a) * sunR]);
+    }
+    return arr;
+  }, [sunR, sunAng]);
+
+  const pulse = useRef<THREE.Mesh>(null);
+  useFrame(({ clock }) => {
+    if (pulse.current) {
+      const s = 1 + Math.sin(clock.elapsedTime * 2.3) * 0.25;
+      pulse.current.scale.setScalar(s);
+    }
+  });
+
   return (
-    <Canvas
-      // Tilted angle echoes the reference illustration
-      camera={{ position: [0, 2.6, 3.4], fov: 45 }}
-      dpr={[1, 2]}
-      gl={{ antialias: true, alpha: true }}
-      style={{ width: "100%", height: "100%" }}
-    >
-      <Scene />
-      <OrbitControls
-        enablePan={false}
-        minDistance={2.4}
-        maxDistance={7}
-        minPolarAngle={Math.PI * 0.08}
-        maxPolarAngle={Math.PI * 0.5}
-        rotateSpeed={0.55}
-        autoRotate
-        autoRotateSpeed={0.2}
-      />
-    </Canvas>
+    <group>
+      {/* solar-system orbit arc */}
+      <Line points={orbitPts} color="#e8eef8" lineWidth={0.8} transparent opacity={0.65} dashed dashSize={0.08} gapSize={0.04} />
+
+      {/* sun marker */}
+      <mesh position={[sx, 0.015, sz]}>
+        <sphereGeometry args={[0.022, 16, 16]} />
+        <meshBasicMaterial color="#ffffff" />
+      </mesh>
+      <mesh ref={pulse} position={[sx, 0.015, sz]}>
+        <sphereGeometry args={[0.05, 16, 16]} />
+        <meshBasicMaterial color="#9ed1ff" transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
+      </mesh>
+
+      {/* label */}
+      <Text
+        position={[sx - 0.18, 0.02, sz + 0.10]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        fontSize={0.062}
+        color="#ffffff"
+        anchorX="right"
+        anchorY="middle"
+        letterSpacing={0.18}
+        outlineWidth={0.003}
+        outlineColor="#000"
+        outlineOpacity={0.7}
+      >
+        YOU ARE HERE
+      </Text>
+      <Text
+        position={[sx - 0.18, 0.02, sz + 0.18]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        fontSize={0.05}
+        color="#cfd9ea"
+        anchorX="right"
+        anchorY="middle"
+        letterSpacing={0.15}
+      >
+        SOLAR SYSTEM
+      </Text>
+
+      {/* "Direction of rotation" tag on outer rim */}
+      <Text
+        position={[DISK_R * 1.18, 0.005, -0.15]}
+        rotation={[-Math.PI / 2, 0, 0]}
+        fontSize={0.055}
+        color="#a8b6cc"
+        anchorX="left"
+        anchorY="middle"
+      >
+        Direction of rotation →
+      </Text>
+    </group>
   );
-};
+}
+
+// ─────────── Slow auto rotation of the whole galaxy ───────────
+function GalaxySpin({ children }: { children: React.ReactNode }) {
+  const ref = useRef<THREE.Group>(null);
+  useFrame((_, dt) => {
+    if (ref.current) ref.current.rotation.y += dt * 0.02;
+  });
+  return <group ref={ref}>{children}</group>;
+}
+
+// ─────────── Scene root ───────────
+export default function CosmicAddress3D() {
+  return (
+    <div className="w-full h-[600px] rounded-xl overflow-hidden bg-black">
+      <Canvas camera={{ position: [0, 2.4, 4.0], fov: 42 }} dpr={[1, 2]}>
+        <color attach="background" args={["#02030a"]} />
+        <ambientLight intensity={0.4} />
+
+        <BackgroundStars />
+
+        <GalaxySpin>
+          <DiskHaze />
+          <Arms />
+          <GalacticCore />
+
+          {/* Distance rings */}
+          <DistanceRing ly={10000} label="10,000 light-years" />
+          <DistanceRing ly={20000} label="20,000 light-years" />
+          <DistanceRing ly={30000} label="30,000 light-years" />
+          <DistanceRing ly={40000} label="40,000 light-years" />
+
+          {/* Degree ring */}
+          <DegreeRing />
+
+          {/* Arm labels */}
+          {ARMS.map((arm) => (
+            <ArmLabel key={arm.id} arm={arm} />
+          ))}
+          <CoreLabel />
+
+          {/* Solar system */}
+          <SolarSystem />
+        </GalaxySpin>
+
+        <OrbitControls
+          enablePan={false}
+          minDistance={2.8}
+          maxDistance={7.5}
+          minPolarAngle={Math.PI * 0.08}
+          maxPolarAngle={Math.PI * 0.48}
+          rotateSpeed={0.55}
+          autoRotate={false}
+        />
+      </Canvas>
+    </div>
+  );
+}
