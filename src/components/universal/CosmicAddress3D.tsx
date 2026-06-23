@@ -1,47 +1,39 @@
-import { useMemo, useRef } from "react";
-import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, Line, Text } from "@react-three/drei";
+import { useMemo, useRef, useState, Suspense } from "react";
+import { Canvas, useFrame, useThree } from "@react-three/fiber";
+import { OrbitControls, Line, Html } from "@react-three/drei";
 import * as THREE from "three";
 
 /**
- * Interactive recreation of the "A Safe Location" Milky Way plate:
- * tilted three-quarter view of a barred spiral galaxy with labeled arms,
- * distance rings, degree ring, solar-system marker and orbit arc.
- * Fully procedural — no textures, no info boxes.
+ * Interactive Milky Way for the Cosmic Address page.
+ * Procedural barred-spiral galaxy + leader-line info pointers (glass cards)
+ * for galactic structure, spiral arms, our location, and scale.
  */
 
-// ─── Scale: galactic disk ~50,000 ly maps to scene units ───
+// ─── Scale ───
 const DISK_R = 2.6;
 const LY = DISK_R / 50000;
-
-// Overall galaxy tilt (matches the plate's bar orientation)
 const GAL_ROT = -0.35;
 
-// ─── Spiral arms (barred-spiral, logarithmic) ───
+// ─── Spiral arms ───
 type ArmDef = {
   id: string;
   name: string;
-  phase: number;         // starting angle of arm root at bar tip
-  spin: 1 | -1;          // which bar tip it comes off
+  phase: number;
+  spin: 1 | -1;
   pitchDeg: number;
-  brightness: number;    // particle alpha multiplier
-  label: string;
-  labelTheta: number;    // theta along arm where label center sits
-  labelSize: number;
-  labelColor: string;
-  reverseLabel?: boolean;
+  brightness: number;
+  description: string;
 };
 
 const ARMS: ArmDef[] = [
-  { id: "perseus",     name: "Perseus",       phase: 0.00,             spin:  1, pitchDeg: 12.5, brightness: 1.00, label: "P E R S E U S   A R M",                   labelTheta: 2.30, labelSize: 0.085, labelColor: "#bfe6ff" },
-  { id: "outer",       name: "Outer",         phase: 0.55,             spin:  1, pitchDeg: 13.5, brightness: 0.70, label: "O U T E R   A R M",                       labelTheta: 2.55, labelSize: 0.085, labelColor: "#bfe6ff" },
-  { id: "sagittarius", name: "Sagittarius",   phase: Math.PI,          spin: -1, pitchDeg: 12.5, brightness: 1.00, label: "S A G I T T A R I U S   A R M",           labelTheta: 2.15, labelSize: 0.080, labelColor: "#bfe6ff", reverseLabel: true },
-  { id: "scutum",      name: "Scutum-Cent.",  phase: Math.PI + 0.55,   spin: -1, pitchDeg: 13.0, brightness: 0.95, label: "S C U T U M – C E N T A U R U S   A R M", labelTheta: 2.45, labelSize: 0.070, labelColor: "#bfe6ff", reverseLabel: true },
-  { id: "norma",       name: "Norma",         phase: 0.30,             spin:  1, pitchDeg: 14.5, brightness: 0.55, label: "N O R M A   A R M",                       labelTheta: 1.65, labelSize: 0.075, labelColor: "#bfe6ff" },
-  { id: "orion",       name: "Orion Spur",    phase: Math.PI + 0.30,   spin: -1, pitchDeg: 16.5, brightness: 0.55, label: "O R I O N   S P U R",                     labelTheta: 1.65, labelSize: 0.070, labelColor: "#bfe6ff", reverseLabel: true },
+  { id: "perseus",     name: "Perseus Arm",            phase: 0.00,           spin:  1, pitchDeg: 12.5, brightness: 1.00, description: "Major outer arm — bright star-forming regions." },
+  { id: "outer",       name: "Outer Arm",              phase: 0.55,           spin:  1, pitchDeg: 13.5, brightness: 0.70, description: "Faint outermost arm of the disk." },
+  { id: "sagittarius", name: "Sagittarius Arm",        phase: Math.PI,        spin: -1, pitchDeg: 12.5, brightness: 1.00, description: "Inner major arm, rich in nebulae." },
+  { id: "scutum",      name: "Scutum–Centaurus Arm",   phase: Math.PI + 0.55, spin: -1, pitchDeg: 13.0, brightness: 0.95, description: "Densest spiral arm, anchored at the bar." },
+  { id: "norma",       name: "Norma Arm",              phase: 0.30,           spin:  1, pitchDeg: 14.5, brightness: 0.55, description: "Faint inner arm near the galactic core." },
+  { id: "orion",       name: "Orion Spur",             phase: Math.PI + 0.30, spin: -1, pitchDeg: 16.5, brightness: 0.55, description: "Minor arm — home of our Solar System." },
 ];
 
-// r(θ) = r0 * exp(B θ)
 function armPoint(theta: number, arm: ArmDef, r0Ly = 4000) {
   const B = 1 / Math.tan((arm.pitchDeg * Math.PI) / 180);
   const rLy = r0Ly * Math.exp(theta / B);
@@ -50,11 +42,10 @@ function armPoint(theta: number, arm: ArmDef, r0Ly = 4000) {
     rLy,
     x: Math.cos(ang) * rLy * LY,
     z: Math.sin(ang) * rLy * LY,
-    tangent: ang + arm.spin * Math.PI / 2,
   };
 }
 
-// ─────────── Background star field ───────────
+// ─── Background stars ───
 function BackgroundStars() {
   const geom = useMemo(() => {
     const g = new THREE.BufferGeometry();
@@ -82,31 +73,26 @@ function BackgroundStars() {
   );
 }
 
-// ─────────── Galactic core: bar + bulge halo ───────────
+// ─── Galactic core ───
 function GalacticCore() {
   return (
     <group rotation={[0, GAL_ROT, 0]}>
-      {/* soft outermost golden disc haze */}
       <mesh rotation={[-Math.PI / 2, 0, 0]}>
         <circleGeometry args={[0.95, 64]} />
         <meshBasicMaterial color="#f1c98a" transparent opacity={0.08} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* golden outer bulge */}
       <mesh scale={[0.78, 0.16, 0.42]}>
         <sphereGeometry args={[1, 48, 48]} />
         <meshBasicMaterial color="#e7a24a" transparent opacity={0.45} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* yellow inner bulge */}
       <mesh scale={[0.55, 0.13, 0.30]}>
         <sphereGeometry args={[1, 48, 48]} />
         <meshBasicMaterial color="#fde08a" transparent opacity={0.75} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* white-hot bar core */}
       <mesh scale={[0.36, 0.10, 0.13]}>
         <sphereGeometry args={[1, 48, 48]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.95} depthWrite={false} blending={THREE.AdditiveBlending} />
       </mesh>
-      {/* hot tips of bar */}
       {[-1, 1].map((s) => (
         <mesh key={s} position={[s * 0.28, 0, 0]} scale={[0.10, 0.07, 0.08]}>
           <sphereGeometry args={[1, 32, 32]} />
@@ -117,35 +103,24 @@ function GalacticCore() {
   );
 }
 
-// ─────────── Spiral arm particles ───────────
+// ─── Arms (particles) ───
 function Arms() {
   const geom = useMemo(() => {
     const positions: number[] = [];
     const colors: number[] = [];
-    const sizes: number[] = [];
-
     ARMS.forEach((arm) => {
       const N = 2400;
       const thetaMax = 3.2;
       for (let i = 0; i < N; i++) {
-        // bias samples outward for thicker outer arms
         const t = Math.pow(Math.random(), 0.55) * thetaMax;
         const p = armPoint(t, arm);
         if (p.rLy > 52000) continue;
-
-        // perpendicular jitter (arm thickness grows with radius)
         const armWidth = 0.04 + p.rLy * LY * 0.10;
         const j1 = (Math.random() - 0.5) * armWidth;
-        const j2 = (Math.random() - 0.5) * armWidth;
-        const perpAng = p.tangent + Math.PI / 2;
-
-        const x = p.x + Math.cos(perpAng) * j1 + (Math.random() - 0.5) * 0.015;
-        const z = p.z + Math.sin(perpAng) * j1 + (Math.random() - 0.5) * 0.015;
-        const y = (Math.random() - 0.5) * 0.025 + j2 * 0.05;
-
+        const x = p.x + j1 + (Math.random() - 0.5) * 0.015;
+        const z = p.z + (Math.random() - 0.5) * 0.015;
+        const y = (Math.random() - 0.5) * 0.025;
         positions.push(x, y, z);
-
-        // color: cool blue-white in main body, warmer near core, dusty tint sometimes
         const rNorm = p.rLy / 50000;
         const warm = Math.max(0, 1 - rNorm * 2.4);
         const dust = Math.random() < 0.18;
@@ -155,35 +130,21 @@ function Arms() {
         if (dust) { r *= 0.45; g *= 0.45; b *= 0.55; }
         const bMul = arm.brightness * (0.7 + Math.random() * 0.3);
         colors.push(r * bMul, g * bMul, b * bMul);
-
-        sizes.push(0.012 + Math.random() * 0.022);
       }
     });
-
     const g = new THREE.BufferGeometry();
     g.setAttribute("position", new THREE.Float32BufferAttribute(positions, 3));
     g.setAttribute("color", new THREE.Float32BufferAttribute(colors, 3));
     return g;
   }, []);
-
   return (
-    <group rotation={[0, 0, 0]}>
-      <points geometry={geom}>
-        <pointsMaterial
-          size={0.032}
-          sizeAttenuation
-          vertexColors
-          transparent
-          opacity={0.85}
-          depthWrite={false}
-          blending={THREE.AdditiveBlending}
-        />
-      </points>
-    </group>
+    <points geometry={geom}>
+      <pointsMaterial size={0.032} sizeAttenuation vertexColors transparent opacity={0.85} depthWrite={false} blending={THREE.AdditiveBlending} />
+    </points>
   );
 }
 
-// ─────────── Disk haze (soft bluish wash across the disk) ───────────
+// ─── Disk haze ───
 function DiskHaze() {
   const geom = useMemo(() => {
     const g = new THREE.BufferGeometry();
@@ -210,72 +171,8 @@ function DiskHaze() {
   );
 }
 
-// ─────────── Curved arm label (per-character along the spiral) ───────────
-function ArmLabel({ arm }: { arm: ArmDef }) {
-  const chars = arm.label.split("");
-  // Sample positions along arm centered at arm.labelTheta
-  const total = chars.length;
-  // characters use a small fixed angular step; compute step from labelSize and radius
-  const center = armPoint(arm.labelTheta, arm);
-  const stepRadial = arm.labelSize * 0.95;
-  // angular step at this radius
-  const dTheta = stepRadial / Math.max(0.2, Math.hypot(center.x, center.z));
-  const startIdx = -(total - 1) / 2;
-
-  return (
-    <group>
-      {chars.map((ch, i) => {
-        const idx = startIdx + i;
-        const t = arm.labelTheta + idx * dTheta * 0.85;
-        const p = armPoint(t, arm);
-        const ang = Math.atan2(p.z, p.x);
-        // text lies flat on disk; rotate around Z so +X (text right) aligns with tangent.
-        // Tangent direction at (cosA,sinA): (-sinA, cosA). After rotation [-PI/2,0,Z]:
-        // local +X maps to (cosZ, 0, -sinZ). Match → Z = ang + π/2 (or + 3π/2 if reversed).
-        const zRot = arm.reverseLabel ? ang - Math.PI / 2 : ang + Math.PI / 2;
-        return (
-          <Text
-            key={i}
-            position={[p.x, 0.02, p.z]}
-            rotation={[-Math.PI / 2, 0, zRot]}
-            fontSize={arm.labelSize}
-            color={arm.labelColor}
-            anchorX="center"
-            anchorY="middle"
-            outlineWidth={0.002}
-            outlineColor="#000"
-            outlineOpacity={0.5}
-          >
-            {ch}
-          </Text>
-        );
-      })}
-    </group>
-  );
-}
-
-// ─────────── "CORE" label ───────────
-function CoreLabel() {
-  return (
-    <Text
-      position={[Math.cos(GAL_ROT) * 0.18, 0.05, Math.sin(GAL_ROT) * 0.18]}
-      rotation={[-Math.PI / 2, 0, GAL_ROT]}
-      fontSize={0.07}
-      color="#ffffff"
-      anchorX="center"
-      anchorY="middle"
-      letterSpacing={0.25}
-      outlineWidth={0.002}
-      outlineColor="#000"
-      outlineOpacity={0.6}
-    >
-      CORE
-    </Text>
-  );
-}
-
-// ─────────── Distance ring ───────────
-function DistanceRing({ ly, label }: { ly: number; label: string }) {
+// ─── Distance ring ───
+function DistanceRing({ ly }: { ly: number }) {
   const r = ly * LY;
   const pts = useMemo(() => {
     const arr: [number, number, number][] = [];
@@ -286,77 +183,99 @@ function DistanceRing({ ly, label }: { ly: number; label: string }) {
     }
     return arr;
   }, [r]);
+  return <Line points={pts} color="#7a8aa3" lineWidth={0.6} transparent opacity={0.25} />;
+}
+
+// ─── Info pointer (leader line + glass card) ───
+type Pointer = {
+  id: string;
+  anchor: [number, number, number];   // 3D world point in galaxy-local space
+  offset: [number, number, number];   // leader endpoint offset from anchor
+  title: string;
+  description: string;
+  accent?: boolean;
+};
+
+function InfoPointer({
+  pointer,
+  onHover,
+  visible,
+}: {
+  pointer: Pointer;
+  onHover: (hovering: boolean) => void;
+  visible: boolean;
+}) {
+  const [hovered, setHovered] = useState(false);
+  const [expanded, setExpanded] = useState(false);
+  const end: [number, number, number] = [
+    pointer.anchor[0] + pointer.offset[0],
+    pointer.anchor[1] + pointer.offset[1],
+    pointer.anchor[2] + pointer.offset[2],
+  ];
+  const lineColor = pointer.accent ? "#ffffff" : hovered ? "#ffffff" : "#9fb3cf";
+  const lineOpacity = pointer.accent ? 0.9 : hovered ? 0.95 : 0.55;
+
+  if (!visible) return null;
+
   return (
     <group>
-      <Line points={pts} color="#7a8aa3" lineWidth={0.6} transparent opacity={0.35} />
-      <Text
-        position={[0, 0.01, r + 0.05]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.065}
-        color="#a8b6cc"
-        anchorX="center"
-        anchorY="middle"
-        outlineWidth={0.002}
-        outlineColor="#000"
-        outlineOpacity={0.6}
+      <Line points={[pointer.anchor, end]} color={lineColor} lineWidth={pointer.accent ? 1.1 : 0.8} transparent opacity={lineOpacity} />
+      {/* Anchor dot */}
+      <mesh position={pointer.anchor}>
+        <sphereGeometry args={[pointer.accent ? 0.028 : 0.018, 16, 16]} />
+        <meshBasicMaterial color={pointer.accent ? "#ffffff" : "#cfd9ea"} />
+      </mesh>
+      <Html
+        position={end}
+        center
+        distanceFactor={6}
+        zIndexRange={[40, 0]}
+        style={{ pointerEvents: "auto" }}
       >
-        {label}
-      </Text>
-    </group>
-  );
-}
-
-// ─────────── Degree ring (outer edge ticks + labels) ───────────
-function DegreeRing() {
-  const r = DISK_R * 1.05;
-  const labels = useMemo(
-    () =>
-      Array.from({ length: 12 }, (_, i) => {
-        const deg = i * 30;
-        const a = (deg * Math.PI) / 180;
-        return { deg, x: Math.cos(a) * r, z: Math.sin(a) * r };
-      }),
-    [r]
-  );
-  return (
-    <group>
-      {labels.map(({ deg, x, z }) => (
-        <Text
-          key={deg}
-          position={[x, 0.005, z]}
-          rotation={[-Math.PI / 2, 0, 0]}
-          fontSize={0.06}
-          color="#6e7a90"
-          anchorX="center"
-          anchorY="middle"
+        <div
+          onMouseEnter={() => { setHovered(true); onHover(true); }}
+          onMouseLeave={() => { setHovered(false); onHover(false); }}
+          onClick={() => setExpanded((v) => !v)}
+          style={{
+            width: expanded ? 240 : 168,
+            transition: "width 180ms ease, background 180ms ease",
+            background: pointer.accent ? "rgba(255,255,255,0.10)" : "rgba(255,255,255,0.05)",
+            backdropFilter: "blur(8px)",
+            WebkitBackdropFilter: "blur(8px)",
+            border: `1px solid rgba(255,255,255,${pointer.accent ? 0.35 : 0.15})`,
+            borderRadius: 10,
+            padding: "8px 10px",
+            color: "rgba(255,255,255,0.92)",
+            fontFamily: "ui-sans-serif, system-ui",
+            fontSize: 11,
+            lineHeight: 1.35,
+            letterSpacing: 0.3,
+            boxShadow: hovered ? "0 4px 18px rgba(0,0,0,0.6)" : "0 2px 10px rgba(0,0,0,0.4)",
+            cursor: "pointer",
+            userSelect: "none",
+          }}
         >
-          {`${deg}°`}
-        </Text>
-      ))}
+          <div style={{
+            fontSize: 10,
+            textTransform: "uppercase",
+            letterSpacing: 1.4,
+            color: pointer.accent ? "#ffffff" : "rgba(255,255,255,0.75)",
+            fontWeight: 600,
+            marginBottom: 3,
+          }}>
+            {pointer.title}
+          </div>
+          <div style={{ color: "rgba(255,255,255,0.72)", fontSize: 10.5 }}>
+            {pointer.description}
+          </div>
+        </div>
+      </Html>
     </group>
   );
 }
 
-// ─────────── Solar system marker + orbit arc ───────────
-function SolarSystem() {
-  // Place on Orion Spur at ~26,000 ly
-  const sunR = 26000 * LY;
-  const sunAng = GAL_ROT + Math.PI * 0.55; // bottom-center area
-  const sx = Math.cos(sunAng) * sunR;
-  const sz = Math.sin(sunAng) * sunR;
-
-  const orbitPts = useMemo(() => {
-    const arr: [number, number, number][] = [];
-    const start = sunAng + 0.05;
-    const end = sunAng + Math.PI * 0.85;
-    const N = 96;
-    for (let i = 0; i <= N; i++) {
-      const a = start + ((end - start) * i) / N;
-      arr.push([Math.cos(a) * sunR, 0, Math.sin(a) * sunR]);
-    }
-    return arr;
-  }, [sunR, sunAng]);
-
+// ─── Solar system marker + orbit ───
+function SolarSystem({ position }: { position: [number, number, number] }) {
   const pulse = useRef<THREE.Mesh>(null);
   useFrame(({ clock }) => {
     if (pulse.current) {
@@ -364,117 +283,204 @@ function SolarSystem() {
       pulse.current.scale.setScalar(s);
     }
   });
-
+  const sunR = Math.hypot(position[0], position[2]);
+  const sunAng = Math.atan2(position[2], position[0]);
+  const orbitPts = useMemo(() => {
+    const arr: [number, number, number][] = [];
+    const N = 128;
+    for (let i = 0; i <= N; i++) {
+      const a = (i / N) * Math.PI * 2;
+      arr.push([Math.cos(a) * sunR, 0, Math.sin(a) * sunR]);
+    }
+    return arr;
+  }, [sunR]);
   return (
     <group>
-      {/* solar-system orbit arc */}
-      <Line points={orbitPts} color="#e8eef8" lineWidth={0.8} transparent opacity={0.65} dashed dashSize={0.08} gapSize={0.04} />
-
-      {/* sun marker */}
-      <mesh position={[sx, 0.015, sz]}>
+      <Line points={orbitPts} color="#e8eef8" lineWidth={0.7} transparent opacity={0.4} dashed dashSize={0.08} gapSize={0.05} />
+      <mesh position={position}>
         <sphereGeometry args={[0.022, 16, 16]} />
         <meshBasicMaterial color="#ffffff" />
       </mesh>
-      <mesh ref={pulse} position={[sx, 0.015, sz]}>
+      <mesh ref={pulse} position={position}>
         <sphereGeometry args={[0.05, 16, 16]} />
         <meshBasicMaterial color="#9ed1ff" transparent opacity={0.35} blending={THREE.AdditiveBlending} depthWrite={false} />
       </mesh>
-
-      {/* label */}
-      <Text
-        position={[sx - 0.18, 0.02, sz + 0.10]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.062}
-        color="#ffffff"
-        anchorX="right"
-        anchorY="middle"
-        letterSpacing={0.18}
-        outlineWidth={0.003}
-        outlineColor="#000"
-        outlineOpacity={0.7}
-      >
-        YOU ARE HERE
-      </Text>
-      <Text
-        position={[sx - 0.18, 0.02, sz + 0.18]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.05}
-        color="#cfd9ea"
-        anchorX="right"
-        anchorY="middle"
-        letterSpacing={0.15}
-      >
-        SOLAR SYSTEM
-      </Text>
-
-      {/* "Direction of rotation" tag on outer rim */}
-      <Text
-        position={[DISK_R * 1.18, 0.005, -0.15]}
-        rotation={[-Math.PI / 2, 0, 0]}
-        fontSize={0.055}
-        color="#a8b6cc"
-        anchorX="left"
-        anchorY="middle"
-      >
-        Direction of rotation →
-      </Text>
+      {/* rotation hint */}
+      <Html position={[DISK_R * 1.08, 0, -0.05]} center distanceFactor={6} zIndexRange={[20, 0]}>
+        <div style={{
+          fontSize: 10, color: "rgba(255,255,255,0.6)", letterSpacing: 1.2,
+          textTransform: "uppercase", whiteSpace: "nowrap", fontFamily: "ui-sans-serif, system-ui",
+        }}>
+          Direction of rotation →
+        </div>
+      </Html>
+      {/* scale legend */}
+      <Html position={[-DISK_R * 1.05, 0, DISK_R * 0.9]} center distanceFactor={6} zIndexRange={[20, 0]}>
+        <div style={{
+          background: "rgba(255,255,255,0.04)",
+          backdropFilter: "blur(6px)",
+          border: "1px solid rgba(255,255,255,0.12)",
+          borderRadius: 8, padding: "6px 9px",
+          fontFamily: "ui-sans-serif, system-ui",
+          fontSize: 10, color: "rgba(255,255,255,0.75)",
+          letterSpacing: 0.4, lineHeight: 1.5, whiteSpace: "nowrap",
+        }}>
+          <div style={{ textTransform: "uppercase", letterSpacing: 1.4, color: "#fff", marginBottom: 2, fontWeight: 600 }}>Scale</div>
+          Rings · 10k / 20k / 30k / 40k ly<br />
+          Disk ≈ 100,000 light-years
+        </div>
+      </Html>
     </group>
   );
 }
 
-// ─────────── Slow auto rotation of the whole galaxy ───────────
-function GalaxySpin({ children }: { children: React.ReactNode }) {
+// ─── Auto-spin group ───
+function GalaxySpin({ children, paused }: { children: React.ReactNode; paused: boolean }) {
   const ref = useRef<THREE.Group>(null);
   useFrame((_, dt) => {
-    if (ref.current) ref.current.rotation.y += dt * 0.02;
+    if (ref.current && !paused) ref.current.rotation.y += dt * 0.02;
   });
   return <group ref={ref}>{children}</group>;
 }
 
-// ─────────── Scene root ───────────
-export default function CosmicAddress3D() {
+// ─── Build pointer set from arms + features ───
+function buildPointers(): Pointer[] {
+  const pts: Pointer[] = [];
+
+  // Core structure
+  pts.push({
+    id: "sgrA",
+    anchor: [0, 0.02, 0],
+    offset: [0.4, 0, -0.55],
+    title: "Galactic Center · Sgr A*",
+    description: "Supermassive black hole, ~4 million ☉.",
+    accent: true,
+  });
+  pts.push({
+    id: "bar",
+    anchor: [Math.cos(GAL_ROT) * 0.28, 0.02, Math.sin(GAL_ROT) * 0.28],
+    offset: [0.55, 0, 0.35],
+    title: "Central Bar",
+    description: "~10,000 ly stellar bar across the core.",
+  });
+  pts.push({
+    id: "bulge",
+    anchor: [Math.cos(GAL_ROT + 1.2) * 0.42, 0.02, Math.sin(GAL_ROT + 1.2) * 0.42],
+    offset: [-0.35, 0, -0.55],
+    title: "Galactic Bulge",
+    description: "Dense population of old yellow stars.",
+  });
+  pts.push({
+    id: "halo",
+    anchor: [DISK_R * 0.96, 0.02, -DISK_R * 0.25],
+    offset: [0.55, 0, -0.5],
+    title: "Galactic Halo",
+    description: "Dark matter + globular clusters, ~200,000 ly across.",
+  });
+
+  // Arm pointers — anchor mid-arm
+  const armOffsets: Record<string, [number, number, number]> = {
+    perseus:     [ 0.55,  0,  0.40],
+    outer:       [ 0.10,  0,  0.70],
+    sagittarius: [-0.55,  0, -0.40],
+    scutum:      [-0.10,  0, -0.70],
+    norma:       [-0.45,  0,  0.45],
+    orion:       [ 0.45,  0, -0.45],
+  };
+  ARMS.forEach((arm) => {
+    const p = armPoint(2.2, arm);
+    pts.push({
+      id: `arm-${arm.id}`,
+      anchor: [p.x, 0.02, p.z],
+      offset: armOffsets[arm.id] ?? [0.4, 0, 0.4],
+      title: arm.name,
+      description: arm.description,
+      accent: arm.id === "orion",
+    });
+  });
+
+  return pts;
+}
+
+// Solar system position on Orion Spur (~26,000 ly from center)
+function solarSystemPos(): [number, number, number] {
+  // Find theta along orion arm where rLy ≈ 26000
+  const arm = ARMS.find((a) => a.id === "orion")!;
+  let bestT = 0, bestDiff = Infinity;
+  for (let t = 0; t < 3.2; t += 0.01) {
+    const p = armPoint(t, arm);
+    const d = Math.abs(p.rLy - 26000);
+    if (d < bestDiff) { bestDiff = d; bestT = t; }
+  }
+  const p = armPoint(bestT, arm);
+  return [p.x, 0.015, p.z];
+}
+
+// ─── Scene ───
+function Scene({ showLabels }: { showLabels: boolean }) {
+  const [hoverCount, setHoverCount] = useState(0);
+  const pointers = useMemo(() => buildPointers(), []);
+  const sunPos = useMemo(() => solarSystemPos(), []);
+
+  // Sun pointer
+  const sunPointer: Pointer = {
+    id: "sun",
+    anchor: sunPos,
+    offset: [-0.6, 0, 0.55],
+    title: "You Are Here · Solar System",
+    description: "Sun · Orion Spur · 26,000 ly from center · 230 Myr orbit.",
+    accent: true,
+  };
+
   return (
-    <div className="w-full h-[600px] rounded-xl overflow-hidden bg-black">
+    <>
+      <color attach="background" args={["#02030a"]} />
+      <ambientLight intensity={0.4} />
+      <BackgroundStars />
+
+      <GalaxySpin paused={hoverCount > 0}>
+        <DiskHaze />
+        <Arms />
+        <GalacticCore />
+        <DistanceRing ly={10000} />
+        <DistanceRing ly={20000} />
+        <DistanceRing ly={30000} />
+        <DistanceRing ly={40000} />
+        <SolarSystem position={sunPos} />
+
+        {pointers.map((p) => (
+          <InfoPointer key={p.id} pointer={p} visible={showLabels} onHover={(h) => setHoverCount((c) => c + (h ? 1 : -1))} />
+        ))}
+        <InfoPointer pointer={sunPointer} visible={showLabels} onHover={(h) => setHoverCount((c) => c + (h ? 1 : -1))} />
+      </GalaxySpin>
+
+      <OrbitControls
+        enablePan={false}
+        minDistance={2.8}
+        maxDistance={7.5}
+        minPolarAngle={Math.PI * 0.08}
+        maxPolarAngle={Math.PI * 0.48}
+        rotateSpeed={0.55}
+      />
+    </>
+  );
+}
+
+export default function CosmicAddress3D() {
+  const [showLabels, setShowLabels] = useState(true);
+  return (
+    <div className="relative w-full h-[600px] rounded-xl overflow-hidden bg-black">
       <Canvas camera={{ position: [0, 2.4, 4.0], fov: 42 }} dpr={[1, 2]}>
-        <color attach="background" args={["#02030a"]} />
-        <ambientLight intensity={0.4} />
-
-        <BackgroundStars />
-
-        <GalaxySpin>
-          <DiskHaze />
-          <Arms />
-          <GalacticCore />
-
-          {/* Distance rings */}
-          <DistanceRing ly={10000} label="10,000 light-years" />
-          <DistanceRing ly={20000} label="20,000 light-years" />
-          <DistanceRing ly={30000} label="30,000 light-years" />
-          <DistanceRing ly={40000} label="40,000 light-years" />
-
-          {/* Degree ring */}
-          <DegreeRing />
-
-          {/* Arm labels */}
-          {ARMS.map((arm) => (
-            <ArmLabel key={arm.id} arm={arm} />
-          ))}
-          <CoreLabel />
-
-          {/* Solar system */}
-          <SolarSystem />
-        </GalaxySpin>
-
-        <OrbitControls
-          enablePan={false}
-          minDistance={2.8}
-          maxDistance={7.5}
-          minPolarAngle={Math.PI * 0.08}
-          maxPolarAngle={Math.PI * 0.48}
-          rotateSpeed={0.55}
-          autoRotate={false}
-        />
+        <Suspense fallback={null}>
+          <Scene showLabels={showLabels} />
+        </Suspense>
       </Canvas>
+      <button
+        onClick={() => setShowLabels((v) => !v)}
+        className="absolute top-3 right-3 px-3 py-1.5 text-[11px] uppercase tracking-wider text-white/80 bg-white/5 hover:bg-white/10 backdrop-blur border border-white/15 rounded-md transition"
+      >
+        {showLabels ? "Hide labels" : "Show labels"}
+      </button>
     </div>
   );
 }

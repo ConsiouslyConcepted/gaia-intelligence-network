@@ -1,49 +1,58 @@
 ## Goal
-Replace the current procedural galaxy in `src/components/universal/CosmicAddress3D.tsx` with an interactive 3D recreation that matches the look of the attached National Geographic "A Safe Location" plate. No image textures, no info boxes — just the galaxy, its labels, and the "You Are Here" marker, fully orbit-able and zoom-able.
+Replace the procedural galaxy in `src/components/universal/CosmicAddress3D.tsx` with a real 3D Milky Way model (`.glb`), and overlay National Geographic–style leader lines + small glass info cards that label every key feature.
 
-## What changes
-Only `src/components/universal/CosmicAddress3D.tsx`. No edits to `Universal.tsx` or anything else.
+## Asset pipeline
+- Source a CC-licensed top-down barred-spiral Milky Way `.glb` (Sketchfab CC-BY or NASA SVS). Target <5 MB.
+- Upload via `lovable-assets create --file /tmp/milkyway.glb > public/models/milkyway.glb.asset.json`. Reference by CDN URL — no binary in repo.
+- Load with `useGLTF(url)` from `@react-three/drei` (already installed). Add `<Suspense>` fallback (the existing soft procedural disk haze, dimmed) so the scene never flashes empty.
+- If no suitable CC model is found at build time, fall back to keeping the current procedural arms/core as the base geometry — the pointer system below works identically either way.
 
-## Visual targets (matching the reference)
+## Scene
+- Same `<Canvas>` shell, deep-space background, subtle star field, slow auto-spin group.
+- Model centered, scaled so disk diameter ≈ current `DISK_R * 2`. Tilted three-quarter camera preserved.
+- `OrbitControls`: pan off, zoom clamped, slow auto-rotate (toggleable on hover-pause).
+- Keep distance rings (10k/20k/30k/40k ly) and degree ring as thin guides — they double as scale pointers.
 
-**Camera / framing**
-- Tilted three-quarter view, galaxy filling the frame, deep black background with subtle star field.
+## Info pointers (the main new work)
+A single reusable `<InfoPointer>` component:
+- Takes a 3D anchor point (galaxy-local coords), a label, and a short description.
+- Renders a thin SVG/`<Line>` leader from the anchor out to a `<Html>` (drei) glass card positioned in screen space, with a small dot at the anchor.
+- Card style: monochromatic glassmorphism (project rule) — `bg-white/5 backdrop-blur border border-white/15 text-white/90`, ~180 px wide, title + 1–2 line description.
+- Hover the card or anchor → leader brightens, auto-rotate pauses.
+- Click → card expands to ~260 px with an extra sentence (optional second line of detail).
+- Cards use `<Html occlude transform={false}>` so they always face the camera and never get hidden by the galaxy.
 
-**Galactic structure**
-- Bright white-hot **central bar** (elongated ellipsoid, ~10–12k ly long) — this is the defining feature of the reference, not a round bulge.
-- Soft **golden bulge haze** wrapping the bar.
-- **Two dominant grand-design spiral arms** sweeping off the ends of the bar, plus secondary inner arms, built from logarithmic spirals (pitch ~12°). Particle count tuned for a soft, dusty "painted" look rather than discrete stars.
-- Cool blue-white star/dust color in the arms with darker dust lanes between them.
-- Thin disk (very small Y jitter) so the tilt reads correctly.
+### Pointers to place
+**Core structure**
+- Galactic Center (Sgr A*) — "Supermassive black hole, ~4 million ☉, 26,000 ly away"
+- Central Bar — "~10,000 ly long stellar bar"
+- Galactic Bulge — "Dense old-star population"
+- Halo — outer pointer — "Dark-matter + globular-cluster halo, ~200,000 ly across"
 
-**Labels (curved along arms, like the plate)**
-- Arm names, letter-spaced, in soft cyan: `OUTER ARM`, `PERSEUS ARM`, `SAGITTARIUS ARM`, `SCUTUM–CENTAURUS ARM`, `NORMA ARM`, `ORION SPUR`, `FAR 3 KPC ARM`, `NEAR 3 KPC ARM`, `CORE`.
-- Implemented by sampling points along each arm's spiral and placing per-character `<Text>` glyphs rotated to the local tangent (billboarded only on Y so they stay on the disk plane).
+**Spiral arms** (anchor on the arm midline, label radiating outward)
+- Perseus Arm, Sagittarius Arm, Scutum–Centaurus Arm, Norma Arm, Outer Arm, Orion Spur (ours)
+- Each card: one-line descriptor (e.g. "Major arm — bright star-forming regions")
 
-**Rings and markers**
-- Faint concentric distance rings at **10,000 / 20,000 / 30,000 / 40,000 light-years**, each labeled once near the bottom (`10,000 light-years`, etc.).
-- Faint **degree tick ring** around the outer edge with labels every 30° (`0°, 30°, 60° … 330°`) in muted gray.
-- **Solar-system orbit**: a thin near-circular arc at ~26,000 ly with a small arrowhead, matching the reference's "solar system orbit" curve.
-- **"YOU ARE HERE / SOLAR SYSTEM"** marker: small white dot on the Orion Spur with two-line label, no box.
-- Small "Direction of rotation" arrow on the outer rim.
+**Our location**
+- "You Are Here / Solar System" — pulsing dot on Orion Spur with a stronger leader and a bolder card: "Sun • Orion Spur • 26,000 ly from center"
+- Galactic orbit arc with arrowhead, label "Sun's orbit — 230 Myr"
+- Direction-of-rotation tag on outer rim
 
-**Removed (per "leave out info boxes")**
-- No "Galaxy Halo", "Ripe for Life?", "Chaotic Core", "Our sun offers protection…", "Our galactic path…", "Our location is far…" text blocks.
-- No "PROFILE VIEW" inset, no nearby-stars inset, no title block, no body paragraph.
+**Scale & orientation**
+- Distance-ring legend card (bottom-left): "Rings: 10k / 20k / 30k / 40k light-years"
+- Diameter card: "Disk ≈ 100,000 ly across"
+- Degree ring kept as-is for orientation reference
 
 ## Interaction
-- `OrbitControls` with `autoRotate` (slow), `enablePan={false}`, zoom clamped so the galaxy can't be zoomed past its outer ring or shrunk to a dot.
-- Hovering an arm subtly brightens its particles and its label (kept from the current implementation).
-- Left-drag orbits, scroll zooms — same controls the user already has.
+- Toggle in the corner: "Show labels" / "Hide labels" (default on).
+- Hovering any pointer highlights its anchor and pauses auto-rotate.
+- Clicking the Sun pointer smoothly orbits camera to a closer view of Orion Spur.
 
-## Technical notes
-- Pure `@react-three/fiber` + `@react-three/drei` (`OrbitControls`, `Billboard`, `Text`, `Line`). No new dependencies.
-- Bar = scaled `sphereGeometry` (e.g. `[1, 0.25, 0.45]` scale on a 0.55-radius sphere) with additive emissive material, layered with a softer halo sphere.
-- Arms = `THREE.Points` with `AdditiveBlending`, per-vertex colors so dust lanes/highlights read.
-- Curved arm labels = small helper component that takes an arm's spiral, samples N evenly-spaced points across the label span, and renders one `<Text>` per character at each sample with rotation set to the spiral tangent.
-- Degree ring = `Line` plus 12 `<Billboard>`/`<Text>` labels at 30° increments.
-- All colors use literal hex inside the 3D scene (Three.js materials, not Tailwind tokens) — consistent with the existing file.
+## Files
+- Edit only `src/components/universal/CosmicAddress3D.tsx`.
+- Add `public/models/milkyway.glb.asset.json` (CDN pointer) if a suitable model is sourced.
+- No new dependencies.
 
 ## Out of scope
-- No changes to the page layout, the surrounding card, or any other component.
-- No texture/image assets — fully procedural as you previously requested.
+- No info side-panels outside the canvas, no surrounding card/page changes.
+- No business logic, no data fetching.
