@@ -10,7 +10,7 @@ export default function CosmicAddress3D() {
       <img
         src={safeLocation.url}
         alt="A Safe Location — the Milky Way, showing the Solar System's position on the Orion Spur"
-        className="max-w-full max-h-full w-auto h-auto object-contain"
+        className="w-full h-full object-contain"
       />
     </div>
   );
