@@ -539,7 +539,7 @@ const Universal = () => {
           className={cn(
             "pointer-events-auto relative",
             layer === "address"
-              ? "w-full max-w-[min(1400px,calc(100vw-340px))] h-auto max-h-[calc(100vh-260px)] flex items-center justify-center"
+              ? "w-full max-w-[min(1400px,calc(100vw-340px))] h-[calc(100vh-260px)] flex items-center justify-center"
               : "aspect-square w-[min(880px,calc(100vh-260px),100%)]"
           )}
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}
