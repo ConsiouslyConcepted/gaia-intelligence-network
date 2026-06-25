@@ -6,11 +6,11 @@ import safeLocation from "@/assets/a-safe-location.jpg.asset.json";
  */
 export default function CosmicAddress3D() {
   return (
-    <div className="w-full rounded-xl overflow-hidden bg-black">
+    <div className="w-full h-full flex items-center justify-center rounded-xl overflow-hidden bg-black">
       <img
         src={safeLocation.url}
         alt="A Safe Location — the Milky Way, showing the Solar System's position on the Orion Spur"
-        className="w-full h-auto block"
+        className="max-w-full max-h-full w-auto h-auto object-contain"
       />
     </div>
   );

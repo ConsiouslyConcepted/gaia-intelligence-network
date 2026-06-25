@@ -7,6 +7,7 @@ import CosmicAddress3D from "@/components/universal/CosmicAddress3D";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
+import { cn } from "@/lib/utils";
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; topBar?: boolean }) => (
   <div
@@ -534,8 +535,15 @@ const Universal = () => {
 
       {/* Center stage */}
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
-        <div className="pointer-events-auto relative aspect-square w-[min(880px,calc(100vh-260px),100%)]"
-          style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}>
+        <div
+          className={cn(
+            "pointer-events-auto relative",
+            layer === "address"
+              ? "w-full max-w-[min(1400px,calc(100vw-340px))] h-[calc(100vh-260px)] flex items-center justify-center"
+              : "aspect-square w-[min(880px,calc(100vh-260px),100%)]"
+          )}
+          style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}
+        >
           <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
         </div>
       </div>
