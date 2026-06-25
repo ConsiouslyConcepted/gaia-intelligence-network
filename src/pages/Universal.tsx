@@ -7,6 +7,7 @@ import CosmicAddress3D from "@/components/universal/CosmicAddress3D";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
+import { cn } from "@/lib/utils";
 
 const HudPanel = ({ children, className = "", topBar = false }: { children: React.ReactNode; className?: string; topBar?: boolean }) => (
   <div
