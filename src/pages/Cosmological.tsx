@@ -271,7 +271,7 @@ const Cosmological = () => {
                   <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-2">{info.seeing}</p>
                 </div>
                 <div className="border-t border-border/30 pt-3">
-                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why it matters for cosmic harmonics</div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why this matters</div>
                   <ul className="text-[10px] leading-relaxed text-muted-foreground/70 space-y-1.5 list-disc list-inside marker:text-foreground/40">
                     {info.why.map((w, i) => <li key={i}>{w}</li>)}
                   </ul>
