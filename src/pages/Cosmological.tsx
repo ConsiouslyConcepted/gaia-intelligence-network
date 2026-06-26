@@ -266,19 +266,19 @@ const Cosmological = () => {
             return (
               <>
                 <div>
-                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground/90 mb-1">What you're seeing</div>
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground mb-1">What you're seeing</div>
                   <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground">{active.card}</div>
                   <p className="text-[10px] leading-relaxed text-foreground mt-2">{info.seeing}</p>
                 </div>
                 <div className="border-t border-border/30 pt-3">
-                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground/90 mb-1.5">Why this matters</div>
-                  <ul className="text-[10px] leading-relaxed text-foreground space-y-1.5 list-disc list-inside marker:text-foreground/80">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground mb-1.5">Why this matters</div>
+                  <ul className="text-[10px] leading-relaxed text-foreground space-y-1.5 list-disc list-inside marker:text-foreground">
                     {info.why.map((w, i) => <li key={i}>{w}</li>)}
                   </ul>
                 </div>
                 <div className="border-t border-border/30 pt-3">
-                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground/90 mb-1.5">How to interact</div>
-                  <ul className="text-[10px] leading-relaxed text-foreground space-y-1 list-disc list-inside marker:text-foreground/80">
+                  <div className="text-[8px] uppercase tracking-[0.18em] text-foreground mb-1.5">How to interact</div>
+                  <ul className="text-[10px] leading-relaxed text-foreground space-y-1 list-disc list-inside marker:text-foreground">
                     {info.interact.map((w, i) => <li key={i}>{w}</li>)}
                   </ul>
                 </div>
