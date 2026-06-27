@@ -501,7 +501,7 @@ const Universal = () => {
           )}
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}
         >
-          <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
+          <LayerStage layer={layer} tick={tick} />
         </div>
       </div>
 
@@ -532,58 +532,6 @@ const Universal = () => {
                   </ul>
                 </div>
 
-                {layer === "harmonics" && (
-                  <>
-                    <div className="border-t border-border/30 pt-3">
-                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Mode (ℓ, m)</div>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">ℓ deg</span>
-                          <button onClick={() => setL(sphL - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphL}</span>
-                          <button onClick={() => setL(sphL + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">m ord</span>
-                          <button onClick={() => setM(sphM - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphM}</span>
-                          <button onClick={() => setM(sphM + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
-                        </div>
-                        <div className="text-[9px] text-muted-foreground/50 tracking-wider">constraint: |m| ≤ ℓ ≤ 6</div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-border/30 pt-3">
-                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Famous modes</div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {[
-                          { l: 0, m: 0, label: "Y₀₀ · Monopole" },
-                          { l: 1, m: 0, label: "Y₁₀ · Dipole" },
-                          { l: 2, m: 0, label: "Y₂₀ · Oblate" },
-                          { l: 2, m: 2, label: "Y₂₂ · Tidal" },
-                          { l: 3, m: 2, label: "Y₃₂ · f-orbital" },
-                          { l: 4, m: 3, label: "Y₄₃ · Schumann-like" },
-                        ].map((p) => {
-                          const active = sphL === p.l && sphM === p.m;
-                          return (
-                            <button
-                              key={p.label}
-                              onClick={() => { setSphL(p.l); setSphM(p.m); }}
-                              className="text-[9px] tracking-[0.05em] uppercase py-1.5 px-1.5 rounded border transition-all text-left leading-tight"
-                              style={{
-                                background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                                borderColor: active ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
-                                color: active ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
-                              }}
-                            >
-                              {p.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </>
-                )}
               </>
             );
           })()}
