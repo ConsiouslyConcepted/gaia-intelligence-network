@@ -34,6 +34,8 @@ const App = () => (
           <Route path="/cosmological" element={<Cosmological />} />
           <Route path="/universal" element={<Universal />} />
           <Route path="/stellar" element={<Stellar />} />
+          <Route path="/harmonics" element={<HarmonicsEngine />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 
           <Route path="*" element={<NotFound />} />
