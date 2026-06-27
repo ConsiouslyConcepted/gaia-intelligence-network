@@ -60,41 +60,6 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
                   <div className="w-px h-3 bg-harmonic-cyan" />
                 </div>
               </div>
-
-              {/* Technical readouts grid */}
-              <div className="mt-4 grid grid-cols-2 gap-x-10 gap-y-1 border-t border-foreground/5 pt-3">
-                <div className="flex flex-col gap-1">
-                  <div className="flex justify-between items-end gap-3">
-                    <span className="text-[8px] font-mono text-harmonic-cyan/60 uppercase">Latitude</span>
-                    <span className="text-[9px] font-mono text-foreground">40.7128 N</span>
-                  </div>
-                  <div className="h-px w-full bg-harmonic-cyan/10" />
-                  <div className="flex justify-between items-end gap-3">
-                    <span className="text-[8px] font-mono text-harmonic-cyan/60 uppercase">Longitude</span>
-                    <span className="text-[9px] font-mono text-foreground">74.0060 W</span>
-                  </div>
-                </div>
-
-                <div className="flex flex-col gap-1">
-                  <div className="flex justify-between items-end gap-3">
-                    <span className="text-[8px] font-mono text-harmonic-cyan/60 uppercase">Signal</span>
-                    <span className="text-[9px] font-mono text-foreground">0.9822.4</span>
-                  </div>
-                  <div className="h-px w-full bg-harmonic-cyan/10" />
-                  <div className="flex justify-between items-end gap-3">
-                    <span className="text-[8px] font-mono text-harmonic-cyan/60 uppercase">Reference</span>
-                    <span className="text-[9px] font-mono text-harmonic-cyan">ORBIT-V3</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Floating ID tag */}
-            <div className="absolute -bottom-2 -right-4 flex items-center gap-2">
-              <div className="w-8 h-px bg-harmonic-cyan/30" />
-              <span className="text-[7px] font-mono text-harmonic-cyan font-bold uppercase tracking-[0.18em] bg-harmonic-cyan/10 px-1.5 py-0.5 border-r-2 border-harmonic-cyan">
-                Verified Instance
-              </span>
             </div>
           </div>
         </div>
