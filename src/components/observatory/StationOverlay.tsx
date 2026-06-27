@@ -92,8 +92,8 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
         </div>
       </div>
 
-      {/* Bottom-center HUD card */}
-      <div className="absolute left-1/2 -translate-x-1/2 bottom-8 z-30 pointer-events-auto w-[min(640px,calc(100vw-32px))]">
+      {/* Bottom-left HUD card */}
+      <div className="absolute left-6 bottom-8 z-30 pointer-events-auto w-[min(640px,calc(100vw-88px))]">
         <div
           key={station.id}
           className="rounded-2xl border px-6 py-5 animate-fade-in"
