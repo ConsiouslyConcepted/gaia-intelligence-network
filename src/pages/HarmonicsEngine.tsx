@@ -260,6 +260,7 @@ const HarmonicsEngine = () => {
                 );
               })}
             </div>
+          </div>
         </HudPanel>
       </div>
 
