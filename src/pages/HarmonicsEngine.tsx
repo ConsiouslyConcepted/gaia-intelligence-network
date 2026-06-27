@@ -197,7 +197,12 @@ function CorrelationPlot({ a, b }: { a: Dataset; b: Dataset }) {
 
 const HarmonicsEngine = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"single" | "cross" | "events" | "reports">("single");
+  const [searchParams] = useSearchParams();
+  const initialMode = (() => {
+    const m = searchParams.get("mode");
+    return m === "cross" || m === "events" || m === "reports" || m === "single" ? m : "single";
+  })();
+  const [mode, setMode] = useState<"single" | "cross" | "events" | "reports">(initialMode);
   const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
   const [scope, setScope] = useState<Scope>("universal");
   const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
