@@ -3,6 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, MapPin } from "lucide-react";
 
 import { HudPanel } from "./MissionShell";
+import CosmicAddressZoom from "./CosmicAddressZoom";
+
+// Map address node key → station index in observatory STATIONS registry.
+const NODE_TO_STATION: Record<string, number> = {
+  earth: 0,
+  solar: 2,        // heliosphere
+  "orion-spur": 4, // orionspur
+  "milky-way": 5,  // milkyway
+  "local-group": 6,
+  virgo: 7,
+  laniakea: 8,
+  universe: 9,
+};
+const STATION_TO_NODE: Record<number, string> = Object.fromEntries(
+  Object.entries(NODE_TO_STATION).map(([k, v]) => [v, k]),
+);
 
 interface AddressNode {
   key: string;
@@ -130,6 +146,25 @@ const CosmicAddressWorkspace = () => {
               </span>
             </div>
           </div>
+        </HudPanel>
+
+        {/* Nested-scale zoom (same engine as the homepage Observatory) */}
+        <HudPanel className="p-3 mb-4">
+          <div className="flex items-center justify-between mb-2 px-1">
+            <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/55">
+              Nested Scale Zoom
+            </div>
+            <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/55">
+              Station {(NODE_TO_STATION[active.key] ?? 0) + 1} / 10
+            </div>
+          </div>
+          <CosmicAddressZoom
+            stationIndex={NODE_TO_STATION[active.key] ?? 0}
+            onStationChange={(idx) => {
+              const key = STATION_TO_NODE[idx];
+              if (key) setActiveKey(key);
+            }}
+          />
         </HudPanel>
 
         <div className="grid grid-cols-1 lg:grid-cols-[320px_1fr] gap-4">
