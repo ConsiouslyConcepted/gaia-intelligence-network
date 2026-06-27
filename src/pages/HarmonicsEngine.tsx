@@ -224,10 +224,21 @@ const HarmonicsEngine = () => {
 
   // Compact JSON snapshot for the assistant — grounds its replies in the active selection.
   const assistantContext = useMemo(() => {
+    // A trimmed cross-layer event snapshot is always included so the assistant
+    // can speak to anomalies even from Single mode.
+    const events = scanAllLayers({ minSeverity: "watch", limit: 8 }).map((e) => ({
+      scope: e.scope,
+      dataset: e.datasetLabel,
+      kind: e.kind,
+      severity: e.severity,
+      summary: e.summary,
+      evidence: e.evidence,
+    }));
+
     if (mode === "cross") {
       const a = getDataset(crossA);
       const b = getDataset(crossB);
-      if (!a || !b) return { mode };
+      if (!a || !b) return { mode, events };
       const r = compareLayers(a, b);
       return {
         mode: "cross-layer",
@@ -240,7 +251,17 @@ const HarmonicsEngine = () => {
         topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         sharedPeriods: r.sharedPeriods,
+        events,
       };
+    }
+    if (mode === "events") {
+      return { mode: "events", events: scanAllLayers({ limit: 30 }).map((e) => ({
+        scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
+        summary: e.summary, evidence: e.evidence,
+      })) };
+    }
+    if (mode === "reports") {
+      return { mode: "reports", events };
     }
     const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
     return {
@@ -250,6 +271,7 @@ const HarmonicsEngine = () => {
       dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
       topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
       fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+      events,
     };
   }, [mode, scope, method, dataset, crossA, crossB]);
 
