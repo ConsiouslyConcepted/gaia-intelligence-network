@@ -441,6 +441,9 @@ export default function Home() {
           </div>
           <div className="md:col-span-8 space-y-5 text-[15px] leading-relaxed text-white/70">
             <p>
+              GaiaSphere presents a modern cosmological framework for understanding humanity's place within the nested systems of the observable universe.
+            </p>
+            <p>
               GaiaSphere combines Earth system science, astronomy, astrophysics, systems science,
               network science, and AI into one environment for observing the organization of the
               observable universe.
