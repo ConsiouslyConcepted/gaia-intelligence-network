@@ -9,7 +9,7 @@ import SphereDetail from "./pages/SphereDetail";
 import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
-import Universal from "./pages/Universal";
+import MissionControl from "./pages/MissionControl";
 import Stellar from "./pages/Stellar";
 import HarmonicsEngine from "./pages/HarmonicsEngine";
 import ObservatoryGuide from "./components/observatory/ObservatoryGuide";
