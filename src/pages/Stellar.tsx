@@ -749,11 +749,11 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   // exoplanets
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-3 px-2 py-1 overflow-y-auto">
+    <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
       <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
-        Exoplanetary Systems — confirmed detections (NASA Exoplanet Archive)
+        Exoplanetary systems — NASA Exoplanet Archive
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-1.5">
         {[
           { label: "Confirmed planets", value: "5,800+" },
           { label: "Planetary systems", value: "4,300+" },
@@ -762,16 +762,41 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
           { label: "Transit method", value: "~75%" },
           { label: "Radial-velocity", value: "~19%" },
         ].map((c) => (
-          <div key={c.label} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-            <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
-            <div className="text-[16px] font-mono font-semibold text-foreground/90">{c.value}</div>
+          <div key={c.label} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
+            <div className="text-[13px] font-mono font-semibold text-foreground/90">{c.value}</div>
           </div>
         ))}
       </div>
-      <div className="rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+
+      <div className="grid grid-cols-2 gap-2 mt-1">
+        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Habitable zone</div>
+          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Liquid-water orbits</div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
+            Sun: ~0.95–1.37 AU · M-dwarf (Proxima): ~0.04–0.08 AU. Zone location scales with stellar luminosity.
+          </div>
+        </div>
+        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">System architecture</div>
+          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Compact · spaced · hierarchical</div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
+            Planet count, spacing, and mass ordering record formation and migration history.
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Orbital resonance · TRAPPIST-1</div>
+        <div className="text-[10px] text-muted-foreground/75 leading-snug">
+          Seven planets locked in a near-perfect mean-motion chain (period ratios ≈ 8:5:3:2:3:4:3). Integer-ratio resonances stabilize tightly-packed systems and are observed in many multi-planet architectures.
+        </div>
+      </div>
+
+      <div className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
         <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Nearest known exoplanet</div>
-        <div className="text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
-        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass planet · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
+        <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
+        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
       </div>
     </div>
   );
