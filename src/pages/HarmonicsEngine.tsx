@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
@@ -488,6 +488,8 @@ const HarmonicsEngine = () => {
                 </div>
               </div>
 
+              {dataset.scope === "stellar" && <StellarSonificationControl dataset={dataset} />}
+
               <div className="h-[260px] rounded-md overflow-hidden border border-border/30">
                 <MethodView method={method} dataset={dataset} compare={compare} lm={lm} />
               </div>
@@ -695,6 +697,101 @@ const Stat = ({ label, value }: { label: string; value: string }) => (
     <div className="text-foreground/90 font-mono tracking-tight">{value}</div>
   </div>
 );
+
+function StellarSonificationControl({ dataset }: { dataset: Dataset }) {
+  const [playing, setPlaying] = useState(false);
+  const stopRef = useRef<(() => void) | null>(null);
+  const timerRef = useRef<number | null>(null);
+  const spec = useMemo(() => spectrum(dataset.series, dataset.sampleRate, dataset.unit), [dataset]);
+  const peaks = spec.peaks.slice(0, 3);
+
+  useEffect(() => {
+    return () => {
+      stopRef.current?.();
+      if (timerRef.current) window.clearTimeout(timerRef.current);
+    };
+  }, []);
+
+  const stop = () => {
+    stopRef.current?.();
+    stopRef.current = null;
+    if (timerRef.current) {
+      window.clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
+    setPlaying(false);
+  };
+
+  const play = async () => {
+    if (playing) {
+      stop();
+      return;
+    }
+
+    const AudioContextCtor = window.AudioContext || (window as Window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
+    if (!AudioContextCtor) return;
+
+    const ctx = new AudioContextCtor();
+    const master = ctx.createGain();
+    master.gain.setValueAtTime(0.0001, ctx.currentTime);
+    master.gain.exponentialRampToValueAtTime(0.11, ctx.currentTime + 0.25);
+    master.connect(ctx.destination);
+
+    const sourcePeaks = peaks.length > 0
+      ? peaks
+      : [{ period: dataset.knownPeriod ?? 1, power: 1 }, { period: (dataset.knownPeriod ?? 1) / 2, power: 0.6 }, { period: (dataset.knownPeriod ?? 1) / 3, power: 0.35 }];
+    const reference = 1 / (dataset.knownPeriod || sourcePeaks[0].period || 1);
+    const oscillators: OscillatorNode[] = [];
+
+    sourcePeaks.slice(0, 3).forEach((p, i) => {
+      const modeFrequency = 1 / Math.max(p.period, 0.0001);
+      const audibleFrequency = Math.max(110, Math.min(880, 196 * (modeFrequency / reference)));
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.type = i === 0 ? "sine" : "triangle";
+      osc.frequency.setValueAtTime(audibleFrequency, ctx.currentTime);
+      gain.gain.setValueAtTime(0.028 / (i + 1), ctx.currentTime);
+      osc.connect(gain).connect(master);
+      osc.start();
+      oscillators.push(osc);
+    });
+
+    stopRef.current = () => {
+      master.gain.cancelScheduledValues(ctx.currentTime);
+      master.gain.setTargetAtTime(0.0001, ctx.currentTime, 0.08);
+      window.setTimeout(() => {
+        oscillators.forEach((osc) => {
+          try { osc.stop(); } catch { /* already stopped */ }
+        });
+        void ctx.close();
+      }, 180);
+    };
+    setPlaying(true);
+    timerRef.current = window.setTimeout(stop, 12000);
+  };
+
+  return (
+    <div className="mb-3 rounded-xl border border-border/30 bg-foreground/[0.035] px-4 py-3 flex items-center justify-between gap-4">
+      <div className="min-w-0">
+        <div className="text-[9px] uppercase tracking-[0.22em] text-muted-foreground/60 mb-1">Stellar sound available</div>
+        <div className="text-[12px] font-semibold tracking-[0.12em] uppercase text-foreground/90">Listen to p-mode sonification</div>
+        <div className="text-[10px] leading-relaxed text-muted-foreground/75 mt-1">
+          Converts detected oscillation peaks into audible tones. Pitch maps to mode frequency; this is not literal sound from the star.
+        </div>
+      </div>
+      <button
+        onClick={play}
+        className="shrink-0 rounded-lg border border-border/40 bg-background/50 hover:bg-foreground/[0.08] transition px-4 py-2.5 flex items-center gap-2 text-[10px] uppercase tracking-[0.16em] text-foreground/90"
+        aria-label={playing ? "Stop stellar sonification" : "Play stellar sonification"}
+      >
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8">
+          {playing ? <path d="M7 6h3v12H7zM14 6h3v12h-3z" /> : <path d="M8 5v14l11-7z" />}
+        </svg>
+        {playing ? "Stop" : "Listen"}
+      </button>
+    </div>
+  );
+}
 
 // ───────── Method views ─────────
 
