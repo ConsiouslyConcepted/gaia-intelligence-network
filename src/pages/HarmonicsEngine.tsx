@@ -419,17 +419,17 @@ const HarmonicsEngine = () => {
                       style={{ background: "hsla(210,80%,70%,1)", boxShadow: "0 0 10px hsla(210,80%,70%,0.8)" }}
                     />
                   )}
-                  <div className="flex flex-col gap-1.5 pl-2">
+                  <div className="flex flex-col gap-2 pl-2">
                     <span
                       className={cn(
-                        "text-[11px] tracking-[0.16em] uppercase font-bold leading-tight",
+                        "text-[13px] tracking-[0.12em] uppercase font-bold leading-tight",
                         isActive ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
                       )}
                     >
                       {d.label}
                     </span>
                     <span
-                      className="text-[10px] leading-snug"
+                      className="text-[12px] leading-relaxed"
                       style={{ color: isActive ? "hsla(190,55%,80%,0.95)" : "hsla(210,30%,78%,0.8)" }}
                     >
                       {d.description}
