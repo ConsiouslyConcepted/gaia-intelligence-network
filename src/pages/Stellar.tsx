@@ -525,6 +525,112 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     );
   }
 
+  if (layer === "oscillations") {
+    // schematic stacked sine waves at different frequencies (p-modes)
+    const size = 760;
+    const h = 360;
+    const baseY = h / 2;
+    const lines = [
+      { freq: 2, color: "#9ec5ff", label: "Low-ℓ p-mode" },
+      { freq: 3.5, color: "#ffe87a", label: "Solar 5-min mode (3.1 mHz)" },
+      { freq: 5, color: "#ff9d6e", label: "High-ℓ p-mode" },
+    ];
+    const path = (freq: number, yOff: number) => {
+      const pts: string[] = [];
+      for (let x = 0; x <= size; x += 4) {
+        const y = baseY + yOff + Math.sin((x / size) * Math.PI * 2 * freq) * 28;
+        pts.push(`${x === 0 ? "M" : "L"}${x},${y}`);
+      }
+      return pts.join(" ");
+    };
+    return (
+      <div className="w-full h-full flex flex-col gap-2 px-2 py-2">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
+          Asteroseismic p-modes — schematic
+        </div>
+        <svg viewBox={`0 0 ${size} ${h}`} className="w-full">
+          {lines.map((l, i) => (
+            <g key={i}>
+              <path d={path(l.freq, (i - 1) * 80)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
+              <text x={10} y={baseY + (i - 1) * 80 - 32} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
+            </g>
+          ))}
+        </svg>
+        <div className="text-[10px] text-muted-foreground/70 px-3">
+          Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
+        </div>
+      </div>
+    );
+  }
+
+  if (layer === "variables") {
+    const cards = [
+      { name: "Cepheid", period: "1–100 days", use: "Distance ladder · period–luminosity relation", color: "#ffe87a" },
+      { name: "RR Lyrae", period: "0.2–1 day", use: "Distances within the Milky Way halo", color: "#ffba6b" },
+      { name: "Mira", period: "~1 year", use: "Late-stage AGB pulsators", color: "#ff7d5e" },
+      { name: "Eclipsing Binary", period: "hours–years", use: "Precise stellar masses and radii", color: "#9ec5ff" },
+      { name: "δ Scuti", period: "0.5–8 hours", use: "Asteroseismology of A/F stars", color: "#cfd9ff" },
+      { name: "Cataclysmic", period: "minutes–days", use: "Accreting binaries · novae", color: "#cc5533" },
+    ];
+    return (
+      <div className="w-full h-full flex flex-col gap-3 px-2 py-2 overflow-y-auto">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
+          Variable star classes
+        </div>
+        <div className="grid grid-cols-2 gap-2">
+          {cards.map((c) => (
+            <div key={c.name} className="rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div className="flex items-center gap-2 mb-1.5">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
+                <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{c.name}</div>
+              </div>
+              <div className="text-[9px] font-mono text-muted-foreground/65">{c.period}</div>
+              <div className="text-[10px] text-muted-foreground/70 mt-1">{c.use}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  if (layer === "magnetic") {
+    const rows = [
+      { name: "Sun (mean)", val: 1.5, color: "#ffe87a", note: "Quiet photosphere" },
+      { name: "Sunspot", val: 3000, color: "#ffba6b", note: "Concentrated flux tubes" },
+      { name: "M-dwarf", val: 3000, color: "#cc5533", note: "Strong global dynamo" },
+      { name: "White Dwarf", val: 1e6, color: "#cfe6ff", note: "Compressed remnant field" },
+      { name: "Neutron Star", val: 1e12, color: "#9ec5ff", note: "Pulsar magnetosphere" },
+      { name: "Magnetar", val: 1e14, color: "#7aa8ff", note: "Most magnetic objects known" },
+    ];
+    const max = Math.log10(1e14);
+    return (
+      <div className="w-full h-full flex flex-col gap-3 px-2 py-2 overflow-y-auto">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
+          Magnetic field strength · log scale (Gauss)
+        </div>
+        <div className="flex flex-col gap-2">
+          {rows.map((r) => {
+            const w = (Math.log10(r.val) / max) * 100;
+            return (
+              <div key={r.name} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+                <div className="flex items-baseline justify-between mb-1">
+                  <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{r.name}</div>
+                  <div className="text-[10px] font-mono text-muted-foreground/75">
+                    {r.val >= 1e6 ? `10^${Math.round(Math.log10(r.val))}` : r.val.toLocaleString()} G
+                  </div>
+                </div>
+                <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "hsla(240,20%,18%,0.8)" }}>
+                  <div className="h-full rounded-full" style={{ width: `${w}%`, background: r.color, boxShadow: `0 0 10px ${r.color}` }} />
+                </div>
+                <div className="text-[9px] text-muted-foreground/65 mt-1">{r.note}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    );
+  }
+
   // exoplanets
   return (
     <div className="w-full h-full flex flex-col justify-start gap-4 px-2 py-2 overflow-y-auto">
