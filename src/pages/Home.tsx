@@ -561,11 +561,10 @@ export default function Home() {
         />
         <div className="relative max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-light text-white leading-tight">
-            The observatory is open.
+            Begin exploring.
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/65">
-            Start at Earth and travel outward — or jump to any scale. Every observation
-            connects.
+            Start at Earth or jump to any scale.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link
