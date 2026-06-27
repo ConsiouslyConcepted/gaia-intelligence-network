@@ -619,14 +619,14 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   if (layer === "oscillations") {
     // Upgraded asteroseismic schematic: glowing waves + power spectrum sidebar
     const W = 920;
-    const H = 320;
+    const H = 360;
     const labelGutter = 168;
     const waveStart = labelGutter + 16;
     const specStart = 660;
     const waveEnd = specStart - 28;
     const waveWidth = waveEnd - waveStart;
-    const rowGap = 70;
-    const baseY = 78;
+    const rowGap = 66;
+    const baseY = 104;
     const rows = [
       { freq: 2,   color: "#9ec5ff", glow: "#5b8cff", label: "Low-ℓ p-mode",            sub: "ℓ = 0 · deep cavity",    amp: 22, mHz: 1.8, power: 0.55 },
       { freq: 3.5, color: "#ffe87a", glow: "#f5c542", label: "Solar 5-min mode",        sub: "ν ≈ 3.1 mHz · ℓ = 1",    amp: 18, mHz: 3.1, power: 1.0  },
@@ -673,6 +673,9 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
         <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-h-[300px]">
           <defs>
+            <clipPath id="stellar-wave-lane-clip">
+              <rect x={waveStart} y={baseY - 42} width={waveEnd - waveStart} height={rowGap * 3 + 42} rx={8} />
+            </clipPath>
             {rows.map((r, i) => (
               <filter key={i} id={`glow-${i}`} x="-10%" y="-50%" width="120%" height="200%">
                 <feGaussianBlur stdDeviation="2.4" result="b" />
@@ -708,23 +711,25 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
                         fontFamily="ui-monospace, monospace" fontWeight={600}>{r.label}</text>
                   <text x={labelGutter} y={y + 10} textAnchor="end" fill={r.color} opacity={0.75} fontSize={9}
                         fontFamily="ui-monospace, monospace" letterSpacing="1">{r.sub}</text>
-                  {/* glow underlay */}
-                  <path d={path(r.freq, y, r.amp)} stroke={r.glow} strokeWidth={5} fill="none" opacity={0.28}
-                        filter={`url(#glow-${i})`} strokeLinecap="round">
-                    <animateTransform attributeName="transform" type="translate"
-                                      from="0 0" to={`${-waveWidth / r.freq} 0`}
-                                      dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
-                  </path>
-                  {/* main wave */}
-                  <path d={path(r.freq, y, r.amp)} stroke={r.color} strokeWidth={1.8} fill="none"
-                        strokeLinecap="round">
-                    <animateTransform attributeName="transform" type="translate"
-                                      from="0 0" to={`${-waveWidth / r.freq} 0`}
-                                      dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
-                  </path>
-                  {/* node markers */}
-                  <circle cx={waveStart} cy={y} r={2.5} fill={r.color} />
-                  <circle cx={waveEnd} cy={y} r={2.5} fill={r.color} opacity={0.5} />
+                  <g clipPath="url(#stellar-wave-lane-clip)">
+                    {/* glow underlay */}
+                    <path d={path(r.freq, y, r.amp)} stroke={r.glow} strokeWidth={5} fill="none" opacity={0.28}
+                          filter={`url(#glow-${i})`} strokeLinecap="round">
+                      <animateTransform attributeName="transform" type="translate"
+                                        from="0 0" to={`${-waveWidth / r.freq} 0`}
+                                        dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
+                    </path>
+                    {/* main wave */}
+                    <path d={path(r.freq, y, r.amp)} stroke={r.color} strokeWidth={1.8} fill="none"
+                          strokeLinecap="round">
+                      <animateTransform attributeName="transform" type="translate"
+                                        from="0 0" to={`${-waveWidth / r.freq} 0`}
+                                        dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
+                    </path>
+                    {/* node markers */}
+                    <circle cx={waveStart} cy={y} r={2.5} fill={r.color} />
+                    <circle cx={waveEnd} cy={y} r={2.5} fill={r.color} opacity={0.5} />
+                  </g>
                 </g>
               );
             })}
