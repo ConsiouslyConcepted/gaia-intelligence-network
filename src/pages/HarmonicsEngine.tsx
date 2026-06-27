@@ -197,7 +197,7 @@ function CorrelationPlot({ a, b }: { a: Dataset; b: Dataset }) {
 
 const HarmonicsEngine = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"single" | "cross">("single");
+  const [mode, setMode] = useState<"single" | "cross" | "events" | "reports">("single");
   const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
   const [scope, setScope] = useState<Scope>("universal");
   const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
