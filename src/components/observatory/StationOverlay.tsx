@@ -22,6 +22,8 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
 
   return (
     <>
+      <style>{scanKeyframes}</style>
+
       {/* Top bar — Parametric tactical HUD title */}
       <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none px-6 pt-4 flex items-start justify-between">
         <div className="pointer-events-auto group">
