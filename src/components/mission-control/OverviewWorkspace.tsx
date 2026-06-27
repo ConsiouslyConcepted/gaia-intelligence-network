@@ -3,17 +3,25 @@ import { ArrowRight, Activity, Sun, Star, Orbit, Telescope } from "lucide-react"
 import type { LucideIcon } from "lucide-react";
 
 import { HudPanel } from "./MissionShell";
+import {
+  useUSGSEarthquakes,
+  useNOAAKpIndex,
+  useNOAASolarWind,
+  useNOAASolarCycle,
+  useNASAEONET,
+  useNOAAAlerts,
+} from "@/hooks/usePlanetaryData";
 
 type Status = "nominal" | "active" | "watch";
 
-interface LayerStatus {
+interface LayerCard {
   key: string;
   label: string;
   caption: string;
   icon: LucideIcon;
   route: string;
   status: Status;
-  health: number; // 0-100
+  health: number;
   events: number;
   recent: string;
   metrics: { label: string; value: string }[];
@@ -25,83 +33,8 @@ const STATUS_STYLE: Record<Status, { color: string; bg: string; label: string }>
   watch:   { color: "hsla(15,90%,75%,0.95)",  bg: "hsla(15,75%,35%,0.25)",  label: "Watch"   },
 };
 
-const LAYERS: LayerStatus[] = [
-  {
-    key: "planetary",
-    label: "Planetary Intelligence",
-    caption: "Earth Systems · Biosphere → Technosphere",
-    icon: Activity,
-    route: "/planetary",
-    status: "nominal",
-    health: 92,
-    events: 3,
-    recent: "Schumann resonance stable · ENSO neutral",
-    metrics: [
-      { label: "Spheres",   value: "8 live" },
-      { label: "Telemetry", value: "Streaming" },
-    ],
-  },
-  {
-    key: "solar",
-    label: "Solar Intelligence",
-    caption: "Heliosphere · Solar Cycle · Transits",
-    icon: Sun,
-    route: "/planetary?view=hgs",
-    status: "active",
-    health: 78,
-    events: 5,
-    recent: "Cycle 25 active · solar wind elevated",
-    metrics: [
-      { label: "SSN",        value: "143" },
-      { label: "Kp Index",   value: "3.7" },
-    ],
-  },
-  {
-    key: "stellar",
-    label: "Stellar Intelligence",
-    caption: "Evolution · Oscillations · Variability",
-    icon: Star,
-    route: "/stellar",
-    status: "nominal",
-    health: 95,
-    events: 1,
-    recent: "Local stellar neighborhood quiescent",
-    metrics: [
-      { label: "Tracked",    value: "127 stars" },
-      { label: "Variables",  value: "12 active" },
-    ],
-  },
-  {
-    key: "galactic",
-    label: "Galactic Intelligence",
-    caption: "Milky Way · Cosmic Rays · ISM",
-    icon: Orbit,
-    route: "/galactic",
-    status: "nominal",
-    health: 88,
-    events: 2,
-    recent: "Sgr A* baseline · cosmic ray flux nominal",
-    metrics: [
-      { label: "GCR Flux",   value: "Steady" },
-      { label: "Position",   value: "Orion Arm" },
-    ],
-  },
-  {
-    key: "cosmological",
-    label: "Cosmological Intelligence",
-    caption: "CMB · Structure · Spacetime",
-    icon: Telescope,
-    route: "/cosmological",
-    status: "nominal",
-    health: 99,
-    events: 0,
-    recent: "CMB anisotropy stable · H₀ tension monitored",
-    metrics: [
-      { label: "CMB",        value: "2.725 K" },
-      { label: "Layers",     value: "5 active" },
-    ],
-  },
-];
+const kpToStatus = (kp: number): Status => (kp >= 5 ? "watch" : kp >= 4 ? "active" : "nominal");
+const ssnToStatus = (ssn: number): Status => (ssn >= 150 ? "watch" : ssn >= 90 ? "active" : "nominal");
 
 const StatusPill = ({ status }: { status: Status }) => {
   const s = STATUS_STYLE[status];
@@ -121,7 +54,7 @@ const HealthBar = ({ value }: { value: number }) => (
     <div
       className="h-full rounded-full"
       style={{
-        width: `${value}%`,
+        width: `${Math.max(0, Math.min(100, value))}%`,
         background: "linear-gradient(90deg, hsla(200,70%,60%,0.7), hsla(200,80%,80%,0.95))",
         boxShadow: "0 0 12px hsla(200,70%,60%,0.4)",
       }}
@@ -131,6 +64,124 @@ const HealthBar = ({ value }: { value: number }) => (
 
 const OverviewWorkspace = () => {
   const navigate = useNavigate();
+
+  // Live data sources
+  const quakes = useUSGSEarthquakes("day", 4.5);
+  const kp = useNOAAKpIndex();
+  const wind = useNOAASolarWind();
+  const cycle = useNOAASolarCycle();
+  const eonet = useNASAEONET();
+  const alerts = useNOAAAlerts();
+
+  // --- Planetary ---
+  const eonetCount = eonet.data?.length ?? 0;
+  const quakeCount = quakes.data?.length ?? 0;
+  const alertCount = alerts.data?.length ?? 0;
+  const planetaryEvents = eonetCount + alertCount;
+  const planetaryHealth = Math.max(55, 95 - alertCount * 4 - Math.min(20, eonetCount));
+  const planetaryStatus: Status = alertCount >= 5 ? "watch" : alertCount >= 2 ? "active" : "nominal";
+  const topQuake = quakes.data?.[0];
+
+  // --- Solar ---
+  const latestKp = kp.data?.[kp.data.length - 1]?.kp ?? 0;
+  const latestWind = wind.data?.[wind.data.length - 1];
+  const ssn = cycle.data?.ssn ?? 0;
+  const solarStatus: Status = (() => {
+    const s1 = kpToStatus(latestKp);
+    const s2 = ssnToStatus(ssn);
+    const order = { nominal: 0, active: 1, watch: 2 } as const;
+    return order[s1] >= order[s2] ? s1 : s2;
+  })();
+  const solarHealth = Math.max(45, 100 - latestKp * 8 - Math.max(0, ssn - 100) * 0.15);
+  const solarEvents = (latestKp >= 4 ? 1 : 0) + (ssn >= 120 ? 1 : 0);
+
+  const LAYERS: LayerCard[] = [
+    {
+      key: "planetary",
+      label: "Planetary Intelligence",
+      caption: "Earth Systems · Biosphere → Technosphere",
+      icon: Activity,
+      route: "/planetary",
+      status: planetaryStatus,
+      health: planetaryHealth,
+      events: planetaryEvents,
+      recent: topQuake
+        ? `M${topQuake.magnitude.toFixed(1)} · ${topQuake.place}`
+        : eonet.data?.[0]
+          ? `${eonet.data[0].title}`
+          : "Telemetry streaming · no major events",
+      metrics: [
+        { label: "Quakes ≥4.5", value: quakes.isLoading ? "…" : String(quakeCount) },
+        { label: "NASA Events", value: eonet.isLoading ? "…" : String(eonetCount) },
+      ],
+    },
+    {
+      key: "solar",
+      label: "Solar Intelligence",
+      caption: "Heliosphere · Solar Cycle · Transits",
+      icon: Sun,
+      route: "/planetary?view=hgs",
+      status: solarStatus,
+      health: solarHealth,
+      events: solarEvents,
+      recent: latestWind
+        ? `Solar wind ${Math.round(latestWind.speed)} km/s · ${Math.round(latestWind.density)} p/cm³`
+        : "Awaiting NOAA SWPC stream",
+      metrics: [
+        { label: "SSN", value: cycle.isLoading ? "…" : String(Math.round(ssn)) },
+        { label: "Kp", value: kp.isLoading ? "…" : latestKp.toFixed(1) },
+      ],
+    },
+    {
+      key: "stellar",
+      label: "Stellar Intelligence",
+      caption: "Evolution · Oscillations · Variability",
+      icon: Star,
+      route: "/stellar",
+      status: "nominal",
+      health: 95,
+      events: 1,
+      recent: "Local stellar neighborhood quiescent · 12 variables tracked",
+      metrics: [
+        { label: "Tracked", value: "127" },
+        { label: "Variables", value: "12" },
+      ],
+    },
+    {
+      key: "galactic",
+      label: "Galactic Intelligence",
+      caption: "Milky Way · Cosmic Rays · ISM",
+      icon: Orbit,
+      route: "/galactic",
+      status: "nominal",
+      health: 88,
+      events: 2,
+      recent: "Sgr A* baseline · GCR flux nominal · Orion Spur position stable",
+      metrics: [
+        { label: "GCR", value: "Steady" },
+        { label: "Arm", value: "Orion" },
+      ],
+    },
+    {
+      key: "cosmological",
+      label: "Cosmological Intelligence",
+      caption: "CMB · Structure · Spacetime",
+      icon: Telescope,
+      route: "/cosmological",
+      status: "nominal",
+      health: 99,
+      events: 0,
+      recent: "CMB anisotropy stable · H₀ tension monitored",
+      metrics: [
+        { label: "CMB", value: "2.725 K" },
+        { label: "H₀", value: "67–73" },
+      ],
+    },
+  ];
+
+  const overallHealth = Math.round(LAYERS.reduce((a, l) => a + l.health, 0) / LAYERS.length);
+  const totalEvents = LAYERS.reduce((a, l) => a + l.events, 0);
+
   return (
     <div className="h-full w-full overflow-y-auto">
       <div className="max-w-[1400px] mx-auto pb-4">
@@ -145,14 +196,19 @@ const OverviewWorkspace = () => {
                 Universal Overview
               </h2>
               <p className="text-[11px] text-muted-foreground/75 mt-1.5 max-w-2xl leading-relaxed">
-                Live operational status across every GaiaSphere intelligence layer. Health, active events,
-                and recent changes synthesized from each observatory.
+                Live operational status across every GaiaSphere intelligence layer. Synthesized from
+                USGS, NOAA SWPC, NASA EONET, and observatory telemetry streams.
               </p>
             </div>
-            <div className="flex gap-2">
-              {(["nominal", "active", "watch"] as Status[]).map((s) => (
-                <StatusPill key={s} status={s} />
-              ))}
+            <div className="flex items-center gap-4">
+              <div className="text-right">
+                <div className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/55">Composite Health</div>
+                <div className="text-[18px] font-mono font-bold text-foreground/95 tabular-nums">{overallHealth}%</div>
+              </div>
+              <div className="text-right">
+                <div className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/55">Active Events</div>
+                <div className="text-[18px] font-mono font-bold text-foreground/95 tabular-nums">{totalEvents}</div>
+              </div>
             </div>
           </div>
         </HudPanel>
@@ -193,7 +249,7 @@ const OverviewWorkspace = () => {
                       System Health
                     </span>
                     <span className="text-[11px] font-mono font-semibold text-foreground/90 tabular-nums">
-                      {layer.health}%
+                      {Math.round(layer.health)}%
                     </span>
                   </div>
                   <HealthBar value={layer.health} />
@@ -231,7 +287,7 @@ const OverviewWorkspace = () => {
                   <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">
                     Recent
                   </div>
-                  <p className="text-[10px] leading-relaxed text-muted-foreground/85">{layer.recent}</p>
+                  <p className="text-[10px] leading-relaxed text-muted-foreground/85 line-clamp-2">{layer.recent}</p>
                 </div>
 
                 <button
@@ -257,16 +313,33 @@ const OverviewWorkspace = () => {
               Mission Synthesis
             </div>
             <div className="text-[13px] font-bold tracking-[0.1em] uppercase text-foreground/90">
-              All Systems Synchronized
+              {totalEvents === 0
+                ? "All Systems Synchronized"
+                : totalEvents < 5
+                  ? "Network Stable · Minor Activity"
+                  : "Elevated Activity Detected"}
             </div>
             <p className="text-[10px] leading-relaxed text-muted-foreground/85">
-              Every observatory is reporting. Solar Cycle 25 is the dominant driver across the network,
-              with elevated planetary magnetosphere response. Stellar, Galactic, and Cosmological layers
-              are baseline.
+              {latestKp >= 4
+                ? `Geomagnetic activity elevated (Kp ${latestKp.toFixed(1)}). Solar Cycle 25 driving the network.`
+                : `Solar Cycle 25 active (SSN ${Math.round(ssn)}). Planetary, stellar, and deep-space layers baseline.`}
+              {" "}
+              {eonetCount > 0 && `${eonetCount} active NASA events. `}
+              {alertCount > 0 && `${alertCount} space-weather alerts.`}
             </p>
-            <div className="mt-auto text-[8px] tracking-[0.2em] uppercase text-muted-foreground/45">
-              Updated continuously · synthesized across 5 observatories
-            </div>
+            <button
+              onClick={() => navigate("/universal?workspace=ai")}
+              className="mt-auto flex items-center justify-between w-full px-3 py-2 rounded-lg border transition-all duration-300 hover:bg-foreground/[0.04]"
+              style={{
+                background: "hsla(240,25%,8%,0.5)",
+                borderColor: "hsla(220,30%,55%,0.35)",
+              }}
+            >
+              <span className="text-[10px] tracking-[0.18em] uppercase font-semibold text-foreground/85">
+                Open AI Analyst
+              </span>
+              <ArrowRight size={14} className="text-foreground/70" />
+            </button>
           </HudPanel>
         </div>
       </div>
