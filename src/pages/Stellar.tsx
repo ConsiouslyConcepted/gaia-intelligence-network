@@ -42,7 +42,7 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-type StellarLayer = "neighborhood" | "classification" | "lifecycle" | "exoplanets";
+type StellarLayer = "neighborhood" | "classification" | "lifecycle" | "oscillations" | "variables" | "magnetic" | "exoplanets";
 
 interface LayerSpec {
   key: StellarLayer;
@@ -79,7 +79,7 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "lifecycle",
-    card: "Stellar Lifecycle",
+    card: "Stellar Evolution",
     title: "Birth · Main Sequence · Death",
     question: "How do stars evolve from nebula to remnant?",
     metrics: [
@@ -87,6 +87,42 @@ const LAYERS: LayerSpec[] = [
       { label: "Main Sequence Left", value: "~5", unit: "Gyr" },
       { label: "Sun End State", value: "White Dwarf", unit: "" },
       { label: "Massive Star End", value: "Supernova", unit: "" },
+    ],
+  },
+  {
+    key: "oscillations",
+    card: "Stellar Oscillations",
+    title: "Asteroseismology · p-mode pulsations",
+    question: "How do stars vibrate and what do their modes reveal?",
+    metrics: [
+      { label: "Sun 5-min Mode", value: "3.1", unit: "mHz" },
+      { label: "Detected Solar Modes", value: "~10,000", unit: "" },
+      { label: "Kepler Oscillators", value: "~16,000", unit: "stars" },
+      { label: "Method", value: "Helioseismology", unit: "" },
+    ],
+  },
+  {
+    key: "variables",
+    card: "Variable Stars",
+    title: "Cepheids · RR Lyrae · Eclipsing Binaries",
+    question: "Which stars change brightness, and how do we use them?",
+    metrics: [
+      { label: "Cataloged Variables", value: "~500,000", unit: "" },
+      { label: "Cepheid Period Range", value: "1–100", unit: "days" },
+      { label: "Use", value: "Standard Candles", unit: "" },
+      { label: "Nearest Cepheid", value: "Polaris", unit: "~433 ly" },
+    ],
+  },
+  {
+    key: "magnetic",
+    card: "Stellar Magnetic Fields",
+    title: "Dynamos · Starspots · Flares",
+    question: "How strong are stellar magnetic fields and what do they drive?",
+    metrics: [
+      { label: "Sun Mean Field", value: "1–2", unit: "G" },
+      { label: "Sunspot Peak Field", value: "~3,000", unit: "G" },
+      { label: "M-Dwarf Field", value: "~3,000", unit: "G" },
+      { label: "Magnetar Field", value: "10¹⁴", unit: "G" },
     ],
   },
   {
