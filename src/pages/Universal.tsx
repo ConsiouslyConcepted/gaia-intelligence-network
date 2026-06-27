@@ -398,14 +398,6 @@ const LayerStage = ({ layer, tick }: { layer: UniversalLayer; tick: number }) =>
 const Universal = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<UniversalLayer>("address");
-  const [sphL, setSphL] = useState(3);
-  const [sphM, setSphM] = useState(2);
-  const setL = (v: number) => {
-    const nl = Math.max(0, Math.min(6, v));
-    setSphL(nl);
-    if (Math.abs(sphM) > nl) setSphM(nl);
-  };
-  const setM = (v: number) => setSphM(Math.max(-sphL, Math.min(sphL, v)));
   const active = LAYERS.find((l) => l.key === layer)!;
 
   const [tick, setTick] = useState(0);
