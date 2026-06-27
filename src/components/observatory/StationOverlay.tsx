@@ -40,9 +40,16 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
                 <h1 className="text-[32px] md:text-[40px] font-display font-bold text-foreground tracking-tight leading-none">
                   GAIASPHERE
                 </h1>
-                {/* Underline accents — monochrome glass */}
+                {/* Underline accents — monochrome glass with loading scan */}
                 <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-foreground/25 shadow-[0_0_18px_hsla(210,75%,62%,0.45)]" />
-                <div className="absolute -bottom-1 left-1/2 w-1/4 h-[2px] bg-foreground/70" />
+                <div
+                  className="absolute -bottom-1 h-[2px] bg-foreground/80 shadow-[0_0_12px_hsla(0,0%,100%,0.7)]"
+                  style={{
+                    width: "25%",
+                    left: "0%",
+                    animation: "scanBar 2.4s ease-in-out infinite",
+                  }}
+                />
               </div>
 
               {/* Secondary descriptor */}
