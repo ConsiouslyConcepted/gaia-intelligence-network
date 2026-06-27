@@ -5,6 +5,8 @@ import OverviewWorkspace from "@/components/mission-control/OverviewWorkspace";
 import CosmicAddressWorkspace from "@/components/mission-control/CosmicAddressWorkspace";
 import CrossLayerWorkspace from "@/components/mission-control/CrossLayerWorkspace";
 import HarmonicWorkspace from "@/components/mission-control/HarmonicWorkspace";
+import AIAnalystWorkspace from "@/components/mission-control/AIAnalystWorkspace";
+import ReportsWorkspace from "@/components/mission-control/ReportsWorkspace";
 import WorkspaceStub from "@/components/mission-control/WorkspaceStub";
 
 const VALID = new Set<Workspace>(WORKSPACES.map((w) => w.key));
@@ -20,6 +22,8 @@ const MissionControl = () => {
       case "address":     return <CosmicAddressWorkspace />;
       case "cross-layer": return <CrossLayerWorkspace />;
       case "harmonic":    return <HarmonicWorkspace />;
+      case "ai":          return <AIAnalystWorkspace />;
+      case "reports":     return <ReportsWorkspace />;
       default:            return <WorkspaceStub workspace={active} />;
     }
   };
