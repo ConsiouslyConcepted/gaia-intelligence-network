@@ -436,6 +436,131 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ ABOUT ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
+          <div className="md:col-span-4">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              About GaiaSphere
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              A living observatory of nested systems.
+            </h2>
+          </div>
+          <div className="md:col-span-8 space-y-5 text-[15px] leading-relaxed text-white/70">
+            <p>
+              GaiaSphere integrates modern Earth system science, astronomy, astrophysics,
+              systems science, network science, and AI into a single environment for
+              exploring the interconnected organization of the observable universe.
+            </p>
+            <p>
+              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is
+              treated as a system in its own right, and as part of a larger architecture.
+              Together they form a continuous, observable whole.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ SCIENTIFIC FOUNDATIONS ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-2xl">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              Scientific Foundations
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              Grounded in open science.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
+              Every observation, signal, and analysis is anchored in established disciplines
+              and public datasets. Transparency and evidence first.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {[
+              "Earth System Science",
+              "Heliophysics",
+              "Astrophysics",
+              "Galactic Astronomy",
+              "Cosmology",
+              "Systems Science",
+              "Network Science",
+              "Harmonic Analysis",
+              "Spectral Analysis",
+              "Spherical Harmonics",
+              "Time-Series Analysis",
+              "AI-Assisted Analysis",
+            ].map((d) => (
+              <div
+                key={d}
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-[12.5px] text-white/80"
+              >
+                {d}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex items-center gap-3 text-[12px] text-white/55">
+            <Telescope className="w-4 h-4" strokeWidth={1.4} />
+            Data sourced from NASA, NOAA, USGS, ESA, and open scientific archives.
+          </div>
+        </div>
+      </section>
+
+      {/* ============ AI ASSISTANT ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 50%, rgba(160,200,255,0.10), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-7 order-2 md:order-1">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 space-y-3">
+              {[
+                "Explain scientific concepts across every observatory",
+                "Summarize current conditions and surface anomalies",
+                "Compare multiple intelligence layers",
+                "Generate daily, weekly, and monthly reports",
+                "Detect trends and recurring patterns",
+                "Recommend additional analyses and datasets",
+              ].map((c) => (
+                <div key={c} className="flex items-start gap-3">
+                  <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-white/60" />
+                  <p className="text-[13.5px] text-white/75 leading-relaxed">{c}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="md:col-span-5 order-1 md:order-2">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              AI Intelligence Assistant
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              An analyst across every layer.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
+              The GaiaSphere AI is connected to every observatory and the Harmonic Analysis
+              Engine. Ask questions, request reports, or let it guide your exploration through
+              data and scientific reasoning.
+            </p>
+            <div className="mt-8">
+              <Link
+                to="/mission-control?workspace=ai"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+              >
+                Meet the Analyst
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* ============ CTA ============ */}
       <section className="relative px-6 py-32 border-t border-white/5">
         <div
