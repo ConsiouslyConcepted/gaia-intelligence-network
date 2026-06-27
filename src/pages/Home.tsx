@@ -13,6 +13,14 @@ import {
   Infinity as InfinityIcon,
   ArrowDown,
   ArrowRight,
+  Activity,
+  Waves,
+  Network,
+  Brain,
+  LineChart,
+  Atom,
+  Telescope,
+  Sigma,
 } from "lucide-react";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
@@ -174,9 +182,9 @@ export default function Home() {
               <span className="italic font-extralight text-white/85">observed as one system.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              GaiaSphere is a living observatory for the nested systems that shape life on
-              Earth — from planetary spheres to the cosmic web — and the harmonic relationships
-              that bind them.
+              Explore Earth's place within the nested systems of the observable universe
+              through real-time scientific data, systems intelligence, harmonic analysis,
+              and AI-assisted discovery.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -323,6 +331,69 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ HARMONIC ANALYSIS ENGINE ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 80% 20%, rgba(120,170,255,0.10), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-5">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              Core Capability
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              The Harmonic Analysis Engine.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
+              Not another dashboard — the analytical framework that connects every layer of
+              the observatory. Surface the recurring patterns, cycles, resonances, and field
+              relationships that link planetary, solar, stellar, galactic, cosmological, and
+              universal systems.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/harmonics"
+                className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+              >
+                Launch Harmonic Analysis
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/mission-control"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+              >
+                Open Mission Control
+              </Link>
+            </div>
+          </div>
+
+          <div className="md:col-span-7 grid grid-cols-2 gap-3">
+            {[
+              { Icon: Network, t: "Cross-layer analysis" },
+              { Icon: Waves, t: "Harmonic & frequency" },
+              { Icon: Activity, t: "Pattern recognition" },
+              { Icon: Sigma, t: "Wave & field viz" },
+              { Icon: LineChart, t: "Correlation analysis" },
+              { Icon: Activity, t: "Time-series analysis" },
+              { Icon: Atom, t: "Spherical harmonics" },
+              { Icon: Brain, t: "AI-assisted analysis" },
+            ].map(({ Icon, t }) => (
+              <div
+                key={t}
+                className="rounded-lg border border-white/10 bg-white/[0.03] backdrop-blur-xl px-4 py-3.5 flex items-center gap-3"
+              >
+                <Icon className="w-4 h-4 text-white/70" strokeWidth={1.4} />
+                <span className="text-[12.5px] text-white/80">{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============ NESTED ADDRESS ============ */}
       <section className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto text-center">
@@ -361,6 +432,131 @@ export default function Home() {
               Open the Cosmic Address
               <ArrowRight className="w-4 h-4" />
             </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ ABOUT ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
+          <div className="md:col-span-4">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              About GaiaSphere
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              A living observatory of nested systems.
+            </h2>
+          </div>
+          <div className="md:col-span-8 space-y-5 text-[15px] leading-relaxed text-white/70">
+            <p>
+              GaiaSphere integrates modern Earth system science, astronomy, astrophysics,
+              systems science, network science, and AI into a single environment for
+              exploring the interconnected organization of the observable universe.
+            </p>
+            <p>
+              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is
+              treated as a system in its own right, and as part of a larger architecture.
+              Together they form a continuous, observable whole.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ SCIENTIFIC FOUNDATIONS ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <div className="max-w-2xl">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              Scientific Foundations
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              Grounded in open science.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
+              Every observation, signal, and analysis is anchored in established disciplines
+              and public datasets. Transparency and evidence first.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3">
+            {[
+              "Earth System Science",
+              "Heliophysics",
+              "Astrophysics",
+              "Galactic Astronomy",
+              "Cosmology",
+              "Systems Science",
+              "Network Science",
+              "Harmonic Analysis",
+              "Spectral Analysis",
+              "Spherical Harmonics",
+              "Time-Series Analysis",
+              "AI-Assisted Analysis",
+            ].map((d) => (
+              <div
+                key={d}
+                className="rounded-lg border border-white/10 bg-white/[0.03] px-4 py-3 text-[12.5px] text-white/80"
+              >
+                {d}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-10 flex items-center gap-3 text-[12px] text-white/55">
+            <Telescope className="w-4 h-4" strokeWidth={1.4} />
+            Data sourced from NASA, NOAA, USGS, ESA, and open scientific archives.
+          </div>
+        </div>
+      </section>
+
+      {/* ============ AI ASSISTANT ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 20% 50%, rgba(160,200,255,0.10), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-7 order-2 md:order-1">
+            <div className="rounded-2xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 space-y-3">
+              {[
+                "Explain scientific concepts across every observatory",
+                "Summarize current conditions and surface anomalies",
+                "Compare multiple intelligence layers",
+                "Generate daily, weekly, and monthly reports",
+                "Detect trends and recurring patterns",
+                "Recommend additional analyses and datasets",
+              ].map((c) => (
+                <div key={c} className="flex items-start gap-3">
+                  <div className="mt-1.5 w-1.5 h-1.5 rounded-full bg-white/60" />
+                  <p className="text-[13.5px] text-white/75 leading-relaxed">{c}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="md:col-span-5 order-1 md:order-2">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              AI Intelligence Assistant
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              An analyst across every layer.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
+              The GaiaSphere AI is connected to every observatory and the Harmonic Analysis
+              Engine. Ask questions, request reports, or let it guide your exploration through
+              data and scientific reasoning.
+            </p>
+            <div className="mt-8">
+              <Link
+                to="/mission-control?workspace=ai"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+              >
+                Meet the Analyst
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            </div>
           </div>
         </div>
       </section>
