@@ -91,17 +91,20 @@ function Earth() {
 }
 
 function OrbitRing({ radius, opacity = 0.18 }: { radius: number; opacity?: number }) {
-  const points = Array.from({ length: 129 }, (_, i) => {
-    const a = (i / 128) * Math.PI * 2;
-    return new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius);
-  });
-  const geom = new THREE.BufferGeometry().setFromPoints(points);
+  const geom = (() => {
+    const points = Array.from({ length: 129 }, (_, i) => {
+      const a = (i / 128) * Math.PI * 2;
+      return new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius);
+    });
+    return new THREE.BufferGeometry().setFromPoints(points);
+  })();
   return (
-    <line>
-      {/* @ts-expect-error r3f primitive */}
-      <bufferGeometry attach="geometry" {...geom} />
-      <lineBasicMaterial color="#9fb4d6" transparent opacity={opacity} />
-    </line>
+    <primitive
+      object={new THREE.Line(
+        geom,
+        new THREE.LineBasicMaterial({ color: "#9fb4d6", transparent: true, opacity })
+      )}
+    />
   );
 }
 
