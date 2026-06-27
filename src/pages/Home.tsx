@@ -11,6 +11,8 @@ import {
   Sparkles,
   Orbit,
   Infinity as InfinityIcon,
+  ArrowDown,
+  ArrowRight,
 } from "lucide-react";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
@@ -18,38 +20,50 @@ const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topolog
 
 const OBSERVATORIES = [
   {
+    n: "01",
     title: "Planetary Intelligence",
-    blurb: "Earth's coupled spheres — atmosphere, biosphere, lithosphere, magnetosphere.",
+    blurb:
+      "Earth's coupled spheres — atmosphere, biosphere, lithosphere, hydrosphere, magnetosphere — observed as one living system.",
     to: "/planetary",
     Icon: Globe2,
   },
   {
+    n: "02",
     title: "Solar Intelligence",
-    blurb: "Heliosphere dynamics, solar wind, and space weather.",
+    blurb:
+      "The Sun's heartbeat — solar wind, flares, and the heliosphere that shapes every planetary climate.",
     to: "/solar",
     Icon: Sun,
   },
   {
+    n: "03",
     title: "Stellar Intelligence",
-    blurb: "Asteroseismology, variable stars, and the local stellar neighborhood.",
+    blurb:
+      "Stars as natural oscillators. Asteroseismology, variable stars, and the songs of the local stellar neighborhood.",
     to: "/stellar",
     Icon: Star,
   },
   {
+    n: "04",
     title: "Galactic Intelligence",
-    blurb: "Milky Way structure, the Orion Spur, and galactic rotation.",
+    blurb:
+      "The Milky Way's architecture — spiral arms, the Orion Spur, and the rotation that carries our solar system.",
     to: "/galactic",
     Icon: Sparkles,
   },
   {
+    n: "05",
     title: "Cosmological Intelligence",
-    blurb: "Large-scale structure, cosmic microwave background, expansion.",
+    blurb:
+      "The largest scales — cosmic microwave background, large-scale structure, and the expansion of the universe.",
     to: "/cosmological",
     Icon: Orbit,
   },
   {
+    n: "06",
     title: "Universal Intelligence",
-    blurb: "Cosmic address and the nested architecture of the observable universe.",
+    blurb:
+      "Your cosmic address. The nested architecture from Earth to the observable universe, mapped end to end.",
     to: "/universal",
     Icon: InfinityIcon,
   },
@@ -61,14 +75,14 @@ function Earth() {
   const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
 
   useFrame((_, dt) => {
-    if (meshRef.current) meshRef.current.rotation.y += dt * 0.08;
-    if (cloudRef.current) cloudRef.current.rotation.y += dt * 0.04;
+    if (meshRef.current) meshRef.current.rotation.y += dt * 0.05;
+    if (cloudRef.current) cloudRef.current.rotation.y += dt * 0.025;
   });
 
   return (
     <group>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1.6, 96, 96]} />
+        <sphereGeometry args={[1.7, 96, 96]} />
         <meshStandardMaterial
           map={earthMap}
           bumpMap={bumpMap}
@@ -77,101 +91,206 @@ function Earth() {
           metalness={0.05}
         />
       </mesh>
-      {/* atmospheric glow */}
       <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.66, 64, 64]} />
+        <sphereGeometry args={[1.76, 64, 64]} />
         <meshBasicMaterial color="#7ec8ff" transparent opacity={0.08} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[1.78, 64, 64]} />
-        <meshBasicMaterial color="#4aa3ff" transparent opacity={0.05} side={THREE.BackSide} />
+        <sphereGeometry args={[1.9, 64, 64]} />
+        <meshBasicMaterial color="#4aa3ff" transparent opacity={0.06} side={THREE.BackSide} />
       </mesh>
     </group>
   );
 }
 
-function OrbitRing({ radius, opacity = 0.18 }: { radius: number; opacity?: number }) {
-  const geom = (() => {
-    const points = Array.from({ length: 129 }, (_, i) => {
-      const a = (i / 128) * Math.PI * 2;
-      return new THREE.Vector3(Math.cos(a) * radius, 0, Math.sin(a) * radius);
-    });
-    return new THREE.BufferGeometry().setFromPoints(points);
-  })();
-  return (
-    <primitive
-      object={new THREE.Line(
-        geom,
-        new THREE.LineBasicMaterial({ color: "#9fb4d6", transparent: true, opacity })
-      )}
-    />
-  );
-}
-
-function Scene() {
+function HeroScene() {
   return (
     <>
-      <ambientLight intensity={0.55} />
+      <ambientLight intensity={0.5} />
       <directionalLight position={[5, 3, 5]} intensity={1.4} />
       <directionalLight position={[-4, -2, -3]} intensity={0.25} color="#88aaff" />
-      <Stars radius={80} depth={40} count={3500} factor={3} fade speed={0.4} />
+      <Stars radius={80} depth={40} count={4000} factor={3.2} fade speed={0.3} />
       <Suspense fallback={null}>
         <Earth />
       </Suspense>
-      <group rotation={[Math.PI / 2.6, 0, 0]}>
-        <OrbitRing radius={2.4} opacity={0.22} />
-        <OrbitRing radius={3.1} opacity={0.14} />
-        <OrbitRing radius={3.9} opacity={0.08} />
-      </group>
     </>
   );
 }
 
+const NESTED_SCALES = [
+  { label: "Earth", scale: "10³ km" },
+  { label: "Solar System", scale: "10⁹ km" },
+  { label: "Orion Spur", scale: "10³ ly" },
+  { label: "Milky Way", scale: "10⁵ ly" },
+  { label: "Local Group", scale: "10⁷ ly" },
+  { label: "Virgo Cluster", scale: "10⁸ ly" },
+  { label: "Laniakea", scale: "10⁸ ly" },
+  { label: "Observable Universe", scale: "10¹⁰ ly" },
+];
+
 export default function Home() {
   return (
-    <div className="relative min-h-screen w-full overflow-hidden bg-[#05060f] text-foreground">
-      {/* Background 3D scene */}
-      <div className="absolute inset-0 z-0">
-        <Canvas camera={{ position: [0, 0.6, 5.2], fov: 50 }} dpr={[1, 2]}>
-          <Scene />
-        </Canvas>
-      </div>
+    <div className="relative w-full bg-[#05060f] text-foreground">
+      {/* ============ HERO ============ */}
+      <section className="relative h-screen w-full overflow-hidden">
+        <div className="absolute inset-0 z-0">
+          <Canvas camera={{ position: [0, 0.4, 5.4], fov: 50 }} dpr={[1, 2]}>
+            <HeroScene />
+          </Canvas>
+        </div>
 
-      {/* Vignette */}
-      <div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 35%, rgba(5,6,15,0.85) 100%)",
-        }}
-      />
+        {/* Vignette */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 30%, rgba(5,6,15,0.9) 95%)",
+          }}
+        />
 
-      {/* Foreground content */}
-      <div className="relative z-20 flex flex-col min-h-screen">
-        {/* Header */}
-        <header className="px-8 pt-10 pb-6 text-center">
-          <p className="text-[11px] uppercase tracking-[0.45em] text-white/50">
-            Nested Intelligence · Live Telemetry
+        {/* Hero copy */}
+        <div className="relative z-20 flex flex-col h-full">
+          <header className="px-8 pt-10">
+            <div className="flex items-center justify-between">
+              <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
+                GaiaSphere · Observatory
+              </p>
+              <Link
+                to="/universal"
+                className="text-[11px] uppercase tracking-[0.35em] text-white/55 hover:text-white transition-colors"
+              >
+                Enter Platform →
+              </Link>
+            </div>
+          </header>
+
+          <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
+            <p className="text-[11px] uppercase tracking-[0.5em] text-white/50">
+              An Observatory of Nested Intelligence
+            </p>
+            <h1 className="mt-5 text-5xl md:text-7xl font-light tracking-tight text-white">
+              The universe,
+              <br />
+              <span className="italic font-extralight text-white/85">observed as one system.</span>
+            </h1>
+            <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
+              GaiaSphere is a living observatory for the nested systems that shape life on
+              Earth — from planetary spheres to the cosmic web — and the harmonic relationships
+              that bind them.
+            </p>
+
+            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+              <Link
+                to="/planetary"
+                className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+              >
+                Begin at Earth
+                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
+              </Link>
+              <a
+                href="#vision"
+                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-[13px] tracking-wide text-white/75 hover:text-white hover:border-white/25 transition-all"
+              >
+                What is GaiaSphere?
+              </a>
+            </div>
+          </div>
+
+          <div className="pb-8 flex flex-col items-center text-white/45">
+            <span className="text-[10px] uppercase tracking-[0.4em]">Scroll</span>
+            <ArrowDown className="w-3.5 h-3.5 mt-2 animate-bounce" />
+          </div>
+        </div>
+      </section>
+
+      {/* ============ VISION ============ */}
+      <section id="vision" className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
+          <div className="md:col-span-4">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              The Vision
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              A single lens for a layered universe.
+            </h2>
+          </div>
+          <div className="md:col-span-8 space-y-6 text-[15px] leading-relaxed text-white/70">
+            <p>
+              Modern science fragments the cosmos into disciplines — climate, heliophysics,
+              astrophysics, cosmology. GaiaSphere reunites them as one continuous
+              observation, from the rhythms of the biosphere outward to the structure of
+              spacetime itself.
+            </p>
+            <p>
+              Every layer of the universe oscillates. Stars ring. Planets resonate. Galaxies
+              rotate in measurable cadence. GaiaSphere listens across these scales and
+              surfaces the <span className="text-white">harmonic relationships</span> that
+              connect them.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ THREE PILLARS ============ */}
+      <section className="relative px-6 py-24 border-t border-white/5">
+        <div className="max-w-6xl mx-auto">
+          <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45 text-center">
+            What you can explore
           </p>
-          <h1 className="mt-3 text-5xl md:text-6xl font-light tracking-tight text-white">
-            Gaiasphere Observatory
-          </h1>
-          <p className="mt-3 max-w-2xl mx-auto text-sm text-white/65">
-            An Observatory for Earths nested systems of intelligence and the harmonic relationships between them.
-          </p>
-        </header>
+          <div className="mt-12 grid md:grid-cols-3 gap-px bg-white/5 rounded-xl overflow-hidden border border-white/5">
+            {[
+              {
+                k: "Observe",
+                t: "Live telemetry",
+                d: "Real signals from Earth, Sun, and sky — streamed from NOAA, NASA, USGS, and open scientific archives.",
+              },
+              {
+                k: "Analyze",
+                t: "Harmonic engine",
+                d: "Decompose any signal into its oscillation spectrum and compare resonances across scales.",
+              },
+              {
+                k: "Synthesize",
+                t: "AI mission analyst",
+                d: "Ask an analyst to explain conditions, surface anomalies, and synthesize cross-layer reports.",
+              },
+            ].map(({ k, t, d }) => (
+              <div key={k} className="bg-[#05060f] p-8">
+                <div className="text-[10px] uppercase tracking-[0.4em] text-white/40">{k}</div>
+                <div className="mt-3 text-xl text-white font-light">{t}</div>
+                <p className="mt-3 text-[13.5px] leading-relaxed text-white/60">{d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
 
-        {/* Observatory grid */}
-        <main className="flex-1 px-6 pb-12 flex items-end md:items-center">
-          <div className="w-full max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {OBSERVATORIES.map(({ title, blurb, to, Icon }) => (
+      {/* ============ THE SIX OBSERVATORIES ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-7xl mx-auto">
+          <div className="max-w-2xl">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              Six Observatories · One Continuous System
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              Step into any scale. They all connect.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
+              Each observatory is a complete intelligence environment for a layer of the
+              cosmos. Move freely between them — or let the Universal observatory show you
+              how they nest together.
+            </p>
+          </div>
+
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {OBSERVATORIES.map(({ n, title, blurb, to, Icon }) => (
               <Link
                 key={to}
                 to={to}
-                className="group relative rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-5 transition-all hover:border-white/30 hover:bg-white/[0.08] hover:-translate-y-0.5"
+                className="group relative rounded-xl border border-white/10 bg-white/[0.04] backdrop-blur-xl p-6 transition-all hover:border-white/30 hover:bg-white/[0.07] hover:-translate-y-0.5"
                 style={{
                   boxShadow:
-                    "0 1px 0 rgba(255,255,255,0.05) inset, 0 20px 60px -30px rgba(120,170,255,0.35)",
+                    "0 1px 0 rgba(255,255,255,0.05) inset, 0 30px 80px -40px rgba(120,170,255,0.35)",
                 }}
               >
                 <div
@@ -181,31 +300,109 @@ export default function Home() {
                       "radial-gradient(120% 80% at 50% 0%, rgba(160,200,255,0.18), transparent 60%)",
                   }}
                 />
-                <div className="relative flex items-start gap-3">
-                  <div className="shrink-0 grid place-items-center w-10 h-10 rounded-lg border border-white/15 bg-white/[0.06]">
-                    <Icon className="w-5 h-5 text-white/85" strokeWidth={1.4} />
+                <div className="relative">
+                  <div className="flex items-start justify-between">
+                    <div className="grid place-items-center w-11 h-11 rounded-lg border border-white/15 bg-white/[0.06]">
+                      <Icon className="w-5 h-5 text-white/85" strokeWidth={1.4} />
+                    </div>
+                    <span className="text-[10px] uppercase tracking-[0.35em] text-white/35">
+                      {n}
+                    </span>
                   </div>
-                  <div className="min-w-0">
-                    <div className="text-[15px] font-medium text-white tracking-tight">
-                      {title}
-                    </div>
-                    <p className="mt-1 text-[12.5px] leading-snug text-white/60">
-                      {blurb}
-                    </p>
-                    <div className="mt-3 text-[11px] uppercase tracking-[0.3em] text-white/45 group-hover:text-white/80 transition-colors">
-                      Enter →
-                    </div>
+                  <div className="mt-5 text-[16px] font-medium text-white tracking-tight">
+                    {title}
+                  </div>
+                  <p className="mt-2 text-[13px] leading-relaxed text-white/60">{blurb}</p>
+                  <div className="mt-5 text-[11px] uppercase tracking-[0.3em] text-white/45 group-hover:text-white/85 transition-colors inline-flex items-center gap-1.5">
+                    Enter <ArrowRight className="w-3 h-3" />
                   </div>
                 </div>
               </Link>
             ))}
           </div>
-        </main>
+        </div>
+      </section>
 
-        <footer className="pb-6 text-center text-[10.5px] uppercase tracking-[0.4em] text-white/35">
-          Digital Twin · Read-Free Observation
+      {/* ============ NESTED ADDRESS ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5">
+        <div className="max-w-5xl mx-auto text-center">
+          <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+            How the observatories connect
+          </p>
+          <h2 className="mt-4 text-3xl md:text-4xl font-light text-white">
+            Every scale, nested inside the next.
+          </h2>
+          <p className="mt-5 max-w-2xl mx-auto text-[14.5px] leading-relaxed text-white/65">
+            Your location in the cosmos isn't a point — it's a chain. GaiaSphere lets you
+            travel the chain from your doorstep to the edge of the observable universe.
+          </p>
+
+          <div className="mt-12 flex flex-wrap items-center justify-center gap-x-2 gap-y-3">
+            {NESTED_SCALES.map((s, i) => (
+              <div key={s.label} className="flex items-center gap-2">
+                <div className="rounded-full border border-white/15 bg-white/[0.04] px-3.5 py-1.5">
+                  <div className="text-[12px] text-white/90">{s.label}</div>
+                  <div className="text-[9px] uppercase tracking-[0.3em] text-white/40">
+                    {s.scale}
+                  </div>
+                </div>
+                {i < NESTED_SCALES.length - 1 && (
+                  <ArrowRight className="w-3 h-3 text-white/25" />
+                )}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12">
+            <Link
+              to="/universal"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+            >
+              Open the Cosmic Address
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ============ CTA ============ */}
+      <section className="relative px-6 py-32 border-t border-white/5">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 50% 50%, rgba(120,170,255,0.12), transparent 65%)",
+          }}
+        />
+        <div className="relative max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl md:text-5xl font-light text-white leading-tight">
+            The observatory is open.
+          </h2>
+          <p className="mt-5 text-[15px] leading-relaxed text-white/65">
+            Start at Earth and travel outward — or jump to any scale. Every observation
+            connects.
+          </p>
+          <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
+            <Link
+              to="/planetary"
+              className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+            >
+              Begin at Earth
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+            <Link
+              to="/universal"
+              className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+            >
+              Enter the Universal Observatory
+            </Link>
+          </div>
+        </div>
+
+        <footer className="mt-24 text-center text-[10px] uppercase tracking-[0.4em] text-white/30">
+          GaiaSphere Observatory · Live Telemetry
         </footer>
-      </div>
+      </section>
     </div>
   );
 }
