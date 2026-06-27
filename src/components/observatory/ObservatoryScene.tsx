@@ -392,12 +392,8 @@ function Laniakea({ opacity }: { opacity: number }) {
       </mesh>
       {lines.map((pts, i) => {
         const geom = new THREE.BufferGeometry().setFromPoints(pts);
-        return (
-          <line key={i}>
-            <primitive object={geom} attach="geometry" />
-            <lineBasicMaterial color="#9ec5ff" transparent opacity={0.35 * opacity} />
-          </line>
-        );
+        const mat = new THREE.LineBasicMaterial({ color: "#9ec5ff", transparent: true, opacity: 0.35 * opacity });
+        return <primitive key={i} object={new THREE.Line(geom, mat)} />;
       })}
     </group>
   );
