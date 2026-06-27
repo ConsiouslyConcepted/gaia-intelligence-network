@@ -273,6 +273,9 @@ function OrionSpur({ opacity }: { opacity: number }) {
       </mesh>
     </group>
   );
+}
+
+
 
 function MilkyWay({ opacity }: { opacity: number }) {
   const groupRef = useRef<THREE.Group>(null);
