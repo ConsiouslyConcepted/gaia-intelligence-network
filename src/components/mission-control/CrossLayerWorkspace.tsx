@@ -8,11 +8,11 @@ import { getDataset } from "@/lib/harmonics/datasets";
 
 // Five intelligence layers laid out around a circle.
 const LAYERS = [
-  { key: "Planetary",    label: "Planetary",    hue: 150 },
-  { key: "Solar",        label: "Solar",        hue: 45  },
-  { key: "Stellar",      label: "Stellar",      hue: 280 },
-  { key: "Galactic",     label: "Galactic",     hue: 200 },
-  { key: "Cosmological", label: "Cosmological", hue: 15  },
+  { key: "Planetary",    label: "Planetary",    hue: 150, route: "/planetary" },
+  { key: "Solar",        label: "Solar",        hue: 45,  route: "/planetary?view=hgs" },
+  { key: "Stellar",      label: "Stellar",      hue: 280, route: "/stellar" },
+  { key: "Galactic",     label: "Galactic",     hue: 200, route: "/galactic" },
+  { key: "Cosmological", label: "Cosmological", hue: 15,  route: "/cosmological" },
 ] as const;
 
 type LayerKey = (typeof LAYERS)[number]["key"];
@@ -310,8 +310,14 @@ const CrossLayerWorkspace = () => {
                   const isDimmed = filterLayer !== "all" && !isFiltered;
                   return (
                     <g key={l.key} style={{ cursor: "pointer", opacity: isDimmed ? 0.35 : 1, transition: "opacity 250ms" }}
-                      onClick={() => setFilterLayer((v) => (v === l.key ? "all" : l.key))}>
-                      {/* outer glow halo */}
+                      onClick={(e) => {
+                        if (e.shiftKey) {
+                          setFilterLayer((v) => (v === l.key ? "all" : l.key));
+                        } else {
+                          navigate(l.route);
+                        }
+                      }}>
+                      <title>{`Open ${l.label} dashboard · shift-click to filter`}</title>
                       <circle cx={p.x} cy={p.y} r={rNode + 22} fill="url(#nodeGlow)" opacity={isFiltered ? 0.95 : 0.45} />
                       {/* pulse ring */}
                       <circle cx={p.x} cy={p.y} r={rNode} fill="none" stroke={layerColor(l.hue, 0.7)} strokeWidth="1">
@@ -377,7 +383,7 @@ const CrossLayerWorkspace = () => {
                 <Zap size={10} className="text-foreground/60" />
                 {edges.length} active couplings
               </span>
-              <span>click any edge to inspect · click a node to filter</span>
+              <span>click an edge to inspect · click a node to open its dashboard · shift-click to filter</span>
             </div>
           </HudPanel>
 
