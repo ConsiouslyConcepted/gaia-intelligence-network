@@ -573,16 +573,16 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "lifecycle") {
     return (
-      <div className="w-full h-full flex flex-col justify-start gap-3 px-2 py-2 overflow-y-auto">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           Stellar Lifecycle — Sun-mass track
         </div>
         {LIFECYCLE_STAGES.map((s, i) => (
-          <div key={s.name} className="flex items-center gap-4 rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div key={s.name} className="flex items-center gap-3 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
             <div className="text-[10px] font-mono text-muted-foreground/55 w-6 text-right">{String(i + 1).padStart(2, "0")}</div>
             <div className="flex-1">
               <div className="text-[12px] font-semibold tracking-[0.1em] uppercase text-foreground/85">{s.name}</div>
-              <div className="text-[10px] text-muted-foreground/65 mt-0.5">{s.desc}</div>
+              <div className="text-[10px] text-muted-foreground/65 mt-0">{s.desc}</div>
             </div>
           </div>
         ))}
