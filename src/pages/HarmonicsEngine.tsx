@@ -347,7 +347,7 @@ const HarmonicsEngine = () => {
 
       {/* Left rail — scope + dataset */}
       <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[320px] xl:w-[360px] hidden md:flex flex-col gap-3">
-        <HudPanel className="p-4 flex flex-col gap-1 flex-none max-h-[42%] overflow-y-auto">
+        <HudPanel className="p-5 flex flex-col gap-1 flex-none max-h-[46%] overflow-y-auto">
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Intelligence Layer
           </div>
@@ -359,35 +359,44 @@ const HarmonicsEngine = () => {
                   key={s.id}
                   onClick={() => onScope(s.id)}
                   className={cn(
-                    "w-full group text-left px-4 py-3 rounded-xl border transition-all duration-200",
+                    "w-full group relative flex flex-col items-start text-left p-4 rounded-xl border transition-all duration-200",
                     isActive
                       ? "bg-foreground/[0.08] border-foreground/30"
-                      : "bg-transparent border-foreground/[0.06] hover:border-foreground/20 hover:bg-foreground/[0.03]"
+                      : "bg-foreground/[0.03] border-foreground/[0.06] hover:bg-foreground/[0.06] hover:border-foreground/15"
                   )}
                   style={isActive ? {
                     borderColor: "hsla(210,70%,60%,0.55)",
                     boxShadow: "0 0 20px hsla(210,70%,55%,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05)",
                   } : undefined}
                 >
-                  <div
-                    className={cn(
-                      "text-[12px] tracking-[0.16em] uppercase font-bold leading-tight",
-                      isActive ? "text-foreground" : "text-foreground/70 group-hover:text-foreground/90"
-                    )}
-                  >
-                    {s.label}
-                  </div>
-                  <div
-                    className="text-[10px] leading-snug mt-1"
-                    style={{ color: isActive ? "hsla(170,40%,55%,0.75)" : "hsla(170,30%,45%,0.55)" }}
-                  >
-                    {s.tagline}
+                  {isActive && (
+                    <div
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 rounded-r-full"
+                      style={{ background: "hsla(210,80%,70%,1)", boxShadow: "0 0 10px hsla(210,80%,70%,0.8)" }}
+                    />
+                  )}
+                  <div className="flex flex-col gap-2 pl-2">
+                    <span
+                      className={cn(
+                        "text-[13px] tracking-[0.12em] uppercase font-bold leading-tight",
+                        isActive ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
+                      )}
+                    >
+                      {s.label}
+                    </span>
+                    <span
+                      className="text-[12px] leading-relaxed"
+                      style={{ color: isActive ? "hsla(190,55%,80%,0.95)" : "hsla(210,30%,78%,0.8)" }}
+                    >
+                      {s.tagline}
+                    </span>
                   </div>
                 </button>
               );
             })}
           </div>
         </HudPanel>
+
 
 
 
