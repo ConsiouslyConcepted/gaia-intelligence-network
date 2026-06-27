@@ -430,7 +430,32 @@ const HarmonicsEngine = () => {
               </button>
             );
           })}
+          {mode === "single" && (
+            <div className="ml-auto flex items-center gap-2">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Dataset</div>
+              <Select value={datasetId} onValueChange={setDatasetId}>
+                <SelectTrigger
+                  className="h-8 w-[240px] text-[10px] tracking-[0.14em] uppercase rounded-md border"
+                  style={{
+                    background: "hsla(210,50%,18%,0.75)",
+                    borderColor: "hsla(210,70%,60%,0.5)",
+                    color: "hsl(0,0%,98%)",
+                  }}
+                >
+                  <SelectValue placeholder="Select dataset" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[320px]">
+                  {inScope.map((d) => (
+                    <SelectItem key={d.id} value={d.id} className="text-[11px] tracking-[0.1em] uppercase">
+                      {d.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
+
 
         {mode === "single" && (
           <>
