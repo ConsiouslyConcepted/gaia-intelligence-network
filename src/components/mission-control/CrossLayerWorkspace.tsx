@@ -312,14 +312,8 @@ const CrossLayerWorkspace = () => {
                   const isDimmed = filterLayer !== "all" && !isFiltered;
                   return (
                     <g key={l.key} style={{ cursor: "pointer", opacity: isDimmed ? 0.35 : 1, transition: "opacity 250ms" }}
-                      onClick={(e) => {
-                        if (e.shiftKey) {
-                          setFilterLayer((v) => (v === l.key ? "all" : l.key));
-                        } else {
-                          navigate(l.route);
-                        }
-                      }}>
-                      <title>{`Open ${l.label} dashboard · shift-click to filter`}</title>
+                      onClick={() => setFilterLayer((v) => (v === l.key ? "all" : l.key))}>
+                      <title>{`Click to focus ${l.label} couplings`}</title>
                       <circle cx={p.x} cy={p.y} r={rNode + 22} fill="url(#nodeGlow)" opacity={isFiltered ? 0.95 : 0.45} />
                       {/* pulse ring */}
                       <circle cx={p.x} cy={p.y} r={rNode} fill="none" stroke={layerColor(l.hue, 0.7)} strokeWidth="1">
