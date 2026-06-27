@@ -617,60 +617,204 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   }
 
   if (layer === "oscillations") {
-    // schematic stacked sine waves at different frequencies (p-modes)
-    const size = 760;
-    const h = 240;
-    const labelGutter = 200;
-    const waveStart = labelGutter + 12;
-    const waveWidth = size - waveStart - 12;
-    const amp = 18;
-    const rowGap = 64;
+    // Upgraded asteroseismic schematic: glowing waves + power spectrum sidebar
+    const W = 920;
+    const H = 320;
+    const labelGutter = 168;
+    const waveStart = labelGutter + 16;
+    const specStart = 660;
+    const waveEnd = specStart - 28;
+    const waveWidth = waveEnd - waveStart;
+    const rowGap = 70;
+    const baseY = 78;
     const rows = [
-      { freq: 2, color: "#9ec5ff", label: "Low-ℓ p-mode" },
-      { freq: 3.5, color: "#ffe87a", label: "Solar 5-min mode (3.1 mHz)" },
-      { freq: 5, color: "#ff9d6e", label: "High-ℓ p-mode" },
+      { freq: 2,   color: "#9ec5ff", glow: "#5b8cff", label: "Low-ℓ p-mode",            sub: "ℓ = 0 · deep cavity",    amp: 22, mHz: 1.8, power: 0.55 },
+      { freq: 3.5, color: "#ffe87a", glow: "#f5c542", label: "Solar 5-min mode",        sub: "ν ≈ 3.1 mHz · ℓ = 1",    amp: 18, mHz: 3.1, power: 1.0  },
+      { freq: 5.5, color: "#ff9d6e", glow: "#e8632c", label: "High-ℓ p-mode",           sub: "ℓ ≥ 3 · near-surface",   amp: 12, mHz: 4.4, power: 0.42 },
     ];
-    const rowY = (i: number) => h / 2 + (i - 1) * rowGap;
-    const path = (freq: number, y: number) => {
+    const path = (freq: number, y: number, amp: number, phase = 0) => {
       const pts: string[] = [];
-      for (let x = 0; x <= waveWidth; x += 3) {
-        const yy = y + Math.sin((x / waveWidth) * Math.PI * 2 * freq) * amp;
+      for (let x = 0; x <= waveWidth; x += 2) {
+        const t = x / waveWidth;
+        const env = Math.sin(Math.PI * t); // amplitude envelope
+        const yy = y + Math.sin(t * Math.PI * 2 * freq + phase) * amp * (0.55 + 0.45 * env);
         pts.push(`${x === 0 ? "M" : "L"}${waveStart + x},${yy}`);
       }
       return pts.join(" ");
     };
+
+    // power spectrum bars
+    const specW = W - specStart - 16;
+    const specH = 180;
+    const specBaseY = baseY + 30;
+    const bars = Array.from({ length: 28 }, (_, i) => {
+      const f = (i / 28) * 5; // 0..5 mHz
+      // sum of lorentzians around each row peak
+      let p = 0;
+      for (const r of rows) {
+        const d = f - r.mHz;
+        p += r.power / (1 + (d * 3.2) ** 2);
+      }
+      return { f, p: Math.min(1, p), color: f < 2.5 ? "#9ec5ff" : f < 4 ? "#ffe87a" : "#ff9d6e" };
+    });
+
     return (
-      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
-          Asteroseismic p-modes — schematic
+      <div className="w-full h-full flex flex-col justify-center gap-3 px-2 py-2">
+        <div className="flex items-center justify-between px-3">
+          <div className="text-[10px] uppercase tracking-[0.24em] text-muted-foreground/70 font-mono">
+            Asteroseismic p-modes · live schematic
+          </div>
+          <div className="flex items-center gap-3 text-[9px] uppercase tracking-[0.18em] font-mono text-muted-foreground/55">
+            <span className="flex items-center gap-1.5"><span className="w-2 h-px bg-[#9ec5ff]" />Low-ℓ</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-px bg-[#ffe87a]" />5-min</span>
+            <span className="flex items-center gap-1.5"><span className="w-2 h-px bg-[#ff9d6e]" />High-ℓ</span>
+          </div>
         </div>
-        <svg viewBox={`0 0 ${size} ${h}`} className="w-full max-h-[220px]">
-          {rows.map((l, i) => {
-            const y = rowY(i);
-            return (
-              <g key={i}>
-                <line x1={waveStart} y1={y} x2={size - 12} y2={y} stroke="hsla(0,0%,100%,0.06)" strokeDasharray="2 4" />
-                <text x={labelGutter} y={y + 4} textAnchor="end" fill="hsla(0,0%,100%,0.78)" fontSize={11} fontFamily="ui-monospace, monospace">{l.label}</text>
-                <path d={path(l.freq, y)} stroke={l.color} strokeWidth={1.6} fill="none" opacity={0.9} />
-              </g>
-            );
-          })}
+
+        <svg viewBox={`0 0 ${W} ${H}`} className="w-full max-h-[300px]">
+          <defs>
+            {rows.map((r, i) => (
+              <filter key={i} id={`glow-${i}`} x="-10%" y="-50%" width="120%" height="200%">
+                <feGaussianBlur stdDeviation="2.4" result="b" />
+                <feMerge><feMergeNode in="b" /><feMergeNode in="SourceGraphic" /></feMerge>
+              </filter>
+            ))}
+            <linearGradient id="rail-fade" x1="0" x2="1">
+              <stop offset="0" stopColor="hsla(0,0%,100%,0)" />
+              <stop offset="0.5" stopColor="hsla(0,0%,100%,0.18)" />
+              <stop offset="1" stopColor="hsla(0,0%,100%,0)" />
+            </linearGradient>
+            <linearGradient id="spec-bg" x1="0" x2="0" y1="0" y2="1">
+              <stop offset="0" stopColor="hsla(220,40%,60%,0.05)" />
+              <stop offset="1" stopColor="hsla(220,40%,60%,0)" />
+            </linearGradient>
+          </defs>
+
+          {/* WAVES LEFT BLOCK */}
+          <g>
+            {/* container frame */}
+            <rect x={labelGutter - 6} y={baseY - 26} width={waveEnd - labelGutter + 12} height={rowGap * 3 + 8}
+                  rx={10} fill="hsla(220,40%,12%,0.35)" stroke="hsla(220,40%,80%,0.08)" />
+            <text x={labelGutter - 6} y={baseY - 32} fill="hsla(0,0%,100%,0.45)" fontSize={9}
+                  fontFamily="ui-monospace, monospace" letterSpacing="2">TIME DOMAIN →</text>
+
+            {rows.map((r, i) => {
+              const y = baseY + i * rowGap;
+              return (
+                <g key={i}>
+                  <line x1={waveStart} y1={y} x2={waveEnd} y2={y} stroke="url(#rail-fade)" strokeDasharray="1 4" />
+                  {/* label block */}
+                  <text x={labelGutter} y={y - 4} textAnchor="end" fill="hsla(0,0%,100%,0.92)" fontSize={11.5}
+                        fontFamily="ui-monospace, monospace" fontWeight={600}>{r.label}</text>
+                  <text x={labelGutter} y={y + 10} textAnchor="end" fill={r.color} opacity={0.75} fontSize={9}
+                        fontFamily="ui-monospace, monospace" letterSpacing="1">{r.sub}</text>
+                  {/* glow underlay */}
+                  <path d={path(r.freq, y, r.amp)} stroke={r.glow} strokeWidth={5} fill="none" opacity={0.28}
+                        filter={`url(#glow-${i})`} strokeLinecap="round">
+                    <animateTransform attributeName="transform" type="translate"
+                                      from="0 0" to={`${-waveWidth / r.freq} 0`}
+                                      dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
+                  </path>
+                  {/* main wave */}
+                  <path d={path(r.freq, y, r.amp)} stroke={r.color} strokeWidth={1.8} fill="none"
+                        strokeLinecap="round">
+                    <animateTransform attributeName="transform" type="translate"
+                                      from="0 0" to={`${-waveWidth / r.freq} 0`}
+                                      dur={`${6 + i * 1.5}s`} repeatCount="indefinite" />
+                  </path>
+                  {/* node markers */}
+                  <circle cx={waveStart} cy={y} r={2.5} fill={r.color} />
+                  <circle cx={waveEnd} cy={y} r={2.5} fill={r.color} opacity={0.5} />
+                </g>
+              );
+            })}
+          </g>
+
+          {/* POWER SPECTRUM RIGHT BLOCK */}
+          <g>
+            <rect x={specStart - 6} y={baseY - 26} width={W - specStart + 2} height={rowGap * 3 + 8}
+                  rx={10} fill="url(#spec-bg)" stroke="hsla(220,40%,80%,0.08)" />
+            <text x={specStart} y={baseY - 32} fill="hsla(0,0%,100%,0.45)" fontSize={9}
+                  fontFamily="ui-monospace, monospace" letterSpacing="2">POWER SPECTRUM</text>
+
+            {/* horizontal gridlines */}
+            {[0.25, 0.5, 0.75].map((g, i) => (
+              <line key={i} x1={specStart} x2={W - 16}
+                    y1={specBaseY + specH - g * specH} y2={specBaseY + specH - g * specH}
+                    stroke="hsla(0,0%,100%,0.05)" strokeDasharray="1 3" />
+            ))}
+
+            {/* bars */}
+            {bars.map((b, i) => {
+              const bw = (specW / bars.length) - 2;
+              const x = specStart + i * (specW / bars.length);
+              const hh = b.p * specH;
+              return (
+                <g key={i}>
+                  <rect x={x} y={specBaseY + specH - hh} width={bw} height={hh}
+                        fill={b.color} opacity={0.85} rx={1} />
+                  <rect x={x} y={specBaseY + specH - hh} width={bw} height={Math.min(hh, 6)}
+                        fill={b.color} opacity={1} rx={1} />
+                </g>
+              );
+            })}
+
+            {/* axis */}
+            <line x1={specStart} y1={specBaseY + specH} x2={W - 16} y2={specBaseY + specH}
+                  stroke="hsla(0,0%,100%,0.18)" />
+            {[0, 1, 2, 3, 4, 5].map((v) => {
+              const x = specStart + (v / 5) * specW;
+              return (
+                <g key={v}>
+                  <line x1={x} y1={specBaseY + specH} x2={x} y2={specBaseY + specH + 3}
+                        stroke="hsla(0,0%,100%,0.3)" />
+                  <text x={x} y={specBaseY + specH + 14} textAnchor="middle"
+                        fill="hsla(0,0%,100%,0.45)" fontSize={9} fontFamily="ui-monospace, monospace">{v}</text>
+                </g>
+              );
+            })}
+            <text x={(specStart + W - 16) / 2} y={specBaseY + specH + 26} textAnchor="middle"
+                  fill="hsla(0,0%,100%,0.4)" fontSize={9} fontFamily="ui-monospace, monospace"
+                  letterSpacing="1.5">FREQUENCY (mHz)</text>
+
+            {/* highlight 3.1 mHz peak */}
+            {(() => {
+              const x = specStart + (3.1 / 5) * specW;
+              return (
+                <g>
+                  <line x1={x} y1={specBaseY} x2={x} y2={specBaseY + specH}
+                        stroke="#ffe87a" strokeDasharray="2 3" opacity={0.55} />
+                  <text x={x + 4} y={specBaseY + 10} fill="#ffe87a" fontSize={9}
+                        fontFamily="ui-monospace, monospace" opacity={0.85}>ν☉ 3.1 mHz</text>
+                </g>
+              );
+            })()}
+          </g>
         </svg>
-        <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
-          Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
+
+        <div className="text-[10px] text-muted-foreground/70 px-4 text-center max-w-3xl mx-auto leading-relaxed">
+          The stellar interior acts as a resonant cavity. Surface oscillations interfere into a discrete forest of p-modes whose frequencies encode interior density, rotation, and composition — letting helioseismology probe the Sun's structure to within ~1%.
         </div>
+
         <button
           onClick={() => navigate("/harmonics?mode=single&method=spectrum&scope=stellar&dataset=g-star-pmodes")}
-          className="mx-3 mt-1 rounded-lg border border-border/30 bg-white/[0.03] hover:bg-white/[0.06] transition px-3 py-2 flex items-center justify-between gap-3 text-left"
+          className="group mx-3 mt-1 rounded-xl border border-border/30 bg-gradient-to-r from-white/[0.04] via-white/[0.06] to-white/[0.03] hover:from-white/[0.07] hover:via-white/[0.10] hover:to-white/[0.05] transition px-4 py-3 flex items-center justify-between gap-3 text-left"
           aria-label="Open Stellar Resonance Explorer"
         >
-          <div className="min-w-0">
-            <div className="text-[10px] uppercase tracking-[0.22em] text-foreground/85 font-semibold">Stellar Resonance Explorer</div>
-            <div className="text-[10px] text-muted-foreground/75 mt-0.5 leading-snug">
-              Inspect and sonify measured asteroseismic mode spectra. Scientific data sonification — pitch maps to mode frequency, not literal stellar sound.
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-lg border border-border/30 bg-white/[0.04] flex items-center justify-center shrink-0">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" className="text-[#ffe87a]">
+                <path d="M3 12h2l2-7 4 14 3-10 2 6 2-3h3" />
+              </svg>
+            </div>
+            <div className="min-w-0">
+              <div className="text-[10px] uppercase tracking-[0.24em] text-foreground/90 font-semibold">Stellar Resonance Explorer</div>
+              <div className="text-[10.5px] text-muted-foreground/75 mt-0.5 leading-snug">
+                Inspect and sonify measured asteroseismic mode spectra — pitch maps to mode frequency, not literal stellar sound.
+              </div>
             </div>
           </div>
-          <div className="text-[10px] font-mono text-foreground/70 shrink-0">OPEN →</div>
+          <div className="text-[10px] font-mono text-foreground/70 shrink-0 group-hover:translate-x-0.5 transition-transform">OPEN →</div>
         </button>
       </div>
     );
