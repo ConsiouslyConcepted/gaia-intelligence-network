@@ -291,7 +291,7 @@ const Stellar = () => {
 
       {/* Left rail */}
       <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-none w-[240px] hidden lg:flex flex-col">
-        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col gap-2">
+        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col gap-2 overflow-y-auto min-h-0">
           <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 px-2 pt-1 pb-2">
             Stellar Layers
           </div>
