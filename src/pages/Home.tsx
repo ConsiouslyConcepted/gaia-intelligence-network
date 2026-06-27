@@ -331,6 +331,69 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ HARMONIC ANALYSIS ENGINE ============ */}
+      <section className="relative px-6 py-28 border-t border-white/5 overflow-hidden">
+        <div
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at 80% 20%, rgba(120,170,255,0.10), transparent 60%)",
+          }}
+        />
+        <div className="relative max-w-6xl mx-auto grid md:grid-cols-12 gap-12 items-center">
+          <div className="md:col-span-5">
+            <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
+              Core Capability
+            </p>
+            <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
+              The Harmonic Analysis Engine.
+            </h2>
+            <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
+              Not another dashboard — the analytical framework that connects every layer of
+              the observatory. Surface the recurring patterns, cycles, resonances, and field
+              relationships that link planetary, solar, stellar, galactic, cosmological, and
+              universal systems.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link
+                to="/harmonics"
+                className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+              >
+                Launch Harmonic Analysis
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                to="/mission-control"
+                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+              >
+                Open Mission Control
+              </Link>
+            </div>
+          </div>
+
+          <div className="md:col-span-7 grid grid-cols-2 gap-3">
+            {[
+              { Icon: Network, t: "Cross-layer analysis" },
+              { Icon: Waves, t: "Harmonic & frequency" },
+              { Icon: Activity, t: "Pattern recognition" },
+              { Icon: Sigma, t: "Wave & field viz" },
+              { Icon: LineChart, t: "Correlation analysis" },
+              { Icon: Activity, t: "Time-series analysis" },
+              { Icon: Atom, t: "Spherical harmonics" },
+              { Icon: Brain, t: "AI-assisted analysis" },
+            ].map(({ Icon, t }) => (
+              <div
+                key={t}
+                className="rounded-lg border border-white/10 bg-white/[0.03] backdrop-blur-xl px-4 py-3.5 flex items-center gap-3"
+              >
+                <Icon className="w-4 h-4 text-white/70" strokeWidth={1.4} />
+                <span className="text-[12.5px] text-white/80">{t}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============ NESTED ADDRESS ============ */}
       <section className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto text-center">
