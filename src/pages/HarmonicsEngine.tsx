@@ -6,6 +6,9 @@ import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
 import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
+import { EventsPanel } from "@/components/harmonics/EventsPanel";
+import { ReportsPanel } from "@/components/harmonics/ReportsPanel";
+import { scanAllLayers } from "@/lib/harmonics/anomalies";
 import {
   DATASETS,
   METHODS,
