@@ -173,7 +173,7 @@ const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
 // ───────── Cosmic Address (3D) ─────────
 const AddressView = () => (
   <div className="w-full h-full">
-    <CosmicAddress3D />
+    <CosmicAddressWorkspace />
   </div>
 );
 
