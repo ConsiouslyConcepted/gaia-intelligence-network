@@ -690,12 +690,12 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
             </linearGradient>
           </defs>
 
-          {/* WAVES LEFT BLOCK */}
+          {/* WAVES BLOCK */}
           <g>
-            {/* container frame */}
-            <rect x={labelGutter - 6} y={baseY - 26} width={waveEnd - labelGutter + 12} height={rowGap * 3 + 8}
+            {/* container frame — starts after labels to avoid overlap */}
+            <rect x={waveStart - 10} y={baseY - 26} width={waveEnd - waveStart + 16} height={rowGap * 3 + 8}
                   rx={10} fill="hsla(220,40%,12%,0.35)" stroke="hsla(220,40%,80%,0.08)" />
-            <text x={labelGutter - 6} y={baseY - 32} fill="hsla(0,0%,100%,0.45)" fontSize={9}
+            <text x={waveStart - 6} y={baseY - 32} fill="hsla(0,0%,100%,0.45)" fontSize={9}
                   fontFamily="ui-monospace, monospace" letterSpacing="2">TIME DOMAIN →</text>
 
             {rows.map((r, i) => {
