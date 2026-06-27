@@ -29,7 +29,9 @@ import {
   spectrum,
 } from "@/lib/harmonics/engine";
 import { compareLayers } from "@/lib/harmonics/crossLayer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+
 
 // ───────── HUD chrome (matches sibling dashboards) ─────────
 
@@ -345,9 +347,10 @@ const HarmonicsEngine = () => {
         </HudPanel>
       </div>
 
-      {/* Left rail — scope + dataset */}
-      <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[320px] xl:w-[360px] hidden md:flex flex-col gap-3">
-        <HudPanel className="p-5 flex flex-col gap-1 flex-none max-h-[46%] overflow-y-auto">
+      {/* Left rail — intelligence layer */}
+      <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[280px] xl:w-[320px] hidden md:flex flex-col gap-3">
+        <HudPanel className="p-5 flex flex-col gap-1 flex-1 overflow-y-auto">
+
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Intelligence Layer
           </div>
@@ -396,65 +399,12 @@ const HarmonicsEngine = () => {
             })}
           </div>
         </HudPanel>
-
-
-
-
-        <HudPanel className="p-5 flex flex-col gap-1 overflow-y-auto flex-1 min-h-[300px]">
-          <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
-            Dataset
-          </div>
-          <div className="space-y-2">
-            {inScope.map((d) => {
-              const isActive = d.id === datasetId;
-              return (
-                <button
-                  key={d.id}
-                  onClick={() => setDatasetId(d.id)}
-                  className={cn(
-                    "w-full group relative flex flex-col items-start text-left p-4 rounded-xl border transition-all duration-200",
-                    isActive
-                      ? "bg-foreground/[0.08] border-foreground/30"
-                      : "bg-foreground/[0.03] border-foreground/[0.06] hover:bg-foreground/[0.06] hover:border-foreground/15"
-                  )}
-                  style={isActive ? {
-                    borderColor: "hsla(210,70%,60%,0.55)",
-                    boxShadow: "0 0 20px hsla(210,70%,55%,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05)",
-                  } : undefined}
-                >
-                  {isActive && (
-                    <div
-                      className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 rounded-r-full"
-                      style={{ background: "hsla(210,80%,70%,1)", boxShadow: "0 0 10px hsla(210,80%,70%,0.8)" }}
-                    />
-                  )}
-                  <div className="flex flex-col gap-2 pl-2">
-                    <span
-                      className={cn(
-                        "text-[13px] tracking-[0.12em] uppercase font-bold leading-tight",
-                        isActive ? "text-foreground" : "text-foreground/90 group-hover:text-foreground"
-                      )}
-                    >
-                      {d.label}
-                    </span>
-                    <span
-                      className="text-[12px] leading-relaxed"
-                      style={{ color: isActive ? "hsla(190,55%,80%,0.95)" : "hsla(210,30%,78%,0.8)" }}
-                    >
-                      {d.description}
-                    </span>
-                  </div>
-                </button>
-              );
-            })}
-          </div>
-        </HudPanel>
-
       </div>
 
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] pt-28 pb-32 md:pl-[356px] xl:pl-[396px] xl:pr-[350px] px-4 flex flex-col gap-3 overflow-y-auto">
+      <div className="absolute inset-0 z-[2] pt-28 pb-32 md:pl-[308px] xl:pl-[352px] xl:pr-[350px] px-4 flex flex-col gap-3 overflow-y-auto">
+
         {/* Mode toggle */}
         <div className="flex items-center gap-2">
           <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Mode</div>
@@ -480,7 +430,32 @@ const HarmonicsEngine = () => {
               </button>
             );
           })}
+          {mode === "single" && (
+            <div className="ml-auto flex items-center gap-2">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Dataset</div>
+              <Select value={datasetId} onValueChange={setDatasetId}>
+                <SelectTrigger
+                  className="h-8 w-[240px] text-[10px] tracking-[0.14em] uppercase rounded-md border"
+                  style={{
+                    background: "hsla(210,50%,18%,0.75)",
+                    borderColor: "hsla(210,70%,60%,0.5)",
+                    color: "hsl(0,0%,98%)",
+                  }}
+                >
+                  <SelectValue placeholder="Select dataset" />
+                </SelectTrigger>
+                <SelectContent className="max-h-[320px]">
+                  {inScope.map((d) => (
+                    <SelectItem key={d.id} value={d.id} className="text-[11px] tracking-[0.1em] uppercase">
+                      {d.label}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
         </div>
+
 
         {mode === "single" && (
           <>
