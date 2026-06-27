@@ -550,7 +550,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     return (
       <div className="w-full h-full flex flex-col justify-center gap-1 px-1 py-1 overflow-y-auto">
         <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
-          OBAFGKM Spectral Sequence — hot ⟶ cool
+          Light &amp; Spectra — OBAFGKM sequence (hot ⟶ cool)
         </div>
         {SPECTRAL.map((s) => (
           <div key={s.cls} className="flex items-center gap-3 rounded-lg px-2.5 py-1.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
