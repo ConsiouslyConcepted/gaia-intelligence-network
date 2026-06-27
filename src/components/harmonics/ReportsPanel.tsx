@@ -62,14 +62,17 @@ export function ReportsPanel({ context }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <div>
+      <div className="flex flex-wrap items-start justify-between gap-2">
+        <div className="max-w-[640px]">
           <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">
             Intelligence Reports
           </div>
           <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">
             Generate & archive
           </div>
+          <p className="text-[10px] leading-relaxed text-muted-foreground/75 mt-1.5">
+            Generate Daily, Weekly, Monthly, or Custom reports synthesized across the loaded layers. Reports are archived in this browser and can be revisited any time.
+          </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {KINDS.map((k) => (
