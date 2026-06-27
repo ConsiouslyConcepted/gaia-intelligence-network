@@ -209,8 +209,8 @@ const HarmonicsEngine = () => {
   const inScope = datasetsByScope(scope);
   const [datasetId, setDatasetId] = useState<string>(inScope[0].id);
   const [compareId, setCompareId] = useState<string>(DATASETS[0].id);
-  const [crossA, setCrossA] = useState<string>("imf-bt");
-  const [crossB, setCrossB] = useState<string>("kp-index");
+  const [crossA, setCrossA] = useState<string>(searchParams.get("a") || "imf-bt");
+  const [crossB, setCrossB] = useState<string>(searchParams.get("b") || "kp-index");
   const [lm, setLm] = useState<{ l: number; m: number }>({ l: 2, m: 1 });
 
   const dataset = getDataset(datasetId) ?? inScope[0];
