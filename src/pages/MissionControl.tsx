@@ -3,6 +3,8 @@ import { useSearchParams } from "react-router-dom";
 import MissionShell, { type Workspace, WORKSPACES } from "@/components/mission-control/MissionShell";
 import OverviewWorkspace from "@/components/mission-control/OverviewWorkspace";
 import CosmicAddressWorkspace from "@/components/mission-control/CosmicAddressWorkspace";
+import CrossLayerWorkspace from "@/components/mission-control/CrossLayerWorkspace";
+import HarmonicWorkspace from "@/components/mission-control/HarmonicWorkspace";
 import WorkspaceStub from "@/components/mission-control/WorkspaceStub";
 
 const VALID = new Set<Workspace>(WORKSPACES.map((w) => w.key));
