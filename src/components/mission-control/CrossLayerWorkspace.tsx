@@ -385,6 +385,52 @@ const CrossLayerWorkspace = () => {
 
           {/* Detail */}
           <HudPanel className="p-5 flex flex-col gap-4">
+            {filterLayer !== "all" && (() => {
+              const layer = LAYERS.find((l) => l.key === filterLayer)!;
+              return (
+                <div
+                  className="rounded-lg p-3 border"
+                  style={{
+                    background: `hsla(${layer.hue},40%,10%,0.45)`,
+                    borderColor: layerColor(layer.hue, 0.45),
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/65">
+                        Focused Layer
+                      </div>
+                      <div className="text-[13px] font-bold tracking-[0.12em] uppercase mt-0.5"
+                        style={{ color: layerColor(layer.hue, 1) }}>
+                        {layer.label}
+                      </div>
+                      <div className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground/65 mt-0.5">
+                        {edges.length} couplings
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setFilterLayer("all")}
+                      className="text-[8px] tracking-[0.18em] uppercase text-muted-foreground/70 hover:text-foreground/90 px-2 py-1 rounded border border-border/40"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => navigate(layer.route)}
+                    className="mt-3 flex items-center justify-between w-full px-3 py-2 rounded-md border transition-all hover:bg-foreground/[0.05]"
+                    style={{
+                      background: "hsla(240,25%,8%,0.5)",
+                      borderColor: layerColor(layer.hue, 0.4),
+                    }}
+                  >
+                    <span className="text-[9px] tracking-[0.18em] uppercase font-semibold text-foreground/90">
+                      Open {layer.label} Dashboard
+                    </span>
+                    <ArrowRight size={12} className="text-foreground/75" />
+                  </button>
+                </div>
+              );
+            })()}
             <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/55">
               Selected Coupling
             </div>
