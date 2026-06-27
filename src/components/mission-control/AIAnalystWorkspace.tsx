@@ -98,7 +98,7 @@ const AIAnalystWorkspace = () => {
                 AI Mission Analyst
               </h2>
               <p className="text-[10px] text-muted-foreground/75 mt-1 max-w-[640px]">
-                Continuous synthesis across every observatory. Ask it to explain conditions, compare layers, surface anomalies, generate a report, or recommend what to investigate next.
+                Continuous synthesis across every observatory. Ask the Planetary Intelligence Analyst to explain conditions, compare layers, surface anomalies, generate a report, or recommend what to investigate next.
               </p>
             </div>
             {messages.length > 0 && (
