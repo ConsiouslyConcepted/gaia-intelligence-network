@@ -202,12 +202,25 @@ const HarmonicsEngine = () => {
     const m = searchParams.get("mode");
     return m === "cross" || m === "events" || m === "reports" || m === "single" ? m : "single";
   })();
+  const initialMethod: AnalyticalMethod = (() => {
+    const m = searchParams.get("method");
+    const valid: AnalyticalMethod[] = ["spectrum", "harmonic", "timeSeries", "correlation", "spherical", "pattern"];
+    return (valid as string[]).includes(m ?? "") ? (m as AnalyticalMethod) : "spectrum";
+  })();
+  const initialDatasetId = searchParams.get("dataset");
+  const initialDataset = initialDatasetId ? getDataset(initialDatasetId) : undefined;
+  const initialScope: Scope = (() => {
+    const s = searchParams.get("scope");
+    const valid: Scope[] = ["planetary", "solar", "stellar", "galactic", "universal", "cosmological"];
+    if (initialDataset) return initialDataset.scope;
+    return (valid as string[]).includes(s ?? "") ? (s as Scope) : "universal";
+  })();
   const [mode, setMode] = useState<"single" | "cross" | "events" | "reports">(initialMode);
   const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
-  const [scope, setScope] = useState<Scope>("universal");
-  const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
+  const [scope, setScope] = useState<Scope>(initialScope);
+  const [method, setMethod] = useState<AnalyticalMethod>(initialMethod);
   const inScope = datasetsByScope(scope);
-  const [datasetId, setDatasetId] = useState<string>(inScope[0].id);
+  const [datasetId, setDatasetId] = useState<string>(initialDataset?.id ?? inScope[0].id);
   const [compareId, setCompareId] = useState<string>(DATASETS[0].id);
   const [crossA, setCrossA] = useState<string>(searchParams.get("a") || "imf-bt");
   const [crossB, setCrossB] = useState<string>(searchParams.get("b") || "kp-index");
