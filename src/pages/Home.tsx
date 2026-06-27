@@ -31,7 +31,7 @@ const OBSERVATORIES = [
     n: "01",
     title: "Planetary Intelligence",
     blurb:
-      "Earth's coupled spheres — atmosphere, biosphere, lithosphere, hydrosphere, magnetosphere — observed as one living system.",
+      "Earth's coupled spheres: atmosphere, biosphere, lithosphere, hydrosphere, magnetosphere.",
     to: "/planetary",
     Icon: Globe2,
   },
@@ -39,7 +39,7 @@ const OBSERVATORIES = [
     n: "02",
     title: "Solar Intelligence",
     blurb:
-      "The Sun's heartbeat — solar wind, flares, and the heliosphere that shapes every planetary climate.",
+      "Solar wind, flares, and the heliosphere that shapes planetary climate.",
     to: "/solar",
     Icon: Sun,
   },
@@ -47,7 +47,7 @@ const OBSERVATORIES = [
     n: "03",
     title: "Stellar Intelligence",
     blurb:
-      "Stars as natural oscillators. Asteroseismology, variable stars, and the songs of the local stellar neighborhood.",
+      "Asteroseismology, variable stars, and stellar oscillations in the local neighborhood.",
     to: "/stellar",
     Icon: Star,
   },
@@ -55,7 +55,7 @@ const OBSERVATORIES = [
     n: "04",
     title: "Galactic Intelligence",
     blurb:
-      "The Milky Way's architecture — spiral arms, the Orion Spur, and the rotation that carries our solar system.",
+      "Spiral arms, the Orion Spur, and galactic rotation.",
     to: "/galactic",
     Icon: Sparkles,
   },
@@ -63,7 +63,7 @@ const OBSERVATORIES = [
     n: "05",
     title: "Cosmological Intelligence",
     blurb:
-      "The largest scales — cosmic microwave background, large-scale structure, and the expansion of the universe.",
+      "Cosmic microwave background, large-scale structure, and cosmic expansion.",
     to: "/cosmological",
     Icon: Orbit,
   },
@@ -71,7 +71,7 @@ const OBSERVATORIES = [
     n: "06",
     title: "Universal Intelligence",
     blurb:
-      "Your cosmic address. The nested architecture from Earth to the observable universe, mapped end to end.",
+      "Nested architecture from Earth to the observable universe.",
     to: "/universal",
     Icon: InfinityIcon,
   },
