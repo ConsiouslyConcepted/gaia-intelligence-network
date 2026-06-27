@@ -290,36 +290,100 @@ const Stellar = () => {
       </div>
 
       {/* Left rail */}
-      <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-none w-[240px] hidden lg:flex flex-col">
-        <HudPanel className="pointer-events-auto p-3 flex-1 flex flex-col gap-2 overflow-y-auto min-h-0">
-          <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 px-2 pt-1 pb-2">
-            Stellar Layers
+      <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-none w-[260px] hidden lg:flex flex-col">
+        <HudPanel className="pointer-events-auto flex-1 flex flex-col min-h-0 overflow-hidden">
+          {/* Header */}
+          <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-white/5">
+            <div className="text-[10px] font-bold tracking-[0.2em] uppercase text-foreground/55">
+              Stellar Layers
+            </div>
+            <div className="flex gap-1.5">
+              <div className="w-1.5 h-1.5 rounded-full animate-pulse" style={{ background: "hsla(200,70%,65%,0.6)" }} />
+              <div className="w-1.5 h-1.5 rounded-full bg-foreground/10" />
+            </div>
           </div>
-          {LAYERS.map((l, idx) => {
-            const isActive = l.key === layer;
-            return (
-              <button
-                key={l.key}
-                onClick={() => setLayer(l.key)}
-                className="text-left rounded-lg p-3 border transition-all duration-300"
+
+          {/* Scrollable list */}
+          <div className="flex-1 overflow-y-auto p-2.5 space-y-2">
+            {LAYERS.map((l, idx) => {
+              const isActive = l.key === layer;
+              return (
+                <button
+                  key={l.key}
+                  onClick={() => setLayer(l.key)}
+                  className="group relative w-full text-left p-3 rounded-lg border transition-all duration-300"
+                  style={{
+                    background: isActive ? "hsla(240,20%,10%,0.4)" : "transparent",
+                    borderColor: isActive ? "hsla(200,70%,65%,0.35)" : "transparent",
+                    boxShadow: isActive ? "0 0 20px -5px hsla(200,70%,60%,0.25)" : undefined,
+                  }}
+                  onMouseEnter={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "hsla(240,20%,10%,0.35)";
+                  }}
+                  onMouseLeave={(e) => {
+                    if (!isActive) e.currentTarget.style.background = "transparent";
+                  }}
+                >
+                  {isActive && (
+                    <div
+                      className="absolute left-0 top-3 bottom-3 w-[2px] rounded-full"
+                      style={{
+                        background: "hsla(200,80%,70%,0.95)",
+                        boxShadow: "0 0 8px hsla(200,80%,70%,0.8)",
+                      }}
+                    />
+                  )}
+                  <div
+                    className={`flex flex-col gap-1 transition-opacity ${isActive ? "opacity-100" : "opacity-70 group-hover:opacity-100"}`}
+                  >
+                    <span
+                      className="text-[10px] font-bold mb-0.5 tabular-nums"
+                      style={{
+                        fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace",
+                        color: isActive ? "hsla(200,80%,75%,0.85)" : "hsla(0,0%,100%,0.35)",
+                      }}
+                    >
+                      {String(idx + 1).padStart(2, "0")}
+                    </span>
+                    <h3
+                      className="text-[13px] font-bold tracking-[0.08em] uppercase leading-tight"
+                      style={{ color: isActive ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.78)" }}
+                    >
+                      {l.card}
+                    </h3>
+                    <p
+                      className="text-[10px] font-medium leading-snug"
+                      style={{ color: isActive ? "hsla(0,0%,100%,0.55)" : "hsla(0,0%,100%,0.4)" }}
+                    >
+                      {l.title}
+                    </p>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Footer */}
+          <div className="px-4 py-3 border-t border-white/5 flex items-center justify-between" style={{ background: "hsla(240,30%,5%,0.4)" }}>
+            <span
+              className="text-[9px] uppercase tracking-[0.15em] text-foreground/40"
+              style={{ fontFamily: "ui-monospace, SFMono-Regular, Menlo, monospace" }}
+            >
+              Layer {String(LAYERS.findIndex((l) => l.key === layer) + 1).padStart(2, "0")} / {String(LAYERS.length).padStart(2, "0")}
+            </span>
+            <div className="h-1 w-12 rounded-full overflow-hidden" style={{ background: "hsla(240,20%,15%,0.8)" }}>
+              <div
+                className="h-full transition-all duration-500"
                 style={{
-                  background: isActive ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                  borderColor: isActive ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
-                  boxShadow: isActive ? "inset 0 1px 0 hsla(200,60%,80%,0.15), 0 0 20px hsla(200,70%,60%,0.22)" : undefined,
+                  width: `${((LAYERS.findIndex((l) => l.key === layer) + 1) / LAYERS.length) * 100}%`,
+                  background: "hsla(200,75%,65%,0.55)",
                 }}
-              >
-                <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">
-                  {String(idx + 1).padStart(2, "0")}
-                </div>
-                <div className="text-[11px] font-semibold tracking-[0.1em] uppercase text-foreground/85">
-                  {l.card}
-                </div>
-                <div className="text-[9px] text-muted-foreground/55 mt-1">{l.title}</div>
-              </button>
-            );
-          })}
+              />
+            </div>
+          </div>
         </HudPanel>
       </div>
+
 
       {/* Center stage — simple stellar neighborhood diagram */}
       <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-[300px] px-4">
