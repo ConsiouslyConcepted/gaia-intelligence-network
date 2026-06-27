@@ -3,6 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { ArrowRight, MapPin } from "lucide-react";
 
 import { HudPanel } from "./MissionShell";
+import CosmicAddressZoom from "./CosmicAddressZoom";
+
+// Map address node key → station index in observatory STATIONS registry.
+const NODE_TO_STATION: Record<string, number> = {
+  earth: 0,
+  solar: 2,        // heliosphere
+  "orion-spur": 4, // orionspur
+  "milky-way": 5,  // milkyway
+  "local-group": 6,
+  virgo: 7,
+  laniakea: 8,
+  universe: 9,
+};
+const STATION_TO_NODE: Record<number, string> = Object.fromEntries(
+  Object.entries(NODE_TO_STATION).map(([k, v]) => [v, k]),
+);
 
 interface AddressNode {
   key: string;
