@@ -63,7 +63,7 @@ const HudPanel = ({
 );
 
 const TOGGLE_BTN_BASE =
-  "text-center px-2.5 py-2 whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
+  "text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
 
 const ACTIVE_BTN_STYLE: React.CSSProperties = {
   background:
@@ -72,6 +72,13 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   border: "1.5px solid hsla(220,35%,60%,0.55)",
   boxShadow:
     "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
+};
+
+const NAV_PILL_STYLE: React.CSSProperties = {
+  background: "hsla(228,40%,5%,0.6)",
+  border: "1px solid hsla(220,40%,65%,0.5)",
+  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), inset 0 -1px 0 rgba(0,0,0,0.4), 0 0 24px hsla(210,70%,60%,0.28), 0 0 48px hsla(210,70%,55%,0.18), 0 12px 32px rgba(0,0,0,0.5)",
+  backdropFilter: "blur(12px)",
 };
 
 // ───────── Visualizations (pure SVG) ─────────
@@ -223,28 +230,50 @@ const HarmonicsEngine = () => {
               </div>
             </div>
           </div>
-          <div className="flex items-center gap-1 overflow-x-auto">
-            {[
-              { label: "Planetary", path: "/planetary" },
-              { label: "Solar", path: "/planetary?view=hgs" },
-              { label: "Stellar", path: "/stellar" },
-              { label: "Galactic", path: "/galactic" },
-              { label: "Universal", path: "/universal" },
-              { label: "Cosmological", path: "/cosmological" },
-              { label: "Analysis", path: "/harmonics" },
-            ].map((b) => {
-              const active = b.label === "Analysis";
-              return (
-                <button
-                  key={b.label}
-                  onClick={() => navigate(b.path)}
-                  className={cn(TOGGLE_BTN_BASE, active ? "" : "text-muted-foreground/60")}
-                  style={active ? ACTIVE_BTN_STYLE : undefined}
-                >
-                  {b.label}
-                </button>
-              );
-            })}
+          <div className="flex items-center gap-3">
+            <div
+              className="flex gap-1 xl:gap-1.5 rounded-2xl p-1 xl:p-1.5 overflow-x-auto max-w-full"
+              style={NAV_PILL_STYLE}
+            >
+              {[
+                { label: "Planetary", path: "/planetary" },
+                { label: "Solar", path: "/planetary?view=hgs" },
+                { label: "Stellar", path: "/stellar" },
+                { label: "Galactic", path: "/galactic" },
+                { label: "Universal", path: "/universal" },
+                { label: "Cosmological", path: "/cosmological" },
+                { label: "Analysis", path: "/harmonics" },
+              ].map((b) => {
+                const active = b.label === "Analysis";
+                return (
+                  <button
+                    key={b.label}
+                    onClick={() => navigate(b.path)}
+                    className={cn(
+                      TOGGLE_BTN_BASE,
+                      active ? "font-semibold" : "text-foreground/40"
+                    )}
+                    style={active ? ACTIVE_BTN_STYLE : undefined}
+                  >
+                    {b.label}
+                  </button>
+                );
+              })}
+            </div>
+
+            <button
+              onClick={() => navigate("/commons")}
+              className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
+              style={{
+                color: "hsla(0,0%,100%,0.75)",
+                border: "1px solid hsla(220,30%,55%,0.35)",
+                background: "hsla(240,25%,8%,0.5)",
+                boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)",
+              }}
+              title="Planetary Commons Data"
+            >
+              <CommonsIcon size={20} />
+            </button>
           </div>
         </HudPanel>
       </div>
