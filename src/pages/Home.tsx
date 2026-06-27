@@ -157,8 +157,7 @@ export default function Home() {
             Gaiasphere Observatory
           </h1>
           <p className="mt-3 max-w-2xl mx-auto text-sm text-white/65">
-            Six observatories, one continuous system. Move outward from Earth through the
-            heliosphere, the local stellar neighborhood, the galaxy, and the cosmos.
+            An Observatory for Earths nested systems of intelligence and the harmonic relationships between them.
           </p>
         </header>
 
