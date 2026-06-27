@@ -6,6 +6,7 @@ import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
 import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
+import CrossLayerWorkspace from "@/components/mission-control/CrossLayerWorkspace";
 import { EventsPanel } from "@/components/harmonics/EventsPanel";
 import { ReportsPanel } from "@/components/harmonics/ReportsPanel";
 import { scanAllLayers } from "@/lib/harmonics/anomalies";
@@ -500,16 +501,21 @@ const HarmonicsEngine = () => {
         )}
 
         {mode === "cross" && (
-          <HudPanel className="p-4">
-            <div className="mb-3">
-              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
-              <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">Compare nested intelligence systems</div>
-              <p className="text-[10px] text-muted-foreground/70 mt-1 leading-relaxed">
-                Pick two datasets from any scale. The engine aligns, normalizes, runs spectral and lag analysis, and labels the relationship as <span className="text-foreground/85">Measured</span>, <span className="text-foreground/85">Statistical</span>, or <span className="text-foreground/85">Exploratory</span>.
-              </p>
+          <>
+            <div className="mb-4">
+              <CrossLayerWorkspace />
             </div>
-            <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
-          </HudPanel>
+            <HudPanel className="p-4">
+              <div className="mb-3">
+                <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
+                <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">Compare nested intelligence systems</div>
+                <p className="text-[10px] text-muted-foreground/70 mt-1 leading-relaxed">
+                  Pick two datasets from any scale. The engine aligns, normalizes, runs spectral and lag analysis, and labels the relationship as <span className="text-foreground/85">Measured</span>, <span className="text-foreground/85">Statistical</span>, or <span className="text-foreground/85">Exploratory</span>.
+                </p>
+              </div>
+              <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
+            </HudPanel>
+          </>
         )}
 
         {mode === "events" && (
