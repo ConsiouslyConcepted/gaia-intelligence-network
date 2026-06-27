@@ -548,7 +548,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "classification") {
     return (
-      <div className="w-full h-full flex flex-col justify-start gap-1 px-1 py-1 overflow-y-auto">
+      <div className="w-full h-full flex flex-col justify-center gap-1 px-1 py-1 overflow-y-auto">
         <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           OBAFGKM Spectral Sequence — hot ⟶ cool
         </div>
