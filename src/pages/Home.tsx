@@ -274,15 +274,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="max-w-2xl">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              Six Observatories · One Continuous System
+              Six Observatories
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              Step into any scale. They all connect.
+              Select a scale.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
-              Each observatory is a complete intelligence environment for a layer of the
-              cosmos. Move freely between them — or let the Universal observatory show you
-              how they nest together.
+              Each observatory is an intelligence environment for a specific layer. The Universal
+              observatory shows how they nest together.
             </p>
           </div>
 
