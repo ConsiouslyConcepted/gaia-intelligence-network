@@ -64,13 +64,13 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
       {/* Right rail — station list */}
       <div className="absolute top-1/2 right-4 z-30 -translate-y-1/2 pointer-events-auto">
         <div
-          className="rounded-xl border p-2 flex flex-col gap-0.5"
+          className="rounded-2xl p-2 flex flex-col gap-0.5"
           style={{
-            background: "hsla(228,40%,7%,0.55)",
-            backdropFilter: "blur(14px)",
-            WebkitBackdropFilter: "blur(14px)",
-            borderColor: "hsla(220,20%,40%,0.22)",
-            boxShadow: "0 8px 32px hsla(228,60%,2%,0.6), inset 0 0 0 1px hsla(220,30%,60%,0.06)",
+            background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+            border: "1.5px solid hsla(220,35%,60%,0.55)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 24px hsla(210,75%,62%,0.28), 0 0 48px hsla(210,70%,55%,0.18), 0 12px 32px rgba(0,0,0,0.55)",
           }}
         >
           <button
@@ -129,13 +129,13 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
       <div className="absolute left-6 bottom-8 z-30 pointer-events-auto w-[min(640px,calc(100vw-88px))]">
         <div
           key={station.id}
-          className="rounded-2xl border px-6 py-5 animate-fade-in"
+          className="rounded-2xl px-6 py-5 animate-fade-in"
           style={{
-            background: "hsla(228,40%,7%,0.62)",
+            background: "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+            border: "1.5px solid hsla(220,35%,60%,0.55)",
             backdropFilter: "blur(18px)",
             WebkitBackdropFilter: "blur(18px)",
-            borderColor: "hsla(220,20%,45%,0.25)",
-            boxShadow: "0 16px 60px hsla(228,60%,2%,0.7), inset 0 0 0 1px hsla(220,30%,60%,0.06)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 16px 48px rgba(0,0,0,0.65)",
           }}
         >
           <div className="flex items-baseline justify-between gap-4 mb-2">
