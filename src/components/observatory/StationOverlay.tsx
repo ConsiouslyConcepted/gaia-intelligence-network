@@ -77,66 +77,8 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
           </div>
         </div>
 
-        {/* Mission statement HUD capsule */}
-        <div className="pointer-events-auto max-w-md group">
-          <div
-            className="relative rounded-2xl p-6 overflow-hidden"
-            style={{
-              background: "linear-gradient(145deg, hsla(225,50%,7%,0.82) 0%, hsla(225,55%,5%,0.88) 50%, hsla(228,60%,4%,0.82) 100%)",
-              border: "1.5px solid hsla(200,65%,55%,0.45)",
-              backdropFilter: "blur(20px)",
-              WebkitBackdropFilter: "blur(20px)",
-              boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(200,65%,55%,0.20), 0 0 64px hsla(200,60%,50%,0.12), 0 16px 48px rgba(0,0,0,0.55)",
-            }}
-          >
-            {/* Subtle scan lines */}
-            <div className="absolute inset-0 pointer-events-none opacity-[0.08]">
-              <div className="absolute top-1/4 left-0 w-full h-px bg-[#5fb4d9]" />
-              <div className="absolute top-2/4 left-0 w-full h-px bg-[#5fb4d9]" />
-              <div className="absolute top-3/4 left-0 w-full h-px bg-[#5fb4d9]" />
-            </div>
-
-            {/* Corner brackets */}
-            <div className="absolute top-2 left-2 w-3 h-3 border-t border-l border-[#5fb4d9]/50" />
-            <div className="absolute top-2 right-2 w-3 h-3 border-t border-r border-[#5fb4d9]/50" />
-            <div className="absolute bottom-2 left-2 w-3 h-3 border-b border-l border-[#5fb4d9]/50" />
-            <div className="absolute bottom-2 right-2 w-3 h-3 border-b border-r border-[#5fb4d9]/50" />
-
-            {/* Top meta bar */}
-            <div className="relative flex items-center justify-between mb-4 pb-3 border-b border-[#5fb4d9]/15">
-              <div className="flex items-center gap-3">
-                <div className="w-2 h-2 rounded-full bg-[#5fb4d9] animate-pulse shadow-[0_0_8px_#5fb4d9]" />
-                <span className="text-[10px] font-mono tracking-widest text-[#5fb4d9] uppercase font-medium">
-                  System_Mission.v1
-                </span>
-              </div>
-              <span className="text-[10px] font-mono text-[#5fb4d9]/60">
-                [40.7128° N, 74.0060° W]
-              </span>
-            </div>
-
-            {/* Mission statement */}
-            <p className="relative text-[13px] leading-relaxed tracking-wide text-foreground/90 font-display">
-              Explore the nested systems of organization that shape{" "}
-              <span className="text-[#5fb4d9] font-medium">Earth</span>, the{" "}
-              <span className="text-[#5fb4d9] font-medium">Solar System</span>, the{" "}
-              <span className="text-[#5fb4d9] font-medium">Milky Way</span>, and the observable universe through real-time scientific data, systems intelligence, and AI-assisted analysis.
-            </p>
-
-            {/* Bottom status element */}
-            <div className="relative flex items-end justify-between pt-4 mt-2">
-              <div className="flex gap-1">
-                <div className="w-1 h-3 bg-[#5fb4d9]/40" />
-                <div className="w-1 h-3 bg-[#5fb4d9]/20" />
-                <div className="w-1 h-3 bg-[#5fb4d9]/60" />
-              </div>
-              <span className="text-[9px] font-mono text-[#5fb4d9]/40 uppercase tracking-tighter">
-                Active_Link_Established
-              </span>
-            </div>
-          </div>
-        </div>
-      </div>
+        {/* Spacer to keep title block anchored */}
+        <div className="pointer-events-none" />
 
       {/* Right rail — station list */}
       <div className="absolute top-1/2 right-4 z-30 -translate-y-1/2 pointer-events-auto">
