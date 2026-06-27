@@ -524,12 +524,6 @@ const Universal = () => {
               </button>
             );
           })}
-          <div className="mt-auto pt-3 px-1">
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/45 mb-1.5">Premise</div>
-            <p className="text-[9px] leading-relaxed text-muted-foreground/65">
-              The universe has a wave structure, and each wave develops harmonically related waves — each of those does the same.
-            </p>
-          </div>
         </HudPanel>
       </div>
 
