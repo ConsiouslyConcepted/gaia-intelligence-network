@@ -82,29 +82,91 @@ export function CrossLayerPanel({ aId, bId, onChange }: Props) {
         <DatasetPicker label="Layer B" value={bId} color="hsla(45,100%,70%,0.95)" onChange={(v) => onChange(aId, v)} />
       </div>
 
-      {/* Suggested pairings — grouped by boundary */}
+      {/* Suggested pairings — HUD telemetry chips */}
       <div>
-        <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mb-1.5">Suggested cross-layer pairings</div>
-        <div className="flex flex-col gap-2">
-          {Array.from(new Set(SUGGESTED_PAIRINGS.map((p) => p.group))).map((group) => (
-            <div key={group}>
-              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/45 mb-1">{group}</div>
-              <div className="flex flex-wrap gap-1.5">
-                {SUGGESTED_PAIRINGS.filter((p) => p.group === group).map((p) => (
-                  <button
-                    key={p.label}
-                    onClick={() => onChange(p.a, p.b)}
-                    title={`${p.note}  ·  expected: ${p.expected}`}
-                    className="text-[9px] uppercase tracking-[0.12em] px-2 py-1 rounded-md border border-border/30 bg-background/40 text-muted-foreground/80 hover:bg-foreground/[0.06] hover:text-foreground/90"
-                  >
-                    {p.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          ))}
+        <div className="flex items-center gap-3 mb-4 opacity-70">
+          <div className="w-4 h-px bg-sky-500/70" />
+          <div className="text-[10px] font-bold tracking-[0.22em] uppercase text-sky-400/85 font-mono">
+            Suggested Cross-Layer Pairings
+          </div>
+        </div>
+
+        <div className="space-y-5">
+          {(() => {
+            // Per-layer hue (matches the rest of the platform's cross-layer color system)
+            const LAYER_HUE: Record<string, { ring: string; text: string; hover: string }> = {
+              Planetary:    { ring: "bg-emerald-500/45", text: "group-hover:text-emerald-400", hover: "hover:border-emerald-500/50 hover:bg-emerald-500/[0.05]" },
+              Solar:        { ring: "bg-amber-500/45",   text: "group-hover:text-amber-400",   hover: "hover:border-amber-500/50 hover:bg-amber-500/[0.05]" },
+              Stellar:      { ring: "bg-indigo-500/45",  text: "group-hover:text-indigo-300",  hover: "hover:border-indigo-500/50 hover:bg-indigo-500/[0.05]" },
+              Galactic:     { ring: "bg-cyan-500/45",    text: "group-hover:text-cyan-300",    hover: "hover:border-cyan-500/50 hover:bg-cyan-500/[0.05]" },
+              Cosmological: { ring: "bg-orange-500/45",  text: "group-hover:text-orange-300",  hover: "hover:border-orange-500/50 hover:bg-orange-500/[0.05]" },
+              Harmonic:     { ring: "bg-sky-500/45",     text: "group-hover:text-sky-300",     hover: "hover:border-sky-500/50 hover:bg-sky-500/[0.05]" },
+            };
+            const CATCODE: Record<string, string> = {
+              "Planetary ↔ Solar":       "CAT_01·ALPHA",
+              "Solar ↔ Stellar":         "CAT_02·DELTA",
+              "Stellar ↔ Galactic":      "CAT_03·SIGMA",
+              "Galactic ↔ Cosmological": "CAT_04·OMEGA",
+              "Harmonic & Mathematical": "CAT_05·LAMBDA",
+            };
+            const splitGroup = (g: string): [string, string] => {
+              if (g.includes("↔")) {
+                const [a, b] = g.split("↔").map((s) => s.trim());
+                return [a, b];
+              }
+              return ["Harmonic", "Harmonic"];
+            };
+
+            return Array.from(new Set(SUGGESTED_PAIRINGS.map((p) => p.group))).map((group) => {
+              const [layerA, layerB] = splitGroup(group);
+              const a = LAYER_HUE[layerA] ?? LAYER_HUE.Harmonic;
+              const b = LAYER_HUE[layerB] ?? LAYER_HUE.Harmonic;
+              return (
+                <section key={group}>
+                  <header className="flex items-center justify-between mb-2.5 border-b border-border/25 pb-1.5">
+                    <span className="text-[9px] font-bold tracking-[0.18em] uppercase text-muted-foreground/65 font-mono">
+                      {layerA} <span className="text-muted-foreground/30 mx-0.5">/</span> {layerB}
+                    </span>
+                    <span className="text-[8px] text-muted-foreground/35 font-mono tracking-wider">
+                      {CATCODE[group] ?? ""}
+                    </span>
+                  </header>
+                  <div className="flex flex-wrap gap-2">
+                    {SUGGESTED_PAIRINGS.filter((p) => p.group === group).map((p) => {
+                      const isActive = aId === p.a && bId === p.b;
+                      return (
+                        <button
+                          key={p.label}
+                          onClick={() => onChange(p.a, p.b)}
+                          title={`${p.note}  ·  expected: ${p.expected}`}
+                          className={`group flex items-center gap-2 px-2.5 py-1.5 rounded border bg-background/30 transition-all cursor-pointer ${
+                            isActive
+                              ? "border-foreground/40 bg-foreground/[0.04]"
+                              : `border-border/40 ${a.hover}`
+                          }`}
+                        >
+                          <div className={`w-[3px] h-3 rounded-full ${a.ring} ${isActive ? "!bg-foreground/70" : ""}`} />
+                          <span className={`text-[10px] font-medium uppercase tracking-[0.06em] text-muted-foreground/85 transition-colors ${isActive ? "text-foreground/95" : a.text}`}>
+                            {p.label.split(/[↔→]/)[0].trim()}
+                          </span>
+                          <span className="text-muted-foreground/35 text-[10px]">
+                            {p.label.includes("→") ? "→" : "↔"}
+                          </span>
+                          <span className={`text-[10px] font-medium uppercase tracking-[0.06em] text-muted-foreground/85 transition-colors ${isActive ? "text-foreground/95" : b.text}`}>
+                            {p.label.split(/[↔→]/)[1]?.trim() ?? ""}
+                          </span>
+                          <div className={`w-[3px] h-3 rounded-full ${b.ring} ${isActive ? "!bg-foreground/70" : ""}`} />
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+              );
+            });
+          })()}
         </div>
       </div>
+
 
 
       {/* Evidence badge */}
