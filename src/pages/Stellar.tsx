@@ -836,23 +836,24 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       { name: "Cataclysmic", period: "minutes–days", use: "Accreting binaries · novae", color: "#cc5533" },
     ];
     return (
-      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
+      <div className="w-full h-full flex flex-col justify-center gap-4 px-4 py-2 overflow-y-auto">
+        <div className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground/70 text-center">
           Variable star classes
         </div>
-        <div className="grid grid-cols-2 gap-2">
+        <div className="grid grid-cols-2 gap-4">
           {cards.map((c) => (
-            <div key={c.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-              <div className="flex items-center gap-2 mb-1">
-                <div className="w-2 h-2 rounded-full" style={{ background: c.color, boxShadow: `0 0 8px ${c.color}` }} />
-                <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{c.name}</div>
+            <div key={c.name} className="rounded-xl p-4 border border-border/30" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div className="flex items-center gap-2.5 mb-2">
+                <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
+                <div className="text-[14px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{c.name}</div>
               </div>
-              <div className="text-[9px] font-mono text-muted-foreground/65">{c.period}</div>
-              <div className="text-[10px] text-muted-foreground/70 mt-0.5">{c.use}</div>
+              <div className="text-[12px] font-mono text-muted-foreground/75">{c.period}</div>
+              <div className="text-[13px] text-muted-foreground/80 mt-1">{c.use}</div>
             </div>
           ))}
         </div>
       </div>
+
     );
   }
 
