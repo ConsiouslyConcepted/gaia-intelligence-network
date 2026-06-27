@@ -13,13 +13,13 @@ interface Props {
 }
 
 const QUICK_PROMPTS: { label: string; prompt: string }[] = [
-  { label: "Explain current pattern", prompt: "Explain the harmonic pattern in the current selection in plain language." },
-  { label: "Summarize this layer", prompt: "Summarize the current dynamics of the selected intelligence layer." },
-  { label: "Find anomalies", prompt: "Identify emerging trends or anomalies in the current dataset." },
-  { label: "Compare both layers", prompt: "Compare the two selected layers and highlight any meaningful coupling." },
-  { label: "Daily report", prompt: "Generate a daily harmonic intelligence report." },
-  { label: "Weekly report", prompt: "Generate a weekly harmonic intelligence report." },
-  { label: "Monthly report", prompt: "Generate a monthly harmonic intelligence report." },
+  { label: "Explain current pattern", prompt: "Explain the harmonic pattern in the current selection. Lead with the answer, classify by evidence tier (Measured / Statistical / Exploratory), keep it under 200 words." },
+  { label: "Summarize this layer", prompt: "Summarize the current dynamics of the selected intelligence layer using evidence tiers." },
+  { label: "Find anomalies", prompt: "Identify anomalies or drift in the loaded datasets. For each, state the signal, the deviation, and the evidence tier." },
+  { label: "Compare both layers", prompt: "Compare the two selected layers and highlight any meaningful coupling. Use evidence tiers." },
+  { label: "Daily report", prompt: "Generate a daily intelligence report. Sections: Conditions, Notable Events, Cross-Layer Notes, Watch List. Under 250 words. Use evidence tiers." },
+  { label: "Recommend investigations", prompt: "Recommend two cross-layer pairings worth investigating next, why each matters, and which dataset ids to load. Mark each as Statistical or Exploratory." },
+  { label: "Weekly report", prompt: "Generate a weekly harmonic intelligence report using evidence tiers." },
   { label: "Suggest datasets", prompt: "Recommend additional datasets in the registry I should investigate next." },
 ];
 
