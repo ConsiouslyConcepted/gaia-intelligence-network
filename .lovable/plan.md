@@ -1,32 +1,32 @@
-## Goal
+# Add Cross-Layer Living Network to the Harmonics Engine
 
-Treat Mission Control as a global tool (not a scale layer) and give the Universal page back its original identity.
+Goal: When users switch to the **Cross-Layer** mode in the Harmonics Engine, show the same nested-shell harmonic-couplings visualization from Mission Control at the top of the section, followed by the existing dataset-pairing tool.
 
-## Changes
+## Change
 
-**1. Route split**
-- New route `/mission-control` → renders the existing `MissionControl.tsx` (Overview, Cosmic Address, Cross-Layer, Harmonic, AI Analyst, Reports workspaces — unchanged).
-- `/universal` reverts to the original `Universal.tsx` (the 682-line file is still in the repo, just not currently routed). All its existing scale-layer content returns: cosmic address visualization, spherical harmonics, info panels, transits, etc.
+`src/pages/HarmonicsEngine.tsx` — Cross-Layer block (currently lines 502–513):
 
-**2. Global HUD button (top-right)**
-- Add a small `MissionControlLauncher` component, styled to match the existing Observatory Guide pill in the top-right HUD.
-- Mount it globally so it appears on every dashboard (Home, Planetary, Solar, Stellar, Galactic, Universal, Cosmological) — sitting next to Observatory Guide.
-- Icon + label "Mission Control". Click → navigates to `/mission-control` (preserves any `?workspace=` query if already on that route).
+```text
+[Cross-Layer Mode]
+ ├── NEW: <CrossLayerWorkspace />        ← nested rings + selected coupling rail
+ └── existing HudPanel
+     ├── "Compare nested intelligence systems" header
+     └── <CrossLayerPanel ... />          ← dataset A/B selectors + analysis
+```
 
-**3. Menu bar stays pure**
-- Scale menu order unchanged: Planetary · Solar · Stellar · Galactic · Universal · Cosmological. No Mission Control entry added to the horizontal scale bar.
+Implementation:
+- Import `CrossLayerWorkspace` from `@/components/mission-control/CrossLayerWorkspace`.
+- Render it inside a wrapping container above the existing `HudPanel`, with `mb-4` spacing.
+- Keep the existing dataset-pairing UI unchanged below it.
 
-**4. Internal links**
-- Any existing deep links currently pointing at `/universal?workspace=...` (e.g. from `HarmonicWorkspace` tiles, Cross-Layer deep-links, AI suggestions) are repointed to `/mission-control?workspace=...`.
+## Notes
 
-## Technical notes
+- `CrossLayerWorkspace` is self-contained (live correlations, window selector, anomaly toggle, selected-coupling detail panel) and already used in `/mission-control`. No prop changes required.
+- Its internal `useNavigate` won't fire unless a user clicks a layer's "Open dashboard" link — safe to embed.
+- No changes to the Single-Layer, Events, or Reports modes.
+- No styling overrides; it inherits the engine's dark glass aesthetic.
 
-- `src/App.tsx`: add `<Route path="/mission-control" element={<MissionControl />} />`; change `<Route path="/universal" element={<MissionControl />} />` back to `<Universal />`.
-- New file `src/components/MissionControlLauncher.tsx` rendered from the same place `ObservatoryGuide` is mounted (likely `App.tsx` or a layout wrapper). Same glass-pill styling, `Radar` or `LayoutDashboard` icon.
-- Repoint `navigate("/universal?workspace=...")` → `navigate("/mission-control?workspace=...")` across the codebase (HarmonicWorkspace, CrossLayerWorkspace, any AI Analyst CTAs, etc.).
-- No data, schema, or backend changes.
+## Out of scope (can do next if you want)
 
-## Out of scope
-
-- No redesign of Mission Control's internal workspaces.
-- No edits to the original Universal page content — it returns exactly as it was.
+- Wiring a chord click in the rings to auto-fill Layer A / Layer B in the pairing panel below.
+- Collapsible header to hide the network for users who only want the pairing tool.
