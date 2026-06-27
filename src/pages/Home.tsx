@@ -341,13 +341,11 @@ export default function Home() {
               Core Capability
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              The Harmonic Analysis Engine.
+              Harmonic Analysis Engine.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
-              Not another dashboard — the analytical framework that connects every layer of
-              the observatory. Surface the recurring patterns, cycles, resonances, and field
-              relationships that link planetary, solar, stellar, galactic, cosmological, and
-              universal systems.
+              Cross-scale spectral analysis and resonance detection. Detect cycles, resonances,
+              and field relationships across all six observatories.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
