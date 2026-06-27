@@ -47,7 +47,7 @@ export function AssistantPanel({ context }: Props) {
     setError(null);
     try {
       const { data, error: fnErr } = await supabase.functions.invoke("harmonic-assistant", {
-        body: { messages: next, context },
+        body: { mode: "analyst", messages: next, context: { surface: "harmonics-engine", ...context } },
       });
       if (fnErr) throw new Error(fnErr.message);
       const reply = (data as { reply?: string; error?: string })?.reply;
