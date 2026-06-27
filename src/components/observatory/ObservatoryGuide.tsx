@@ -91,7 +91,7 @@ export default function ObservatoryGuide() {
           aria-label="Open Observatory Guide"
         >
           <MessageCircle className="w-4 h-4" />
-          <span className="text-[10px] font-semibold uppercase tracking-[0.18em]">Ask the Guide</span>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.18em]">Observatory Guide</span>
         </button>
       )}
 
