@@ -125,13 +125,13 @@ const MissionShell = ({ active, children }: Props) => {
               <button onClick={() => navigate("/planetary?view=hgs")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Solar</button>
               <button onClick={() => navigate("/stellar")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Stellar</button>
               <button onClick={() => navigate("/galactic")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Galactic</button>
+              <button onClick={() => navigate("/cosmological")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Cosmological</button>
               <button
                 className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[110px] whitespace-nowrap rounded-xl text-[11px] font-semibold tracking-[0.18em] uppercase"
                 style={ACTIVE_TOP_BTN}
               >
                 Universal
               </button>
-              <button onClick={() => navigate("/cosmological")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Cosmological</button>
             </div>
 
             <button
