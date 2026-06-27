@@ -260,21 +260,6 @@ const HarmonicsEngine = () => {
                 );
               })}
             </div>
-
-            <button
-              onClick={() => navigate("/commons")}
-              className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
-              style={{
-                color: "hsla(0,0%,100%,0.75)",
-                border: "1px solid hsla(220,30%,55%,0.35)",
-                background: "hsla(240,25%,8%,0.5)",
-                boxShadow: "inset 0 1px 0 hsla(200,60%,78%,0.18), inset 0 0 6px hsla(210,50%,60%,0.08), 0 0 14px -4px hsla(210,60%,65%,0.2)",
-              }}
-              title="Planetary Commons Data"
-            >
-              <CommonsIcon size={20} />
-            </button>
-          </div>
         </HudPanel>
       </div>
 
