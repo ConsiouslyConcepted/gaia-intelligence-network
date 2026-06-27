@@ -33,10 +33,11 @@ const EVIDENCE_STYLE: Record<Evidence, { hue: number; width: number; label: stri
 };
 
 const W = 760;
-const H = 520;
+const H = 560;
 const CX = W / 2;
-const CY = H / 2 + 8;
-const R = 195;
+const CY = H / 2 + 4;
+const R = 200;
+const PAD = 56; // keep nodes + labels inside viewBox
 
 const nodePos = (i: number) => {
   const a = -Math.PI / 2 + (i * 2 * Math.PI) / LAYERS.length;
@@ -46,6 +47,7 @@ const NODE_POS: Record<LayerKey, { x: number; y: number }> = LAYERS.reduce(
   (acc, l, i) => ({ ...acc, [l.key]: nodePos(i) }),
   {} as Record<LayerKey, { x: number; y: number }>,
 );
+void PAD;
 
 const CrossLayerWorkspace = () => {
   const navigate = useNavigate();
@@ -310,14 +312,8 @@ const CrossLayerWorkspace = () => {
                   const isDimmed = filterLayer !== "all" && !isFiltered;
                   return (
                     <g key={l.key} style={{ cursor: "pointer", opacity: isDimmed ? 0.35 : 1, transition: "opacity 250ms" }}
-                      onClick={(e) => {
-                        if (e.shiftKey) {
-                          setFilterLayer((v) => (v === l.key ? "all" : l.key));
-                        } else {
-                          navigate(l.route);
-                        }
-                      }}>
-                      <title>{`Open ${l.label} dashboard · shift-click to filter`}</title>
+                      onClick={() => setFilterLayer((v) => (v === l.key ? "all" : l.key))}>
+                      <title>{`Click to focus ${l.label} couplings`}</title>
                       <circle cx={p.x} cy={p.y} r={rNode + 22} fill="url(#nodeGlow)" opacity={isFiltered ? 0.95 : 0.45} />
                       {/* pulse ring */}
                       <circle cx={p.x} cy={p.y} r={rNode} fill="none" stroke={layerColor(l.hue, 0.7)} strokeWidth="1">
@@ -383,12 +379,58 @@ const CrossLayerWorkspace = () => {
                 <Zap size={10} className="text-foreground/60" />
                 {edges.length} active couplings
               </span>
-              <span>click an edge to inspect · click a node to open its dashboard · shift-click to filter</span>
+              <span>click a layer to focus · click an edge to inspect</span>
             </div>
           </HudPanel>
 
           {/* Detail */}
           <HudPanel className="p-5 flex flex-col gap-4">
+            {filterLayer !== "all" && (() => {
+              const layer = LAYERS.find((l) => l.key === filterLayer)!;
+              return (
+                <div
+                  className="rounded-lg p-3 border"
+                  style={{
+                    background: `hsla(${layer.hue},40%,10%,0.45)`,
+                    borderColor: layerColor(layer.hue, 0.45),
+                  }}
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <div>
+                      <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/65">
+                        Focused Layer
+                      </div>
+                      <div className="text-[13px] font-bold tracking-[0.12em] uppercase mt-0.5"
+                        style={{ color: layerColor(layer.hue, 1) }}>
+                        {layer.label}
+                      </div>
+                      <div className="text-[9px] tracking-[0.15em] uppercase text-muted-foreground/65 mt-0.5">
+                        {edges.length} couplings
+                      </div>
+                    </div>
+                    <button
+                      onClick={() => setFilterLayer("all")}
+                      className="text-[8px] tracking-[0.18em] uppercase text-muted-foreground/70 hover:text-foreground/90 px-2 py-1 rounded border border-border/40"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  <button
+                    onClick={() => navigate(layer.route)}
+                    className="mt-3 flex items-center justify-between w-full px-3 py-2 rounded-md border transition-all hover:bg-foreground/[0.05]"
+                    style={{
+                      background: "hsla(240,25%,8%,0.5)",
+                      borderColor: layerColor(layer.hue, 0.4),
+                    }}
+                  >
+                    <span className="text-[9px] tracking-[0.18em] uppercase font-semibold text-foreground/90">
+                      Open {layer.label} Dashboard
+                    </span>
+                    <ArrowRight size={12} className="text-foreground/75" />
+                  </button>
+                </div>
+              );
+            })()}
             <div className="text-[8px] uppercase tracking-[0.22em] text-muted-foreground/55">
               Selected Coupling
             </div>
