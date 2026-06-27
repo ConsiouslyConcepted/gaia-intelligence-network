@@ -176,12 +176,12 @@ export default function Home() {
             <p className="text-[11px] uppercase tracking-[0.5em] text-white/50">
               Nested Intelligence Observatory
             </p>
-            <h1 className="mt-5 text-5xl md:text-7xl font-light tracking-tight text-white">
+            <h1 className="mt-5 font-wordmark text-5xl md:text-7xl font-normal tracking-[0.08em] text-white uppercase">
               Gaiasphere
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
               Real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted
-              discovery across nested planetary to cosmic scales.
+              discovery across nested systems within the observable universe.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
