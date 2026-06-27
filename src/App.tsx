@@ -12,6 +12,7 @@ import Cosmological from "./pages/Cosmological";
 import Universal from "./pages/Universal";
 import Stellar from "./pages/Stellar";
 import HarmonicsEngine from "./pages/HarmonicsEngine";
+import ObservatoryGuide from "./components/observatory/ObservatoryGuide";
 
 
 
@@ -40,6 +41,7 @@ const App = () => (
 
           <Route path="*" element={<NotFound />} />
         </Routes>
+        <ObservatoryGuide />
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
