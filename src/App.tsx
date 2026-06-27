@@ -11,6 +11,9 @@ import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
 import Universal from "./pages/Universal";
 import Stellar from "./pages/Stellar";
+import HarmonicsEngine from "./pages/HarmonicsEngine";
+
+
 
 import NotFound from "./pages/NotFound";
 
