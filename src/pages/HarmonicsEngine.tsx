@@ -346,8 +346,8 @@ const HarmonicsEngine = () => {
       </div>
 
       {/* Left rail — scope + dataset */}
-      <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-auto w-[260px] hidden lg:flex flex-col gap-3">
-        <HudPanel className="p-4 flex flex-col gap-1">
+      <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[320px] xl:w-[360px] hidden md:flex flex-col gap-3">
+        <HudPanel className="p-4 flex flex-col gap-1 flex-none max-h-[42%] overflow-y-auto">
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Intelligence Layer
           </div>
@@ -391,7 +391,7 @@ const HarmonicsEngine = () => {
 
 
 
-        <HudPanel className="p-4 flex flex-col gap-1 overflow-y-auto flex-1">
+        <HudPanel className="p-5 flex flex-col gap-1 overflow-y-auto flex-1 min-h-[300px]">
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Dataset
           </div>
@@ -445,7 +445,7 @@ const HarmonicsEngine = () => {
 
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] pt-28 pb-44 lg:pl-[290px] lg:pr-[330px] px-4 flex flex-col gap-3 overflow-y-auto">
+      <div className="absolute inset-0 z-[2] pt-28 pb-32 md:pl-[356px] xl:pl-[396px] xl:pr-[350px] px-4 flex flex-col gap-3 overflow-y-auto">
         {/* Mode toggle */}
         <div className="flex items-center gap-2">
           <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Mode</div>
@@ -546,7 +546,7 @@ const HarmonicsEngine = () => {
       </div>
 
       {/* Right rail — info / assistant */}
-      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[310px] hidden lg:flex flex-col">
+      <div className="absolute right-4 top-28 bottom-24 z-10 pointer-events-auto w-[330px] hidden xl:flex flex-col">
         <HudPanel className="p-3 flex flex-col gap-3 flex-1 min-h-0">
           <div className="flex gap-1">
             {[
