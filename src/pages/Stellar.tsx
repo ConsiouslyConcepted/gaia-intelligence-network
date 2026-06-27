@@ -594,17 +594,22 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     // schematic stacked sine waves at different frequencies (p-modes)
     const size = 760;
     const h = 240;
-    const baseY = h / 2;
-    const lines = [
+    const labelGutter = 200;
+    const waveStart = labelGutter + 12;
+    const waveWidth = size - waveStart - 12;
+    const amp = 18;
+    const rowGap = 64;
+    const rows = [
       { freq: 2, color: "#9ec5ff", label: "Low-ℓ p-mode" },
       { freq: 3.5, color: "#ffe87a", label: "Solar 5-min mode (3.1 mHz)" },
       { freq: 5, color: "#ff9d6e", label: "High-ℓ p-mode" },
     ];
-    const path = (freq: number, yOff: number) => {
+    const rowY = (i: number) => h / 2 + (i - 1) * rowGap;
+    const path = (freq: number, y: number) => {
       const pts: string[] = [];
-      for (let x = 0; x <= size; x += 4) {
-        const y = baseY + yOff + Math.sin((x / size) * Math.PI * 2 * freq) * 28;
-        pts.push(`${x === 0 ? "M" : "L"}${x},${y}`);
+      for (let x = 0; x <= waveWidth; x += 3) {
+        const yy = y + Math.sin((x / waveWidth) * Math.PI * 2 * freq) * amp;
+        pts.push(`${x === 0 ? "M" : "L"}${waveStart + x},${yy}`);
       }
       return pts.join(" ");
     };
@@ -613,13 +618,17 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           Asteroseismic p-modes — schematic
         </div>
-        <svg viewBox={`0 0 ${size} ${h}`} className="w-full max-h-[200px]">
-          {lines.map((l, i) => (
-            <g key={i}>
-              <path d={path(l.freq, (i - 1) * 55)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
-              <text x={10} y={baseY + (i - 1) * 55 - 22} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
-            </g>
-          ))}
+        <svg viewBox={`0 0 ${size} ${h}`} className="w-full max-h-[220px]">
+          {rows.map((l, i) => {
+            const y = rowY(i);
+            return (
+              <g key={i}>
+                <line x1={waveStart} y1={y} x2={size - 12} y2={y} stroke="hsla(0,0%,100%,0.06)" strokeDasharray="2 4" />
+                <text x={labelGutter} y={y + 4} textAnchor="end" fill="hsla(0,0%,100%,0.78)" fontSize={11} fontFamily="ui-monospace, monospace">{l.label}</text>
+                <path d={path(l.freq, y)} stroke={l.color} strokeWidth={1.6} fill="none" opacity={0.9} />
+              </g>
+            );
+          })}
         </svg>
         <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
           Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
