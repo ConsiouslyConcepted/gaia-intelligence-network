@@ -163,12 +163,6 @@ export default function Home() {
               <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
                 GaiaSphere · Observatory
               </p>
-              <Link
-                to="/universal"
-                className="text-[11px] uppercase tracking-[0.35em] text-white/55 hover:text-white transition-colors"
-              >
-                Enter Platform →
-              </Link>
             </div>
           </header>
 
