@@ -429,26 +429,25 @@ export default function Home() {
       </section>
 
       {/* ============ ABOUT ============ */}
-      <section className="relative px-6 py-28 border-t border-white/5">
+      <section id="about" className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              About GaiaSphere
+              What GaiaSphere Is
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              A living observatory of nested systems.
+              Integrated observatory for nested systems.
             </h2>
           </div>
           <div className="md:col-span-8 space-y-5 text-[15px] leading-relaxed text-white/70">
             <p>
-              GaiaSphere integrates modern Earth system science, astronomy, astrophysics,
-              systems science, network science, and AI into a single environment for
-              exploring the interconnected organization of the observable universe.
+              GaiaSphere combines Earth system science, astronomy, astrophysics, systems science,
+              network science, and AI into one environment for observing the organization of the
+              observable universe.
             </p>
             <p>
-              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is
-              treated as a system in its own right, and as part of a larger architecture.
-              Together they form a continuous, observable whole.
+              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is analyzed
+              as a system and as part of a larger architecture.
             </p>
           </div>
         </div>
