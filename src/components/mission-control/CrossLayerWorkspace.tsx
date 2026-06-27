@@ -33,10 +33,11 @@ const EVIDENCE_STYLE: Record<Evidence, { hue: number; width: number; label: stri
 };
 
 const W = 760;
-const H = 520;
+const H = 560;
 const CX = W / 2;
-const CY = H / 2 + 8;
-const R = 195;
+const CY = H / 2 + 4;
+const R = 200;
+const PAD = 56; // keep nodes + labels inside viewBox
 
 const nodePos = (i: number) => {
   const a = -Math.PI / 2 + (i * 2 * Math.PI) / LAYERS.length;
@@ -46,6 +47,7 @@ const NODE_POS: Record<LayerKey, { x: number; y: number }> = LAYERS.reduce(
   (acc, l, i) => ({ ...acc, [l.key]: nodePos(i) }),
   {} as Record<LayerKey, { x: number; y: number }>,
 );
+void PAD;
 
 const CrossLayerWorkspace = () => {
   const navigate = useNavigate();
