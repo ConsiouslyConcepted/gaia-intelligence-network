@@ -69,7 +69,7 @@ export function AssistantPanel({ context }: Props) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-foreground/60" />
-          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Intelligence Assistant</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">AI Mission Analyst</div>
         </div>
         {messages.length > 0 && (
           <button
@@ -83,7 +83,7 @@ export function AssistantPanel({ context }: Props) {
 
       {messages.length === 0 && (
         <div className="text-[10px] leading-relaxed text-muted-foreground/70 mb-3">
-          Ask the assistant to interpret the current analysis, compare layers, or generate a report. Every answer is grounded in the loaded series and labelled by evidence tier.
+          Continuous synthesis across every observatory. The Analyst speaks in evidence tiers — Measured, Statistical, Exploratory — and refuses to speculate beyond the loaded data.
         </div>
       )}
 
