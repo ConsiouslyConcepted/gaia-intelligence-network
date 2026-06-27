@@ -378,8 +378,10 @@ const HarmonicsEngine = () => {
         <div className="flex items-center gap-2">
           <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Mode</div>
           {[
-            { id: "single" as const, label: "Single Layer Analysis" },
-            { id: "cross" as const, label: "Cross-Layer Comparison" },
+            { id: "single" as const, label: "Single Layer" },
+            { id: "cross" as const, label: "Cross-Layer" },
+            { id: "events" as const, label: "Events & Anomalies" },
+            { id: "reports" as const, label: "Reports" },
           ].map((m) => {
             const active = m.id === mode;
             return (
@@ -399,7 +401,7 @@ const HarmonicsEngine = () => {
           })}
         </div>
 
-        {mode === "single" ? (
+        {mode === "single" && (
           <>
             <HudPanel className="p-4">
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
@@ -437,7 +439,9 @@ const HarmonicsEngine = () => {
 
             <MethodDetail method={method} dataset={dataset} compare={compare} setCompareId={setCompareId} compareId={compareId} lm={lm} setLm={setLm} />
           </>
-        ) : (
+        )}
+
+        {mode === "cross" && (
           <HudPanel className="p-4">
             <div className="mb-3">
               <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
@@ -447,6 +451,24 @@ const HarmonicsEngine = () => {
               </p>
             </div>
             <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
+          </HudPanel>
+        )}
+
+        {mode === "events" && (
+          <HudPanel className="p-4">
+            <EventsPanel
+              onSelectDataset={(id, sc) => {
+                setScope(sc);
+                setDatasetId(id);
+                setMode("single");
+              }}
+            />
+          </HudPanel>
+        )}
+
+        {mode === "reports" && (
+          <HudPanel className="p-4">
+            <ReportsPanel context={assistantContext} />
           </HudPanel>
         )}
       </div>
