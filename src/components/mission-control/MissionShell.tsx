@@ -132,7 +132,6 @@ const MissionShell = ({ active, children }: Props) => {
                 Universal
               </button>
               <button onClick={() => navigate("/cosmological")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(0,0%,100%,0.4)" }}>Cosmological</button>
-              <button onClick={() => navigate("/harmonics")} className={TOGGLE_BTN_BASE} style={{ color: "hsla(45,100%,75%,0.7)" }}>Analysis</button>
             </div>
 
             <button
