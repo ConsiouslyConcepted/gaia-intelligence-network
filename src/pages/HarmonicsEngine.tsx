@@ -231,9 +231,9 @@ const HarmonicsEngine = () => {
               { label: "Galactic", path: "/galactic" },
               { label: "Universal", path: "/universal" },
               { label: "Cosmological", path: "/cosmological" },
-              { label: "Engine", path: "/harmonics" },
+              { label: "Analysis", path: "/harmonics" },
             ].map((b) => {
-              const active = b.label === "Engine";
+              const active = b.label === "Analysis";
               return (
                 <button
                   key={b.label}
