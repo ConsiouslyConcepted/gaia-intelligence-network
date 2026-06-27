@@ -403,32 +403,34 @@ const HarmonicsEngine = () => {
                   key={d.id}
                   onClick={() => setDatasetId(d.id)}
                   className={cn(
-                    "w-full text-left p-3 rounded relative overflow-hidden group border transition-colors",
+                    "w-full group relative flex flex-col items-start text-left p-4 rounded-xl border transition-all duration-200",
                     isActive
-                      ? "bg-foreground/[0.05] border-foreground/20"
-                      : "bg-transparent border-foreground/[0.06] hover:border-foreground/20"
+                      ? "bg-foreground/[0.08] border-foreground/30"
+                      : "bg-foreground/[0.03] border-foreground/[0.06] hover:bg-foreground/[0.06] hover:border-foreground/15"
                   )}
+                  style={isActive ? {
+                    borderColor: "hsla(210,70%,60%,0.55)",
+                    boxShadow: "0 0 20px hsla(210,70%,55%,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05)",
+                  } : undefined}
                 >
                   {isActive && (
                     <div
-                      className="absolute top-0 left-0 w-1 h-full"
-                      style={{ background: "hsla(0,0%,100%,1)", boxShadow: "0 0 10px hsla(0,0%,100%,0.5)" }}
+                      className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-1 rounded-r-full"
+                      style={{ background: "hsla(210,80%,70%,1)", boxShadow: "0 0 10px hsla(210,80%,70%,0.8)" }}
                     />
                   )}
-                  <div className="flex flex-col gap-1">
+                  <div className="flex flex-col gap-1 pl-2">
                     <span
                       className={cn(
-                        "text-[10px] font-bold tracking-[0.14em] uppercase leading-tight",
-                        isActive ? "text-foreground" : "text-foreground/50 group-hover:text-foreground/80"
+                        "text-[11px] tracking-[0.16em] uppercase font-bold leading-tight",
+                        isActive ? "text-foreground" : "text-foreground/60 group-hover:text-foreground/85"
                       )}
                     >
                       {d.label}
                     </span>
                     <span
-                      className={cn(
-                        "text-[9px] font-medium uppercase tracking-tight leading-snug",
-                        isActive ? "text-foreground/40" : "text-foreground/20"
-                      )}
+                      className="text-[10px] leading-snug"
+                      style={{ color: isActive ? "hsla(170,40%,55%,0.75)" : "hsla(170,30%,45%,0.55)" }}
                     >
                       {d.description}
                     </span>
@@ -438,6 +440,7 @@ const HarmonicsEngine = () => {
             })}
           </div>
         </HudPanel>
+
       </div>
 
 
