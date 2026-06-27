@@ -180,8 +180,8 @@ export default function Home() {
               Gaiasphere
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              Real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted
-              discovery across nested systems within the observable universe.
+              Explore the nested systems of Earth and the observable universe through real-time
+              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
