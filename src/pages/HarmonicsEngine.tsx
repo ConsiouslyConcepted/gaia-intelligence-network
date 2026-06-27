@@ -1,5 +1,5 @@
 import { useMemo, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
