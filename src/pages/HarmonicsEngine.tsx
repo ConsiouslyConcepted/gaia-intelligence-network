@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
+import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
+import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
 import {
   DATASETS,
   METHODS,
@@ -23,6 +25,7 @@ import {
   nearestRatio,
   spectrum,
 } from "@/lib/harmonics/engine";
+import { compareLayers } from "@/lib/harmonics/crossLayer";
 import { cn } from "@/lib/utils";
 
 // ───────── HUD chrome (matches sibling dashboards) ─────────
@@ -191,11 +194,15 @@ function CorrelationPlot({ a, b }: { a: Dataset; b: Dataset }) {
 
 const HarmonicsEngine = () => {
   const navigate = useNavigate();
+  const [mode, setMode] = useState<"single" | "cross">("single");
+  const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
   const [scope, setScope] = useState<Scope>("universal");
   const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
   const inScope = datasetsByScope(scope);
   const [datasetId, setDatasetId] = useState<string>(inScope[0].id);
   const [compareId, setCompareId] = useState<string>(DATASETS[0].id);
+  const [crossA, setCrossA] = useState<string>("imf-bt");
+  const [crossB, setCrossB] = useState<string>("kp-index");
   const [lm, setLm] = useState<{ l: number; m: number }>({ l: 2, m: 1 });
 
   const dataset = getDataset(datasetId) ?? inScope[0];
@@ -211,6 +218,37 @@ const HarmonicsEngine = () => {
   };
 
   const allowedMethods = METHODS.filter((m) => !dataset.methods || dataset.methods.includes(m.id));
+
+  // Compact JSON snapshot for the assistant — grounds its replies in the active selection.
+  const assistantContext = useMemo(() => {
+    if (mode === "cross") {
+      const a = getDataset(crossA);
+      const b = getDataset(crossB);
+      if (!a || !b) return { mode };
+      const r = compareLayers(a, b);
+      return {
+        mode: "cross-layer",
+        layerA: { id: a.id, label: a.label, scope: a.scope, provenance: a.provenance, unit: a.unit },
+        layerB: { id: b.id, label: b.label, scope: b.scope, provenance: b.provenance, unit: b.unit },
+        evidence: r.evidence,
+        evidenceNote: r.evidenceNote,
+        bestLag: r.correlation.bestLag,
+        bestR: Number(r.correlation.bestR.toFixed(3)),
+        topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        sharedPeriods: r.sharedPeriods,
+      };
+    }
+    const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
+    return {
+      mode: "single-layer",
+      scope,
+      method,
+      dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
+      topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+      fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+    };
+  }, [mode, scope, method, dataset, crossA, crossB]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
@@ -310,77 +348,178 @@ const HarmonicsEngine = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] pt-28 pb-44 lg:pl-[290px] lg:pr-[310px] px-4 flex flex-col gap-3 overflow-y-auto">
-        <HudPanel className="p-4">
-          <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
-            <div>
-              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Active dataset</div>
-              <div className="text-[14px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{dataset.label}</div>
-            </div>
-            <div className="flex flex-wrap gap-1">
-              {allowedMethods.map((m) => {
-                const active = m.id === method;
-                return (
-                  <button
-                    key={m.id}
-                    onClick={() => setMethod(m.id)}
-                    className={cn(
-                      "px-3 py-1.5 rounded-md text-[9px] tracking-[0.14em] uppercase whitespace-nowrap border transition-all",
-                    )}
-                    style={{
-                      background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                      borderColor: active ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
-                      color: active ? "hsl(0,0%,98%)" : "hsla(220,20%,75%,0.7)",
-                    }}
-                  >
-                    {m.label}
-                  </button>
-                );
-              })}
-            </div>
-          </div>
+      <div className="absolute inset-0 z-[2] pt-28 pb-44 lg:pl-[290px] lg:pr-[330px] px-4 flex flex-col gap-3 overflow-y-auto">
+        {/* Mode toggle */}
+        <div className="flex items-center gap-2">
+          <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Mode</div>
+          {[
+            { id: "single" as const, label: "Single Layer Analysis" },
+            { id: "cross" as const, label: "Cross-Layer Comparison" },
+          ].map((m) => {
+            const active = m.id === mode;
+            return (
+              <button
+                key={m.id}
+                onClick={() => setMode(m.id)}
+                className="px-3 py-1.5 rounded-md text-[9px] tracking-[0.14em] uppercase whitespace-nowrap border transition-all"
+                style={{
+                  background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                  borderColor: active ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
+                  color: active ? "hsl(0,0%,98%)" : "hsla(220,20%,75%,0.7)",
+                }}
+              >
+                {m.label}
+              </button>
+            );
+          })}
+        </div>
 
-          <div className="h-[260px] rounded-md overflow-hidden border border-border/30">
-            <MethodView method={method} dataset={dataset} compare={compare} lm={lm} />
-          </div>
-        </HudPanel>
+        {mode === "single" ? (
+          <>
+            <HudPanel className="p-4">
+              <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
+                <div>
+                  <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Active dataset</div>
+                  <div className="text-[14px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{dataset.label}</div>
+                </div>
+                <div className="flex flex-wrap gap-1">
+                  {allowedMethods.map((m) => {
+                    const active = m.id === method;
+                    return (
+                      <button
+                        key={m.id}
+                        onClick={() => setMethod(m.id)}
+                        className={cn(
+                          "px-3 py-1.5 rounded-md text-[9px] tracking-[0.14em] uppercase whitespace-nowrap border transition-all",
+                        )}
+                        style={{
+                          background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                          borderColor: active ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
+                          color: active ? "hsl(0,0%,98%)" : "hsla(220,20%,75%,0.7)",
+                        }}
+                      >
+                        {m.label}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
 
-        <MethodDetail method={method} dataset={dataset} compare={compare} setCompareId={setCompareId} compareId={compareId} lm={lm} setLm={setLm} />
+              <div className="h-[260px] rounded-md overflow-hidden border border-border/30">
+                <MethodView method={method} dataset={dataset} compare={compare} lm={lm} />
+              </div>
+            </HudPanel>
+
+            <MethodDetail method={method} dataset={dataset} compare={compare} setCompareId={setCompareId} compareId={compareId} lm={lm} setLm={setLm} />
+          </>
+        ) : (
+          <HudPanel className="p-4">
+            <div className="mb-3">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
+              <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">Compare nested intelligence systems</div>
+              <p className="text-[10px] text-muted-foreground/70 mt-1 leading-relaxed">
+                Pick two datasets from any scale. The engine aligns, normalizes, runs spectral and lag analysis, and labels the relationship as <span className="text-foreground/85">Measured</span>, <span className="text-foreground/85">Statistical</span>, or <span className="text-foreground/85">Exploratory</span>.
+              </p>
+            </div>
+            <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
+          </HudPanel>
+        )}
       </div>
 
-      {/* Right rail — what / why / how */}
-      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[290px] hidden lg:flex flex-col">
-        <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
-          <div>
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Method</div>
-            <div className="text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/90">
-              {METHODS.find((m) => m.id === method)?.label}
+      {/* Right rail — info / assistant */}
+      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[310px] hidden lg:flex flex-col">
+        <HudPanel className="p-3 flex flex-col gap-3 flex-1 min-h-0">
+          <div className="flex gap-1">
+            {[
+              { id: "info" as const, label: "Info" },
+              { id: "assistant" as const, label: "Assistant" },
+            ].map((t) => {
+              const active = t.id === rightTab;
+              return (
+                <button
+                  key={t.id}
+                  onClick={() => setRightTab(t.id)}
+                  className="flex-1 px-2 py-1.5 rounded-md text-[9px] tracking-[0.14em] uppercase border transition-all"
+                  style={{
+                    background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
+                    borderColor: active ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
+                    color: active ? "hsl(0,0%,98%)" : "hsla(220,20%,75%,0.7)",
+                  }}
+                >
+                  {t.label}
+                </button>
+              );
+            })}
+          </div>
+
+          {rightTab === "info" ? (
+            <div className="flex flex-col gap-3 overflow-y-auto flex-1 pr-1">
+              {mode === "single" ? (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Method</div>
+                    <div className="text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/90">
+                      {METHODS.find((m) => m.id === method)?.label}
+                    </div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground mt-2">
+                      {METHODS.find((m) => m.id === method)?.description}
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">What you're seeing</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">{whatYoureSeeing(method, dataset)}</p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why this matters</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1.5 list-disc list-inside marker:text-foreground/40">
+                      {whyItMatters(method).map((w, i) => (
+                        <li key={i}>{w}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Pick an intelligence layer to scope the available datasets.</li>
+                      <li>Switch the analytical method to view the same series differently.</li>
+                      {method === "correlation" && <li>Use the compare picker to align two series across layers.</li>}
+                      {method === "spherical" && <li>Adjust the ℓ and m sliders to change the spherical mode.</li>}
+                      <li>Switch to Cross-Layer mode to compare two systems across scales.</li>
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Cross-Layer Mode</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      Compares harmonic structure between two datasets drawn from any scale — planetary to cosmological.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Evidence tiers</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1.5">
+                      <li><span className="text-foreground/85">Measured</span> — both series are anchored on direct observational sources.</li>
+                      <li><span className="text-foreground/85">Statistical</span> — |r| ≥ 0.40 across the aligned window.</li>
+                      <li><span className="text-foreground/85">Exploratory</span> — user-driven pairing without statistical support.</li>
+                    </ul>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Pick Layer A and Layer B, or tap a suggested pairing.</li>
+                      <li>Read the evidence badge before interpreting the result.</li>
+                      <li>Use the Assistant tab to ask for a plain-language interpretation.</li>
+                    </ul>
+                  </div>
+                </>
+              )}
             </div>
-            <p className="text-[10px] leading-relaxed text-muted-foreground mt-2">
-              {METHODS.find((m) => m.id === method)?.description}
-            </p>
-          </div>
-          <div className="border-t border-border/30 pt-3">
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">What you're seeing</div>
-            <p className="text-[10px] leading-relaxed text-muted-foreground">{whatYoureSeeing(method, dataset)}</p>
-          </div>
-          <div className="border-t border-border/30 pt-3">
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Why this matters</div>
-            <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1.5 list-disc list-inside marker:text-foreground/40">
-              {whyItMatters(method).map((w, i) => (
-                <li key={i}>{w}</li>
-              ))}
-            </ul>
-          </div>
-          <div className="border-t border-border/30 pt-3">
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
-            <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
-              <li>Pick an intelligence layer to scope the available datasets.</li>
-              <li>Switch the analytical method to view the same series differently.</li>
-              {method === "correlation" && <li>Use the compare picker to align two series across layers.</li>}
-              {method === "spherical" && <li>Adjust the ℓ and m sliders to change the spherical mode.</li>}
-            </ul>
-          </div>
+          ) : (
+            <div className="flex-1 min-h-0">
+              <AssistantPanel context={assistantContext} />
+            </div>
+          )}
         </HudPanel>
       </div>
 
