@@ -11,6 +11,8 @@ export type Scope =
   | "universal"
   | "cosmological";
 
+export type Provenance = "measured" | "modeled" | "synthetic";
+
 export interface Dataset {
   id: string;
   scope: Scope;
@@ -23,7 +25,39 @@ export interface Dataset {
   knownPeriod?: number;
   /** Hint for which methods make sense. */
   methods?: AnalyticalMethod[];
+  /** Origin tier: directly measured, physically modeled, or illustrative synthetic. */
+  provenance?: Provenance;
 }
+
+/** Default provenance for ids in this registry. Stored as a map so we don't
+ *  have to retrofit every Dataset literal above. */
+const PROVENANCE_MAP: Record<string, Provenance> = {
+  // measured / instrument-derived analogs
+  "kp-index": "measured",
+  "co2-ppm": "measured",
+  "ohc": "measured",
+  "sea-ice": "measured",
+  "ndvi": "measured",
+  "schumann": "measured",
+  "sunspot": "measured",
+  "solar-wind": "measured",
+  "imf-bt": "measured",
+  "xray-flux": "measured",
+  "cosmic-ray-flux": "measured",
+  "cmb-cl": "measured",
+  "bao": "measured",
+  // modeled / theoretical
+  "g-star-pmodes": "modeled",
+  "variable-cepheid": "modeled",
+  "starspot-rotation": "modeled",
+  "galactic-orbit": "modeled",
+  "arm-density": "modeled",
+  "solar-system-beat": "modeled",
+  "jupiter-saturn": "modeled",
+  "primordial": "modeled",
+  // technosphere / illustrative
+  "grid-load": "synthetic",
+};
 
 export type AnalyticalMethod =
   | "spectrum"        // Fourier / power spectrum
