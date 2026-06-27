@@ -215,24 +215,21 @@ export default function Home() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              The Vision
+              Vision
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              A single lens for a layered universe.
+              One integrated view of nested systems.
             </h2>
           </div>
           <div className="md:col-span-8 space-y-6 text-[15px] leading-relaxed text-white/70">
             <p>
-              Modern science fragments the cosmos into disciplines — climate, heliophysics,
-              astrophysics, cosmology. GaiaSphere reunites them as one continuous
-              observation, from the rhythms of the biosphere outward to the structure of
-              spacetime itself.
+              Modern science divides the cosmos into disciplines: climate, heliophysics,
+              astrophysics, cosmology. GaiaSphere unifies them as one continuous observation,
+              from Earth's systems to the structure of spacetime.
             </p>
             <p>
-              Every layer of the universe oscillates. Stars ring. Planets resonate. Galaxies
-              rotate in measurable cadence. GaiaSphere listens across these scales and
-              surfaces the <span className="text-white">harmonic relationships</span> that
-              connect them.
+              Each scale exhibits periodic behavior: stellar oscillations, planetary resonances,
+              galactic rotation. GaiaSphere surfaces the harmonic relationships across them.
             </p>
           </div>
         </div>
