@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
-import CosmicAddress3D from "@/components/universal/CosmicAddress3D";
+import CosmicAddressWorkspace from "@/components/mission-control/CosmicAddressWorkspace";
 
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
