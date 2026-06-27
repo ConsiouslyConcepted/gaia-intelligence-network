@@ -15,11 +15,64 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
   return (
     <>
       {/* Top bar */}
-      <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none px-6 pt-5 flex items-start justify-between">
-        <div className="pointer-events-auto">
-          <div className="text-[13px] uppercase tracking-[0.35em] text-muted-foreground/70">Gaiasphere</div>
-          <div className="text-[18px] font-semibold tracking-[0.18em] uppercase text-foreground/95">
-            Intelligence Observatory
+      <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none px-6 pt-4 flex items-start justify-between">
+        <div className="pointer-events-auto group">
+          <div className="relative inline-block">
+            {/* Decorative HUD corner accents */}
+            <div className="absolute -top-2 -left-2 w-4 h-4 border-t border-l border-harmonic-cyan/50" />
+            <div className="absolute -top-2 -right-2 w-2 h-2 border-t border-r border-harmonic-cyan/30" />
+
+            {/* Background glow */}
+            <div className="absolute inset-0 bg-harmonic-cyan/5 blur-3xl rounded-full scale-150 group-hover:bg-harmonic-cyan/10 transition-all duration-700" />
+
+            <div className="relative flex flex-col gap-0.5">
+              {/* Top meta row */}
+              <div className="flex items-center gap-2 mb-0.5">
+                <div className="h-px w-6 bg-harmonic-cyan/40" />
+                <span className="text-[9px] font-mono font-bold tracking-[0.3em] text-harmonic-cyan/60 uppercase">
+                  System.Active
+                </span>
+                <div className="w-1.5 h-1.5 rounded-full bg-harmonic-cyan animate-pulse shadow-[0_0_8px_hsl(var(--harmonic-cyan))]" />
+              </div>
+
+              {/* Main wordmark */}
+              <h1 className="text-[28px] md:text-[36px] font-display font-bold tracking-tight text-foreground/95 select-none relative leading-none">
+                <span className="bg-clip-text text-transparent bg-gradient-to-b from-foreground via-foreground to-harmonic-cyan/50">
+                  GAIASPHERE
+                </span>
+                {/* Glitch overlay layer */}
+                <span className="absolute top-0 left-0 w-full h-full text-harmonic-cyan/20 translate-x-[1px] -z-10 blur-[1px] group-hover:translate-x-[2px] transition-transform">
+                  GAIASPHERE
+                </span>
+              </h1>
+
+              {/* Sub-headline */}
+              <div className="flex items-baseline gap-3 mt-1 overflow-hidden">
+                <h2 className="text-[11px] md:text-[12px] font-mono font-bold tracking-[0.42em] text-foreground/80 uppercase whitespace-nowrap">
+                  Intelligence Observatory
+                </h2>
+                <div className="h-[2px] flex-grow bg-gradient-to-r from-harmonic-cyan/50 to-transparent" />
+              </div>
+
+              {/* Bottom meta data */}
+              <div className="mt-2 flex gap-5 text-[8px] font-mono text-harmonic-cyan/40 font-medium">
+                <div className="flex flex-col">
+                  <span>LAT: 40.7128 N</span>
+                  <span>LNG: 74.0060 W</span>
+                </div>
+                <div className="flex flex-col">
+                  <span>SIG: 0.9822.4</span>
+                  <span>REF: ORBIT-V3</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side decorative bar */}
+            <div className="absolute -right-4 top-1/2 -translate-y-1/2 flex flex-col gap-0.5">
+              <div className="w-0.5 h-6 bg-harmonic-cyan/20" />
+              <div className="w-0.5 h-1.5 bg-harmonic-cyan shadow-[0_0_10px_hsl(var(--harmonic-cyan))]" />
+              <div className="w-0.5 h-9 bg-harmonic-cyan/10" />
+            </div>
           </div>
         </div>
         <div className="pointer-events-auto text-right">
