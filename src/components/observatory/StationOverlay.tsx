@@ -76,6 +76,22 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
             </div>
           </div>
         </div>
+
+        {/* Mission statement */}
+        <div
+          className="pointer-events-auto max-w-[440px] rounded-xl px-4 py-3"
+          style={{
+            background: "linear-gradient(145deg, hsla(225,45%,11%,0.85) 0%, hsla(225,50%,7%,0.82) 50%, hsla(228,55%,5%,0.85) 100%)",
+            border: "1.5px solid hsla(220,35%,60%,0.55)",
+            backdropFilter: "blur(18px)",
+            WebkitBackdropFilter: "blur(18px)",
+            boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 24px hsla(210,75%,62%,0.22), 0 12px 32px rgba(0,0,0,0.55)",
+          }}
+        >
+          <p className="text-[11px] leading-relaxed text-muted-foreground/85">
+            Explore the nested systems of organization that shape Earth, the Solar System, the Milky Way, and the observable universe through real-time scientific data, systems intelligence, and AI-assisted analysis.
+          </p>
+        </div>
       </div>
 
       {/* Right rail — station list */}
