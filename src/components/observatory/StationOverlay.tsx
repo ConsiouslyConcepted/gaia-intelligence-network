@@ -18,10 +18,6 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
       <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none px-6 pt-4 flex items-start justify-between">
         <div className="pointer-events-auto group">
           <div className="relative inline-block">
-            {/* Decorative frame elements */}
-            <div className="absolute -top-3 -left-3 w-5 h-5 border-t border-l border-harmonic-cyan/40" />
-            <div className="absolute -top-3 -left-3 w-1.5 h-1.5 bg-harmonic-cyan" />
-            <div className="absolute top-0 -right-5 h-full w-px bg-gradient-to-b from-transparent via-harmonic-cyan/20 to-transparent" />
 
             {/* Main HUD block */}
             <div className="relative flex flex-col">
