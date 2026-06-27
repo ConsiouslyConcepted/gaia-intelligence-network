@@ -178,14 +178,6 @@ export default function Home() {
               scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
             </p>
           </div>
-              <a
-                href="#about"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-[13px] tracking-wide text-white/75 hover:text-white hover:border-white/25 transition-all"
-              >
-                What is GaiaSphere?
-              </a>
-            </div>
-          </div>
 
           <div className="pb-8 flex flex-col items-center text-white/45">
             <span className="text-[10px] uppercase tracking-[0.4em]">Scroll</span>
