@@ -391,14 +391,13 @@ export default function Home() {
       <section className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-            How the observatories connect
+            Nested scales
           </p>
           <h2 className="mt-4 text-3xl md:text-4xl font-light text-white">
-            Every scale, nested inside the next.
+            From Earth to the observable universe.
           </h2>
           <p className="mt-5 max-w-2xl mx-auto text-[14.5px] leading-relaxed text-white/65">
-            Your location in the cosmos isn't a point — it's a chain. GaiaSphere lets you
-            travel the chain from your doorstep to the edge of the observable universe.
+            Cosmic address: a sequence of nested physical scales from Earth to the observable universe.
           </p>
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-x-2 gap-y-3">
