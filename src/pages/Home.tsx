@@ -246,7 +246,7 @@ export default function Home() {
               {
                 k: "Observe",
                 t: "Live telemetry",
-                d: "Real signals from Earth, Sun, and sky — streamed from NOAA, NASA, USGS, and open scientific archives.",
+                d: "Real signals from Earth, the Sun, and the sky, streamed from NOAA, NASA, USGS, and open scientific archives.",
               },
               {
                 k: "Analyze",
@@ -256,7 +256,7 @@ export default function Home() {
               {
                 k: "Synthesize",
                 t: "AI mission analyst",
-                d: "Ask an analyst to explain conditions, surface anomalies, and synthesize cross-layer reports.",
+                d: "Ask the analyst to explain conditions, surface anomalies, and synthesize cross-layer reports.",
               },
             ].map(({ k, t, d }) => (
               <div key={k} className="bg-[#05060f] p-8">
