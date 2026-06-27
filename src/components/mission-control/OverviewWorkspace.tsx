@@ -125,7 +125,7 @@ const OverviewWorkspace = () => {
       health: solarHealth,
       events: solarEvents,
       recent: latestWind
-        ? `Solar wind ${Math.round(latestWind.speed)} km/s · Bz ${latestWind.bz?.toFixed?.(1) ?? "—"} nT`
+        ? `Solar wind ${Math.round(latestWind.speed)} km/s · ${Math.round(latestWind.density)} p/cm³`
         : "Awaiting NOAA SWPC stream",
       metrics: [
         { label: "SSN", value: cycle.isLoading ? "…" : String(Math.round(ssn)) },
