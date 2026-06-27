@@ -17,7 +17,7 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-30 pointer-events-none px-6 pt-5 flex items-start justify-between">
         <div className="pointer-events-auto">
-          <div className="text-[10px] uppercase tracking-[0.4em] text-muted-foreground/70">Gaiasphere</div>
+          <div className="text-[13px] uppercase tracking-[0.35em] text-muted-foreground/70">Gaiasphere</div>
           <div className="text-[18px] font-semibold tracking-[0.18em] uppercase text-foreground/95">
             Intelligence Observatory
           </div>
