@@ -186,28 +186,28 @@ const LAYER_INFO: Record<StellarLayer, LayerInfo> = {
     ],
   },
   oscillations: {
-    seeing: "Stars ring like bells. Acoustic (p-mode) and gravity (g-mode) oscillations make their surfaces pulsate. The Sun's dominant p-mode sits near 3.1 mHz (~5 min period).",
+    seeing: "Stars are resonant cavities. Acoustic (p-mode) and gravity (g-mode) oscillations make their surfaces pulsate at micro-magnitude amplitudes. The Sun's dominant p-mode sits near 3.1 mHz (~5 min period).",
     why: [
-      "Asteroseismology measures these oscillations to read a star's interior structure, rotation, and composition — just as seismology does for Earth.",
-      "p-mode frequencies scale as √(M/R³); g-mode periods scale with buoyancy frequency.",
-      "Mode spectra have now been resolved in tens of thousands of stars by Kepler, TESS, and ground-based surveys.",
+      "Asteroseismology — the same field that studies variable stars — uses these oscillations to read a star's interior structure, rotation, and composition, exactly as seismology does for Earth.",
+      "p-mode frequencies scale as √(M/R³); g-mode periods scale with the buoyancy (Brunt–Väisälä) frequency.",
+      "Mode spectra have been resolved in tens of thousands of stars by Kepler, TESS, and ground-based surveys — covering both low-amplitude solar-like oscillators and high-amplitude classical variables.",
     ],
     interact: [
       "Metric rail lists the Sun's dominant frequency and detected mode count.",
-      "Cross-reference Magnetism — magnetic activity modulates p-mode amplitudes.",
-      "Use Light & Spectra to predict where each spectral type peaks in mode frequency.",
+      "Open the Stellar Resonance Explorer below to inspect or sonify measured oscillation data.",
+      "Cross-reference Variables — the same asteroseismic physics, just at much larger amplitude.",
     ],
   },
   variables: {
-    seeing: "Variable stars pulsate or eclipse on hours-to-years timescales. Cepheids and RR Lyrae follow strict period–luminosity relations.",
+    seeing: "Variable stars pulsate or eclipse on hours-to-years timescales. Cepheids and RR Lyrae follow strict period–luminosity relations used to measure cosmic distance.",
     why: [
+      "Variables and solar-like oscillators are two ends of one asteroseismic spectrum — both are standing waves in a stellar cavity, differing mainly in mode and amplitude.",
       "Cepheid pulsation is a clean fundamental-mode oscillation — period directly encodes luminosity, anchoring the cosmic distance ladder.",
       "Eclipsing binaries give the most precise direct measurements of stellar masses and radii.",
-      "Variable-star pulsations follow the same physics as solar p-modes, just at much larger amplitude.",
     ],
     interact: [
       "Metric rail shows catalog size and Cepheid period range.",
-      "Cross-reference Oscillations — variables are the strongest standing-wave emitters.",
+      "Cross-reference Oscillations to see the low-amplitude solar-like counterpart of these high-amplitude pulsators.",
       "Use Light & Spectra to see which spectral bands host each variable class.",
     ],
   },
@@ -658,9 +658,22 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
         <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
           Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
         </div>
+        <a
+          href="/mission-control?workspace=harmonics&layer=stellar&dataset=solar-pmodes"
+          className="mx-3 mt-1 rounded-lg border border-border/30 bg-white/[0.03] hover:bg-white/[0.06] transition px-3 py-2 flex items-center justify-between gap-3"
+        >
+          <div className="min-w-0">
+            <div className="text-[10px] uppercase tracking-[0.22em] text-foreground/85 font-semibold">Stellar Resonance Explorer</div>
+            <div className="text-[10px] text-muted-foreground/75 mt-0.5 leading-snug">
+              Inspect and sonify measured asteroseismic mode spectra. Scientific data sonification — pitch maps to mode frequency, not literal stellar sound.
+            </div>
+          </div>
+          <div className="text-[10px] font-mono text-foreground/70 shrink-0">OPEN →</div>
+        </a>
       </div>
     );
   }
+
 
   if (layer === "variables") {
     const cards = [
