@@ -194,11 +194,15 @@ function CorrelationPlot({ a, b }: { a: Dataset; b: Dataset }) {
 
 const HarmonicsEngine = () => {
   const navigate = useNavigate();
+  const [mode, setMode] = useState<"single" | "cross">("single");
+  const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
   const [scope, setScope] = useState<Scope>("universal");
   const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
   const inScope = datasetsByScope(scope);
   const [datasetId, setDatasetId] = useState<string>(inScope[0].id);
   const [compareId, setCompareId] = useState<string>(DATASETS[0].id);
+  const [crossA, setCrossA] = useState<string>("imf-bt");
+  const [crossB, setCrossB] = useState<string>("kp-index");
   const [lm, setLm] = useState<{ l: number; m: number }>({ l: 2, m: 1 });
 
   const dataset = getDataset(datasetId) ?? inScope[0];
@@ -214,6 +218,37 @@ const HarmonicsEngine = () => {
   };
 
   const allowedMethods = METHODS.filter((m) => !dataset.methods || dataset.methods.includes(m.id));
+
+  // Compact JSON snapshot for the assistant — grounds its replies in the active selection.
+  const assistantContext = useMemo(() => {
+    if (mode === "cross") {
+      const a = getDataset(crossA);
+      const b = getDataset(crossB);
+      if (!a || !b) return { mode };
+      const r = compareLayers(a, b);
+      return {
+        mode: "cross-layer",
+        layerA: { id: a.id, label: a.label, scope: a.scope, provenance: a.provenance, unit: a.unit },
+        layerB: { id: b.id, label: b.label, scope: b.scope, provenance: b.provenance, unit: b.unit },
+        evidence: r.evidence,
+        evidenceNote: r.evidenceNote,
+        bestLag: r.correlation.bestLag,
+        bestR: Number(r.correlation.bestR.toFixed(3)),
+        topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        sharedPeriods: r.sharedPeriods,
+      };
+    }
+    const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
+    return {
+      mode: "single-layer",
+      scope,
+      method,
+      dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
+      topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+      fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+    };
+  }, [mode, scope, method, dataset, crossA, crossB]);
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
