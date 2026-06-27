@@ -573,16 +573,16 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "lifecycle") {
     return (
-      <div className="w-full h-full flex flex-col justify-start gap-3 px-2 py-2 overflow-y-auto">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           Stellar Lifecycle — Sun-mass track
         </div>
         {LIFECYCLE_STAGES.map((s, i) => (
-          <div key={s.name} className="flex items-center gap-4 rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div key={s.name} className="flex items-center gap-3 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
             <div className="text-[10px] font-mono text-muted-foreground/55 w-6 text-right">{String(i + 1).padStart(2, "0")}</div>
             <div className="flex-1">
               <div className="text-[12px] font-semibold tracking-[0.1em] uppercase text-foreground/85">{s.name}</div>
-              <div className="text-[10px] text-muted-foreground/65 mt-0.5">{s.desc}</div>
+              <div className="text-[10px] text-muted-foreground/65 mt-0">{s.desc}</div>
             </div>
           </div>
         ))}
@@ -593,7 +593,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   if (layer === "oscillations") {
     // schematic stacked sine waves at different frequencies (p-modes)
     const size = 760;
-    const h = 360;
+    const h = 240;
     const baseY = h / 2;
     const lines = [
       { freq: 2, color: "#9ec5ff", label: "Low-ℓ p-mode" },
@@ -609,19 +609,19 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       return pts.join(" ");
     };
     return (
-      <div className="w-full h-full flex flex-col gap-2 px-2 py-2">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           Asteroseismic p-modes — schematic
         </div>
-        <svg viewBox={`0 0 ${size} ${h}`} className="w-full">
+        <svg viewBox={`0 0 ${size} ${h}`} className="w-full max-h-[200px]">
           {lines.map((l, i) => (
             <g key={i}>
-              <path d={path(l.freq, (i - 1) * 80)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
-              <text x={10} y={baseY + (i - 1) * 80 - 32} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
+              <path d={path(l.freq, (i - 1) * 55)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
+              <text x={10} y={baseY + (i - 1) * 55 - 22} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
             </g>
           ))}
         </svg>
-        <div className="text-[10px] text-muted-foreground/70 px-3">
+        <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
           Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
         </div>
       </div>
@@ -638,19 +638,19 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       { name: "Cataclysmic", period: "minutes–days", use: "Accreting binaries · novae", color: "#cc5533" },
     ];
     return (
-      <div className="w-full h-full flex flex-col gap-3 px-2 py-2 overflow-y-auto">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
           Variable star classes
         </div>
         <div className="grid grid-cols-2 gap-2">
           {cards.map((c) => (
-            <div key={c.name} className="rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-              <div className="flex items-center gap-2 mb-1.5">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
+            <div key={c.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div className="flex items-center gap-2 mb-1">
+                <div className="w-2 h-2 rounded-full" style={{ background: c.color, boxShadow: `0 0 8px ${c.color}` }} />
                 <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{c.name}</div>
               </div>
               <div className="text-[9px] font-mono text-muted-foreground/65">{c.period}</div>
-              <div className="text-[10px] text-muted-foreground/70 mt-1">{c.use}</div>
+              <div className="text-[10px] text-muted-foreground/70 mt-0.5">{c.use}</div>
             </div>
           ))}
         </div>
@@ -669,15 +669,15 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     ];
     const max = Math.log10(1e14);
     return (
-      <div className="w-full h-full flex flex-col gap-3 px-2 py-2 overflow-y-auto">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
           Magnetic field strength · log scale (Gauss)
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {rows.map((r) => {
             const w = (Math.log10(r.val) / max) * 100;
             return (
-              <div key={r.name} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div key={r.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
                 <div className="flex items-baseline justify-between mb-1">
                   <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{r.name}</div>
                   <div className="text-[10px] font-mono text-muted-foreground/75">
@@ -687,7 +687,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
                 <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "hsla(240,20%,18%,0.8)" }}>
                   <div className="h-full rounded-full" style={{ width: `${w}%`, background: r.color, boxShadow: `0 0 10px ${r.color}` }} />
                 </div>
-                <div className="text-[9px] text-muted-foreground/65 mt-1">{r.note}</div>
+                <div className="text-[9px] text-muted-foreground/65 mt-0.5">{r.note}</div>
               </div>
             );
           })}
@@ -698,11 +698,11 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   // exoplanets
   return (
-    <div className="w-full h-full flex flex-col justify-start gap-4 px-2 py-2 overflow-y-auto">
+    <div className="w-full h-full flex flex-col justify-center gap-3 px-2 py-1 overflow-y-auto">
       <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
         Exoplanetary Systems — confirmed detections (NASA Exoplanet Archive)
       </div>
-      <div className="grid grid-cols-2 gap-3">
+      <div className="grid grid-cols-2 gap-2">
         {[
           { label: "Confirmed planets", value: "5,800+" },
           { label: "Planetary systems", value: "4,300+" },
@@ -711,16 +711,16 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
           { label: "Transit method", value: "~75%" },
           { label: "Radial-velocity", value: "~19%" },
         ].map((c) => (
-          <div key={c.label} className="rounded-lg p-4 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-            <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1.5">{c.label}</div>
-            <div className="text-[20px] font-mono font-semibold text-foreground/90">{c.value}</div>
+          <div key={c.label} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+            <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
+            <div className="text-[16px] font-mono font-semibold text-foreground/90">{c.value}</div>
           </div>
         ))}
       </div>
-      <div className="rounded-lg p-4 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1.5">Nearest known exoplanet</div>
+      <div className="rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Nearest known exoplanet</div>
         <div className="text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
-        <div className="text-[10px] text-muted-foreground/70 mt-1">Terrestrial-mass planet · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
+        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass planet · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
       </div>
     </div>
   );
