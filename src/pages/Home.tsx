@@ -159,7 +159,7 @@ export default function Home() {
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 30%, rgba(5,6,15,0.9) 95%)",
+              "radial-gradient(ellipse at center, transparent 45%, rgba(5,6,15,0.55) 100%)",
           }}
         />
 
