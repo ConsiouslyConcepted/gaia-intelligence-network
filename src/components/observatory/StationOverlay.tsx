@@ -60,7 +60,7 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
                   <div className="w-px h-3 bg-harmonic-cyan" />
                 </div>
               </div>
-
+            </div>
           </div>
         </div>
       </div>
