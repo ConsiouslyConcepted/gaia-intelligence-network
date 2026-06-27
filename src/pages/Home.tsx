@@ -163,12 +163,6 @@ export default function Home() {
               <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
                 GaiaSphere · Observatory
               </p>
-              <Link
-                to="/universal"
-                className="text-[11px] uppercase tracking-[0.35em] text-white/55 hover:text-white transition-colors"
-              >
-                Enter Platform →
-              </Link>
             </div>
           </header>
 
@@ -183,22 +177,6 @@ export default function Home() {
               Explore the nested systems of Earth and the observable universe through real-time
               scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
             </p>
-
-            <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-              <Link
-                to="/planetary"
-                className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
-              >
-                Start at Earth
-                <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
-              </Link>
-              <a
-                href="#about"
-                className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-[13px] tracking-wide text-white/75 hover:text-white hover:border-white/25 transition-all"
-              >
-                What is GaiaSphere?
-              </a>
-            </div>
           </div>
 
           <div className="pb-8 flex flex-col items-center text-white/45">
