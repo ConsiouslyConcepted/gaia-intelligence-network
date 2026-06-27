@@ -23,6 +23,17 @@ import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
 
+const GlobalLaunchers = () => {
+  const { pathname } = useLocation();
+  if (pathname === "/") return null;
+  return (
+    <>
+      <ObservatoryGuide />
+      <MissionControlLauncher />
+    </>
+  );
+};
+
 const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
@@ -45,8 +56,7 @@ const App = () => (
 
           <Route path="*" element={<NotFound />} />
         </Routes>
-        <ObservatoryGuide />
-        <MissionControlLauncher />
+        <GlobalLaunchers />
 
       </BrowserRouter>
     </TooltipProvider>
