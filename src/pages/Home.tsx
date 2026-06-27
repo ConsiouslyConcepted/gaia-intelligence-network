@@ -578,7 +578,7 @@ export default function Home() {
               to="/universal"
               className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
             >
-              Enter the Universal Observatory
+              Universal Observatory
             </Link>
           </div>
         </div>
