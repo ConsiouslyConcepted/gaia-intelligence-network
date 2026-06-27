@@ -669,15 +669,15 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     ];
     const max = Math.log10(1e14);
     return (
-      <div className="w-full h-full flex flex-col gap-3 px-2 py-2 overflow-y-auto">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
           Magnetic field strength · log scale (Gauss)
         </div>
-        <div className="flex flex-col gap-2">
+        <div className="flex flex-col gap-1.5">
           {rows.map((r) => {
             const w = (Math.log10(r.val) / max) * 100;
             return (
-              <div key={r.name} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div key={r.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
                 <div className="flex items-baseline justify-between mb-1">
                   <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{r.name}</div>
                   <div className="text-[10px] font-mono text-muted-foreground/75">
@@ -687,7 +687,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
                 <div className="h-1.5 rounded-full overflow-hidden" style={{ background: "hsla(240,20%,18%,0.8)" }}>
                   <div className="h-full rounded-full" style={{ width: `${w}%`, background: r.color, boxShadow: `0 0 10px ${r.color}` }} />
                 </div>
-                <div className="text-[9px] text-muted-foreground/65 mt-1">{r.note}</div>
+                <div className="text-[9px] text-muted-foreground/65 mt-0.5">{r.note}</div>
               </div>
             );
           })}
