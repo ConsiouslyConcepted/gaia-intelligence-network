@@ -3,6 +3,14 @@ import { ArrowRight, ChevronDown, ChevronUp } from "lucide-react";
 import { STATIONS } from "./stations";
 import { cn } from "@/lib/utils";
 
+const scanKeyframes = `
+@keyframes scanBar {
+  0% { left: 0%; }
+  50% { left: 75%; }
+  100% { left: 0%; }
+}
+`;
+
 interface StationOverlayProps {
   activeIndex: number;
   onJumpTo: (idx: number) => void;
