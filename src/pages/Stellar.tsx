@@ -827,35 +827,9 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
 
   if (layer === "variables") {
-    const cards = [
-      { name: "Cepheid", period: "1–100 days", use: "Distance ladder · period–luminosity relation", color: "#ffe87a" },
-      { name: "RR Lyrae", period: "0.2–1 day", use: "Distances within the Milky Way halo", color: "#ffba6b" },
-      { name: "Mira", period: "~1 year", use: "Late-stage AGB pulsators", color: "#ff7d5e" },
-      { name: "Eclipsing Binary", period: "hours–years", use: "Precise stellar masses and radii", color: "#9ec5ff" },
-      { name: "δ Scuti", period: "0.5–8 hours", use: "Asteroseismology of A/F stars", color: "#cfd9ff" },
-      { name: "Cataclysmic", period: "minutes–days", use: "Accreting binaries · novae", color: "#cc5533" },
-    ];
-    return (
-      <div className="w-full h-full flex flex-col justify-center gap-4 px-4 py-2 overflow-y-auto">
-        <div className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground/70 text-center">
-          Variable star classes
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          {cards.map((c) => (
-            <div key={c.name} className="rounded-xl p-4 border border-border/30" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-              <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
-                <div className="text-[14px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{c.name}</div>
-              </div>
-              <div className="text-[12px] font-mono text-muted-foreground/75">{c.period}</div>
-              <div className="text-[13px] text-muted-foreground/80 mt-1">{c.use}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    );
+    return <VariableStarsPanel />;
   }
+
 
   if (layer === "magnetic") {
     const rows = [
