@@ -17,40 +17,40 @@ interface Surface {
 const SURFACES: Surface[] = [
   {
     key: "single",
-    label: "Single-Layer Analysis",
-    caption: "FFT · Spectrum · Autocorrelation",
+    label: "Single-Layer Spectrum",
+    caption: "FFT · Dominant periods · Harmonic ladder",
     description:
-      "Decompose any single dataset into harmonics, identify dominant periods, and map peaks onto orbital intervals and musical ratios.",
+      "Pick any dataset from any layer and decompose it into its frequency content. Identifies dominant periods and maps peaks onto orbital intervals and musical ratios.",
     icon: Activity,
-    route: "/harmonics?mode=single",
+    route: "/harmonics?mode=single&method=spectrum&scope=planetary&dataset=co2-ppm",
     status: "Ready",
   },
   {
     key: "cross",
-    label: "Cross-Layer Comparison",
-    caption: "Coupling · Cross-correlation",
+    label: "Cross-Layer Coupling",
+    caption: "Z-score overlay · Best-lag correlation",
     description:
       "Compare two datasets across scales. Z-score overlay, best-lag cross-correlation, period-ratio detection, and automatic evidence classification.",
     icon: GitCompareArrows,
-    route: "/harmonics?mode=cross",
+    route: "/harmonics?mode=cross&a=imf-bt&b=kp-index",
     status: "Live",
   },
   {
     key: "spherical",
-    label: "Spherical Harmonics",
-    caption: "Yₗᵐ · Multipole geometry",
+    label: "Spherical Harmonics (Yₗᵐ)",
+    caption: "Full-sky · Multipole geometry",
     description:
-      "Visualize the spherical harmonic basis (Yₗᵐ) that underlies CMB anisotropy, planetary fields, and 3D wave structure.",
+      "Render the Yₗᵐ basis that underlies CMB anisotropy, planetary magnetic fields, and 3D wave structure. Adjust ℓ and m to sweep through modes.",
     icon: Waves,
-    route: "/harmonics?mode=single",
+    route: "/harmonics?mode=single&method=spherical&scope=cosmological&dataset=cmb-cl",
     status: "Ready",
   },
   {
     key: "events",
     label: "Events & Anomalies",
-    caption: "Z-score · Drift · Alerts",
+    caption: "Z-score · Drift · Severity-tagged alerts",
     description:
-      "Automated anomaly detection across every registered dataset. Z-score outliers, trend drift, and severity-tagged alerts.",
+      "Automated anomaly detection across every registered dataset. Z-score outliers, trend drift, and severity-tagged alerts surfaced as a live feed.",
     icon: AlertTriangle,
     route: "/harmonics?mode=events",
     status: "Auto-scan",
@@ -58,7 +58,7 @@ const SURFACES: Surface[] = [
   {
     key: "reports",
     label: "Reports Archive",
-    caption: "Daily · Weekly · Monthly",
+    caption: "Daily · Weekly · Monthly briefings",
     description:
       "Persisted Daily, Weekly, and Monthly intelligence briefings synthesized from spectra, comparisons, and anomalies.",
     icon: FileText,
