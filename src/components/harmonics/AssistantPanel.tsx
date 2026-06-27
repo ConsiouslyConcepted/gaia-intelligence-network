@@ -98,13 +98,13 @@ export function AssistantPanel({ context }: Props) {
             }`}
           >
             <div className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/50 mb-1">
-              {m.role === "user" ? "You" : "Assistant"}
+              {m.role === "user" ? "You" : "Analyst"}
             </div>
             <div className="whitespace-pre-wrap">{m.content}</div>
           </div>
         ))}
         {loading && (
-          <div className="text-[10px] text-muted-foreground/70 italic">Thinking…</div>
+          <div className="text-[10px] text-muted-foreground/70 italic">Synthesizing…</div>
         )}
         {error && (
           <div className="text-[10px] text-red-400/80 border border-red-400/30 rounded-md px-2 py-1.5">{error}</div>
