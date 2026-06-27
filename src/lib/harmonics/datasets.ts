@@ -504,7 +504,7 @@ export const DATASETS: Dataset[] = [
   ...galactic,
   ...universal,
   ...cosmological,
-];
+].map((d) => ({ ...d, provenance: d.provenance ?? PROVENANCE_MAP[d.id] ?? "synthetic" }));
 
 export function getDataset(id: string): Dataset | undefined {
   return DATASETS.find((d) => d.id === id);
