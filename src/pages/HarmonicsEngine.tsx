@@ -351,51 +351,44 @@ const HarmonicsEngine = () => {
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Intelligence Layer
           </div>
-          <div className="space-y-1">
-            {SCOPES.map((s, idx) => {
+          <div className="space-y-2">
+            {SCOPES.map((s) => {
               const isActive = s.id === scope;
-              const num = String(idx + 1).padStart(2, "0");
               return (
                 <button
                   key={s.id}
                   onClick={() => onScope(s.id)}
                   className={cn(
-                    "w-full group relative flex items-center justify-between px-3 py-2.5 rounded-lg transition-all cursor-pointer text-left",
+                    "w-full group text-left px-4 py-3 rounded-xl border transition-all duration-200",
                     isActive
-                      ? "bg-foreground/[0.10]"
-                      : "bg-transparent hover:bg-foreground/[0.04]"
+                      ? "bg-foreground/[0.08] border-foreground/30"
+                      : "bg-transparent border-foreground/[0.06] hover:border-foreground/20 hover:bg-foreground/[0.03]"
                   )}
+                  style={isActive ? {
+                    borderColor: "hsla(210,70%,60%,0.55)",
+                    boxShadow: "0 0 20px hsla(210,70%,55%,0.15), inset 0 1px 0 hsla(0,0%,100%,0.05)",
+                  } : undefined}
                 >
-                  <div className="flex items-center gap-3 min-w-0">
-                    <span
-                      className="text-[10px] font-mono leading-none"
-                      style={{ color: isActive ? "hsla(0,0%,100%,0.4)" : "hsla(0,0%,100%,0.2)" }}
-                    >
-                      {num}
-                    </span>
-                    <span
-                      className={cn(
-                        "text-[11px] tracking-[0.18em] uppercase truncate",
-                        isActive ? "font-bold text-foreground" : "font-medium text-foreground/50 group-hover:text-foreground/80"
-                      )}
-                    >
-                      {s.label}
-                    </span>
+                  <div
+                    className={cn(
+                      "text-[12px] tracking-[0.16em] uppercase font-bold leading-tight",
+                      isActive ? "text-foreground" : "text-foreground/70 group-hover:text-foreground/90"
+                    )}
+                  >
+                    {s.label}
                   </div>
-                  {isActive && (
-                    <div
-                      className="h-2 w-2 rounded-full shrink-0"
-                      style={{
-                        background: "hsla(0,0%,100%,1)",
-                        boxShadow: "0 0 8px hsla(0,0%,100%,0.8)",
-                      }}
-                    />
-                  )}
+                  <div
+                    className="text-[10px] leading-snug mt-1"
+                    style={{ color: isActive ? "hsla(170,40%,55%,0.75)" : "hsla(170,30%,45%,0.55)" }}
+                  >
+                    {s.tagline}
+                  </div>
                 </button>
               );
             })}
           </div>
         </HudPanel>
+
 
 
         <HudPanel className="p-4 flex flex-col gap-1 overflow-y-auto flex-1">
