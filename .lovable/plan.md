@@ -1,69 +1,101 @@
-# Cross-Layer Harmonic Intelligence + AI Assistant
 
-Extend the existing `/harmonics` Analysis page with two new capabilities. No changes to other dashboards.
+# Homepage → Intelligence Observatory
 
-## 1. Cross-Layer Comparison (new tab)
+Replace the current split-rail Home with a single full-bleed WebGL scene that the user travels *through* — Earth out to the Observable Universe — with each scale acting as a gateway into its existing dashboard.
 
-Add a new top-level mode on `/harmonics`:
-- **Single Layer Analysis** (current behavior — spectrum, ladder, time series, correlation, spherical harmonics)
-- **Cross-Layer Comparison** (new)
+## Experience model
 
-### Cross-Layer panel
-- Two dataset pickers: **Layer A** and **Layer B**, each scoped by layer (Planetary / Solar / Stellar / Galactic / Cosmological) and drawing from the existing `datasets.ts` registry. Curated suggested pairings shown as quick-pick chips:
-  - Solar magnetic field ↔ Earth magnetosphere (Kp)
-  - Solar cycle (sunspots) ↔ Atmospheric CO₂ seasonal cycle
-  - Orbital resonances ↔ Musical intervals
-  - Stellar oscillations (Cepheid) ↔ Solar oscillations
-  - Galactic vertical oscillation ↔ Heliospheric proxy
-  - Planetary field coherence ↔ Solar activity
-- Renders side-by-side:
-  - Overlaid normalized time-series (z-scored)
-  - Spectra overlay with shared peaks highlighted
-  - Cross-correlation curve with best-lag readout (uses existing `crossCorrelation` from engine)
-  - Period-ratio table → nearest small-integer ratio + nearest musical interval (uses existing `nearestRatio` / `nearestInterval`)
-- **Evidence badge** on every comparison, one of:
-  - `Measured` — both series come from direct observational sources
-  - `Statistical` — correlation r above threshold across overlap
-  - `Exploratory` — user-driven pairing, no significance claim
-  Each dataset in `datasets.ts` gets a `provenance: "measured" | "modeled" | "synthetic"` tag; the badge is derived from the pair + computed |r|.
-
-## 2. AI Harmonic Intelligence Assistant
-
-A right-rail chat panel on `/harmonics` (collapsible). Single conversation, no persistence (in-memory for the session). The assistant is context-aware: every user turn is sent with a compact JSON snapshot of the current selection (mode, layer(s), dataset(s), top spectral peaks, best lag, ratio match).
-
-### Capabilities (system prompt + tool calls)
-- Explain the current harmonic pattern in plain language.
-- Summarize current dynamics of selected layer.
-- Flag emerging trends/anomalies (peaks above mean power, lag shifts).
-- Compare two layers when in cross-layer mode.
-- Generate daily / weekly / monthly harmonic intelligence report (button shortcuts inject canned prompts).
-- Answer natural-language questions about any scale.
-- Suggest additional datasets from the registry when patterns match.
-
-### Backend
-- New Supabase Edge Function `harmonic-assistant` using Lovable AI Gateway (`google/gemini-3-flash-preview`), AI SDK `streamText` + `toUIMessageStreamResponse`, CORS enabled.
-- Server prompt encodes: read-only observatory framing, the three evidence tiers, the registry of available datasets, and a strict "no speculation beyond the data" rule.
-- Client uses `@ai-sdk/react` `useChat` with `DefaultChatTransport` targeting the function URL. Messages render via `message.parts` with markdown.
-- Requires Lovable Cloud — enable if not already on. Requires `LOVABLE_API_KEY` (auto-provisioned).
-
-## Technical layout
+One continuous camera dolly along a Z axis. Scrolling, arrow keys, or clicking a scale rail advances the camera through nine nested "stations." Each station is a self-contained 3D layer composited in depth so the prior scale is still visible behind you — preserving orientation.
 
 ```text
-src/lib/harmonics/
-  datasets.ts          # add `provenance` field to each entry
-  engine.ts            # unchanged
-  crossLayer.ts        # NEW: alignment + evidence classification helpers
-src/components/harmonics/
-  CrossLayerPanel.tsx  # NEW: dataset pair UI + overlaid charts
-  AssistantPanel.tsx   # NEW: collapsible chat rail
-src/pages/HarmonicsEngine.tsx  # add Single vs Cross mode toggle + assistant rail
-supabase/functions/harmonic-assistant/index.ts  # NEW edge function
+[ Earth ] → [ Planetary ] → [ Heliosphere ] → [ Stellar Nbhd ]
+   → [ Milky Way ] → [ Local Group ] → [ Virgo ] → [ Laniakea ] → [ Observable Universe ]
 ```
 
-## Out of scope
-- No changes to Planetary, Solar, Stellar, Galactic, Universal, Cosmological pages.
-- No persisted chat history, no thread list (single in-memory conversation).
-- No new real data feeds; uses existing deterministic series in `datasets.ts`.
-- Daily/weekly/monthly reports are generated on demand via the assistant, not scheduled.
+At every station the HUD updates:
+- Station name + one-line scientific descriptor
+- "Enter dashboard" CTA (only on the 6 stations that map to a real dashboard: Earth→Planetary, Heliosphere→Solar, Stellar Nbhd→Stellar, Milky Way→Galactic, Local Group/Virgo/Laniakea→Universal, Observable Universe→Cosmological)
+- Scale readout (e.g. "12,742 km" → "93 Gly")
+- Mini scale rail down the right side so the user always knows where they are
 
-Approve to build.
+## Scene composition (per station)
+
+| Station | Visual |
+|---|---|
+| Earth | Blue Marble globe (reuse existing Earth3D textures), atmosphere rim |
+| Planetary | Earth + Moon + magnetosphere field lines |
+| Heliosphere | Sun at center, planet orbits as faint rings, heliopause shell |
+| Stellar Nbhd | ~200 nearby-star sprites, color by spectral class, Sun highlighted |
+| Milky Way | Top-down spiral (procedural particles, ~40k), "You are here" marker |
+| Local Group | Milky Way + Andromeda + Triangulum + satellites as glowing discs |
+| Virgo Cluster | Cluster of ~80 galaxy sprites around Virgo A |
+| Laniakea | Flow-field streamlines converging on Great Attractor |
+| Observable Universe | Cosmic web — filament particles + voids, CMB-tinted backdrop |
+
+All stations live in the same scene at exponentially spaced Z positions; camera FOV and exposure are tweened between stations so each scale feels right.
+
+## Interaction
+
+- Scroll wheel / trackpad → advances camera; debounced snap-to-nearest-station on idle
+- Arrow keys ↑ ↓ → step between stations
+- Right-rail station list → click to fly-to (cubic ease, ~1.2s)
+- "Enter [Dashboard]" button → routes to existing page (`/planetary`, `/planetary?view=hgs`, `/stellar`, `/galactic`, `/universal`, `/cosmological`)
+- Top-left wordmark returns to station 0
+
+## HUD / chrome
+
+Keeps the existing monochromatic glassmorphism. No colorful accents. Footer line: "Digital Twin · Live Telemetry".
+
+```text
+┌────────────────────────────────────────────────────────────┐
+│ GAIASPHERE OBSERVATORY                            [≡ menu] │
+│                                                            │
+│                                                  ┌───────┐ │
+│                                                  │Earth ●│ │
+│                                                  │Planet │ │
+│           [ immersive 3D scene ]                 │Helio  │ │
+│                                                  │Stellar│ │
+│                                                  │Galaxy │ │
+│                                                  │Local  │ │
+│                                                  │Virgo  │ │
+│                                                  │Lani.  │ │
+│                                                  │Univ.  │ │
+│                                                  └───────┘ │
+│ ┌──────────────────────────────────────────────┐           │
+│ │ EARTH · 12,742 km · home world               │           │
+│ │ Living planet — biosphere, magnetosphere…    │           │
+│ │ [ Enter Planetary Dashboard → ]              │           │
+│ └──────────────────────────────────────────────┘           │
+│                                  Digital Twin · Live Tel.  │
+└────────────────────────────────────────────────────────────┘
+```
+
+## Technical details
+
+- New file `src/pages/Home.tsx` (replaces current implementation)
+- New component `src/components/observatory/ObservatoryScene.tsx` — `<Canvas>` host, camera rig, station registry, scroll/key controller
+- New components per station under `src/components/observatory/stations/` — `EarthStation`, `PlanetaryStation`, `HeliosphereStation`, `StellarNeighborhoodStation`, `MilkyWayStation`, `LocalGroupStation`, `VirgoStation`, `LaniakeaStation`, `ObservableUniverseStation`
+- `src/components/observatory/StationRail.tsx`, `StationHud.tsx`
+- Reuse existing R3F deps (`@react-three/fiber@^8.18`, `@react-three/drei@^9.122.0`) — already installed for Earth3D / CosmicAddress3D
+- Reuse existing Earth textures from current Home/Universal pages
+- Camera path: positions[] in normalized log-space; lerp `camera.position.z` and `camera.fov`; `useFrame` smoothing factor 0.08
+- Snap behavior: detect scroll-idle 180ms, ease to nearest station t-value
+- Lazy-mount heavy stations (Milky Way 40k particles, Cosmic Web) via `<Suspense>` + visibility distance cull
+- Bottom-bar performance: hard cap pixel ratio at 1.5, single directional light + ambient, no post-processing pass beyond a cheap vignette overlay (CSS)
+- All routes already exist — no router changes needed
+- Existing Home.tsx is overwritten; existing menu bar / other pages untouched
+
+## Build order
+
+1. Scaffold `ObservatoryScene` + camera controller + 3 placeholder stations (Earth, Milky Way, Universe) and verify scroll/snap/keyboard work
+2. Add station rail + HUD wired to active station state
+3. Build the remaining 6 stations
+4. Wire dashboard CTAs to existing routes
+5. Performance pass + responsive (mobile = same rail collapsed into a bottom slider)
+
+## Out of scope (this turn)
+
+- Audio / ambient soundtrack
+- Live telemetry overlays on Earth (already on Planetary page)
+- Saving last-viewed station to localStorage
+- A guided "auto-tour" play button (can add later if wanted)
