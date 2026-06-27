@@ -548,22 +548,22 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
   if (layer === "classification") {
     return (
-      <div className="w-full h-full flex flex-col justify-start gap-2 px-2 py-2 overflow-y-auto">
-        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-2">
+      <div className="w-full h-full flex flex-col justify-start gap-1 px-1 py-1 overflow-y-auto">
+        <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           OBAFGKM Spectral Sequence — hot ⟶ cool
         </div>
         {SPECTRAL.map((s) => (
-          <div key={s.cls} className="flex items-center gap-4 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div key={s.cls} className="flex items-center gap-3 rounded-lg px-2.5 py-1.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
             <div
-              className="flex items-center justify-center rounded-full font-bold font-mono text-foreground/90"
-              style={{ width: 56, height: 56, background: s.color, color: "#101428", boxShadow: `0 0 24px ${s.color}88` }}
+              className="flex shrink-0 items-center justify-center rounded-full font-bold font-mono text-foreground/90"
+              style={{ width: 34, height: 34, fontSize: 13, background: s.color, color: "#101428", boxShadow: `0 0 14px ${s.color}88` }}
             >
               {s.cls}
             </div>
-            <div className="flex-1">
-              <div className="text-[12px] font-semibold tracking-[0.1em] uppercase text-foreground/85">Class {s.cls}{s.cls === "G" && " · Sun"}</div>
-              <div className="text-[10px] text-muted-foreground/70 font-mono mt-0.5">{s.temp}</div>
-              <div className="text-[10px] text-muted-foreground/60 mt-0.5">{s.note}</div>
+            <div className="flex-1 min-w-0">
+              <div className="text-[10px] font-semibold tracking-[0.1em] uppercase text-foreground/85">Class {s.cls}{s.cls === "G" && " · Sun"}</div>
+              <div className="text-[9px] text-muted-foreground/70 font-mono mt-0">{s.temp}</div>
+              <div className="text-[9px] text-muted-foreground/60 mt-0">{s.note}</div>
             </div>
           </div>
         ))}
