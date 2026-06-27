@@ -6,6 +6,9 @@ import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
 import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
+import { EventsPanel } from "@/components/harmonics/EventsPanel";
+import { ReportsPanel } from "@/components/harmonics/ReportsPanel";
+import { scanAllLayers } from "@/lib/harmonics/anomalies";
 import {
   DATASETS,
   METHODS,
@@ -194,7 +197,7 @@ function CorrelationPlot({ a, b }: { a: Dataset; b: Dataset }) {
 
 const HarmonicsEngine = () => {
   const navigate = useNavigate();
-  const [mode, setMode] = useState<"single" | "cross">("single");
+  const [mode, setMode] = useState<"single" | "cross" | "events" | "reports">("single");
   const [rightTab, setRightTab] = useState<"info" | "assistant">("info");
   const [scope, setScope] = useState<Scope>("universal");
   const [method, setMethod] = useState<AnalyticalMethod>("spectrum");
@@ -221,10 +224,21 @@ const HarmonicsEngine = () => {
 
   // Compact JSON snapshot for the assistant — grounds its replies in the active selection.
   const assistantContext = useMemo(() => {
+    // A trimmed cross-layer event snapshot is always included so the assistant
+    // can speak to anomalies even from Single mode.
+    const events = scanAllLayers({ minSeverity: "watch", limit: 8 }).map((e) => ({
+      scope: e.scope,
+      dataset: e.datasetLabel,
+      kind: e.kind,
+      severity: e.severity,
+      summary: e.summary,
+      evidence: e.evidence,
+    }));
+
     if (mode === "cross") {
       const a = getDataset(crossA);
       const b = getDataset(crossB);
-      if (!a || !b) return { mode };
+      if (!a || !b) return { mode, events };
       const r = compareLayers(a, b);
       return {
         mode: "cross-layer",
@@ -237,7 +251,17 @@ const HarmonicsEngine = () => {
         topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         sharedPeriods: r.sharedPeriods,
+        events,
       };
+    }
+    if (mode === "events") {
+      return { mode: "events", events: scanAllLayers({ limit: 30 }).map((e) => ({
+        scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
+        summary: e.summary, evidence: e.evidence,
+      })) };
+    }
+    if (mode === "reports") {
+      return { mode: "reports", events };
     }
     const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
     return {
@@ -247,6 +271,7 @@ const HarmonicsEngine = () => {
       dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
       topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
       fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+      events,
     };
   }, [mode, scope, method, dataset, crossA, crossB]);
 
@@ -353,8 +378,10 @@ const HarmonicsEngine = () => {
         <div className="flex items-center gap-2">
           <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Mode</div>
           {[
-            { id: "single" as const, label: "Single Layer Analysis" },
-            { id: "cross" as const, label: "Cross-Layer Comparison" },
+            { id: "single" as const, label: "Single Layer" },
+            { id: "cross" as const, label: "Cross-Layer" },
+            { id: "events" as const, label: "Events & Anomalies" },
+            { id: "reports" as const, label: "Reports" },
           ].map((m) => {
             const active = m.id === mode;
             return (
@@ -374,7 +401,7 @@ const HarmonicsEngine = () => {
           })}
         </div>
 
-        {mode === "single" ? (
+        {mode === "single" && (
           <>
             <HudPanel className="p-4">
               <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
@@ -412,7 +439,9 @@ const HarmonicsEngine = () => {
 
             <MethodDetail method={method} dataset={dataset} compare={compare} setCompareId={setCompareId} compareId={compareId} lm={lm} setLm={setLm} />
           </>
-        ) : (
+        )}
+
+        {mode === "cross" && (
           <HudPanel className="p-4">
             <div className="mb-3">
               <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
@@ -422,6 +451,24 @@ const HarmonicsEngine = () => {
               </p>
             </div>
             <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
+          </HudPanel>
+        )}
+
+        {mode === "events" && (
+          <HudPanel className="p-4">
+            <EventsPanel
+              onSelectDataset={(id, sc) => {
+                setScope(sc);
+                setDatasetId(id);
+                setMode("single");
+              }}
+            />
+          </HudPanel>
+        )}
+
+        {mode === "reports" && (
+          <HudPanel className="p-4">
+            <ReportsPanel context={assistantContext} />
           </HudPanel>
         )}
       </div>
@@ -488,7 +535,7 @@ const HarmonicsEngine = () => {
                     </ul>
                   </div>
                 </>
-              ) : (
+              ) : mode === "cross" ? (
                 <>
                   <div>
                     <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Cross-Layer Mode</div>
@@ -510,6 +557,54 @@ const HarmonicsEngine = () => {
                       <li>Pick Layer A and Layer B, or tap a suggested pairing.</li>
                       <li>Read the evidence badge before interpreting the result.</li>
                       <li>Use the Assistant tab to ask for a plain-language interpretation.</li>
+                    </ul>
+                  </div>
+                </>
+              ) : mode === "events" ? (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Events & Anomalies</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      A cross-layer feed of recent spikes, trends, and dominant-period shifts detected across every dataset in the registry.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Severity</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1.5">
+                      <li><span className="text-foreground/85">Info</span> — |z| ≥ 2.0, within normal variability.</li>
+                      <li><span className="text-foreground/85">Watch</span> — |z| ≥ 2.25, worth monitoring.</li>
+                      <li><span className="text-foreground/85">Alert</span> — |z| ≥ 3.5, statistically unusual.</li>
+                    </ul>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Filter the feed by layer or minimum severity.</li>
+                      <li>Click any event to jump into Single-Layer analysis on that dataset.</li>
+                      <li>Open the Assistant tab to ask for a plain-language interpretation.</li>
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Intelligence Reports</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      Generate daily, weekly, monthly, or custom reports across all loaded layers. Each report is grounded in the current analysis context plus the live event feed.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Storage</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      Reports are saved in this browser (localStorage) and remain available offline. Up to 50 reports are kept; oldest are dropped.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Pick a cadence to draft a new report.</li>
+                      <li>Select any saved report to read it in full.</li>
+                      <li>Switch to Single-Layer or Cross-Layer first to bias the report toward that context.</li>
                     </ul>
                   </div>
                 </>
