@@ -23,14 +23,14 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
             <div className="relative flex flex-col">
               {/* Top meta bar */}
               <div className="flex items-center gap-3 mb-1.5">
-                <div className="flex items-center gap-2 px-1.5 py-0.5 bg-harmonic-cyan/10 border border-harmonic-cyan/30">
-                  <div className="w-1.5 h-1.5 rounded-full bg-harmonic-cyan animate-pulse" />
-                  <span className="text-[8px] font-mono font-bold tracking-[0.18em] text-harmonic-cyan uppercase leading-none mt-0.5">
+                <div className="flex items-center gap-2 px-1.5 py-0.5 rounded-sm bg-foreground/[0.06] border border-foreground/15">
+                  <div className="w-1.5 h-1.5 rounded-full bg-foreground/80 animate-pulse" />
+                  <span className="text-[8px] font-mono font-bold tracking-[0.18em] text-foreground/75 uppercase leading-none mt-0.5">
                     System.Active
                   </span>
                 </div>
-                <div className="flex-grow h-px bg-harmonic-cyan/20" />
-                <span className="text-[8px] font-mono text-harmonic-cyan/40 tracking-tighter">
+                <div className="flex-grow h-px bg-foreground/15" />
+                <span className="text-[8px] font-mono text-muted-foreground/55 tracking-tighter">
                   SECURE_NODE // 0x4F2
                 </span>
               </div>
@@ -40,9 +40,9 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
                 <h1 className="text-[32px] md:text-[40px] font-display font-bold text-foreground tracking-tight leading-none">
                   GAIASPHERE
                 </h1>
-                {/* Glitch line decoration */}
-                <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-harmonic-cyan shadow-[0_0_15px_hsl(var(--harmonic-cyan))]" />
-                <div className="absolute -bottom-1 left-1/2 w-1/4 h-[2px] bg-foreground" />
+                {/* Underline accents — monochrome glass */}
+                <div className="absolute -bottom-1 left-0 w-full h-[2px] bg-foreground/25 shadow-[0_0_18px_hsla(210,75%,62%,0.45)]" />
+                <div className="absolute -bottom-1 left-1/2 w-1/4 h-[2px] bg-foreground/70" />
               </div>
 
               {/* Secondary descriptor */}
@@ -51,9 +51,9 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
                   Intelligence Observatory
                 </h2>
                 <div className="flex gap-0.5">
-                  <div className="w-px h-3 bg-harmonic-cyan/20" />
-                  <div className="w-px h-3 bg-harmonic-cyan/50" />
-                  <div className="w-px h-3 bg-harmonic-cyan" />
+                  <div className="w-px h-3 bg-foreground/15" />
+                  <div className="w-px h-3 bg-foreground/35" />
+                  <div className="w-px h-3 bg-foreground/70" />
                 </div>
               </div>
             </div>
