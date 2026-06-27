@@ -464,8 +464,7 @@ export default function Home() {
               Grounded in open science.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
-              Every observation, signal, and analysis is anchored in established disciplines
-              and public datasets. Transparency and evidence first.
+              Based on established disciplines and public datasets.
             </p>
           </div>
 
