@@ -593,7 +593,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   if (layer === "oscillations") {
     // schematic stacked sine waves at different frequencies (p-modes)
     const size = 760;
-    const h = 360;
+    const h = 240;
     const baseY = h / 2;
     const lines = [
       { freq: 2, color: "#9ec5ff", label: "Low-ℓ p-mode" },
@@ -609,19 +609,19 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       return pts.join(" ");
     };
     return (
-      <div className="w-full h-full flex flex-col gap-2 px-2 py-2">
+      <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
           Asteroseismic p-modes — schematic
         </div>
-        <svg viewBox={`0 0 ${size} ${h}`} className="w-full">
+        <svg viewBox={`0 0 ${size} ${h}`} className="w-full max-h-[200px]">
           {lines.map((l, i) => (
             <g key={i}>
-              <path d={path(l.freq, (i - 1) * 80)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
-              <text x={10} y={baseY + (i - 1) * 80 - 32} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
+              <path d={path(l.freq, (i - 1) * 55)} stroke={l.color} strokeWidth={1.5} fill="none" opacity={0.85} />
+              <text x={10} y={baseY + (i - 1) * 55 - 22} fill="hsla(0,0%,100%,0.7)" fontSize={10} fontFamily="ui-monospace, monospace">{l.label}</text>
             </g>
           ))}
         </svg>
-        <div className="text-[10px] text-muted-foreground/70 px-3">
+        <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
           Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
         </div>
       </div>
