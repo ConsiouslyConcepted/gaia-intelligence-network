@@ -149,7 +149,7 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <Canvas camera={{ position: [0, 0.4, 5.4], fov: 50 }} dpr={[1, 2]}>
+          <Canvas camera={{ position: [0, 0.3, 4.8], fov: 46 }} dpr={[1, 2]}>
             <HeroScene />
           </Canvas>
         </div>
