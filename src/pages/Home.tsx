@@ -31,7 +31,7 @@ const OBSERVATORIES = [
     n: "01",
     title: "Planetary Intelligence",
     blurb:
-      "Earth's coupled spheres — atmosphere, biosphere, lithosphere, hydrosphere, magnetosphere — observed as one living system.",
+      "Earth's coupled spheres: atmosphere, biosphere, lithosphere, hydrosphere, magnetosphere.",
     to: "/planetary",
     Icon: Globe2,
   },
@@ -39,7 +39,7 @@ const OBSERVATORIES = [
     n: "02",
     title: "Solar Intelligence",
     blurb:
-      "The Sun's heartbeat — solar wind, flares, and the heliosphere that shapes every planetary climate.",
+      "Solar wind, flares, and the heliosphere that shapes planetary climate.",
     to: "/solar",
     Icon: Sun,
   },
@@ -47,7 +47,7 @@ const OBSERVATORIES = [
     n: "03",
     title: "Stellar Intelligence",
     blurb:
-      "Stars as natural oscillators. Asteroseismology, variable stars, and the songs of the local stellar neighborhood.",
+      "Asteroseismology, variable stars, and stellar oscillations in the local neighborhood.",
     to: "/stellar",
     Icon: Star,
   },
@@ -55,7 +55,7 @@ const OBSERVATORIES = [
     n: "04",
     title: "Galactic Intelligence",
     blurb:
-      "The Milky Way's architecture — spiral arms, the Orion Spur, and the rotation that carries our solar system.",
+      "Spiral arms, the Orion Spur, and galactic rotation.",
     to: "/galactic",
     Icon: Sparkles,
   },
@@ -63,7 +63,7 @@ const OBSERVATORIES = [
     n: "05",
     title: "Cosmological Intelligence",
     blurb:
-      "The largest scales — cosmic microwave background, large-scale structure, and the expansion of the universe.",
+      "Cosmic microwave background, large-scale structure, and cosmic expansion.",
     to: "/cosmological",
     Icon: Orbit,
   },
@@ -71,7 +71,7 @@ const OBSERVATORIES = [
     n: "06",
     title: "Universal Intelligence",
     blurb:
-      "Your cosmic address. The nested architecture from Earth to the observable universe, mapped end to end.",
+      "Nested architecture from Earth to the observable universe.",
     to: "/universal",
     Icon: InfinityIcon,
   },
@@ -174,17 +174,16 @@ export default function Home() {
 
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
             <p className="text-[11px] uppercase tracking-[0.5em] text-white/50">
-              An Observatory of Nested Intelligence
+              Nested Intelligence Observatory
             </p>
             <h1 className="mt-5 text-5xl md:text-7xl font-light tracking-tight text-white">
-              The universe,
+              One observatory.
               <br />
-              <span className="italic font-extralight text-white/85">observed as one system.</span>
+              <span className="italic font-extralight text-white/85">Every scale.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              Explore Earth's place within the nested systems of the observable universe
-              through real-time scientific data, systems intelligence, harmonic analysis,
-              and AI-assisted discovery.
+              Real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted
+              discovery across nested planetary to cosmic scales.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -192,11 +191,11 @@ export default function Home() {
                 to="/planetary"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
               >
-                Begin at Earth
+                Start at Earth
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <a
-                href="#vision"
+                href="#about"
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-[13px] tracking-wide text-white/75 hover:text-white hover:border-white/25 transition-all"
               >
                 What is GaiaSphere?
@@ -216,24 +215,21 @@ export default function Home() {
         <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              The Vision
+              Vision
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              A single lens for a layered universe.
+              One integrated view of nested systems.
             </h2>
           </div>
           <div className="md:col-span-8 space-y-6 text-[15px] leading-relaxed text-white/70">
             <p>
-              Modern science fragments the cosmos into disciplines — climate, heliophysics,
-              astrophysics, cosmology. GaiaSphere reunites them as one continuous
-              observation, from the rhythms of the biosphere outward to the structure of
-              spacetime itself.
+              Modern science divides the cosmos into disciplines: climate, heliophysics,
+              astrophysics, cosmology. GaiaSphere unifies them as one continuous observation,
+              from Earth's systems to the structure of spacetime.
             </p>
             <p>
-              Every layer of the universe oscillates. Stars ring. Planets resonate. Galaxies
-              rotate in measurable cadence. GaiaSphere listens across these scales and
-              surfaces the <span className="text-white">harmonic relationships</span> that
-              connect them.
+              Each scale exhibits periodic behavior: stellar oscillations, planetary resonances,
+              galactic rotation. GaiaSphere surfaces the harmonic relationships across them.
             </p>
           </div>
         </div>
@@ -250,7 +246,7 @@ export default function Home() {
               {
                 k: "Observe",
                 t: "Live telemetry",
-                d: "Real signals from Earth, Sun, and sky — streamed from NOAA, NASA, USGS, and open scientific archives.",
+                d: "Real signals from Earth, the Sun, and the sky, streamed from NOAA, NASA, USGS, and open scientific archives.",
               },
               {
                 k: "Analyze",
@@ -260,7 +256,7 @@ export default function Home() {
               {
                 k: "Synthesize",
                 t: "AI mission analyst",
-                d: "Ask an analyst to explain conditions, surface anomalies, and synthesize cross-layer reports.",
+                d: "Ask the analyst to explain conditions, surface anomalies, and synthesize cross-layer reports.",
               },
             ].map(({ k, t, d }) => (
               <div key={k} className="bg-[#05060f] p-8">
@@ -278,15 +274,14 @@ export default function Home() {
         <div className="max-w-7xl mx-auto">
           <div className="max-w-2xl">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              Six Observatories · One Continuous System
+              Six Observatories
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              Step into any scale. They all connect.
+              Select a scale.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
-              Each observatory is a complete intelligence environment for a layer of the
-              cosmos. Move freely between them — or let the Universal observatory show you
-              how they nest together.
+              Each observatory is an intelligence environment for a specific layer. The Universal
+              observatory shows how they nest together.
             </p>
           </div>
 
@@ -346,13 +341,11 @@ export default function Home() {
               Core Capability
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              The Harmonic Analysis Engine.
+              Harmonic Analysis Engine.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
-              Not another dashboard — the analytical framework that connects every layer of
-              the observatory. Surface the recurring patterns, cycles, resonances, and field
-              relationships that link planetary, solar, stellar, galactic, cosmological, and
-              universal systems.
+              Cross-scale spectral analysis and resonance detection. Detect cycles, resonances,
+              and field relationships across all six observatories.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
               <Link
@@ -398,14 +391,13 @@ export default function Home() {
       <section className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto text-center">
           <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-            How the observatories connect
+            Nested scales
           </p>
           <h2 className="mt-4 text-3xl md:text-4xl font-light text-white">
-            Every scale, nested inside the next.
+            From Earth to the observable universe.
           </h2>
           <p className="mt-5 max-w-2xl mx-auto text-[14.5px] leading-relaxed text-white/65">
-            Your location in the cosmos isn't a point — it's a chain. GaiaSphere lets you
-            travel the chain from your doorstep to the edge of the observable universe.
+            Cosmic address: a sequence of nested physical scales from Earth to the observable universe.
           </p>
 
           <div className="mt-12 flex flex-wrap items-center justify-center gap-x-2 gap-y-3">
@@ -437,26 +429,25 @@ export default function Home() {
       </section>
 
       {/* ============ ABOUT ============ */}
-      <section className="relative px-6 py-28 border-t border-white/5">
+      <section id="about" className="relative px-6 py-28 border-t border-white/5">
         <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              About GaiaSphere
+              What GaiaSphere Is
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              A living observatory of nested systems.
+              Integrated observatory for nested systems.
             </h2>
           </div>
           <div className="md:col-span-8 space-y-5 text-[15px] leading-relaxed text-white/70">
             <p>
-              GaiaSphere integrates modern Earth system science, astronomy, astrophysics,
-              systems science, network science, and AI into a single environment for
-              exploring the interconnected organization of the observable universe.
+              GaiaSphere combines Earth system science, astronomy, astrophysics, systems science,
+              network science, and AI into one environment for observing the organization of the
+              observable universe.
             </p>
             <p>
-              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is
-              treated as a system in its own right, and as part of a larger architecture.
-              Together they form a continuous, observable whole.
+              Each layer — planetary, solar, stellar, galactic, cosmological, universal — is analyzed
+              as a system and as part of a larger architecture.
             </p>
           </div>
         </div>
@@ -473,8 +464,7 @@ export default function Home() {
               Grounded in open science.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/65">
-              Every observation, signal, and analysis is anchored in established disciplines
-              and public datasets. Transparency and evidence first.
+              Based on established disciplines and public datasets.
             </p>
           </div>
 
@@ -538,15 +528,14 @@ export default function Home() {
           </div>
           <div className="md:col-span-5 order-1 md:order-2">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              AI Intelligence Assistant
+              AI Analyst
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              An analyst across every layer.
+              Analyst across every layer.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
-              The GaiaSphere AI is connected to every observatory and the Harmonic Analysis
-              Engine. Ask questions, request reports, or let it guide your exploration through
-              data and scientific reasoning.
+              Connected to every observatory and the Harmonic Analysis Engine. Ask questions,
+              request reports, and compare layers.
             </p>
             <div className="mt-8">
               <Link
@@ -572,25 +561,24 @@ export default function Home() {
         />
         <div className="relative max-w-3xl mx-auto text-center">
           <h2 className="text-3xl md:text-5xl font-light text-white leading-tight">
-            The observatory is open.
+            Begin exploring.
           </h2>
           <p className="mt-5 text-[15px] leading-relaxed text-white/65">
-            Start at Earth and travel outward — or jump to any scale. Every observation
-            connects.
+            Start at Earth or jump to any scale.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
             <Link
               to="/planetary"
               className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
             >
-              Begin at Earth
+              Start at Earth
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
               to="/universal"
               className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
             >
-              Enter the Universal Observatory
+              Universal Observatory
             </Link>
           </div>
         </div>
