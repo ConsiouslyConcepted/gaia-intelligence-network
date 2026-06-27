@@ -11,6 +11,9 @@ import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
 import Universal from "./pages/Universal";
 import Stellar from "./pages/Stellar";
+import HarmonicsEngine from "./pages/HarmonicsEngine";
+
+
 
 import NotFound from "./pages/NotFound";
 
@@ -31,6 +34,8 @@ const App = () => (
           <Route path="/cosmological" element={<Cosmological />} />
           <Route path="/universal" element={<Universal />} />
           <Route path="/stellar" element={<Stellar />} />
+          <Route path="/harmonics" element={<HarmonicsEngine />} />
+
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 
           <Route path="*" element={<NotFound />} />
