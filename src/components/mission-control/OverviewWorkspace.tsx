@@ -328,7 +328,7 @@ const OverviewWorkspace = () => {
               {alertCount > 0 && `${alertCount} space-weather alerts.`}
             </p>
             <button
-              onClick={() => navigate("/universal?workspace=ai")}
+              onClick={() => navigate("/mission-control?workspace=ai")}
               className="mt-auto flex items-center justify-between w-full px-3 py-2 rounded-lg border transition-all duration-300 hover:bg-foreground/[0.04]"
               style={{
                 background: "hsla(240,25%,8%,0.5)",
