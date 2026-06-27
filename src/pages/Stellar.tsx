@@ -702,6 +702,11 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       { name: "Magnetar", val: 1e14, color: "#7aa8ff", note: "Most magnetic objects known" },
     ];
     const max = Math.log10(1e14);
+    const windRows = [
+      { name: "Slow solar wind", val: 400, color: "#ffe87a", note: "From streamer belts · ~400 km/s" },
+      { name: "Fast solar wind", val: 750, color: "#ffba6b", note: "From coronal holes · up to ~800 km/s" },
+      { name: "M-dwarf wind", val: 600, color: "#cc5533", note: "Strong magnetic loading · variable" },
+    ];
     return (
       <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
@@ -725,6 +730,18 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
               </div>
             );
           })}
+        </div>
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mt-2">
+          Stellar winds · outflow speed (km/s)
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          {windRows.map((w) => (
+            <div key={w.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div className="text-[10px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{w.name}</div>
+              <div className="text-[11px] font-mono text-foreground/85 mt-0.5">{w.val} <span className="text-[8px] text-muted-foreground/60">km/s</span></div>
+              <div className="text-[9px] text-muted-foreground/65 mt-0.5 leading-tight">{w.note}</div>
+            </div>
+          ))}
         </div>
       </div>
     );
