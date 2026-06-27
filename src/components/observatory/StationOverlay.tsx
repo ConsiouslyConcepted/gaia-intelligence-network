@@ -79,6 +79,7 @@ export default function StationOverlay({ activeIndex, onJumpTo }: StationOverlay
 
         {/* Spacer to keep title block anchored */}
         <div className="pointer-events-none" />
+      </div>
 
       {/* Right rail — station list */}
       <div className="absolute top-1/2 right-4 z-30 -translate-y-1/2 pointer-events-auto">
