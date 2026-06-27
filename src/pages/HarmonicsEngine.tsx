@@ -535,7 +535,7 @@ const HarmonicsEngine = () => {
                     </ul>
                   </div>
                 </>
-              ) : (
+              ) : mode === "cross" ? (
                 <>
                   <div>
                     <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Cross-Layer Mode</div>
@@ -557,6 +557,54 @@ const HarmonicsEngine = () => {
                       <li>Pick Layer A and Layer B, or tap a suggested pairing.</li>
                       <li>Read the evidence badge before interpreting the result.</li>
                       <li>Use the Assistant tab to ask for a plain-language interpretation.</li>
+                    </ul>
+                  </div>
+                </>
+              ) : mode === "events" ? (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Events & Anomalies</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      A cross-layer feed of recent spikes, trends, and dominant-period shifts detected across every dataset in the registry.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Severity</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1.5">
+                      <li><span className="text-foreground/85">Info</span> — |z| ≥ 2.0, within normal variability.</li>
+                      <li><span className="text-foreground/85">Watch</span> — |z| ≥ 2.25, worth monitoring.</li>
+                      <li><span className="text-foreground/85">Alert</span> — |z| ≥ 3.5, statistically unusual.</li>
+                    </ul>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Filter the feed by layer or minimum severity.</li>
+                      <li>Click any event to jump into Single-Layer analysis on that dataset.</li>
+                      <li>Open the Assistant tab to ask for a plain-language interpretation.</li>
+                    </ul>
+                  </div>
+                </>
+              ) : (
+                <>
+                  <div>
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1">Intelligence Reports</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      Generate daily, weekly, monthly, or custom reports across all loaded layers. Each report is grounded in the current analysis context plus the live event feed.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">Storage</div>
+                    <p className="text-[10px] leading-relaxed text-muted-foreground">
+                      Reports are saved in this browser (localStorage) and remain available offline. Up to 50 reports are kept; oldest are dropped.
+                    </p>
+                  </div>
+                  <div className="border-t border-border/30 pt-3">
+                    <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-1.5">How to interact</div>
+                    <ul className="text-[10px] leading-relaxed text-muted-foreground space-y-1 list-disc list-inside marker:text-foreground/40">
+                      <li>Pick a cadence to draft a new report.</li>
+                      <li>Select any saved report to read it in full.</li>
+                      <li>Switch to Single-Layer or Cross-Layer first to bias the report toward that context.</li>
                     </ul>
                   </div>
                 </>
