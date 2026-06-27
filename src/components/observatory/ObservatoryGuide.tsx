@@ -137,8 +137,33 @@ export default function ObservatoryGuide() {
 
           <div ref={scrollerRef} className="flex-1 overflow-y-auto px-4 py-3 space-y-2.5 min-h-0">
             {messages.length === 0 && (
-              <div className="text-[11px] leading-relaxed text-muted-foreground/75">
-                I'm your scientific guide to GaiaSphere. Ask about any intelligence layer, your Cosmic Address, or where to explore next.
+              <div
+                className="rounded-xl p-3.5 border"
+                style={{
+                  background: "linear-gradient(145deg, hsla(225,40%,12%,0.55) 0%, hsla(225,45%,8%,0.45) 100%)",
+                  borderColor: "hsla(220,35%,60%,0.35)",
+                  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.06), 0 4px 18px rgba(0,0,0,0.35)",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-foreground/70 animate-pulse" />
+                  <span className="text-[9px] font-mono uppercase tracking-[0.2em] text-muted-foreground/60">
+                    Observatory Mission
+                  </span>
+                </div>
+                <p className="text-[12px] leading-relaxed text-foreground/85">
+                  Explore the nested systems of organization that shape Earth, the Solar System, the Milky Way, and the observable universe through real-time scientific data, systems intelligence, and AI-assisted analysis.
+                </p>
+                <div className="mt-2.5 pt-2.5 border-t border-border/20 flex items-center justify-between">
+                  <span className="text-[9px] font-mono text-muted-foreground/40 uppercase tracking-tighter">
+                    Ask about any layer, your Cosmic Address, or where to explore next.
+                  </span>
+                  <div className="flex gap-0.5">
+                    <div className="w-1 h-2 bg-foreground/20" />
+                    <div className="w-1 h-2 bg-foreground/40" />
+                    <div className="w-1 h-2 bg-foreground/60" />
+                  </div>
+                </div>
               </div>
             )}
             {messages.map((m, i) => (
