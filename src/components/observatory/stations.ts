@@ -8,6 +8,7 @@ export type StationId =
   | "planetary"
   | "heliosphere"
   | "stellar"
+  | "orionspur"
   | "milkyway"
   | "localgroup"
   | "virgo"
@@ -53,6 +54,13 @@ export const STATIONS: Station[] = [
     descriptor: "Nearby stars within ~50 light-years of the Sun.",
     scale: "~100 ly",
     dashboard: { label: "Stellar Dashboard", path: "/stellar" },
+  },
+  {
+    id: "orionspur",
+    label: "Orion Spur",
+    descriptor: "Minor spiral-arm segment of the Milky Way that contains the Sun.",
+    scale: "~3,500 ly wide",
+    dashboard: { label: "Galactic Dashboard", path: "/galactic" },
   },
   {
     id: "milkyway",
