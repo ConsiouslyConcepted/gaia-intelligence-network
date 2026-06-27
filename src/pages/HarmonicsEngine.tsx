@@ -345,50 +345,107 @@ const HarmonicsEngine = () => {
         </HudPanel>
       </div>
 
-      {/* Left rail — scope + dataset */}
+      {/* Left rail — scope + dataset (Precision Notched Rail) */}
       <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-auto w-[260px] hidden lg:flex flex-col gap-3">
-        <HudPanel className="p-3 flex flex-col gap-2">
-          <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mb-1">Intelligence Layer</div>
-          {SCOPES.map((s) => {
-            const isActive = s.id === scope;
-            return (
-              <button
-                key={s.id}
-                onClick={() => onScope(s.id)}
-                className="text-left px-3 py-2 rounded-md border transition-all"
-                style={{
-                  background: isActive ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                  borderColor: isActive ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
-                }}
-              >
-                <div className="text-[11px] tracking-[0.14em] uppercase text-foreground/90">{s.label}</div>
-                <div className="text-[9px] text-muted-foreground/60 mt-0.5">{s.tagline}</div>
-              </button>
-            );
-          })}
+        <HudPanel className="p-4 flex flex-col gap-1">
+          <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
+            Intelligence Layer
+          </div>
+          <div className="space-y-1">
+            {SCOPES.map((s, idx) => {
+              const isActive = s.id === scope;
+              const num = String(idx + 1).padStart(2, "0");
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => onScope(s.id)}
+                  className={cn(
+                    "w-full group relative flex items-center justify-between px-3 py-2.5 rounded-r-sm border-l-2 transition-all cursor-pointer text-left",
+                    isActive
+                      ? "bg-foreground/[0.10] border-foreground"
+                      : "bg-transparent border-transparent hover:bg-foreground/[0.04]"
+                  )}
+                >
+                  <div className="flex flex-col items-start min-w-0">
+                    <span
+                      className="text-[9px] font-mono leading-none mb-1"
+                      style={{ color: isActive ? "hsla(0,0%,100%,0.4)" : "hsla(0,0%,100%,0.2)" }}
+                    >
+                      {num}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-[11px] tracking-[0.18em] uppercase truncate",
+                        isActive ? "font-bold text-foreground" : "font-medium text-foreground/50 group-hover:text-foreground/80"
+                      )}
+                    >
+                      {s.label}
+                    </span>
+                  </div>
+                  {isActive && (
+                    <div
+                      className="h-1.5 w-1.5 rounded-full shrink-0"
+                      style={{
+                        background: "hsla(0,0%,100%,1)",
+                        boxShadow: "0 0 8px hsla(0,0%,100%,0.8)",
+                      }}
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
         </HudPanel>
 
-        <HudPanel className="p-3 flex flex-col gap-2 overflow-y-auto flex-1">
-          <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mb-1">Dataset</div>
-          {inScope.map((d) => {
-            const isActive = d.id === datasetId;
-            return (
-              <button
-                key={d.id}
-                onClick={() => setDatasetId(d.id)}
-                className="text-left px-3 py-2 rounded-md border transition-all"
-                style={{
-                  background: isActive ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                  borderColor: isActive ? "hsla(210,70%,60%,0.5)" : "hsla(220,20%,30%,0.25)",
-                }}
-              >
-                <div className="text-[10px] tracking-[0.1em] uppercase text-foreground/90">{d.label}</div>
-                <div className="text-[9px] text-muted-foreground/60 mt-0.5 leading-snug">{d.description}</div>
-              </button>
-            );
-          })}
+        <HudPanel className="p-4 flex flex-col gap-1 overflow-y-auto flex-1">
+          <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
+            Dataset
+          </div>
+          <div className="space-y-2">
+            {inScope.map((d) => {
+              const isActive = d.id === datasetId;
+              return (
+                <button
+                  key={d.id}
+                  onClick={() => setDatasetId(d.id)}
+                  className={cn(
+                    "w-full text-left p-3 rounded relative overflow-hidden group border transition-colors",
+                    isActive
+                      ? "bg-foreground/[0.05] border-foreground/20"
+                      : "bg-transparent border-foreground/[0.06] hover:border-foreground/20"
+                  )}
+                >
+                  {isActive && (
+                    <div
+                      className="absolute top-0 left-0 w-1 h-full"
+                      style={{ background: "hsla(0,0%,100%,1)", boxShadow: "0 0 10px hsla(0,0%,100%,0.5)" }}
+                    />
+                  )}
+                  <div className="flex flex-col gap-1">
+                    <span
+                      className={cn(
+                        "text-[10px] font-bold tracking-[0.14em] uppercase leading-tight",
+                        isActive ? "text-foreground" : "text-foreground/50 group-hover:text-foreground/80"
+                      )}
+                    >
+                      {d.label}
+                    </span>
+                    <span
+                      className={cn(
+                        "text-[9px] font-medium uppercase tracking-tight leading-snug",
+                        isActive ? "text-foreground/40" : "text-foreground/20"
+                      )}
+                    >
+                      {d.description}
+                    </span>
+                  </div>
+                </button>
+              );
+            })}
+          </div>
         </HudPanel>
       </div>
+
 
       {/* Center stage */}
       <div className="absolute inset-0 z-[2] pt-28 pb-44 lg:pl-[290px] lg:pr-[330px] px-4 flex flex-col gap-3 overflow-y-auto">
