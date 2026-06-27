@@ -13,13 +13,13 @@ interface Props {
 }
 
 const QUICK_PROMPTS: { label: string; prompt: string }[] = [
-  { label: "Explain current pattern", prompt: "Explain the harmonic pattern in the current selection in plain language." },
-  { label: "Summarize this layer", prompt: "Summarize the current dynamics of the selected intelligence layer." },
-  { label: "Find anomalies", prompt: "Identify emerging trends or anomalies in the current dataset." },
-  { label: "Compare both layers", prompt: "Compare the two selected layers and highlight any meaningful coupling." },
-  { label: "Daily report", prompt: "Generate a daily harmonic intelligence report." },
-  { label: "Weekly report", prompt: "Generate a weekly harmonic intelligence report." },
-  { label: "Monthly report", prompt: "Generate a monthly harmonic intelligence report." },
+  { label: "Explain current pattern", prompt: "Explain the harmonic pattern in the current selection. Lead with the answer, classify by evidence tier (Measured / Statistical / Exploratory), keep it under 200 words." },
+  { label: "Summarize this layer", prompt: "Summarize the current dynamics of the selected intelligence layer using evidence tiers." },
+  { label: "Find anomalies", prompt: "Identify anomalies or drift in the loaded datasets. For each, state the signal, the deviation, and the evidence tier." },
+  { label: "Compare both layers", prompt: "Compare the two selected layers and highlight any meaningful coupling. Use evidence tiers." },
+  { label: "Daily report", prompt: "Generate a daily intelligence report. Sections: Conditions, Notable Events, Cross-Layer Notes, Watch List. Under 250 words. Use evidence tiers." },
+  { label: "Recommend investigations", prompt: "Recommend two cross-layer pairings worth investigating next, why each matters, and which dataset ids to load. Mark each as Statistical or Exploratory." },
+  { label: "Weekly report", prompt: "Generate a weekly harmonic intelligence report using evidence tiers." },
   { label: "Suggest datasets", prompt: "Recommend additional datasets in the registry I should investigate next." },
 ];
 
@@ -47,7 +47,7 @@ export function AssistantPanel({ context }: Props) {
     setError(null);
     try {
       const { data, error: fnErr } = await supabase.functions.invoke("harmonic-assistant", {
-        body: { messages: next, context },
+        body: { mode: "analyst", messages: next, context: { surface: "harmonics-engine", ...context } },
       });
       if (fnErr) throw new Error(fnErr.message);
       const reply = (data as { reply?: string; error?: string })?.reply;
@@ -69,7 +69,7 @@ export function AssistantPanel({ context }: Props) {
       <div className="flex items-center justify-between mb-2">
         <div className="flex items-center gap-2">
           <Sparkles className="w-3.5 h-3.5 text-foreground/60" />
-          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">Intelligence Assistant</div>
+          <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/70">AI Mission Analyst</div>
         </div>
         {messages.length > 0 && (
           <button
@@ -83,7 +83,7 @@ export function AssistantPanel({ context }: Props) {
 
       {messages.length === 0 && (
         <div className="text-[10px] leading-relaxed text-muted-foreground/70 mb-3">
-          Ask the assistant to interpret the current analysis, compare layers, or generate a report. Every answer is grounded in the loaded series and labelled by evidence tier.
+          Continuous synthesis across every observatory. The Analyst speaks in evidence tiers — Measured, Statistical, Exploratory — and refuses to speculate beyond the loaded data.
         </div>
       )}
 
@@ -98,13 +98,13 @@ export function AssistantPanel({ context }: Props) {
             }`}
           >
             <div className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/50 mb-1">
-              {m.role === "user" ? "You" : "Assistant"}
+              {m.role === "user" ? "You" : "Analyst"}
             </div>
             <div className="whitespace-pre-wrap">{m.content}</div>
           </div>
         ))}
         {loading && (
-          <div className="text-[10px] text-muted-foreground/70 italic">Thinking…</div>
+          <div className="text-[10px] text-muted-foreground/70 italic">Synthesizing…</div>
         )}
         {error && (
           <div className="text-[10px] text-red-400/80 border border-red-400/30 rounded-md px-2 py-1.5">{error}</div>
