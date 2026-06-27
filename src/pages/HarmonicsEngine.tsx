@@ -63,7 +63,7 @@ const HudPanel = ({
 );
 
 const TOGGLE_BTN_BASE =
-  "text-center px-2.5 py-2 whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
+  "text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05] hover:text-foreground/70";
 
 const ACTIVE_BTN_STYLE: React.CSSProperties = {
   background:
@@ -72,6 +72,13 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   border: "1.5px solid hsla(220,35%,60%,0.55)",
   boxShadow:
     "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
+};
+
+const NAV_PILL_STYLE: React.CSSProperties = {
+  background: "hsla(228,40%,5%,0.6)",
+  border: "1px solid hsla(220,40%,65%,0.5)",
+  boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), inset 0 -1px 0 rgba(0,0,0,0.4), 0 0 24px hsla(210,70%,60%,0.28), 0 0 48px hsla(210,70%,55%,0.18), 0 12px 32px rgba(0,0,0,0.5)",
+  backdropFilter: "blur(12px)",
 };
 
 // ───────── Visualizations (pure SVG) ─────────
