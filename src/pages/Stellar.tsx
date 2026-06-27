@@ -185,6 +185,45 @@ const LAYER_INFO: Record<StellarLayer, LayerInfo> = {
       "Cross-reference Classification to map class to lifecycle path.",
     ],
   },
+  oscillations: {
+    seeing: "Stars ring like bells. Acoustic (p-mode) and gravity (g-mode) oscillations make their surfaces pulsate at characteristic frequencies. The Sun's dominant mode sits near 5 minutes (3.1 mHz).",
+    why: [
+      "Mode frequencies probe interior density, rotation, and composition — the only direct look inside a star.",
+      "Asteroseismology calibrates stellar ages and masses across the galaxy.",
+      "Kepler and TESS have measured oscillations in tens of thousands of stars.",
+    ],
+    interact: [
+      "Metric rail lists the Sun's dominant mode frequency and detected mode count.",
+      "Compare to Magnetic fields — both are driven by the same convective envelope.",
+      "Use Lifecycle to see how oscillation spectra shift with evolutionary stage.",
+    ],
+  },
+  variables: {
+    seeing: "Variable stars change brightness on hours-to-years timescales. Cepheids and RR Lyrae pulsate with period–luminosity relations; eclipsing binaries dim when one star passes in front of the other.",
+    why: [
+      "Cepheids are standard candles — they anchor the cosmic distance ladder out to ~100 Mly.",
+      "Eclipsing binaries give the most precise stellar masses and radii available.",
+      "Population studies of variables map galactic structure and stellar populations.",
+    ],
+    interact: [
+      "Metric rail shows catalog size and Cepheid period range.",
+      "Cross-reference Oscillations — pulsating variables are the strongest oscillators.",
+      "Use Classification to see which spectral types dominate each variable class.",
+    ],
+  },
+  magnetic: {
+    seeing: "Stars generate magnetic fields through dynamo action in their convective layers. The Sun runs at 1–2 G on average and 3,000 G in sunspots; M-dwarfs and magnetars can reach far higher.",
+    why: [
+      "Magnetic activity drives flares, coronal mass ejections, and stellar wind — the inputs of space weather.",
+      "Strong fields on M-dwarfs threaten the habitability of close-in exoplanets.",
+      "Field strength and topology evolve with rotation, age, and mass.",
+    ],
+    interact: [
+      "Metric rail compares Sun, sunspot, M-dwarf, and magnetar field strengths.",
+      "Cross-reference Oscillations — magnetic activity modulates mode amplitudes.",
+      "Use Lifecycle to see how rotation and dynamo strength evolve with age.",
+    ],
+  },
   exoplanets: {
     seeing: "Over 5,800 confirmed exoplanets across 4,300+ systems. Most stars host at least one planet; many systems include small worlds in or near the habitable zone.",
     why: [
