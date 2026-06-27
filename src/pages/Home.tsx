@@ -528,15 +528,14 @@ export default function Home() {
           </div>
           <div className="md:col-span-5 order-1 md:order-2">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
-              AI Intelligence Assistant
+              AI Analyst
             </p>
             <h2 className="mt-4 text-3xl md:text-4xl font-light text-white leading-tight">
-              An analyst across every layer.
+              Analyst across every layer.
             </h2>
             <p className="mt-5 text-[14.5px] leading-relaxed text-white/70">
-              The GaiaSphere AI is connected to every observatory and the Harmonic Analysis
-              Engine. Ask questions, request reports, or let it guide your exploration through
-              data and scientific reasoning.
+              Connected to every observatory and the Harmonic Analysis Engine. Ask questions,
+              request reports, and compare layers.
             </p>
             <div className="mt-8">
               <Link
