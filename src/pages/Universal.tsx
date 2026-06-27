@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import CosmicAddress3D from "@/components/universal/CosmicAddress3D";
-import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
+
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
 import { cn } from "@/lib/utils";
@@ -44,7 +44,7 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-type UniversalLayer = "address" | "cycles" | "ratios" | "wave" | "harmonics";
+type UniversalLayer = "address" | "cycles" | "ratios" | "wave";
 
 interface LayerSpec {
   key: UniversalLayer;
@@ -100,18 +100,6 @@ const LAYERS: LayerSpec[] = [
       { label: "Cascade Steps", value: "n × (2,3,5,7)", unit: "" },
       { label: "Field", value: "Non-linear", unit: "" },
       { label: "Prediction", value: "Discrete scales", unit: "" },
-    ],
-  },
-  {
-    key: "harmonics",
-    card: "Spherical Harmonics",
-    title: "Yₗᵐ — Modes of the Sphere",
-    question: "What are the resonant modes of a 3D sphere?",
-    metrics: [
-      { label: "Family", value: "Yₗᵐ(θ,φ)", unit: "" },
-      { label: "Degree ℓ", value: "0 → ∞", unit: "" },
-      { label: "Order m", value: "−ℓ → +ℓ", unit: "" },
-      { label: "Multiplicity", value: "2ℓ + 1", unit: "modes" },
     ],
   },
 ];
@@ -178,22 +166,6 @@ const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
       "Higher harmonics oscillate faster — sub-octaves of one root.",
       "Each doubling (n=1, 2, 4, 8) is one octave.",
       "Bridges the Ratios layer (math) and Harmonics layer (modes).",
-    ],
-  },
-  harmonics: {
-    title: "Spherical Harmonics Yₗᵐ",
-    seeing: "The vibration modes of a sphere — the 3D analogue of standing waves on a string. Any field on a sphere decomposes into a sum of these modes.",
-    why: [
-      "The CMB is published as a Yₗᵐ power spectrum.",
-      "Earth's gravity and magnetic fields are mapped as Yₗᵐ coefficients.",
-      "Atomic orbitals (s, p, d, f) are Yₗᵐ shapes.",
-      "Each (ℓ, m) is one note in the cosmic harmonic alphabet.",
-    ],
-    interact: [
-      "Drag to rotate · scroll to zoom.",
-      "ℓ sets total nodal lines — higher ℓ, finer pattern.",
-      "m shifts balance between latitudinal and longitudinal.",
-      "Warm lobes positive, cool lobes negative.",
     ],
   },
 };
@@ -416,27 +388,16 @@ const WaveView = ({ tick }: { tick: number }) => {
   );
 };
 
-// Spherical harmonics now rendered by SphericalHarmonics3D (r3f mesh)
-
-const LayerStage = ({ layer, tick, sphL, sphM }: { layer: UniversalLayer; tick: number; sphL: number; sphM: number }) => {
+const LayerStage = ({ layer, tick }: { layer: UniversalLayer; tick: number }) => {
   if (layer === "address") return <AddressView />;
   if (layer === "cycles") return <CyclesView tick={tick} />;
   if (layer === "ratios") return <RatiosView tick={tick} />;
-  if (layer === "harmonics") return <SphericalHarmonics3D l={sphL} m={sphM} />;
   return <WaveView tick={tick} />;
 };
 
 const Universal = () => {
   const navigate = useNavigate();
   const [layer, setLayer] = useState<UniversalLayer>("address");
-  const [sphL, setSphL] = useState(3);
-  const [sphM, setSphM] = useState(2);
-  const setL = (v: number) => {
-    const nl = Math.max(0, Math.min(6, v));
-    setSphL(nl);
-    if (Math.abs(sphM) > nl) setSphM(nl);
-  };
-  const setM = (v: number) => setSphM(Math.max(-sphL, Math.min(sphL, v)));
   const active = LAYERS.find((l) => l.key === layer)!;
 
   const [tick, setTick] = useState(0);
@@ -540,7 +501,7 @@ const Universal = () => {
           )}
           style={{ filter: "drop-shadow(0 0 30px hsla(210,70%,55%,0.18))" }}
         >
-          <LayerStage layer={layer} tick={tick} sphL={sphL} sphM={sphM} />
+          <LayerStage layer={layer} tick={tick} />
         </div>
       </div>
 
@@ -571,58 +532,6 @@ const Universal = () => {
                   </ul>
                 </div>
 
-                {layer === "harmonics" && (
-                  <>
-                    <div className="border-t border-border/30 pt-3">
-                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Mode (ℓ, m)</div>
-                      <div className="flex flex-col gap-2">
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">ℓ deg</span>
-                          <button onClick={() => setL(sphL - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphL}</span>
-                          <button onClick={() => setL(sphL + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
-                        </div>
-                        <div className="flex items-center gap-2">
-                          <span className="text-[10px] tracking-[0.18em] uppercase text-muted-foreground/65 w-12">m ord</span>
-                          <button onClick={() => setM(sphM - 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">−</button>
-                          <span className="text-[12px] font-mono text-foreground/95 w-6 text-center tabular-nums">{sphM}</span>
-                          <button onClick={() => setM(sphM + 1)} className="w-7 h-7 rounded text-[12px] text-foreground/85 border border-foreground/15 hover:bg-foreground/10">+</button>
-                        </div>
-                        <div className="text-[9px] text-muted-foreground/50 tracking-wider">constraint: |m| ≤ ℓ ≤ 6</div>
-                      </div>
-                    </div>
-
-                    <div className="border-t border-border/30 pt-3">
-                      <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/55 mb-2">Famous modes</div>
-                      <div className="grid grid-cols-2 gap-1.5">
-                        {[
-                          { l: 0, m: 0, label: "Y₀₀ · Monopole" },
-                          { l: 1, m: 0, label: "Y₁₀ · Dipole" },
-                          { l: 2, m: 0, label: "Y₂₀ · Oblate" },
-                          { l: 2, m: 2, label: "Y₂₂ · Tidal" },
-                          { l: 3, m: 2, label: "Y₃₂ · f-orbital" },
-                          { l: 4, m: 3, label: "Y₄₃ · Schumann-like" },
-                        ].map((p) => {
-                          const active = sphL === p.l && sphM === p.m;
-                          return (
-                            <button
-                              key={p.label}
-                              onClick={() => { setSphL(p.l); setSphM(p.m); }}
-                              className="text-[9px] tracking-[0.05em] uppercase py-1.5 px-1.5 rounded border transition-all text-left leading-tight"
-                              style={{
-                                background: active ? "hsla(210,50%,18%,0.75)" : "hsla(240,20%,10%,0.5)",
-                                borderColor: active ? "hsla(200,70%,70%,0.6)" : "hsla(220,30%,40%,0.25)",
-                                color: active ? "hsla(0,0%,100%,0.95)" : "hsla(0,0%,100%,0.55)",
-                              }}
-                            >
-                              {p.label}
-                            </button>
-                          );
-                        })}
-                      </div>
-                    </div>
-                  </>
-                )}
               </>
             );
           })()}
