@@ -127,12 +127,10 @@ function PlanetarySystem({ opacity }: { opacity: number }) {
           const curve = new THREE.EllipseCurve(0, 0, a, b, 0, Math.PI * 2, false, angle);
           const pts = curve.getPoints(48).map((p) => new THREE.Vector3(p.x, p.y, 0));
           const geom = new THREE.BufferGeometry().setFromPoints(pts);
-          return (
-            <line key={i} rotation={[Math.PI / 2, 0, angle]}>
-              <primitive object={geom} attach="geometry" />
-              <lineBasicMaterial color="#7aa8ff" transparent opacity={0.22 * opacity} />
-            </line>
-          );
+          const mat = new THREE.LineBasicMaterial({ color: "#7aa8ff", transparent: true, opacity: 0.22 * opacity });
+          const lineObj = new THREE.Line(geom, mat);
+          lineObj.rotation.set(Math.PI / 2, 0, angle);
+          return <primitive key={i} object={lineObj} />;
         })}
       </group>
       {/* Moon orbit */}
@@ -173,12 +171,8 @@ function Heliosphere({ opacity }: { opacity: number }) {
           const geom = new THREE.BufferGeometry().setFromPoints(
             curve.getPoints(120).map((p) => new THREE.Vector3(p.x, p.y, 0)),
           );
-          return (
-            <line key={i}>
-              <primitive object={geom} attach="geometry" />
-              <lineBasicMaterial color="#cfd9ff" transparent opacity={0.22 * opacity} />
-            </line>
-          );
+          const mat = new THREE.LineBasicMaterial({ color: "#cfd9ff", transparent: true, opacity: 0.22 * opacity });
+          return <primitive key={i} object={new THREE.Line(geom, mat)} />;
         })}
         {/* Earth marker */}
         <group ref={planetsRef}>
