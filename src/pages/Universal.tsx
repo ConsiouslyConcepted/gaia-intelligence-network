@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import CosmicAddress3D from "@/components/universal/CosmicAddress3D";
-import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
+
 import { useChordPlayer } from "@/hooks/useChordPlayer";
 import { useNOAASolarCycle } from "@/hooks/usePlanetaryData";
 import { cn } from "@/lib/utils";
@@ -44,7 +44,7 @@ const ACTIVE_BTN_STYLE: React.CSSProperties = {
   boxShadow: "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)",
 };
 
-type UniversalLayer = "address" | "cycles" | "ratios" | "wave" | "harmonics";
+type UniversalLayer = "address" | "cycles" | "ratios" | "wave";
 
 interface LayerSpec {
   key: UniversalLayer;
@@ -100,18 +100,6 @@ const LAYERS: LayerSpec[] = [
       { label: "Cascade Steps", value: "n × (2,3,5,7)", unit: "" },
       { label: "Field", value: "Non-linear", unit: "" },
       { label: "Prediction", value: "Discrete scales", unit: "" },
-    ],
-  },
-  {
-    key: "harmonics",
-    card: "Spherical Harmonics",
-    title: "Yₗᵐ — Modes of the Sphere",
-    question: "What are the resonant modes of a 3D sphere?",
-    metrics: [
-      { label: "Family", value: "Yₗᵐ(θ,φ)", unit: "" },
-      { label: "Degree ℓ", value: "0 → ∞", unit: "" },
-      { label: "Order m", value: "−ℓ → +ℓ", unit: "" },
-      { label: "Multiplicity", value: "2ℓ + 1", unit: "modes" },
     ],
   },
 ];
@@ -178,22 +166,6 @@ const LAYER_INFO: Record<UniversalLayer, LayerInfo> = {
       "Higher harmonics oscillate faster — sub-octaves of one root.",
       "Each doubling (n=1, 2, 4, 8) is one octave.",
       "Bridges the Ratios layer (math) and Harmonics layer (modes).",
-    ],
-  },
-  harmonics: {
-    title: "Spherical Harmonics Yₗᵐ",
-    seeing: "The vibration modes of a sphere — the 3D analogue of standing waves on a string. Any field on a sphere decomposes into a sum of these modes.",
-    why: [
-      "The CMB is published as a Yₗᵐ power spectrum.",
-      "Earth's gravity and magnetic fields are mapped as Yₗᵐ coefficients.",
-      "Atomic orbitals (s, p, d, f) are Yₗᵐ shapes.",
-      "Each (ℓ, m) is one note in the cosmic harmonic alphabet.",
-    ],
-    interact: [
-      "Drag to rotate · scroll to zoom.",
-      "ℓ sets total nodal lines — higher ℓ, finer pattern.",
-      "m shifts balance between latitudinal and longitudinal.",
-      "Warm lobes positive, cool lobes negative.",
     ],
   },
 };
@@ -416,13 +388,10 @@ const WaveView = ({ tick }: { tick: number }) => {
   );
 };
 
-// Spherical harmonics now rendered by SphericalHarmonics3D (r3f mesh)
-
-const LayerStage = ({ layer, tick, sphL, sphM }: { layer: UniversalLayer; tick: number; sphL: number; sphM: number }) => {
+const LayerStage = ({ layer, tick }: { layer: UniversalLayer; tick: number }) => {
   if (layer === "address") return <AddressView />;
   if (layer === "cycles") return <CyclesView tick={tick} />;
   if (layer === "ratios") return <RatiosView tick={tick} />;
-  if (layer === "harmonics") return <SphericalHarmonics3D l={sphL} m={sphM} />;
   return <WaveView tick={tick} />;
 };
 
