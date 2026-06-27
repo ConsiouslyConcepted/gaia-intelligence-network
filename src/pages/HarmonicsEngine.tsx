@@ -347,9 +347,10 @@ const HarmonicsEngine = () => {
         </HudPanel>
       </div>
 
-      {/* Left rail — scope + dataset */}
-      <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[320px] xl:w-[360px] hidden md:flex flex-col gap-3">
-        <HudPanel className="p-5 flex flex-col gap-1 flex-none max-h-[46%] overflow-y-auto">
+      {/* Left rail — intelligence layer */}
+      <div className="absolute left-4 top-28 bottom-24 z-10 pointer-events-auto w-[280px] xl:w-[320px] hidden md:flex flex-col gap-3">
+        <HudPanel className="p-5 flex flex-col gap-1 flex-1 overflow-y-auto">
+
           <div className="px-2 py-1 mb-2 text-[10px] font-bold tracking-[0.2em] uppercase" style={{ color: "hsla(210,70%,75%,0.6)" }}>
             Intelligence Layer
           </div>
