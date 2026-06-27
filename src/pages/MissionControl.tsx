@@ -16,9 +16,11 @@ const MissionControl = () => {
 
   const renderWorkspace = () => {
     switch (active) {
-      case "overview": return <OverviewWorkspace />;
-      case "address":  return <CosmicAddressWorkspace />;
-      default:         return <WorkspaceStub workspace={active} />;
+      case "overview":    return <OverviewWorkspace />;
+      case "address":     return <CosmicAddressWorkspace />;
+      case "cross-layer": return <CrossLayerWorkspace />;
+      case "harmonic":    return <HarmonicWorkspace />;
+      default:            return <WorkspaceStub workspace={active} />;
     }
   };
 
