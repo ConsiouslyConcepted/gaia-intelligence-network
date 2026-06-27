@@ -658,9 +658,10 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
         <div className="text-[10px] text-muted-foreground/70 px-3 text-center">
           Solar surface oscillations interfere into a forest of discrete modes. Their frequencies depend on interior density, rotation, and composition, letting helioseismology probe the Sun's structure to within ~1%.
         </div>
-        <a
-          href="/mission-control?workspace=harmonics&layer=stellar&dataset=solar-pmodes"
-          className="mx-3 mt-1 rounded-lg border border-border/30 bg-white/[0.03] hover:bg-white/[0.06] transition px-3 py-2 flex items-center justify-between gap-3"
+        <button
+          onClick={() => navigate("/harmonics?mode=single&method=spectrum&scope=stellar&dataset=g-star-pmodes")}
+          className="mx-3 mt-1 rounded-lg border border-border/30 bg-white/[0.03] hover:bg-white/[0.06] transition px-3 py-2 flex items-center justify-between gap-3 text-left"
+          aria-label="Open Stellar Resonance Explorer"
         >
           <div className="min-w-0">
             <div className="text-[10px] uppercase tracking-[0.22em] text-foreground/85 font-semibold">Stellar Resonance Explorer</div>
@@ -669,7 +670,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
             </div>
           </div>
           <div className="text-[10px] font-mono text-foreground/70 shrink-0">OPEN →</div>
-        </a>
+        </button>
       </div>
     );
   }
