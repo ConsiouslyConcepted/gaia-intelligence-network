@@ -1,101 +1,65 @@
+# Universal Intelligence → Mission Control
 
-# Homepage → Intelligence Observatory
+Rebuild `/universal` into a six-workspace Mission Control hub that unifies every intelligence layer. Existing modules (Cosmic Address, Harmonic Cycles, Musical Ratios, Wave Structure, Spherical Harmonics) are preserved but reorganized as analytical workspaces inside the new shell.
 
-Replace the current split-rail Home with a single full-bleed WebGL scene that the user travels *through* — Earth out to the Observable Universe — with each scale acting as a gateway into its existing dashboard.
+## Route & navigation
 
-## Experience model
+- Keep `/universal` as the URL (clean, existing). Update nav label to "Universal" but page title becomes "Mission Control".
+- Add a persistent "Return to Mission Control" link in the top nav of every layer dashboard (Planetary, Solar, Stellar, Galactic, Cosmological).
+- Inside Mission Control, six workspaces accessed via a left rail (icon + label), keyed by URL search param `?workspace=overview|address|cross-layer|harmonic|ai|reports` so deep links work.
 
-One continuous camera dolly along a Z axis. Scrolling, arrow keys, or clicking a scale rail advances the camera through nine nested "stations." Each station is a self-contained 3D layer composited in depth so the prior scale is still visible behind you — preserving orientation.
-
-```text
-[ Earth ] → [ Planetary ] → [ Heliosphere ] → [ Stellar Nbhd ]
-   → [ Milky Way ] → [ Local Group ] → [ Virgo ] → [ Laniakea ] → [ Observable Universe ]
-```
-
-At every station the HUD updates:
-- Station name + one-line scientific descriptor
-- "Enter dashboard" CTA (only on the 6 stations that map to a real dashboard: Earth→Planetary, Heliosphere→Solar, Stellar Nbhd→Stellar, Milky Way→Galactic, Local Group/Virgo/Laniakea→Universal, Observable Universe→Cosmological)
-- Scale readout (e.g. "12,742 km" → "93 Gly")
-- Mini scale rail down the right side so the user always knows where they are
-
-## Scene composition (per station)
-
-| Station | Visual |
-|---|---|
-| Earth | Blue Marble globe (reuse existing Earth3D textures), atmosphere rim |
-| Planetary | Earth + Moon + magnetosphere field lines |
-| Heliosphere | Sun at center, planet orbits as faint rings, heliopause shell |
-| Stellar Nbhd | ~200 nearby-star sprites, color by spectral class, Sun highlighted |
-| Milky Way | Top-down spiral (procedural particles, ~40k), "You are here" marker |
-| Local Group | Milky Way + Andromeda + Triangulum + satellites as glowing discs |
-| Virgo Cluster | Cluster of ~80 galaxy sprites around Virgo A |
-| Laniakea | Flow-field streamlines converging on Great Attractor |
-| Observable Universe | Cosmic web — filament particles + voids, CMB-tinted backdrop |
-
-All stations live in the same scene at exponentially spaced Z positions; camera FOV and exposure are tweened between stations so each scale feels right.
-
-## Interaction
-
-- Scroll wheel / trackpad → advances camera; debounced snap-to-nearest-station on idle
-- Arrow keys ↑ ↓ → step between stations
-- Right-rail station list → click to fly-to (cubic ease, ~1.2s)
-- "Enter [Dashboard]" button → routes to existing page (`/planetary`, `/planetary?view=hgs`, `/stellar`, `/galactic`, `/universal`, `/cosmological`)
-- Top-left wordmark returns to station 0
-
-## HUD / chrome
-
-Keeps the existing monochromatic glassmorphism. No colorful accents. Footer line: "Digital Twin · Live Telemetry".
+## Six workspaces
 
 ```text
-┌────────────────────────────────────────────────────────────┐
-│ GAIASPHERE OBSERVATORY                            [≡ menu] │
-│                                                            │
-│                                                  ┌───────┐ │
-│                                                  │Earth ●│ │
-│                                                  │Planet │ │
-│           [ immersive 3D scene ]                 │Helio  │ │
-│                                                  │Stellar│ │
-│                                                  │Galaxy │ │
-│                                                  │Local  │ │
-│                                                  │Virgo  │ │
-│                                                  │Lani.  │ │
-│                                                  │Univ.  │ │
-│                                                  └───────┘ │
-│ ┌──────────────────────────────────────────────┐           │
-│ │ EARTH · 12,742 km · home world               │           │
-│ │ Living planet — biosphere, magnetosphere…    │           │
-│ │ [ Enter Planetary Dashboard → ]              │           │
-│ └──────────────────────────────────────────────┘           │
-│                                  Digital Twin · Live Tel.  │
-└────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│  GAIASPHERE MISSION CONTROL          [Return to layer ▾]   │
+├──────┬──────────────────────────────────────────────────────┤
+│ [▣]  │                                                      │
+│ [⊕]  │            Active workspace content                  │
+│ [⇄]  │                                                      │
+│ [♪]  │                                                      │
+│ [✦]  │                                                      │
+│ [▤]  │                                                      │
+└──────┴──────────────────────────────────────────────────────┘
 ```
+
+**1. Universal Overview** — five status cards (Planetary, Solar, Stellar, Galactic, Cosmological) each showing Health badge, Active Events count, Recent Changes, and an "Open dashboard →" link. Pulls from each layer's existing telemetry hooks.
+
+**2. Cosmic Address** — migrate the existing `CosmicAddress3D` component. Each level (Earth → Solar System → Stellar Neighborhood → Milky Way → Local Group → Virgo → Laniakea → Observable Universe) becomes clickable; clicking opens the matching dashboard or zooms in 3D.
+
+**3. Cross-Layer Intelligence** — reuses existing `CrossLayerPanel` + `crossLayer.ts`. Adds a "living network" view: 5 nodes (one per layer) with animated edges whose thickness = active correlation strength from latest comparisons. Lists active pairings (Planetary↔Solar, Solar↔Stellar, etc.) and surfaces shared patterns.
+
+**4. Harmonic Intelligence** — consolidate existing Harmonic Cycles, Harmonic Relationships, Musical Ratios, Wave Structures, and Spherical Harmonics into one workspace with sub-tabs. This is where the current Harmonics Engine modes live.
+
+**5. AI Mission Control** — promote the Observatory Guide into a full-pane analyst with starter prompts (Explain conditions / Compare layers / Detect anomalies / Generate report / Recommend investigations). Same edge function backend.
+
+**6. Intelligence Reports** — reuse existing `ReportsPanel` and `reports.ts`. Add report templates: Daily Observatory, Weekly Summary, Planetary Conditions, Solar Activity, Cross-Layer, Universal. Each report shows Conditions / Events / Relationships / Trends / AI Summary / Recommended exploration.
+
+## Build phases
+
+**Phase 1 (this turn) — Shell & navigation**
+- New `src/pages/MissionControl.tsx` replacing current `Universal.tsx` content; mount at `/universal`.
+- New `src/components/mission-control/MissionShell.tsx` with left rail + workspace router.
+- Stub all six workspace components with placeholder + "Coming in next phase" except Overview which renders immediately.
+- Add `ReturnToMissionControl` link component, wire into Planetary/Solar/Stellar/Galactic/Cosmological page headers.
+
+**Phase 2 — Overview + Cosmic Address**
+- Build live status rollup in Workspace 1, pulling each layer's telemetry.
+- Migrate `CosmicAddress3D` into Workspace 2 with clickable navigation.
+
+**Phase 3 — Cross-Layer + Harmonic**
+- Build living network visualization (Workspace 3).
+- Consolidate harmonic modules into Workspace 4 with sub-tabs.
+
+**Phase 4 — AI + Reports**
+- Expand Observatory Guide into Workspace 5 with mission-control prompts.
+- Wire report templates into Workspace 6.
 
 ## Technical details
 
-- New file `src/pages/Home.tsx` (replaces current implementation)
-- New component `src/components/observatory/ObservatoryScene.tsx` — `<Canvas>` host, camera rig, station registry, scroll/key controller
-- New components per station under `src/components/observatory/stations/` — `EarthStation`, `PlanetaryStation`, `HeliosphereStation`, `StellarNeighborhoodStation`, `MilkyWayStation`, `LocalGroupStation`, `VirgoStation`, `LaniakeaStation`, `ObservableUniverseStation`
-- `src/components/observatory/StationRail.tsx`, `StationHud.tsx`
-- Reuse existing R3F deps (`@react-three/fiber@^8.18`, `@react-three/drei@^9.122.0`) — already installed for Earth3D / CosmicAddress3D
-- Reuse existing Earth textures from current Home/Universal pages
-- Camera path: positions[] in normalized log-space; lerp `camera.position.z` and `camera.fov`; `useFrame` smoothing factor 0.08
-- Snap behavior: detect scroll-idle 180ms, ease to nearest station t-value
-- Lazy-mount heavy stations (Milky Way 40k particles, Cosmic Web) via `<Suspense>` + visibility distance cull
-- Bottom-bar performance: hard cap pixel ratio at 1.5, single directional light + ambient, no post-processing pass beyond a cheap vignette overlay (CSS)
-- All routes already exist — no router changes needed
-- Existing Home.tsx is overwritten; existing menu bar / other pages untouched
+- Workspace state via `useSearchParams` so each workspace has its own URL.
+- Reuse existing components — do not duplicate: `CrossLayerPanel`, `EventsPanel`, `ReportsPanel`, `AssistantPanel`, `CosmicAddress3D`, harmonic modules from `HarmonicsEngine.tsx`.
+- The old `/harmonics-engine` route stays functional during transition; nav points to Mission Control going forward.
+- All glass styling matches existing design system (monochromatic glassmorphism per project memory).
 
-## Build order
-
-1. Scaffold `ObservatoryScene` + camera controller + 3 placeholder stations (Earth, Milky Way, Universe) and verify scroll/snap/keyboard work
-2. Add station rail + HUD wired to active station state
-3. Build the remaining 6 stations
-4. Wire dashboard CTAs to existing routes
-5. Performance pass + responsive (mobile = same rail collapsed into a bottom slider)
-
-## Out of scope (this turn)
-
-- Audio / ambient soundtrack
-- Live telemetry overlays on Earth (already on Planetary page)
-- Saving last-viewed station to localStorage
-- A guided "auto-tour" play button (can add later if wanted)
+After Phase 1 ships, you'll see the full shell + navigation working, with Overview live and the other five workspaces showing scaffolded placeholders so you can review the structure before I fill them in.

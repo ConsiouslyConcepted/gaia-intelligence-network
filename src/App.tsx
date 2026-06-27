@@ -9,7 +9,7 @@ import SphereDetail from "./pages/SphereDetail";
 import PlanetaryCommons from "./pages/PlanetaryCommons";
 import Galactic from "./pages/Galactic";
 import Cosmological from "./pages/Cosmological";
-import Universal from "./pages/Universal";
+import MissionControl from "./pages/MissionControl";
 import Stellar from "./pages/Stellar";
 import HarmonicsEngine from "./pages/HarmonicsEngine";
 import ObservatoryGuide from "./components/observatory/ObservatoryGuide";
@@ -33,7 +33,7 @@ const App = () => (
           <Route path="/commons" element={<PlanetaryCommons />} />
           <Route path="/galactic" element={<Galactic />} />
           <Route path="/cosmological" element={<Cosmological />} />
-          <Route path="/universal" element={<Universal />} />
+          <Route path="/universal" element={<MissionControl />} />
           <Route path="/stellar" element={<Stellar />} />
           <Route path="/harmonics" element={<HarmonicsEngine />} />
 
