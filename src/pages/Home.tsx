@@ -182,9 +182,9 @@ export default function Home() {
               <span className="italic font-extralight text-white/85">observed as one system.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              GaiaSphere is a living observatory for the nested systems that shape life on
-              Earth — from planetary spheres to the cosmic web — and the harmonic relationships
-              that bind them.
+              Explore Earth's place within the nested systems of the observable universe
+              through real-time scientific data, systems intelligence, harmonic analysis,
+              and AI-assisted discovery.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
