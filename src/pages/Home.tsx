@@ -571,7 +571,7 @@ export default function Home() {
               to="/planetary"
               className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
             >
-              Begin at Earth
+              Start at Earth
               <ArrowRight className="w-4 h-4" />
             </Link>
             <Link
