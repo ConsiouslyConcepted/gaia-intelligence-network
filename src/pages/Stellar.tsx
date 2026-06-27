@@ -67,26 +67,26 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "classification",
-    card: "Stellar Classification",
-    title: "Spectral Types · OBAFGKM",
-    question: "How are stars categorized by temperature and luminosity?",
+    card: "Light & Spectra",
+    title: "Spectrum · Luminosity · Color · Temperature",
+    question: "What does each star's light reveal about it?",
     metrics: [
       { label: "Sun Spectral Class", value: "G2V", unit: "" },
       { label: "Sun Surface Temp", value: "5,778", unit: "K" },
-      { label: "Most Common Class", value: "M", unit: "dwarf" },
+      { label: "Sun Peak Emission", value: "~500", unit: "nm" },
       { label: "Local M-Dwarf Share", value: "~75", unit: "%" },
     ],
   },
   {
     key: "lifecycle",
-    card: "Stellar Evolution",
-    title: "Birth · Main Sequence · Death",
-    question: "How do stars evolve from nebula to remnant?",
+    card: "Evolution & Element Formation",
+    title: "Stellar lifecycle · stellar nucleosynthesis",
+    question: "How do stars evolve and forge the elements?",
     metrics: [
       { label: "Sun Age", value: "4.6", unit: "Gyr" },
       { label: "Main Sequence Left", value: "~5", unit: "Gyr" },
       { label: "Sun End State", value: "White Dwarf", unit: "" },
-      { label: "Massive Star End", value: "Supernova", unit: "" },
+      { label: "Heavy Elements From", value: "Supernovae", unit: "" },
     ],
   },
   {
@@ -115,26 +115,26 @@ const LAYERS: LayerSpec[] = [
   },
   {
     key: "magnetic",
-    card: "Stellar Magnetic Fields",
-    title: "Dynamos · Starspots · Flares",
-    question: "How strong are stellar magnetic fields and what do they drive?",
+    card: "Magnetism & Stellar Winds",
+    title: "Dynamos · Starspots · Flares · Winds",
+    question: "How do stellar fields and winds shape planetary environments?",
     metrics: [
       { label: "Sun Mean Field", value: "1–2", unit: "G" },
       { label: "Sunspot Peak Field", value: "~3,000", unit: "G" },
-      { label: "M-Dwarf Field", value: "~3,000", unit: "G" },
+      { label: "Solar Wind Speed", value: "300–800", unit: "km/s" },
       { label: "Magnetar Field", value: "10¹⁴", unit: "G" },
     ],
   },
   {
     key: "exoplanets",
     card: "Exoplanetary Systems",
-    title: "Planets Beyond the Sun",
-    question: "How common are planets around nearby stars?",
+    title: "Architecture · Habitable Zone · Resonance",
+    question: "How are planetary systems arranged around other stars?",
     metrics: [
       { label: "Confirmed Exoplanets", value: "5,800+", unit: "" },
       { label: "Systems", value: "4,300+", unit: "" },
       { label: "Habitable-Zone Candidates", value: "~60", unit: "" },
-      { label: "Nearest Exoplanet", value: "Proxima b", unit: "4.24 ly" },
+      { label: "Resonant Chain Example", value: "TRAPPIST-1", unit: "" },
     ],
   },
 ];
@@ -160,81 +160,81 @@ const LAYER_INFO: Record<StellarLayer, LayerInfo> = {
     ],
   },
   classification: {
-    seeing: "The OBAFGKM spectral sequence orders stars by surface temperature. The Sun is a G2V — a mid-band oscillator on the main sequence.",
+    seeing: "Every star emits a unique spectrum. The OBAFGKM sequence orders stars by surface temperature, color, and luminosity. The Sun is a G2V star peaking near 500 nm.",
     why: [
-      "Spectral class fixes a star's peak emission frequency (Wien's law) — its fundamental optical 'note'.",
-      "Mass and class determine the convective-envelope size that drives p-mode oscillation frequencies.",
-      "The OBAFGKM ladder is itself a harmonic series in temperature and luminosity.",
+      "Light is the primary observable expression of a star — spectra encode temperature, composition, motion, and age.",
+      "Peak emission wavelength follows Wien's law: hotter stars emit bluer light, cooler stars redder light.",
+      "Absorption lines in a spectrum reveal which elements are present in the star's outer layers.",
     ],
     interact: [
-      "Metric rail shows the Sun's class and peak emission frequency.",
-      "Cross-reference Oscillations — class predicts the p-mode frequency band.",
-      "Compare against M-dwarf prevalence: the galaxy's dominant oscillator type.",
+      "Metric rail shows the Sun's class, surface temperature, and peak emission wavelength.",
+      "Cross-reference Oscillations — spectral class predicts the dominant p-mode frequency band.",
+      "Compare against the M-dwarf share to see which stellar type dominates the local neighborhood.",
     ],
   },
   lifecycle: {
-    seeing: "Stars form from molecular clouds, fuse hydrogen on the main sequence, then evolve through red-giant, white-dwarf, neutron-star, or black-hole end states.",
+    seeing: "Stars form from molecular clouds, fuse hydrogen on the main sequence, then evolve through red-giant, white-dwarf, neutron-star, or black-hole end states. Along the way, fusion forges the elements heavier than hydrogen.",
     why: [
-      "Each evolutionary stage shifts the star's oscillation spectrum — radius and density set the eigenmode frequencies.",
-      "Red giants ring at minute-scale periods; white dwarfs and neutron stars ring at sub-second periods.",
-      "End-state events (supernovae, mergers) inject the highest-amplitude gravitational and EM waves in the galaxy.",
+      "Stellar nucleosynthesis builds the elements: H → He on the main sequence, then He → C → O → … → Fe in later stages.",
+      "Elements heavier than iron form during supernovae and neutron-star mergers.",
+      "The matter that makes up planets, oceans, and biology was produced by earlier generations of stars.",
     ],
     interact: [
-      "Metric rail tracks the Sun's age and remaining main-sequence time.",
-      "Cross-reference Oscillations to see how mode frequencies migrate with stage.",
-      "Compare Sun vs. massive-star end-states — orders-of-magnitude frequency shift.",
+      "Metric rail tracks the Sun's age, remaining main-sequence time, and end state.",
+      "The element-formation chain below shows where each element is produced.",
+      "Cross-reference Oscillations to see how a star's pulsation spectrum shifts as it evolves.",
     ],
   },
   oscillations: {
     seeing: "Stars ring like bells. Acoustic (p-mode) and gravity (g-mode) oscillations make their surfaces pulsate. The Sun's dominant p-mode sits near 3.1 mHz (~5 min period).",
     why: [
-      "This is the most direct harmonic layer — measured eigenmode spectra read interior density, rotation, and composition.",
-      "p-mode frequency scales as √(M/R³); g-mode periods scale with buoyancy frequency — both are pure standing waves.",
-      "Asteroseismology has now resolved mode combs in tens of thousands of stars.",
+      "Asteroseismology measures these oscillations to read a star's interior structure, rotation, and composition — just as seismology does for Earth.",
+      "p-mode frequencies scale as √(M/R³); g-mode periods scale with buoyancy frequency.",
+      "Mode spectra have now been resolved in tens of thousands of stars by Kepler, TESS, and ground-based surveys.",
     ],
     interact: [
       "Metric rail lists the Sun's dominant frequency and detected mode count.",
-      "Cross-reference Magnetic — fields modulate p-mode amplitudes.",
-      "Use Classification to predict where each spectral type peaks in mode frequency.",
+      "Cross-reference Magnetism — magnetic activity modulates p-mode amplitudes.",
+      "Use Light & Spectra to predict where each spectral type peaks in mode frequency.",
     ],
   },
   variables: {
     seeing: "Variable stars pulsate or eclipse on hours-to-years timescales. Cepheids and RR Lyrae follow strict period–luminosity relations.",
     why: [
-      "Cepheid pulsation is a clean fundamental-mode oscillation — period directly encodes luminosity, anchoring the distance ladder.",
-      "Eclipsing binaries are two-oscillator systems whose orbital period sets the dominant brightness harmonic.",
-      "Variable-star period spectra map onto the same eigenmode physics as solar p-modes, just at larger amplitude.",
+      "Cepheid pulsation is a clean fundamental-mode oscillation — period directly encodes luminosity, anchoring the cosmic distance ladder.",
+      "Eclipsing binaries give the most precise direct measurements of stellar masses and radii.",
+      "Variable-star pulsations follow the same physics as solar p-modes, just at much larger amplitude.",
     ],
     interact: [
       "Metric rail shows catalog size and Cepheid period range.",
       "Cross-reference Oscillations — variables are the strongest standing-wave emitters.",
-      "Use Classification to see which spectral bands host each variable class.",
+      "Use Light & Spectra to see which spectral bands host each variable class.",
     ],
   },
   magnetic: {
-    seeing: "Stars generate magnetic fields through convective dynamo action. The Sun runs at 1–2 G average, 3,000 G in sunspots; magnetars reach 10¹⁵ G.",
+    seeing: "Stars generate magnetic fields through convective dynamo action and drive plasma outflows called stellar winds. The Sun runs at 1–2 G average, 3,000 G in sunspots, and emits a wind at 300–800 km/s.",
     why: [
-      "Dynamo cycles are themselves oscillators — the Sun's 22-yr Hale cycle is a low-frequency magnetic standing wave.",
-      "Field strength sets the Alfvén frequency, which couples plasma motion to magnetic harmonics.",
-      "Magnetic activity modulates the amplitude of every higher-frequency mode the star emits.",
+      "Magnetic fields drive starspots, flares, coronal mass ejections, and long-term activity cycles like the Sun's 22-year Hale cycle.",
+      "Stellar winds carry mass, angular momentum, and energy away from the star, shaping the heliosphere or astrosphere around it.",
+      "Magnetic activity and wind pressure directly influence the atmospheres and habitability of orbiting planets.",
     ],
     interact: [
-      "Metric rail compares Sun, sunspot, M-dwarf, and magnetar field strengths.",
-      "Cross-reference Oscillations — magnetic suppression and amplification of p-modes.",
-      "Use Lifecycle to see how dynamo frequency slows as stars spin down.",
+      "Metric rail compares field strengths from the Sun up to magnetars, plus solar wind speed.",
+      "Cross-reference Exoplanets to see which stellar environments host habitable-zone candidates.",
+      "Use Evolution to see how dynamo activity and wind loss change as stars age.",
     ],
   },
   exoplanets: {
-    seeing: "Over 5,800 confirmed exoplanets across 4,300+ systems. Many show mean-motion resonance chains analogous to the Solar System.",
+    seeing: "Over 5,800 confirmed exoplanets across 4,300+ systems. Architectures range from compact multi-planet systems to wide-orbit giants, with about 60 candidates in their star's habitable zone.",
     why: [
-      "Resonant orbital chains (e.g. TRAPPIST-1's 8:5:3:2 chain) are pure integer-ratio harmonic systems at planetary scale.",
-      "Transit and radial-velocity signals are periodic — each planet adds one frequency line to the host star's spectrum.",
-      "Comparing resonance architectures across systems tests how universal harmonic stability is.",
+      "The habitable zone is the orbital range where liquid water can exist on a rocky planet's surface — its location depends on the host star's luminosity.",
+      "System architecture (planet count, spacing, mass ordering) records how the system formed and evolved.",
+      "Mean-motion orbital resonances (e.g. TRAPPIST-1's 8:5:3:2 chain) stabilize tightly-packed systems through integer-ratio period locks.",
     ],
     interact: [
-      "Metric rail tracks confirmed counts and the nearest known exoplanet.",
-      "Cross-reference Neighborhood to see which nearby stars host resonant chains.",
-      "Use Oscillations to see how planet transit frequencies overlay on the host's mode spectrum.",
+      "Metric rail tracks confirmed counts, habitable-zone candidates, and a benchmark resonant system.",
+      "Cross-reference Light & Spectra — the host star's class sets where its habitable zone falls.",
+      "Cross-reference Local Neighborhood to see which nearby stars host known planets.",
     ],
   },
 };
@@ -254,7 +254,7 @@ const Stellar = () => {
           <div>
             <h1 className="text-sm font-bold tracking-[0.2em] uppercase text-foreground/90">Stellar Intelligence</h1>
             <p className="text-[9px] tracking-[0.2em] uppercase text-muted-foreground/50 mt-0.5">
-              Local Stellar Neighborhood · Spectral Classes · Exoplanetary Systems
+              Light · Oscillation · Magnetism · Element Formation
             </p>
           </div>
 
@@ -550,7 +550,7 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
     return (
       <div className="w-full h-full flex flex-col justify-center gap-1 px-1 py-1 overflow-y-auto">
         <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
-          OBAFGKM Spectral Sequence — hot ⟶ cool
+          Light &amp; Spectra — OBAFGKM sequence (hot ⟶ cool)
         </div>
         {SPECTRAL.map((s) => (
           <div key={s.cls} className="flex items-center gap-3 rounded-lg px-2.5 py-1.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
@@ -572,10 +572,19 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   }
 
   if (layer === "lifecycle") {
+    const chain = [
+      { el: "H", site: "Main sequence" },
+      { el: "He", site: "Core fusion" },
+      { el: "C", site: "Red giant" },
+      { el: "O", site: "Late burning" },
+      { el: "Fe", site: "Massive cores" },
+      { el: "SN", site: "Supernova" },
+      { el: "Au+", site: "Heavy elements" },
+    ];
     return (
       <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
-          Stellar Lifecycle — Sun-mass track
+          Stellar lifecycle — Sun-mass track
         </div>
         {LIFECYCLE_STAGES.map((s, i) => (
           <div key={s.name} className="flex items-center gap-3 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
@@ -586,6 +595,22 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
             </div>
           </div>
         ))}
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mt-2">
+          Element formation chain
+        </div>
+        <div className="flex items-center justify-between gap-1 px-1">
+          {chain.map((c, i) => (
+            <div key={c.el} className="flex items-center gap-1 flex-1">
+              <div className="flex-1 rounded-lg p-1.5 border border-border/25 text-center" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+                <div className="text-[12px] font-mono font-semibold text-foreground/90">{c.el}</div>
+                <div className="text-[8px] text-muted-foreground/65 leading-tight mt-0.5">{c.site}</div>
+              </div>
+              {i < chain.length - 1 && (
+                <div className="text-foreground/40 text-[10px] font-mono">→</div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
@@ -677,6 +702,11 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
       { name: "Magnetar", val: 1e14, color: "#7aa8ff", note: "Most magnetic objects known" },
     ];
     const max = Math.log10(1e14);
+    const windRows = [
+      { name: "Slow solar wind", val: 400, color: "#ffe87a", note: "From streamer belts · ~400 km/s" },
+      { name: "Fast solar wind", val: 750, color: "#ffba6b", note: "From coronal holes · up to ~800 km/s" },
+      { name: "M-dwarf wind", val: 600, color: "#cc5533", note: "Strong magnetic loading · variable" },
+    ];
     return (
       <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
@@ -701,17 +731,29 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
             );
           })}
         </div>
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mt-2">
+          Stellar winds · outflow speed (km/s)
+        </div>
+        <div className="grid grid-cols-3 gap-1.5">
+          {windRows.map((w) => (
+            <div key={w.name} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+              <div className="text-[10px] font-semibold tracking-[0.08em] uppercase text-foreground/90">{w.name}</div>
+              <div className="text-[11px] font-mono text-foreground/85 mt-0.5">{w.val} <span className="text-[8px] text-muted-foreground/60">km/s</span></div>
+              <div className="text-[9px] text-muted-foreground/65 mt-0.5 leading-tight">{w.note}</div>
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
 
   // exoplanets
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-3 px-2 py-1 overflow-y-auto">
+    <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
       <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
-        Exoplanetary Systems — confirmed detections (NASA Exoplanet Archive)
+        Exoplanetary systems — NASA Exoplanet Archive
       </div>
-      <div className="grid grid-cols-2 gap-2">
+      <div className="grid grid-cols-3 gap-1.5">
         {[
           { label: "Confirmed planets", value: "5,800+" },
           { label: "Planetary systems", value: "4,300+" },
@@ -720,16 +762,41 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
           { label: "Transit method", value: "~75%" },
           { label: "Radial-velocity", value: "~19%" },
         ].map((c) => (
-          <div key={c.label} className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-            <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
-            <div className="text-[16px] font-mono font-semibold text-foreground/90">{c.value}</div>
+          <div key={c.label} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
+            <div className="text-[13px] font-mono font-semibold text-foreground/90">{c.value}</div>
           </div>
         ))}
       </div>
-      <div className="rounded-lg p-3 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+
+      <div className="grid grid-cols-2 gap-2 mt-1">
+        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Habitable zone</div>
+          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Liquid-water orbits</div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
+            Sun: ~0.95–1.37 AU · M-dwarf (Proxima): ~0.04–0.08 AU. Zone location scales with stellar luminosity.
+          </div>
+        </div>
+        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">System architecture</div>
+          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Compact · spaced · hierarchical</div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
+            Planet count, spacing, and mass ordering record formation and migration history.
+          </div>
+        </div>
+      </div>
+
+      <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Orbital resonance · TRAPPIST-1</div>
+        <div className="text-[10px] text-muted-foreground/75 leading-snug">
+          Seven planets locked in a near-perfect mean-motion chain (period ratios ≈ 8:5:3:2:3:4:3). Integer-ratio resonances stabilize tightly-packed systems and are observed in many multi-planet architectures.
+        </div>
+      </div>
+
+      <div className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
         <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Nearest known exoplanet</div>
-        <div className="text-[13px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
-        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass planet · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
+        <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
+        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
       </div>
     </div>
   );
