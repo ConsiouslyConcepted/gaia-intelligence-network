@@ -507,6 +507,305 @@ const LIFECYCLE_STAGES = [
   { name: "End State", desc: "White dwarf · neutron star · black hole" },
 ];
 
+// ─────────────────────────────────────────────────────────────
+// Variable Stars — interactive panel
+// ─────────────────────────────────────────────────────────────
+type VarClass = {
+  id: string;
+  name: string;
+  color: string;
+  periodLabel: string;
+  use: string;
+  exemplar: { name: string; note: string };
+  // Period–Luminosity coordinates: log10(period in days), absolute magnitude (M_V)
+  logP: number;
+  absMag: number;
+  // Folded light curve generator: phase 0..1 -> normalized magnitude (0 dim, 1 bright)
+  curve: (phase: number) => number;
+  datasetId?: string; // Harmonics Engine dataset id, if available
+};
+
+const VAR_CLASSES: VarClass[] = [
+  {
+    id: "cepheid",
+    name: "Cepheid",
+    color: "#ffe87a",
+    periodLabel: "1–100 days",
+    use: "Distance ladder · period–luminosity relation",
+    exemplar: { name: "δ Cephei", note: "5.37 d · prototype" },
+    logP: 0.9,
+    absMag: -4.0,
+    curve: (p) => (p < 0.25 ? p / 0.25 : 1 - (p - 0.25) / 0.75),
+    datasetId: "variable-cepheid",
+  },
+  {
+    id: "rrlyrae",
+    name: "RR Lyrae",
+    color: "#ffba6b",
+    periodLabel: "0.2–1 day",
+    use: "Halo distances · old population II tracers",
+    exemplar: { name: "RR Lyrae", note: "0.567 d · prototype" },
+    logP: -0.3,
+    absMag: 0.6,
+    curve: (p) => (p < 0.2 ? p / 0.2 : 1 - (p - 0.2) / 0.8),
+  },
+  {
+    id: "mira",
+    name: "Mira",
+    color: "#ff7d5e",
+    periodLabel: "~1 year",
+    use: "Late-stage AGB pulsators",
+    exemplar: { name: "ο Ceti (Mira)", note: "332 d · ΔV ≈ 8 mag" },
+    logP: 2.5,
+    absMag: -1.5,
+    curve: (p) => 0.5 + 0.5 * Math.sin(2 * Math.PI * p - Math.PI / 2),
+  },
+  {
+    id: "eclipsing",
+    name: "Eclipsing Binary",
+    color: "#9ec5ff",
+    periodLabel: "hours–years",
+    use: "Direct stellar masses and radii",
+    exemplar: { name: "Algol (β Persei)", note: "2.87 d · detached" },
+    logP: 0.46,
+    absMag: -0.2,
+    curve: (p) => {
+      const d1 = Math.exp(-Math.pow((p - 0.25) / 0.04, 2));
+      const d2 = 0.5 * Math.exp(-Math.pow((p - 0.75) / 0.05, 2));
+      return Math.max(0, 1 - d1 - d2);
+    },
+  },
+  {
+    id: "dscuti",
+    name: "δ Scuti",
+    color: "#cfd9ff",
+    periodLabel: "0.5–8 hours",
+    use: "Asteroseismology of A/F stars",
+    exemplar: { name: "δ Scuti", note: "0.194 d · multi-mode" },
+    logP: -0.7,
+    absMag: 1.5,
+    curve: (p) =>
+      0.5 +
+      0.3 * Math.sin(2 * Math.PI * p) +
+      0.15 * Math.sin(2 * Math.PI * 2.3 * p + 0.7),
+  },
+  {
+    id: "cataclysmic",
+    name: "Cataclysmic",
+    color: "#cc5533",
+    periodLabel: "minutes–days",
+    use: "Accreting binaries · novae",
+    exemplar: { name: "SS Cygni", note: "Dwarf nova · ~50 d outbursts" },
+    logP: 1.7,
+    absMag: 4.5,
+    curve: (p) => {
+      const spike = Math.exp(-Math.pow((p - 0.35) / 0.03, 2));
+      const decay = p > 0.35 ? Math.exp(-(p - 0.35) * 6) * 0.7 : 0;
+      return Math.min(1, 0.08 + spike + decay);
+    },
+  },
+];
+
+function FoldedLightCurve({ c, animate = true }: { c: VarClass; animate?: boolean }) {
+  const W = 320;
+  const H = 96;
+  const pad = { l: 28, r: 8, t: 8, b: 20 };
+  const innerW = W - pad.l - pad.r;
+  const innerH = H - pad.t - pad.b;
+  const N = 140;
+  const pts: string[] = [];
+  for (let i = 0; i <= N; i++) {
+    const phase = i / N;
+    const y = c.curve(phase);
+    const px = pad.l + phase * innerW;
+    const py = pad.t + (1 - y) * innerH;
+    pts.push(`${px.toFixed(1)},${py.toFixed(1)}`);
+  }
+  const d = "M" + pts.join(" L");
+  return (
+    <svg width={W} height={H} className="block">
+      <defs>
+        <linearGradient id={`lc-${c.id}`} x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stopColor={c.color} stopOpacity="0.9" />
+          <stop offset="100%" stopColor={c.color} stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {/* axes */}
+      <line x1={pad.l} y1={pad.t} x2={pad.l} y2={H - pad.b} stroke="hsla(220,30%,60%,0.25)" />
+      <line x1={pad.l} y1={H - pad.b} x2={W - pad.r} y2={H - pad.b} stroke="hsla(220,30%,60%,0.25)" />
+      <text x={4} y={pad.t + 8} fill="hsla(220,20%,75%,0.7)" fontSize="9" fontFamily="monospace">bright</text>
+      <text x={4} y={H - pad.b - 2} fill="hsla(220,20%,75%,0.7)" fontSize="9" fontFamily="monospace">dim</text>
+      <text x={pad.l} y={H - 4} fill="hsla(220,20%,75%,0.7)" fontSize="9" fontFamily="monospace">phase 0</text>
+      <text x={W - pad.r - 28} y={H - 4} fill="hsla(220,20%,75%,0.7)" fontSize="9" fontFamily="monospace">1.0</text>
+      <path d={`${d} L ${W - pad.r},${H - pad.b} L ${pad.l},${H - pad.b} Z`} fill={`url(#lc-${c.id})`} opacity="0.35" />
+      <path d={d} fill="none" stroke={c.color} strokeWidth="1.6" style={{ filter: `drop-shadow(0 0 4px ${c.color})` }} />
+      {animate && (
+        <circle r="3.2" fill={c.color} style={{ filter: `drop-shadow(0 0 6px ${c.color})` }}>
+          <animateMotion dur="5s" repeatCount="indefinite" path={d} />
+        </circle>
+      )}
+    </svg>
+  );
+}
+
+function PLDiagram({ selectedId, onSelect }: { selectedId: string | null; onSelect: (id: string) => void }) {
+  const W = 680;
+  const H = 360;
+  const pad = { l: 56, r: 24, t: 24, b: 44 };
+  const innerW = W - pad.l - pad.r;
+  const innerH = H - pad.t - pad.b;
+  const xMin = -1.2;
+  const xMax = 3.0;
+  const yMin = -6; // brightest (top)
+  const yMax = 6;  // dimmest (bottom)
+  const x = (lp: number) => pad.l + ((lp - xMin) / (xMax - xMin)) * innerW;
+  const y = (m: number) => pad.t + ((m - yMin) / (yMax - yMin)) * innerH;
+  // Leavitt law for classical Cepheids: M_V ≈ -2.78 logP - 1.35
+  const lawPts: string[] = [];
+  for (let i = 0; i <= 20; i++) {
+    const lp = 0.4 + (i / 20) * 1.8;
+    const m = -2.78 * lp - 1.35;
+    lawPts.push(`${x(lp).toFixed(1)},${y(m).toFixed(1)}`);
+  }
+  const gridX = [-1, 0, 1, 2, 3];
+  const gridY = [-6, -3, 0, 3, 6];
+  return (
+    <svg width={W} height={H} className="max-w-full">
+      {/* grid */}
+      {gridX.map((g) => (
+        <g key={`gx-${g}`}>
+          <line x1={x(g)} y1={pad.t} x2={x(g)} y2={H - pad.b} stroke="hsla(220,30%,55%,0.12)" />
+          <text x={x(g)} y={H - pad.b + 14} fill="hsla(220,20%,75%,0.7)" fontSize="10" fontFamily="monospace" textAnchor="middle">{`10^${g}`}</text>
+        </g>
+      ))}
+      {gridY.map((g) => (
+        <g key={`gy-${g}`}>
+          <line x1={pad.l} y1={y(g)} x2={W - pad.r} y2={y(g)} stroke="hsla(220,30%,55%,0.12)" />
+          <text x={pad.l - 8} y={y(g) + 3} fill="hsla(220,20%,75%,0.7)" fontSize="10" fontFamily="monospace" textAnchor="end">{g > 0 ? `+${g}` : g}</text>
+        </g>
+      ))}
+      {/* axes */}
+      <line x1={pad.l} y1={pad.t} x2={pad.l} y2={H - pad.b} stroke="hsla(220,30%,60%,0.4)" />
+      <line x1={pad.l} y1={H - pad.b} x2={W - pad.r} y2={H - pad.b} stroke="hsla(220,30%,60%,0.4)" />
+      <text x={W / 2} y={H - 8} fill="hsla(220,20%,80%,0.8)" fontSize="11" fontFamily="monospace" textAnchor="middle">period (days, log)</text>
+      <text x={14} y={H / 2} fill="hsla(220,20%,80%,0.8)" fontSize="11" fontFamily="monospace" textAnchor="middle" transform={`rotate(-90 14 ${H / 2})`}>absolute magnitude M_V</text>
+      {/* Leavitt law line */}
+      <polyline points={lawPts.join(" ")} fill="none" stroke="hsla(48,90%,70%,0.55)" strokeWidth="1.5" strokeDasharray="4 4" />
+      <text x={x(2.2) + 6} y={y(-2.78 * 2.2 - 1.35) - 4} fill="hsla(48,90%,80%,0.8)" fontSize="10" fontFamily="monospace">Leavitt law (Cepheid P–L)</text>
+      {/* class points */}
+      {VAR_CLASSES.map((c) => {
+        const active = selectedId === c.id;
+        return (
+          <g key={c.id} onClick={() => onSelect(c.id)} style={{ cursor: "pointer" }}>
+            <circle cx={x(c.logP)} cy={y(c.absMag)} r={active ? 8 : 6} fill={c.color}
+              style={{ filter: `drop-shadow(0 0 ${active ? 12 : 6}px ${c.color})` }}
+              stroke={active ? "white" : "transparent"} strokeWidth={active ? 1.2 : 0} />
+            <text x={x(c.logP) + 12} y={y(c.absMag) + 3} fill="hsla(0,0%,100%,0.85)" fontSize="11" fontFamily="monospace">{c.name}</text>
+          </g>
+        );
+      })}
+    </svg>
+  );
+}
+
+function VariableStarsPanel() {
+  const navigate = useNavigate();
+  const [selectedId, setSelectedId] = useState<string>("cepheid");
+  const [view, setView] = useState<"cards" | "pl">("cards");
+  const selected = VAR_CLASSES.find((c) => c.id === selectedId) ?? VAR_CLASSES[0];
+
+  const openInEngine = (c: VarClass) => {
+    const params = new URLSearchParams({
+      mode: "single",
+      method: c.id === "dscuti" || c.id === "rrlyrae" ? "spectrum" : "timeSeries",
+      scope: "stellar",
+    });
+    if (c.datasetId) params.set("dataset", c.datasetId);
+    navigate(`/harmonics?${params.toString()}`);
+  };
+
+  return (
+    <div className="w-full h-full flex flex-col gap-3 px-4 py-2 overflow-y-auto">
+      <div className="flex items-center justify-between">
+        <div className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground/70">Variable star classes</div>
+        <div className="flex gap-1 p-1 rounded-lg border border-border/30" style={{ background: "hsla(240,20%,8%,0.5)" }}>
+          {(["cards", "pl"] as const).map((v) => (
+            <button key={v} onClick={() => setView(v)}
+              className={cn("px-3 py-1 text-[10px] uppercase tracking-[0.15em] rounded-md transition-colors",
+                view === v ? "bg-foreground/10 text-foreground" : "text-muted-foreground/70 hover:text-foreground/80")}>
+              {v === "cards" ? "Classes" : "P–L Diagram"}
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {view === "cards" ? (
+        <div className="grid grid-cols-2 gap-3">
+          {VAR_CLASSES.map((c) => {
+            const active = c.id === selectedId;
+            return (
+              <button
+                key={c.id}
+                onClick={() => setSelectedId(c.id)}
+                className={cn(
+                  "text-left rounded-xl p-3 border transition-all duration-200",
+                  active ? "border-foreground/40" : "border-border/30 hover:border-border/50"
+                )}
+                style={{
+                  background: active
+                    ? "linear-gradient(145deg, hsla(225,45%,14%,0.95), hsla(225,50%,8%,0.92))"
+                    : "hsla(240,20%,10%,0.6)",
+                  boxShadow: active ? `0 0 24px ${c.color}33, inset 0 1px 0 hsla(0,0%,100%,0.06)` : "none",
+                }}
+              >
+                <div className="flex items-center gap-2 mb-1">
+                  <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
+                  <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{c.name}</div>
+                </div>
+                <div className="text-[11px] font-mono text-muted-foreground/75">{c.periodLabel}</div>
+                <div className="text-[12px] text-muted-foreground/80 mt-0.5">{c.use}</div>
+              </button>
+            );
+          })}
+        </div>
+      ) : (
+        <div className="flex justify-center">
+          <PLDiagram selectedId={selectedId} onSelect={setSelectedId} />
+        </div>
+      )}
+
+      {/* Detail row */}
+      <div className="rounded-xl border border-border/30 p-3 flex flex-col sm:flex-row gap-3"
+        style={{ background: "linear-gradient(145deg, hsla(225,45%,12%,0.9), hsla(225,50%,6%,0.92))" }}>
+        <div className="shrink-0">
+          <FoldedLightCurve c={selected} />
+          <div className="text-[9px] font-mono text-muted-foreground/60 text-center mt-0.5">Folded light curve · phase 0–1</div>
+        </div>
+        <div className="flex-1 flex flex-col gap-2 min-w-0">
+          <div className="flex items-center gap-2">
+            <div className="w-2 h-2 rounded-full" style={{ background: selected.color, boxShadow: `0 0 8px ${selected.color}` }} />
+            <div className="text-[12px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{selected.name}</div>
+            <div className="text-[10px] font-mono text-muted-foreground/60">log P = {selected.logP.toFixed(2)} · M_V = {selected.absMag.toFixed(1)}</div>
+          </div>
+          <div className="text-[11px] text-muted-foreground/85">
+            <span className="text-foreground/80">Exemplar:</span> {selected.exemplar.name}
+            <span className="text-muted-foreground/60"> — {selected.exemplar.note}</span>
+          </div>
+          <div className="text-[11px] text-muted-foreground/70">{selected.use}</div>
+          <button
+            onClick={() => openInEngine(selected)}
+            className="self-start mt-1 px-3 py-1.5 rounded-md text-[10px] uppercase tracking-[0.18em] font-medium border border-border/40 hover:border-foreground/40 transition-colors"
+            style={{ background: "hsla(240,20%,12%,0.7)", color: "hsla(0,0%,95%,0.9)" }}
+          >
+            Analyze in Harmonics Engine →
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+
 function StellarStage({ layer }: { layer: StellarLayer }) {
   const navigate = useNavigate();
   if (layer === "neighborhood") {
@@ -827,35 +1126,9 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
 
 
   if (layer === "variables") {
-    const cards = [
-      { name: "Cepheid", period: "1–100 days", use: "Distance ladder · period–luminosity relation", color: "#ffe87a" },
-      { name: "RR Lyrae", period: "0.2–1 day", use: "Distances within the Milky Way halo", color: "#ffba6b" },
-      { name: "Mira", period: "~1 year", use: "Late-stage AGB pulsators", color: "#ff7d5e" },
-      { name: "Eclipsing Binary", period: "hours–years", use: "Precise stellar masses and radii", color: "#9ec5ff" },
-      { name: "δ Scuti", period: "0.5–8 hours", use: "Asteroseismology of A/F stars", color: "#cfd9ff" },
-      { name: "Cataclysmic", period: "minutes–days", use: "Accreting binaries · novae", color: "#cc5533" },
-    ];
-    return (
-      <div className="w-full h-full flex flex-col justify-center gap-4 px-4 py-2 overflow-y-auto">
-        <div className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground/70 text-center">
-          Variable star classes
-        </div>
-        <div className="grid grid-cols-2 gap-4">
-          {cards.map((c) => (
-            <div key={c.name} className="rounded-xl p-4 border border-border/30" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-              <div className="flex items-center gap-2.5 mb-2">
-                <div className="w-2.5 h-2.5 rounded-full" style={{ background: c.color, boxShadow: `0 0 10px ${c.color}` }} />
-                <div className="text-[14px] font-semibold tracking-[0.1em] uppercase text-foreground/95">{c.name}</div>
-              </div>
-              <div className="text-[12px] font-mono text-muted-foreground/75">{c.period}</div>
-              <div className="text-[13px] text-muted-foreground/80 mt-1">{c.use}</div>
-            </div>
-          ))}
-        </div>
-      </div>
-
-    );
+    return <VariableStarsPanel />;
   }
+
 
   if (layer === "magnetic") {
     const rows = [
