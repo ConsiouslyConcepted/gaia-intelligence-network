@@ -174,17 +174,16 @@ export default function Home() {
 
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
             <p className="text-[11px] uppercase tracking-[0.5em] text-white/50">
-              An Observatory of Nested Intelligence
+              Nested Intelligence Observatory
             </p>
             <h1 className="mt-5 text-5xl md:text-7xl font-light tracking-tight text-white">
-              The universe,
+              One observatory.
               <br />
-              <span className="italic font-extralight text-white/85">observed as one system.</span>
+              <span className="italic font-extralight text-white/85">Every scale.</span>
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              Explore Earth's place within the nested systems of the observable universe
-              through real-time scientific data, systems intelligence, harmonic analysis,
-              and AI-assisted discovery.
+              Real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted
+              discovery across nested planetary to cosmic scales.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
@@ -192,11 +191,11 @@ export default function Home() {
                 to="/planetary"
                 className="group inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
               >
-                Begin at Earth
+                Start at Earth
                 <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-0.5" />
               </Link>
               <a
-                href="#vision"
+                href="#about"
                 className="inline-flex items-center gap-2 rounded-full border border-white/10 px-6 py-3 text-[13px] tracking-wide text-white/75 hover:text-white hover:border-white/25 transition-all"
               >
                 What is GaiaSphere?
