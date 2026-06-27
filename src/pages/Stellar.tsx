@@ -508,6 +508,7 @@ const LIFECYCLE_STAGES = [
 ];
 
 function StellarStage({ layer }: { layer: StellarLayer }) {
+  const navigate = useNavigate();
   if (layer === "neighborhood") {
     const size = 760;
     const cx = size / 2;
