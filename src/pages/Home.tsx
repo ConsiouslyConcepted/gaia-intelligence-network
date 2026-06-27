@@ -94,24 +94,18 @@ function Earth() {
         <meshStandardMaterial
           map={earthMap}
           bumpMap={bumpMap}
-          bumpScale={0.02}
-          roughness={0.55}
-          metalness={0.1}
-          emissive="#0b1a33"
-          emissiveIntensity={0.2}
+          bumpScale={0.035}
+          roughness={0.45}
+          metalness={0.15}
         />
       </mesh>
       <mesh ref={cloudRef}>
         <sphereGeometry args={[1.735, 64, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.18} />
+        <meshBasicMaterial color="#ffffff" transparent opacity={0.09} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[1.78, 64, 64]} />
-        <meshBasicMaterial color="#6ab0ff" transparent opacity={0.12} side={THREE.BackSide} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[1.95, 64, 64]} />
-        <meshBasicMaterial color="#4aa3ff" transparent opacity={0.04} side={THREE.BackSide} />
+        <sphereGeometry args={[1.82, 64, 64]} />
+        <meshBasicMaterial color="#6ab0ff" transparent opacity={0.06} side={THREE.BackSide} />
       </mesh>
     </group>
   );
@@ -120,10 +114,10 @@ function Earth() {
 function HeroScene() {
   return (
     <>
-      <ambientLight intensity={1.8} />
-      <directionalLight position={[6, 4, 6]} intensity={2.4} color="#ffffff" />
-      <directionalLight position={[-5, -2, -4]} intensity={0.9} color="#aaccff" />
-      <pointLight position={[0, 0, 3.2]} intensity={0.6} color="#d6eaff" />
+      <ambientLight intensity={1.2} />
+      <directionalLight position={[6, 4, 6]} intensity={2.6} color="#ffffff" />
+      <directionalLight position={[-5, -2, -4]} intensity={0.5} color="#aaccff" />
+      <pointLight position={[0, 0, 3.2]} intensity={0.4} color="#d6eaff" />
       <Stars radius={80} depth={40} count={4000} factor={3.2} fade speed={0.3} />
       <Suspense fallback={null}>
         <Earth />
