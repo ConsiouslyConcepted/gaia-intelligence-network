@@ -379,7 +379,7 @@ const CrossLayerWorkspace = () => {
                 <Zap size={10} className="text-foreground/60" />
                 {edges.length} active couplings
               </span>
-              <span>click an edge to inspect · click a node to open its dashboard · shift-click to filter</span>
+              <span>click a layer to focus · click an edge to inspect</span>
             </div>
           </HudPanel>
 
