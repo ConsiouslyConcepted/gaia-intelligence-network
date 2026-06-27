@@ -82,22 +82,30 @@ export function CrossLayerPanel({ aId, bId, onChange }: Props) {
         <DatasetPicker label="Layer B" value={bId} color="hsla(45,100%,70%,0.95)" onChange={(v) => onChange(aId, v)} />
       </div>
 
-      {/* Suggested pairings */}
+      {/* Suggested pairings — grouped by boundary */}
       <div>
         <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55 mb-1.5">Suggested cross-layer pairings</div>
-        <div className="flex flex-wrap gap-1.5">
-          {SUGGESTED_PAIRINGS.map((p) => (
-            <button
-              key={p.label}
-              onClick={() => onChange(p.a, p.b)}
-              title={p.note}
-              className="text-[9px] uppercase tracking-[0.12em] px-2 py-1 rounded-md border border-border/30 bg-background/40 text-muted-foreground/80 hover:bg-foreground/[0.06] hover:text-foreground/90"
-            >
-              {p.label}
-            </button>
+        <div className="flex flex-col gap-2">
+          {Array.from(new Set(SUGGESTED_PAIRINGS.map((p) => p.group))).map((group) => (
+            <div key={group}>
+              <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/45 mb-1">{group}</div>
+              <div className="flex flex-wrap gap-1.5">
+                {SUGGESTED_PAIRINGS.filter((p) => p.group === group).map((p) => (
+                  <button
+                    key={p.label}
+                    onClick={() => onChange(p.a, p.b)}
+                    title={`${p.note}  ·  expected: ${p.expected}`}
+                    className="text-[9px] uppercase tracking-[0.12em] px-2 py-1 rounded-md border border-border/30 bg-background/40 text-muted-foreground/80 hover:bg-foreground/[0.06] hover:text-foreground/90"
+                  >
+                    {p.label}
+                  </button>
+                ))}
+              </div>
+            </div>
           ))}
         </div>
       </div>
+
 
       {/* Evidence badge */}
       <div className="flex items-start gap-2 rounded-md border px-3 py-2"
