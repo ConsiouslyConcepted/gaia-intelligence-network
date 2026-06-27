@@ -29,7 +29,9 @@ import {
   spectrum,
 } from "@/lib/harmonics/engine";
 import { compareLayers } from "@/lib/harmonics/crossLayer";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+
 
 // ───────── HUD chrome (matches sibling dashboards) ─────────
 
