@@ -177,9 +177,7 @@ export default function Home() {
               Nested Intelligence Observatory
             </p>
             <h1 className="mt-5 text-5xl md:text-7xl font-light tracking-tight text-white">
-              One observatory.
-              <br />
-              <span className="italic font-extralight text-white/85">Every scale.</span>
+              Gaiasphere
             </h1>
             <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
               Real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted
