@@ -230,6 +230,50 @@ function StellarNeighborhood({ opacity }: { opacity: number }) {
   );
 }
 
+function OrionSpur({ opacity }: { opacity: number }) {
+  // A tilted spiral-arm fragment with the Sun highlighted near the centre.
+  const groupRef = useRef<THREE.Group>(null);
+  const positions = useMemo(() => {
+    const N = 4000;
+    const arr = new Float32Array(N * 3);
+    for (let i = 0; i < N; i++) {
+      // narrow band along x, slight curve along z
+      const x = (Math.random() - 0.5) * 8;
+      const curve = 0.08 * x * x;
+      const z = curve + (Math.random() - 0.5) * 1.4;
+      const y = (Math.random() - 0.5) * 0.4;
+      arr[i * 3] = x;
+      arr[i * 3 + 1] = y;
+      arr[i * 3 + 2] = z;
+    }
+    return arr;
+  }, []);
+
+  useFrame((s) => {
+    if (groupRef.current) groupRef.current.rotation.y = s.clock.elapsedTime * 0.02;
+  });
+
+  return (
+    <group ref={groupRef} rotation={[0.25, 0.4, 0.1]}>
+      <ambientLight intensity={0.4} />
+      <points>
+        <bufferGeometry>
+          <bufferAttribute attach="attributes-position" count={positions.length / 3} array={positions} itemSize={3} args={[positions, 3]} />
+        </bufferGeometry>
+        <pointsMaterial size={0.035} sizeAttenuation color="#cfe1ff" transparent opacity={0.75 * opacity} />
+      </points>
+      {/* Sun marker */}
+      <mesh position={[0, 0, 0]}>
+        <sphereGeometry args={[0.12, 24, 24]} />
+        <meshBasicMaterial color="#ffe87a" transparent opacity={opacity} />
+      </mesh>
+      <mesh position={[0, 0, 0]}>
+        <ringGeometry args={[0.2, 0.26, 32]} />
+        <meshBasicMaterial color="#ffe87a" transparent opacity={0.7 * opacity} side={THREE.DoubleSide} />
+      </mesh>
+    </group>
+  );
+
 function MilkyWay({ opacity }: { opacity: number }) {
   const groupRef = useRef<THREE.Group>(null);
   const positions = useMemo(() => {
@@ -456,6 +500,8 @@ function StationRenderer({ id, opacity }: { id: string; opacity: number }) {
       return <Heliosphere opacity={opacity} />;
     case "stellar":
       return <StellarNeighborhood opacity={opacity} />;
+    case "orionspur":
+      return <OrionSpur opacity={opacity} />;
     case "milkyway":
       return <MilkyWay opacity={opacity} />;
     case "localgroup":
