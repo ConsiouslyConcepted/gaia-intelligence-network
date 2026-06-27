@@ -13,6 +13,14 @@ import {
   Infinity as InfinityIcon,
   ArrowDown,
   ArrowRight,
+  Activity,
+  Waves,
+  Network,
+  Brain,
+  LineChart,
+  Atom,
+  Telescope,
+  Sigma,
 } from "lucide-react";
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
