@@ -572,10 +572,19 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   }
 
   if (layer === "lifecycle") {
+    const chain = [
+      { el: "H", site: "Main sequence" },
+      { el: "He", site: "Core fusion" },
+      { el: "C", site: "Red giant" },
+      { el: "O", site: "Late burning" },
+      { el: "Fe", site: "Massive cores" },
+      { el: "SN", site: "Supernova" },
+      { el: "Au+", site: "Heavy elements" },
+    ];
     return (
       <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
         <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mb-1">
-          Stellar Lifecycle — Sun-mass track
+          Stellar lifecycle — Sun-mass track
         </div>
         {LIFECYCLE_STAGES.map((s, i) => (
           <div key={s.name} className="flex items-center gap-3 rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
@@ -586,6 +595,22 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
             </div>
           </div>
         ))}
+        <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center mt-2">
+          Element formation chain
+        </div>
+        <div className="flex items-center justify-between gap-1 px-1">
+          {chain.map((c, i) => (
+            <div key={c.el} className="flex items-center gap-1 flex-1">
+              <div className="flex-1 rounded-lg p-1.5 border border-border/25 text-center" style={{ background: "hsla(240,20%,10%,0.6)" }}>
+                <div className="text-[12px] font-mono font-semibold text-foreground/90">{c.el}</div>
+                <div className="text-[8px] text-muted-foreground/65 leading-tight mt-0.5">{c.site}</div>
+              </div>
+              {i < chain.length - 1 && (
+                <div className="text-foreground/40 text-[10px] font-mono">→</div>
+              )}
+            </div>
+          ))}
+        </div>
       </div>
     );
   }
