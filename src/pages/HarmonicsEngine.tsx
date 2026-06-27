@@ -4,6 +4,8 @@ import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
+import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
+import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
 import {
   DATASETS,
   METHODS,
@@ -23,6 +25,7 @@ import {
   nearestRatio,
   spectrum,
 } from "@/lib/harmonics/engine";
+import { compareLayers } from "@/lib/harmonics/crossLayer";
 import { cn } from "@/lib/utils";
 
 // ───────── HUD chrome (matches sibling dashboards) ─────────
