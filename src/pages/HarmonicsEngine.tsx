@@ -1,7 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 
-import { CommonsIcon } from "@/components/CommonsIcon";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
@@ -303,17 +302,16 @@ const HarmonicsEngine = () => {
       {/* Top bar */}
       <div className="absolute top-0 left-0 right-0 z-10 pointer-events-none p-4">
         <HudPanel className="pointer-events-auto px-4 py-4 flex items-center justify-between" topBar>
-          <div className="flex items-center gap-4">
-            <CommonsIcon />
-            <div>
-              <div className="text-[10px] tracking-[0.35em] uppercase text-muted-foreground/70">
-                Harmonic Analysis Engine
-              </div>
-              <div className="text-base font-semibold tracking-[0.16em] uppercase text-foreground/95">
-                Cross-Scale Resonance & Pattern Lab
-              </div>
+        <div className="flex items-center gap-4">
+          <div>
+            <div className="text-[10px] tracking-[0.35em] uppercase text-muted-foreground/70">
+              Harmonic Analysis Engine
+            </div>
+            <div className="text-base font-semibold tracking-[0.16em] uppercase text-foreground/95">
+              Cross-Scale Resonance & Pattern Lab
             </div>
           </div>
+        </div>
           <div className="flex items-center gap-3">
             <div
               className="flex gap-1 xl:gap-1.5 rounded-2xl p-1 xl:p-1.5 overflow-x-auto max-w-full"
