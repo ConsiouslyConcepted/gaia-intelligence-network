@@ -6,7 +6,7 @@ import {
   type HarmonicEvent,
   type Severity,
 } from "@/lib/harmonics/anomalies";
-import { SCOPES, type Scope } from "@/lib/harmonics/datasets";
+import { SCOPES, getDataset, type Scope } from "@/lib/harmonics/datasets";
 
 const ALL_SEVERITIES: Severity[] = ["info", "watch", "alert"];
 
@@ -29,11 +29,6 @@ export function EventsPanel({
     return c;
   }, [events]);
 
-  const maxScore = useMemo(
-    () => events.reduce((m, e) => Math.max(m, Math.abs(e.score)), 1),
-    [events],
-  );
-
   const toggleScope = (s: Scope) => {
     setActiveScopes((prev) => {
       const next = new Set(prev);
@@ -44,105 +39,128 @@ export function EventsPanel({
     });
   };
 
+  const lastUpdate = new Date().toISOString().slice(11, 19);
+
   return (
-    <div className="flex flex-col gap-4">
+    <div
+      className="rounded-lg border overflow-hidden flex flex-col font-sans"
+      style={{
+        background: "hsla(220,30%,8%,0.4)",
+        borderColor: "hsla(220,15%,25%,0.6)",
+      }}
+    >
       {/* Header */}
-      <div className="flex flex-wrap items-end justify-between gap-3 border-b border-border/20 pb-3">
+      <div
+        className="px-6 py-4 border-b flex flex-wrap items-center justify-between gap-3"
+        style={{ borderColor: "hsla(220,15%,25%,0.8)", background: "hsla(220,40%,5%,0.2)" }}
+      >
         <div>
-          <div className="text-[9px] uppercase tracking-[0.24em] text-muted-foreground/55">
+          <p className="text-[10px] uppercase tracking-[0.24em] font-bold text-muted-foreground/55 mb-1">
             Cross-Layer Events
-          </div>
-          <div className="text-[15px] font-semibold tracking-[0.12em] uppercase text-foreground/95 mt-0.5">
+          </p>
+          <h2 className="text-[19px] font-semibold tracking-tight text-foreground/95 uppercase">
             Anomaly &amp; Pattern Feed
-          </div>
+          </h2>
         </div>
-        <div className="flex items-center gap-1.5">
+        <div className="flex gap-2">
           {ALL_SEVERITIES.map((sv) => {
             const style = SEVERITY_STYLE[sv];
             return (
               <div
                 key={sv}
-                className="flex items-baseline gap-1.5 px-2.5 py-1 rounded border"
+                className="flex items-center gap-1.5 px-3 py-1 rounded border text-[11px] font-bold"
                 style={{ borderColor: style.border, background: style.bg }}
               >
-                <span className="text-[8px] uppercase tracking-[0.2em]" style={{ color: style.color }}>
-                  {style.label}
-                </span>
-                <span className="text-[12px] font-mono font-semibold tabular-nums" style={{ color: style.color }}>
-                  {counts[sv]}
-                </span>
+                <span style={{ color: style.color }}>{style.label}</span>
+                <span className="text-foreground/70 font-mono tabular-nums">{counts[sv]}</span>
               </div>
             );
           })}
         </div>
       </div>
 
-      {/* Filters */}
-      <div className="flex flex-wrap items-center gap-x-3 gap-y-2">
-        <div className="flex items-center gap-1.5">
-          <span className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Layers</span>
-          {SCOPES.map((s) => {
-            const active = activeScopes.has(s.id);
-            return (
-              <button
-                key={s.id}
-                onClick={() => toggleScope(s.id)}
-                className="px-2 py-1 rounded text-[9px] tracking-[0.14em] uppercase border transition-all"
-                style={{
-                  background: active ? "hsla(210,55%,16%,0.85)" : "transparent",
-                  borderColor: active ? "hsla(210,75%,60%,0.55)" : "hsla(220,15%,28%,0.4)",
-                  color: active ? "hsl(0,0%,98%)" : "hsla(220,15%,65%,0.6)",
-                }}
-              >
-                {s.label}
-              </button>
-            );
-          })}
+      {/* Filter Bar */}
+      <div
+        className="px-6 py-3 flex flex-wrap items-center gap-x-6 gap-y-2 border-b"
+        style={{ borderColor: "hsla(220,15%,25%,0.5)", background: "hsla(220,40%,4%,0.3)" }}
+      >
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] text-muted-foreground/55 font-bold uppercase tracking-wider">
+            Layers
+          </span>
+          <div className="flex flex-wrap gap-1.5">
+            {SCOPES.map((s) => {
+              const active = activeScopes.has(s.id);
+              return (
+                <button
+                  key={s.id}
+                  onClick={() => toggleScope(s.id)}
+                  className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-tighter border rounded transition-all"
+                  style={{
+                    background: active ? "hsla(210,50%,18%,0.5)" : "transparent",
+                    borderColor: active ? "hsla(210,60%,55%,0.45)" : "hsla(220,15%,25%,0.5)",
+                    color: active ? "hsl(0,0%,92%)" : "hsla(220,12%,55%,0.7)",
+                  }}
+                >
+                  {s.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
-        <div className="flex items-center gap-1.5">
-          <span className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/55 mr-1">Min</span>
-          {ALL_SEVERITIES.map((sv) => {
-            const active = sv === minSeverity;
-            const style = SEVERITY_STYLE[sv];
-            return (
-              <button
-                key={sv}
-                onClick={() => setMinSeverity(sv)}
-                className="px-2 py-1 rounded text-[9px] tracking-[0.14em] uppercase border transition-all"
-                style={{
-                  background: active ? style.bg : "transparent",
-                  borderColor: active ? style.border : "hsla(220,15%,28%,0.4)",
-                  color: active ? style.color : "hsla(220,15%,65%,0.6)",
-                }}
-              >
-                {style.label}
-              </button>
-            );
-          })}
+        <div className="flex items-center gap-3">
+          <span className="text-[10px] text-muted-foreground/55 font-bold uppercase tracking-wider">
+            Min
+          </span>
+          <div className="flex gap-1.5">
+            {ALL_SEVERITIES.map((sv) => {
+              const active = sv === minSeverity;
+              const style = SEVERITY_STYLE[sv];
+              return (
+                <button
+                  key={sv}
+                  onClick={() => setMinSeverity(sv)}
+                  className="px-2.5 py-1 text-[10px] font-bold uppercase tracking-tighter border rounded transition-all"
+                  style={{
+                    background: active ? style.bg : "transparent",
+                    borderColor: active ? style.border : "hsla(220,15%,25%,0.5)",
+                    color: active ? style.color : "hsla(220,12%,55%,0.7)",
+                  }}
+                >
+                  {style.label}
+                </button>
+              );
+            })}
+          </div>
         </div>
       </div>
 
       {/* Feed */}
       {events.length === 0 ? (
-        <div className="text-[11px] text-muted-foreground/70 py-8 text-center border border-dashed border-border/30 rounded-md">
+        <div className="text-[11px] text-muted-foreground/70 py-10 text-center">
           No events at this severity. Lower the threshold or include more layers.
         </div>
       ) : (
-        <ul className="flex flex-col">
-          {events.map((e, i) => (
-            <EventRow
-              key={e.id}
-              event={e}
-              maxScore={maxScore}
-              isLast={i === events.length - 1}
-              onSelect={onSelectDataset}
-            />
+        <div className="divide-y" style={{ borderColor: "hsla(220,15%,25%,0.3)" }}>
+          {events.map((e) => (
+            <EventRow key={e.id} event={e} onSelect={onSelectDataset} />
           ))}
-        </ul>
+        </div>
       )}
 
-      <div className="text-[9px] text-muted-foreground/50 leading-relaxed border-t border-border/20 pt-3">
-        Events are computed via z-score, drift, and dominant-period detectors. Severity reflects statistical magnitude, not real-world urgency. Evidence tags denote each dataset's provenance.
+      {/* Footer */}
+      <div
+        className="px-6 py-2 flex items-center justify-between border-t text-[9px] font-mono text-muted-foreground/45 uppercase tracking-wider"
+        style={{ borderColor: "hsla(220,15%,25%,0.5)", background: "hsla(220,40%,4%,0.35)" }}
+      >
+        <div className="flex items-center gap-2">
+          <span
+            className="w-1.5 h-1.5 rounded-full animate-pulse"
+            style={{ background: "hsl(150,70%,50%)" }}
+          />
+          <span>Sync: Optimal · {events.length} events</span>
+        </div>
+        <div>Last update: {lastUpdate} UTC</div>
       </div>
     </div>
   );
@@ -150,81 +168,138 @@ export function EventsPanel({
 
 function EventRow({
   event,
-  maxScore,
-  isLast,
   onSelect,
 }: {
   event: HarmonicEvent;
-  maxScore: number;
-  isLast: boolean;
   onSelect?: (datasetId: string, scope: Scope) => void;
 }) {
   const sev = SEVERITY_STYLE[event.severity];
-  const magnitude = Math.min(1, Math.abs(event.score) / maxScore);
+  const ds = getDataset(event.datasetId);
+  const sparkPath = useMemo(() => buildSparkPath(ds?.series, event.sampleIndex), [ds, event.sampleIndex]);
+  const positionLabel = formatPosition(event.position, event.unit);
 
   return (
-    <li
-      className="relative group transition-colors"
-      style={{ borderBottom: isLast ? "none" : "1px solid hsla(220,15%,30%,0.12)" }}
+    <div
+      className="group flex relative hover:bg-foreground/[0.025] transition-colors cursor-pointer"
+      onClick={() => onSelect?.(event.datasetId, event.scope)}
     >
-      <button
-        onClick={() => onSelect?.(event.datasetId, event.scope)}
-        className="w-full text-left flex items-stretch gap-3 py-3 pl-4 pr-3 hover:bg-foreground/[0.025] transition-colors"
-      >
-        {/* Severity rail */}
-        <span
-          className="absolute left-0 top-0 bottom-0 w-[3px] rounded-r"
-          style={{ background: sev.color, opacity: 0.7 }}
-        />
+      {/* Severity rail */}
+      <div
+        className="w-[3px] shrink-0"
+        style={{
+          background: sev.color,
+          boxShadow: event.severity === "alert" ? `0 0 12px ${sev.color}66` : undefined,
+          opacity: event.severity === "info" ? 0.55 : 0.95,
+        }}
+      />
 
-        {/* Severity chip */}
-        <span
-          className="text-[8px] uppercase tracking-[0.2em] font-semibold px-1.5 py-0.5 rounded self-start whitespace-nowrap"
-          style={{ color: sev.color, background: sev.bg, border: `1px solid ${sev.border}` }}
-        >
-          {sev.label}
-        </span>
-
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex flex-wrap items-baseline gap-x-2">
-            <span className="text-[11px] uppercase tracking-[0.14em] text-foreground/95 font-medium">
-              {event.datasetLabel}
-            </span>
-            <span className="text-[8px] uppercase tracking-[0.2em] text-muted-foreground/55">
-              {event.scope} · {EVENT_KIND_LABEL[event.kind]} · {event.evidence}
-            </span>
+      <div className="flex-1 grid grid-cols-12 gap-3 items-center px-5 py-3.5 min-w-0">
+        {/* Metadata column */}
+        <div className="col-span-3 min-w-0">
+          <div
+            className="inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase mb-1.5 tracking-[0.18em] border"
+            style={{ background: sev.bg, color: sev.color, borderColor: sev.border }}
+          >
+            {sev.label}
           </div>
-          <div className="text-[10.5px] text-muted-foreground/85 leading-snug mt-1">
-            {event.summary}
-          </div>
-
-          {/* Magnitude bar */}
-          <div className="mt-2 h-[2px] rounded-full overflow-hidden" style={{ background: "hsla(220,15%,30%,0.18)" }}>
-            <div
-              className="h-full rounded-full transition-all"
-              style={{
-                width: `${magnitude * 100}%`,
-                background: `linear-gradient(90deg, ${sev.color}55, ${sev.color})`,
-              }}
-            />
+          <div className="font-mono text-[9px] text-muted-foreground/55 space-y-0.5 uppercase">
+            <MetaLine label="Scope" value={event.scope} />
+            <MetaLine label="Kind" value={EVENT_KIND_LABEL[event.kind]} />
+            <MetaLine label="Tier" value={event.evidence} />
           </div>
         </div>
 
-        {/* Right meta */}
-        <div className="flex flex-col items-end gap-0.5 self-start min-w-[80px]">
-          <span
-            className="text-[13px] font-mono font-semibold tabular-nums leading-none"
+        {/* Title + summary */}
+        <div className="col-span-5 min-w-0">
+          <h3 className="text-foreground/95 font-semibold text-[12px] tracking-[0.06em] uppercase mb-1 truncate">
+            {event.datasetLabel}
+          </h3>
+          <p className="text-muted-foreground/80 text-[11px] leading-relaxed line-clamp-2">
+            {event.summary}
+          </p>
+        </div>
+
+        {/* Sparkline */}
+        <div className="col-span-2 hidden md:flex items-center justify-center">
+          <svg
+            className="w-full h-9"
+            viewBox="0 0 100 24"
+            preserveAspectRatio="none"
+            style={{ color: sev.color }}
+          >
+            {sparkPath && (
+              <>
+                <path d={sparkPath.area} fill="currentColor" opacity="0.08" />
+                <path
+                  d={sparkPath.line}
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="1.2"
+                  opacity="0.85"
+                />
+                <circle
+                  cx={sparkPath.markerX}
+                  cy={sparkPath.markerY}
+                  r="1.6"
+                  fill="currentColor"
+                />
+              </>
+            )}
+          </svg>
+        </div>
+
+        {/* Sigma + position */}
+        <div className="col-span-2 text-right shrink-0">
+          <div
+            className="font-mono text-[20px] font-bold leading-none tabular-nums"
             style={{ color: sev.color }}
           >
             {Math.abs(event.score).toFixed(2)}
-            <span className="text-[9px] text-muted-foreground/50 ml-0.5">σ</span>
-          </span>
-          <span className="text-[9px] font-mono text-muted-foreground/50 tabular-nums whitespace-nowrap">
-            {event.position.toFixed(1)} {event.unit}
-          </span>
+            <span className="text-[11px] ml-0.5 opacity-70">σ</span>
+          </div>
+          <div className="font-mono text-[10px] text-muted-foreground/50 mt-1 tabular-nums uppercase tracking-wider">
+            {positionLabel}
+          </div>
         </div>
-      </button>
-    </li>
+      </div>
+    </div>
   );
+}
+
+function MetaLine({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="flex justify-between gap-2">
+      <span className="text-muted-foreground/40">{label}:</span>
+      <span className="text-foreground/70 truncate">{value}</span>
+    </div>
+  );
+}
+
+function formatPosition(pos: number, unit: string): string {
+  const abs = Math.abs(pos);
+  if (abs >= 1000 && unit === "day") return `${(pos / 365).toFixed(1)} yr`;
+  return `${pos.toFixed(1)} ${unit}`;
+}
+
+function buildSparkPath(series: number[] | undefined, focusIdx: number) {
+  if (!series || series.length < 4) return null;
+  const window = 32;
+  const end = Math.min(series.length, focusIdx + 1);
+  const start = Math.max(0, end - window);
+  const data = series.slice(start, end);
+  if (data.length < 2) return null;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const w = 100;
+  const h = 24;
+  const pts = data.map((v, i) => {
+    const x = (i / (data.length - 1)) * w;
+    const y = h - ((v - min) / range) * h;
+    return [x, y] as const;
+  });
+  const line = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
+  const area = `${line} L${w},${h} L0,${h} Z`;
+  const [mx, my] = pts[pts.length - 1];
+  return { line, area, markerX: mx, markerY: my };
 }
