@@ -156,8 +156,8 @@ export default function Home() {
             <img
               src={earthAsset.url}
               alt="GaiaSphere"
-              width={644}
-              height={644}
+              width={1024}
+              height={1024}
               className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(45,138,158,0.35)]"
             />
           </div>
