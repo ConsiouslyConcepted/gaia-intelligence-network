@@ -19,7 +19,8 @@ import {
   Sigma,
 } from "lucide-react";
 import UniversalOverviewStrip from "@/components/home/UniversalOverviewStrip";
-import earthAsset from "@/assets/earth-marbled.png.asset.json";
+import OrbitingEarth from "@/components/home/OrbitingEarth";
+
 
 
 const PanelButton = ({
