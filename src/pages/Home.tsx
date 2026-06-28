@@ -236,12 +236,16 @@ export default function Home() {
 
 
             <p
-              className="mt-6 max-w-[900px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
+              className="mt-6 max-w-[950px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
               style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
             >
-              Explore Earth's nested systems and their harmonic relationships within the observable universe through real-time
+              <span className="whitespace-nowrap">
+                Explore Earth's nested systems and their harmonic relationships within the observable universe through real-time
+              </span>
               <br className="hidden md:block" />
-              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+              <span className="whitespace-nowrap">
+                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+              </span>
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
