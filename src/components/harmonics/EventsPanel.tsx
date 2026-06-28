@@ -141,7 +141,7 @@ export function EventsPanel({
           No events at this severity. Lower the threshold or include more layers.
         </div>
       ) : (
-        <div className="divide-y" style={{ borderColor: "hsla(220,15%,25%,0.3)" }}>
+        <div className="flex flex-col gap-3 px-5 py-5">
           {events.map((e) => (
             <EventRow key={e.id} event={e} onSelect={onSelectDataset} />
           ))}
@@ -175,71 +175,100 @@ function EventRow({
 }) {
   const sev = SEVERITY_STYLE[event.severity];
   const positionLabel = formatPosition(event.position, event.unit);
+  const sign = event.score >= 0 ? "+" : "−";
 
   return (
     <div
-      className="group flex relative hover:bg-foreground/[0.025] transition-colors cursor-pointer"
       onClick={() => onSelect?.(event.datasetId, event.scope)}
+      className="group relative flex items-center gap-6 rounded-xl border px-5 py-4 cursor-pointer transition-all duration-300"
+      style={{
+        borderColor: "hsla(210,60%,55%,0.10)",
+        background: "hsla(220,30%,8%,0.4)",
+        boxShadow: "inset 0 1px 1px hsla(0,0%,100%,0.04), 0 0 20px hsla(220,40%,2%,0.4)",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.30)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.10)";
+      }}
     >
-      {/* Severity rail */}
+      {/* Severity chip */}
+      <div className="flex items-center justify-center w-20 shrink-0">
+        <span
+          className="flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-[10px] font-bold tracking-tighter uppercase"
+          style={{
+            borderColor: sev.border,
+            background: sev.bg,
+            color: sev.color,
+            boxShadow: `0 0 8px ${sev.color}33`,
+          }}
+        >
+          <span
+            className={`w-1 h-1 rounded-full ${event.severity === "alert" ? "animate-pulse" : ""}`}
+            style={{ background: sev.color }}
+          />
+          {sev.label}
+        </span>
+      </div>
+
+      {/* Metadata stack */}
       <div
-        className="w-[3px] shrink-0"
-        style={{
-          background: sev.color,
-          boxShadow: event.severity === "alert" ? `0 0 12px ${sev.color}66` : undefined,
-          opacity: event.severity === "info" ? 0.55 : 0.95,
-        }}
-      />
+        className="flex flex-col gap-1 w-32 shrink-0 border-r pr-6"
+        style={{ borderColor: "hsla(220,15%,25%,0.6)" }}
+      >
+        <MetaLine label="Scope" value={event.scope} />
+        <MetaLine label="Tier" value={event.evidence} bold />
+      </div>
 
-      <div className="flex-1 grid grid-cols-12 gap-4 items-center px-5 py-3.5 min-w-0">
-        {/* Metadata column */}
-        <div className="col-span-3 min-w-0">
-          <div
-            className="inline-block px-1.5 py-0.5 rounded text-[9px] font-black uppercase mb-1.5 tracking-[0.18em] border"
-            style={{ background: sev.bg, color: sev.color, borderColor: sev.border }}
-          >
-            {sev.label}
-          </div>
-          <div className="font-mono text-[9px] text-muted-foreground/55 space-y-0.5 uppercase">
-            <MetaLine label="Scope" value={event.scope} />
-            <MetaLine label="Kind" value={EVENT_KIND_LABEL[event.kind]} />
-            <MetaLine label="Tier" value={event.evidence} />
-          </div>
-        </div>
+      {/* Title + summary */}
+      <div className="flex-1 min-w-0">
+        <h3 className="text-foreground/95 font-semibold text-[13px] leading-tight mb-1 truncate">
+          {event.datasetLabel}
+        </h3>
+        <p className="text-muted-foreground/75 text-[11px] leading-relaxed line-clamp-2">
+          {event.summary}
+        </p>
+      </div>
 
-        {/* Title + summary */}
-        <div className="col-span-7 min-w-0">
-          <h3 className="text-foreground/95 font-semibold text-[12px] tracking-[0.06em] uppercase mb-1 truncate">
-            {event.datasetLabel}
-          </h3>
-          <p className="text-muted-foreground/80 text-[11px] leading-relaxed line-clamp-2">
-            {event.summary}
-          </p>
-        </div>
-
-        {/* Sigma + position */}
-        <div className="col-span-2 text-right shrink-0">
-          <div
-            className="font-mono text-[20px] font-bold leading-none tabular-nums"
-            style={{ color: sev.color }}
-          >
-            {Math.abs(event.score).toFixed(2)}
-            <span className="text-[11px] ml-0.5 opacity-70">σ</span>
-          </div>
-          <div className="font-mono text-[10px] text-muted-foreground/50 mt-1 tabular-nums uppercase tracking-wider">
-            {positionLabel}
-          </div>
-        </div>
+      {/* Sigma metric */}
+      <div
+        className="flex flex-col items-end w-32 shrink-0 border-l pl-6"
+        style={{ borderColor: "hsla(220,15%,25%,0.6)" }}
+      >
+        <span className="text-[9px] font-bold text-muted-foreground/55 tracking-widest uppercase mb-1">
+          Deviation
+        </span>
+        <span
+          className="font-mono text-2xl font-bold tabular-nums leading-none"
+          style={{
+            color: sev.color,
+            textShadow: `0 0 10px ${sev.color}4d`,
+          }}
+        >
+          {sign}
+          {Math.abs(event.score).toFixed(2)}
+          <span className="text-sm ml-0.5 opacity-80">σ</span>
+        </span>
+        <span className="text-[10px] font-mono text-muted-foreground/50 mt-1.5 uppercase tracking-wider">
+          {positionLabel}
+        </span>
       </div>
     </div>
   );
 }
 
-function MetaLine({ label, value }: { label: string; value: string }) {
+function MetaLine({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
-    <div className="flex justify-between gap-2">
-      <span className="text-muted-foreground/40">{label}:</span>
-      <span className="text-foreground/70 truncate">{value}</span>
+    <div className="flex flex-col">
+      <span className="text-[9px] font-bold text-muted-foreground/55 tracking-widest uppercase">
+        {label}
+      </span>
+      <span
+        className={`text-[11px] font-mono text-foreground/80 tabular-nums truncate ${bold ? "font-bold" : ""}`}
+      >
+        {value}
+      </span>
     </div>
   );
 }
