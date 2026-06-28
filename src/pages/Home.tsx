@@ -219,17 +219,29 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Link
                 to="/planetary"
-                className="group relative inline-flex items-center justify-center min-w-[210px] h-14 px-8 rounded-full bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] active:scale-95"
+                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
               >
-                Enter Observatory
-                <span className="absolute inset-0 rounded-full border border-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
+                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
+                <span className="relative flex items-center gap-3">
+                  <span className="w-1.5 h-1.5 bg-white/80 rounded-full animate-pulse" />
+                  Enter Observatory
+                </span>
+                <span className="absolute -bottom-1 -left-1 text-[6px] font-mono text-white/25 tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">
+                  REF.GAIA_01
+                </span>
               </Link>
+
               <Link
                 to="#vision"
-                className="group relative inline-flex items-center justify-center min-w-[210px] h-14 px-8 rounded-full border border-white/30 bg-white/[0.02] text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-300 hover:scale-[1.02] hover:border-white/60 hover:bg-white/[0.07] active:scale-95"
+                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
               >
+                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
+                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
                 <span className="relative z-10">Learn More</span>
-                <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="absolute bottom-3.5 left-8 right-8 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
               </Link>
             </div>
           </div>
