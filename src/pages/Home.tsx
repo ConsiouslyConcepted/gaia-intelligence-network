@@ -153,9 +153,25 @@ export default function Home() {
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 45%, rgba(5,6,15,0.55) 100%)",
+              "radial-gradient(ellipse at center, transparent 35%, rgba(5,6,15,0.65) 100%)",
           }}
         />
+
+        {/* Orbital rings */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
+          <div className="w-[38rem] h-[38rem] md:w-[52rem] md:h-[52rem] rounded-full border border-white/[0.06]" />
+          <div className="absolute w-[40rem] h-[40rem] md:w-[54rem] md:h-[54rem] rounded-full border border-dashed border-white/[0.04]" />
+        </div>
+
+        {/* Corner telemetry */}
+        <div className="absolute top-24 left-8 z-20 hidden md:flex flex-col gap-1 text-[9px] font-mono text-white/30 tracking-wider">
+          <span>ORBITAL_PHASE: 0.1245</span>
+          <span>SENSORS: ACTIVE</span>
+        </div>
+        <div className="absolute bottom-24 right-8 z-20 hidden md:flex flex-col items-end gap-1 text-[9px] font-mono text-white/30 tracking-wider">
+          <span>COORD: 0.000°N 0.000°E</span>
+          <span>REF: NASA BLUE MARBLE</span>
+        </div>
 
         {/* Hero copy */}
         <div className="relative z-20 flex flex-col h-full">
@@ -168,23 +184,32 @@ export default function Home() {
           </header>
 
           <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-            <p className="text-[11px] uppercase tracking-[0.5em] text-white/50">
-              Nested Intelligence Observatory
-            </p>
-            <h1 className="mt-5 font-wordmark text-5xl md:text-7xl font-normal tracking-[0.08em] text-white uppercase">
+            <div className="flex items-center gap-4">
+              <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/40" />
+              <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/50">
+                Nested Intelligence Observatory
+              </p>
+              <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/40" />
+            </div>
+
+            <h1 className="mt-7 font-wordmark text-6xl md:text-8xl lg:text-9xl font-normal tracking-[0.18em] text-white uppercase drop-shadow-[0_0_40px_rgba(255,255,255,0.25)]">
               Gaiasphere
             </h1>
-            <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70">
-              Explore the nested systems of Earth and the observable universe through real-time
-              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
-            </p>
+
+            <div className="mt-8 max-w-2xl p-6 md:p-8 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/[0.08]">
+              <p className="text-[14px] md:text-[15px] leading-relaxed text-white/75">
+                Explore the nested systems of Earth and the observable universe through real-time
+                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+              </p>
+            </div>
           </div>
 
-          <div className="pb-8 flex flex-col items-center text-white/45">
-            <span className="text-[10px] uppercase tracking-[0.4em]">Scroll</span>
-            <ArrowDown className="w-3.5 h-3.5 mt-2 animate-bounce" />
+          <div className="pb-10 flex flex-col items-center text-white/40">
+            <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
           </div>
         </div>
+
       </section>
 
       {/* ============ VISION ============ */}
