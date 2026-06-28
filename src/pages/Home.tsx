@@ -434,19 +434,21 @@ export default function Home() {
               and field relationships across all six observatories.
             </p>
             <div className="mt-8 flex flex-wrap gap-3">
-              <Link
+              <PanelButton
                 to="/harmonics"
-                className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+                primary
+                className="px-6 py-3 text-[13px] font-medium tracking-wide"
               >
                 Launch Harmonic Analysis
                 <ArrowRight className="w-4 h-4" />
-              </Link>
-              <Link
+              </PanelButton>
+              <PanelButton
                 to="/mission-control"
-                className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+                primary={false}
+                className="px-6 py-3 text-[13px] tracking-wide"
               >
                 Open Mission Control
-              </Link>
+              </PanelButton>
             </div>
           </div>
 
@@ -503,13 +505,14 @@ export default function Home() {
           </div>
 
           <div className="mt-12">
-            <Link
+            <PanelButton
               to="/universal"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+              primary
+              className="px-6 py-3 text-[13px] tracking-wide"
             >
               Open the Cosmic Address
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </PanelButton>
           </div>
         </div>
       </section>
@@ -627,13 +630,14 @@ export default function Home() {
               request reports, and compare layers.
             </p>
             <div className="mt-8">
-              <Link
+              <PanelButton
                 to="/mission-control?workspace=ai"
-                className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+                primary
+                className="px-6 py-3 text-[13px] tracking-wide"
               >
                 Meet the Analyst
                 <ArrowRight className="w-4 h-4" />
-              </Link>
+              </PanelButton>
             </div>
           </div>
         </div>
@@ -656,19 +660,21 @@ export default function Home() {
             Start at Earth or jump to any scale.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <PanelButton
               to="/planetary"
-              className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+              primary
+              className="px-6 py-3 text-[13px] font-medium tracking-wide"
             >
               Start at Earth
               <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
+            </PanelButton>
+            <PanelButton
               to="/universal"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+              primary={false}
+              className="px-6 py-3 text-[13px] tracking-wide"
             >
               Universal Observatory
-            </Link>
+            </PanelButton>
           </div>
         </div>
 
