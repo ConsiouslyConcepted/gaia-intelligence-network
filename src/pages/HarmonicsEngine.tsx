@@ -349,6 +349,7 @@ const HarmonicsEngine = () => {
               style={NAV_PILL_STYLE}
             >
               {[
+                { label: "Home", path: "/" },
                 { label: "Planetary", path: "/planetary" },
                 { label: "Solar", path: "/planetary?view=hgs" },
                 { label: "Stellar", path: "/stellar" },
