@@ -331,6 +331,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
 
             {/* Commons Data icon — tucked next to the toggle */}
+            <GuideButton />
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"
