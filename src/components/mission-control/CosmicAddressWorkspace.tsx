@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, MapPin } from "lucide-react";
 
-import { HudPanel } from "./MissionShell";
+import { HudPanel } from "./HudPanel";
 import CosmicAddressZoom from "./CosmicAddressZoom";
 
 // Map address node key → station index in observatory STATIONS registry.
