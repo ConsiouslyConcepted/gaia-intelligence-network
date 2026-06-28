@@ -256,7 +256,7 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="mt-8 w-full text-left text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-[-0.04em] font-title font-bold">
+            <h1 className="mt-8 w-full text-left text-5xl md:text-6xl lg:text-7xl text-white leading-[0.85] tracking-[-0.04em] font-title font-bold">
               GAIA<span className="text-white/20">SPHERE</span>
             </h1>
 
