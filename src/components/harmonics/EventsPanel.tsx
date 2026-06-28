@@ -174,8 +174,6 @@ function EventRow({
   onSelect?: (datasetId: string, scope: Scope) => void;
 }) {
   const sev = SEVERITY_STYLE[event.severity];
-  const ds = getDataset(event.datasetId);
-  const sparkPath = useMemo(() => buildSparkPath(ds?.series, event.sampleIndex), [ds, event.sampleIndex]);
   const positionLabel = formatPosition(event.position, event.unit);
 
   return (
