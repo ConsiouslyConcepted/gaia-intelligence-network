@@ -144,8 +144,8 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
         {/* Right: Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[30%] flex items-center justify-center pointer-events-none">
-          <div className="relative w-[95vw] h-[95vw] md:w-[80vh] md:h-[80vh] lg:w-[92vh] lg:h-[92vh] max-w-[1050px] max-h-[1050px]">
+        <div className="absolute inset-0 z-0 lg:left-[44%] flex items-center justify-center pointer-events-none">
+          <div className="relative w-[78vw] h-[78vw] md:w-[60vh] md:h-[60vh] lg:w-[72vh] lg:h-[72vh] max-w-[800px] max-h-[800px]">
             <style>{`
               @keyframes gaia-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-18px,0); } }
               @keyframes gaia-breath { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 60px rgba(45,138,158,0.35)); } 50% { transform: scale(1.025); filter: drop-shadow(0 0 110px rgba(45,138,158,0.55)); } }
