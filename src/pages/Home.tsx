@@ -258,7 +258,7 @@ export default function Home() {
             </div>
 
             <h1 className="mt-8 w-full text-left text-5xl md:text-6xl lg:text-7xl text-white leading-[0.85] tracking-[-0.04em] font-title font-bold">
-              GAIA<span className="text-white/20">SPHERE</span>
+              GAIA<span style={{ color: "hsla(45,100%,65%,0.55)" }}>SPHERE</span>
             </h1>
 
 
