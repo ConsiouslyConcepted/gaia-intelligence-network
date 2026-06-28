@@ -8,5 +8,7 @@ import "@fontsource/jetbrains-mono/400.css";
 import "@fontsource/jetbrains-mono/700.css";
 import "@fontsource/cinzel/400.css";
 import "@fontsource/cinzel/700.css";
+import "@fontsource/syncopate/400.css";
+import "@fontsource/syncopate/700.css";
 
 createRoot(document.getElementById("root")!).render(<App />);

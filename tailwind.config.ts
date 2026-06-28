@@ -91,6 +91,7 @@ export default {
       fontFamily: {
         display: ["Space Grotesk", "system-ui", "sans-serif"],
         wordmark: ["Cinzel", "Georgia", "serif"],
+        title: ["Syncopate", "Space Grotesk", "system-ui", "sans-serif"],
         mono: ["JetBrains Mono", "ui-monospace", "monospace"],
       },
       borderRadius: {
