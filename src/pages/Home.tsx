@@ -505,13 +505,14 @@ export default function Home() {
           </div>
 
           <div className="mt-12">
-            <Link
+            <PanelButton
               to="/universal"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 bg-white/10 backdrop-blur-xl px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/15 transition-all"
+              primary
+              className="px-6 py-3 text-[13px] tracking-wide"
             >
               Open the Cosmic Address
               <ArrowRight className="w-4 h-4" />
-            </Link>
+            </PanelButton>
           </div>
         </div>
       </section>
