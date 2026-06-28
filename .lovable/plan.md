@@ -1,32 +1,41 @@
-# Add Cross-Layer Living Network to the Harmonics Engine
+## Goal
 
-Goal: When users switch to the **Cross-Layer** mode in the Harmonics Engine, show the same nested-shell harmonic-couplings visualization from Mission Control at the top of the section, followed by the existing dataset-pairing tool.
+Retire the `/mission-control` hub. Preserve two of its workspaces by moving them into existing destinations; delete the rest.
 
-## Change
+## Changes
 
-`src/pages/HarmonicsEngine.tsx` — Cross-Layer block (currently lines 502–513):
+### 1. Home page — add Universal Overview strip
+- In `src/pages/Home.tsx`, add a new section directly after the hero (before Vision) called **"Live System Status"**.
+- Port the cards from `src/components/mission-control/UniversalOverviewWorkspace.tsx`:
+  - Composite Health + Active Events header row
+  - Six layer cards (Planetary, Solar, Stellar, Galactic, Universal, Cosmological) with system health bar, key metrics, recent event, and `Open Dashboard →` link to each scale page
+  - Mission Synthesis card kept as the 6th tile (or dropped if it feels redundant — leaning drop to keep the home page lean)
+- Reuse the existing live telemetry sources already wired into the workspace (USGS, NOAA SWPC, NASA EONET hooks) so the strip stays live.
+- Style with the existing `HudPanel` treatment so it matches the home page panels.
 
-```text
-[Cross-Layer Mode]
- ├── NEW: <CrossLayerWorkspace />        ← nested rings + selected coupling rail
- └── existing HudPanel
-     ├── "Compare nested intelligence systems" header
-     └── <CrossLayerPanel ... />          ← dataset A/B selectors + analysis
-```
+### 2. Harmonics Engine — merge Harmonic Intelligence surfaces
+- Current `src/pages/HarmonicsEngine.tsx` already covers Single-Layer Spectrum and parts of Cross-Layer Coupling. Extend it with mode tabs:
+  1. **Spectrum** (existing FFT / dominant periods / harmonic ladder)
+  2. **Coupling** (z-score overlay, best-lag cross-correlation, period-ratio detection — port from `HarmonicWorkspace.tsx`)
+  3. **Spherical Harmonics** (Yₗᵐ renderer — port the component used by Mission Control)
+  4. **Events & Anomalies** (z-score drift + severity alerts feed)
+- Keep the existing AI Analyst panel embedded in this page (it's already the unified analyst).
+- No new route; everything stays at `/analysis` (or wherever Harmonics Engine currently lives).
 
-Implementation:
-- Import `CrossLayerWorkspace` from `@/components/mission-control/CrossLayerWorkspace`.
-- Render it inside a wrapping container above the existing `HudPanel`, with `mb-4` spacing.
-- Keep the existing dataset-pairing UI unchanged below it.
+### 3. Delete Mission Control
+- Remove route `/mission-control` from `src/App.tsx`.
+- Delete files:
+  - `src/pages/MissionControl.tsx`
+  - `src/components/mission-control/` (entire folder — UniversalOverviewWorkspace, CrossLayerWorkspace / NestedShellObservatory, AIAnalystWorkspace, ReportsWorkspace, HarmonicWorkspace, CosmicAddressWorkspace, and shared layout)
+- Note: `CosmicAddressWorkspace` and `CosmicAddressZoom` are also used by `/universal`. Before deleting, move them to `src/components/universal/` and update the import in `src/pages/Universal.tsx`.
+- Remove every link/button pointing at `/mission-control` (home page CTAs, any nav entries, in-page "Open Mission Control" buttons).
 
-## Notes
+### 4. Drop without porting
+- Cross-Layer Intelligence (Nested Shell Observatory)
+- AI Mission Analyst standalone surface (analyst stays inside Harmonics Engine only)
+- Intelligence Reports archive
 
-- `CrossLayerWorkspace` is self-contained (live correlations, window selector, anomaly toggle, selected-coupling detail panel) and already used in `/mission-control`. No prop changes required.
-- Its internal `useNavigate` won't fire unless a user clicks a layer's "Open dashboard" link — safe to embed.
-- No changes to the Single-Layer, Events, or Reports modes.
-- No styling overrides; it inherits the engine's dark glass aesthetic.
-
-## Out of scope (can do next if you want)
-
-- Wiring a chord click in the rings to auto-fill Layer A / Layer B in the pairing panel below.
-- Collapsible header to hide the network for users who only want the pairing tool.
+## Out of scope
+- No changes to per-scale dashboards (Planetary, Solar, Stellar, Galactic, Universal, Cosmological).
+- No design-system or palette changes.
+- No backend/data changes — reuse existing telemetry hooks.

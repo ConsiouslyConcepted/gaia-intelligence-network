@@ -23,6 +23,7 @@ import {
   Telescope,
   Sigma,
 } from "lucide-react";
+import UniversalOverviewStrip from "@/components/home/UniversalOverviewStrip";
 
 const PanelButton = ({
   children,
@@ -297,8 +298,12 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ============ LIVE SYSTEM STATUS ============ */}
+      <UniversalOverviewStrip />
+
       {/* ============ VISION ============ */}
       <section id="vision" className="relative px-6 py-28 border-t border-white/5">
+
         <div className="max-w-5xl mx-auto grid md:grid-cols-12 gap-10">
           <div className="md:col-span-4">
             <p className="text-[10.5px] uppercase tracking-[0.45em] text-white/45">
@@ -444,12 +449,13 @@ export default function Home() {
                 <ArrowRight className="w-4 h-4" />
               </PanelButton>
               <PanelButton
-                to="/mission-control"
+                to="/universal"
                 primary={false}
                 className="px-6 py-3 text-[13px] tracking-wide"
               >
-                Open Mission Control
+                Open Universal Observatory
               </PanelButton>
+
             </div>
           </div>
 
@@ -632,13 +638,14 @@ export default function Home() {
             </p>
             <div className="mt-8">
               <PanelButton
-                to="/mission-control?workspace=ai"
+                to="/harmonics"
                 primary
                 className="px-6 py-3 text-[13px] tracking-wide"
               >
                 Meet the Analyst
                 <ArrowRight className="w-4 h-4" />
               </PanelButton>
+
             </div>
           </div>
         </div>
