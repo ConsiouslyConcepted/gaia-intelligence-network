@@ -24,9 +24,10 @@ function GlobeScene() {
 
   return (
     <>
-      <ambientLight intensity={0.4} />
-      <directionalLight position={[5, 2, 5]} intensity={1.6} color="#ffffff" />
-      <directionalLight position={[-3, -1, -4]} intensity={0.35} color="#4a90e2" />
+      <ambientLight intensity={0.6} />
+      <hemisphereLight intensity={0.5} color="#ffffff" groundColor="#1a2a3a" />
+      <directionalLight position={[5, 2, 5]} intensity={2.0} color="#ffffff" />
+      <directionalLight position={[-3, -1, -4]} intensity={0.5} color="#6fa8dc" />
 
       <mesh ref={meshRef}>
         <sphereGeometry args={[1.8, 128, 128]} />
@@ -34,8 +35,10 @@ function GlobeScene() {
           map={earthMap}
           bumpMap={bumpMap}
           bumpScale={0.03}
-          specular={new THREE.Color("#334466")}
-          shininess={8}
+          specular={new THREE.Color("#445566")}
+          shininess={10}
+          emissive={new THREE.Color("#0a1520")}
+          emissiveIntensity={0.15}
         />
       </mesh>
 
@@ -43,7 +46,7 @@ function GlobeScene() {
         <meshBasicMaterial
           color={new THREE.Color("#2d8a9e")}
           transparent
-          opacity={0.06}
+          opacity={0.08}
           side={THREE.BackSide}
           depthWrite={false}
           blending={THREE.AdditiveBlending}
