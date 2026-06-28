@@ -219,15 +219,15 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Link
                 to="/planetary"
-                className="px-8 py-4 bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold rounded-lg hover:bg-white/90 transition-colors"
+                className="inline-flex items-center justify-center px-8 py-4 h-12 bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold rounded-full hover:bg-white/90 transition-colors"
               >
                 Enter Observatory
               </Link>
               <Link
-                to="/mission-control"
-                className="px-8 py-4 border border-white/20 text-white text-[12px] uppercase tracking-[0.2em] font-semibold rounded-lg hover:bg-white/[0.05] transition-colors"
+                to="#vision"
+                className="inline-flex items-center justify-center px-8 py-4 h-12 border border-white/25 text-white text-[12px] uppercase tracking-[0.2em] font-semibold rounded-full hover:bg-white/[0.07] transition-colors"
               >
-                Mission Control
+                Learn More
               </Link>
             </div>
           </div>
