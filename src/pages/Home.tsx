@@ -1,8 +1,3 @@
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
-import { TextureLoader } from "three";
-import * as THREE from "three";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
@@ -24,6 +19,8 @@ import {
   Sigma,
 } from "lucide-react";
 import UniversalOverviewStrip from "@/components/home/UniversalOverviewStrip";
+import earthAsset from "@/assets/earth-marbled.png.asset.json";
+
 
 const PanelButton = ({
   children,
@@ -76,8 +73,6 @@ const PanelButton = ({
   </Link>
 );
 
-const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
-const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
 
 const OBSERVATORIES = [
   {
@@ -130,55 +125,6 @@ const OBSERVATORIES = [
   },
 ];
 
-function Earth() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const cloudRef = useRef<THREE.Mesh>(null);
-  const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
-
-  useFrame((_, dt) => {
-    if (meshRef.current) meshRef.current.rotation.y += dt * 0.05;
-    if (cloudRef.current) cloudRef.current.rotation.y += dt * 0.025;
-  });
-
-  return (
-    <group>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[1.3, 128, 128]} />
-        <meshStandardMaterial
-          map={earthMap}
-          bumpMap={bumpMap}
-          bumpScale={0.03}
-          roughness={0.45}
-          metalness={0.15}
-        />
-      </mesh>
-      <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.327, 64, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.09} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[1.39, 64, 64]} />
-        <meshBasicMaterial color="#6ab0ff" transparent opacity={0.06} side={THREE.BackSide} />
-      </mesh>
-
-    </group>
-  );
-}
-
-function HeroScene() {
-  return (
-    <>
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[6, 4, 6]} intensity={2.6} color="#ffffff" />
-      <directionalLight position={[-5, -2, -4]} intensity={0.5} color="#aaccff" />
-      <pointLight position={[0, 0, 3.2]} intensity={0.4} color="#d6eaff" />
-      <Stars radius={80} depth={40} count={4000} factor={3.2} fade speed={0.3} />
-      <Suspense fallback={null}>
-        <Earth />
-      </Suspense>
-    </>
-  );
-}
 
 const NESTED_SCALES = [
   { label: "Earth", scale: "10³ km" },
@@ -197,11 +143,24 @@ export default function Home() {
     <div className="relative w-full bg-[#05060f] text-foreground">
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
-        {/* Right: 3D Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[40%]">
-          <Canvas camera={{ position: [0, 0, 4.2], fov: 46 }} dpr={[1, 2]}>
-            <HeroScene />
-          </Canvas>
+        {/* Right: Earth */}
+        <div className="absolute inset-0 z-0 lg:left-[40%] flex items-center justify-center pointer-events-none">
+          <div className="relative w-[80vw] h-[80vw] md:w-[55vh] md:h-[55vh] lg:w-[60vh] lg:h-[60vh] max-w-[700px] max-h-[700px]">
+            <div
+              className="absolute inset-0 rounded-full blur-3xl -z-10"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.35) 0%, rgba(20,80,120,0.15) 45%, transparent 75%)",
+              }}
+            />
+            <img
+              src={earthAsset.url}
+              alt="GaiaSphere"
+              width={644}
+              height={644}
+              className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(45,138,158,0.35)]"
+            />
+          </div>
         </div>
 
         {/* Vignette */}
