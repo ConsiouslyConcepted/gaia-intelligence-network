@@ -4,6 +4,7 @@ import { Stars } from "@react-three/drei";
 import { TextureLoader } from "three";
 import * as THREE from "three";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import {
   Globe2,
   Sun,
@@ -22,6 +23,57 @@ import {
   Telescope,
   Sigma,
 } from "lucide-react";
+
+const PanelButton = ({
+  children,
+  primary = true,
+  className = "",
+  ...props
+}: React.ComponentProps<typeof Link> & { primary?: boolean }) => (
+  <Link
+    {...props}
+    className={cn(
+      "group relative inline-flex items-center justify-center rounded-xl backdrop-blur-2xl transition-all duration-300 overflow-hidden",
+      primary ? "text-white/95" : "text-white/70 hover:text-white/95",
+      className
+    )}
+    style={{
+      background:
+        "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+      border: primary
+        ? "1.5px solid hsla(220,35%,60%,0.55)"
+        : "1.5px solid hsla(220,35%,60%,0.35)",
+      boxShadow: primary
+        ? "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)"
+        : "inset 0 1px 0 hsla(0,0%,100%,0.06), 0 0 16px hsla(210,75%,62%,0.15), 0 8px 24px rgba(0,0,0,0.45)",
+    }}
+  >
+    <div
+      className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+      }}
+    />
+    <div
+      className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+      }}
+    />
+    <div
+      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(145deg, hsla(225,45%,14%,0.98) 0%, hsla(225,50%,10%,0.95) 50%, hsla(228,55%,8%,0.98) 100%)",
+      }}
+    />
+    <span className="relative z-10 inline-flex items-center gap-2">
+      {children}
+    </span>
+  </Link>
+);
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
