@@ -201,7 +201,7 @@ export default function Home() {
         </header>
 
         {/* Left hero content */}
-        <div className="relative z-20 h-full max-w-7xl mx-auto px-8 flex flex-col justify-center">
+        <div className="relative z-20 h-full w-full max-w-7xl px-8 flex flex-col justify-center">
           <div className="max-w-2xl">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-white/70 animate-pulse" />
