@@ -180,7 +180,23 @@ export default function Home() {
 
         {/* Header */}
         <header className="absolute top-0 left-0 right-0 z-30 px-8 pt-10">
-          <div className="flex items-center justify-end">
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-2 w-2">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-white/70 opacity-60 animate-ping" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white/80" />
+              </span>
+              <p className="text-[13px] uppercase tracking-[0.4em] text-white/85 font-light">
+                Gaiasphere
+              </p>
+              <span className="h-px w-6 bg-white/25" />
+              <p
+                className="text-[12px] uppercase tracking-[0.35em] font-light"
+                style={{ color: "#C19533" }}
+              >
+                Observatory
+              </p>
+            </div>
             <div className="hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-white/55 font-light">
               <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
               <span>Live Feed · Earth Limb</span>
@@ -189,8 +205,7 @@ export default function Home() {
         </header>
 
         {/* Hero content */}
-        <div className="relative z-20 h-full w-full px-8 md:pl-8 lg:pl-12 pt-24 md:pt-28 flex flex-col justify-start">
-
+        <div className="relative z-20 h-full w-full px-8 md:pl-16 lg:pl-24 flex flex-col justify-center">
           <div className="w-full max-w-[720px] text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/15 backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-white/80 animate-pulse" />
