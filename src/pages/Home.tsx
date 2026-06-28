@@ -147,26 +147,36 @@ export default function Home() {
         <div className="absolute inset-0 z-0 lg:left-[30%] flex items-center justify-center pointer-events-none">
           <div className="relative w-[95vw] h-[95vw] md:w-[80vh] md:h-[80vh] lg:w-[92vh] lg:h-[92vh] max-w-[1050px] max-h-[1050px]">
             <style>{`
-              @keyframes gaia-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
-              @keyframes gaia-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
-              @keyframes gaia-pulse-glow { 0%,100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
+              @keyframes gaia-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-18px,0); } }
+              @keyframes gaia-breath { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 60px rgba(45,138,158,0.35)); } 50% { transform: scale(1.025); filter: drop-shadow(0 0 110px rgba(45,138,158,0.55)); } }
+              @keyframes gaia-halo-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+              @keyframes gaia-shimmer { 0%,100% { opacity: 0.55; } 50% { opacity: 0.95; } }
             `}</style>
+            {/* Rotating conic halo behind the globe */}
+            <div
+              className="absolute inset-[-8%] rounded-full -z-10"
+              style={{
+                background:
+                  "conic-gradient(from 0deg, rgba(45,138,158,0) 0deg, rgba(45,138,158,0.35) 90deg, rgba(92,189,185,0.15) 180deg, rgba(45,138,158,0.4) 270deg, rgba(45,138,158,0) 360deg)",
+                filter: "blur(60px)",
+                animation: "gaia-halo-spin 60s linear infinite, gaia-shimmer 9s ease-in-out infinite",
+              }}
+            />
             <div
               className="absolute inset-0 rounded-full blur-3xl -z-10"
               style={{
                 background:
-                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.4) 0%, rgba(20,80,120,0.18) 45%, transparent 75%)",
-                animation: "gaia-pulse-glow 8s ease-in-out infinite",
+                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.45) 0%, rgba(20,80,120,0.2) 45%, transparent 75%)",
               }}
             />
-            <div style={{ animation: "gaia-float 10s ease-in-out infinite" }} className="w-full h-full">
+            <div style={{ animation: "gaia-float 11s ease-in-out infinite" }} className="w-full h-full">
               <img
                 src={earthAsset.url}
                 alt="GaiaSphere"
                 width={1024}
                 height={1024}
-                className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(45,138,158,0.45)]"
-                style={{ animation: "gaia-spin 90s linear infinite", transformOrigin: "50% 50%" }}
+                className="w-full h-full object-contain"
+                style={{ animation: "gaia-breath 9s ease-in-out infinite", transformOrigin: "50% 50%" }}
               />
             </div>
           </div>
