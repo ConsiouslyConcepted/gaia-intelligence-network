@@ -252,6 +252,7 @@ const Index = () => {
                 style={{ color: "hsla(45,100%,75%,0.7)" }}
               >
                 Analysis
+              </button>
 
 
             </div>
