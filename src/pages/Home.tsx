@@ -1,4 +1,4 @@
-import { Suspense, useRef } from "react";
+import { Suspense, useEffect, useRef, useState } from "react";
 import { Canvas, useFrame, useLoader } from "@react-three/fiber";
 import { Stars } from "@react-three/drei";
 import { TextureLoader } from "three";
@@ -137,6 +137,80 @@ const NESTED_SCALES = [
   { label: "Observable Universe", scale: "10¹⁰ ly" },
 ];
 
+function TelemetryHUD() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const start = Date.UTC(now.getUTCFullYear(), 0, 0);
+  const dayOfYear = (now.getTime() - start) / 86_400_000;
+  const orbitalPhase = (dayOfYear / 365.25).toFixed(4);
+  const utc = now.toISOString().slice(11, 19);
+  const julian = (now.getTime() / 86_400_000 + 2440587.5).toFixed(4);
+
+  const Row = ({ k, v }: { k: string; v: string }) => (
+    <div className="flex items-center gap-2 tabular-nums">
+      <span className="text-white/30">{k}</span>
+      <span className="text-white/60">{v}</span>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Top-left: system identity */}
+      <div className="absolute top-24 left-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase">
+        <div className="flex items-center gap-2 text-white/40 mb-2">
+          <span className="h-px w-4 bg-white/30" />
+          <span>System</span>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Row k="NODE" v="GSPH-01" />
+          <Row k="ORBIT" v={orbitalPhase} />
+          <Row k="SENSORS" v="NOMINAL" />
+        </div>
+      </div>
+
+      {/* Top-right: live UTC clock */}
+      <div className="absolute top-24 right-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase text-right">
+        <div className="flex items-center justify-end gap-2 text-white/40 mb-2">
+          <span>Sync</span>
+          <span className="h-px w-4 bg-white/30" />
+        </div>
+        <div className="flex flex-col gap-1 items-end">
+          <Row k="UTC" v={utc} />
+          <Row k="JD" v={julian} />
+        </div>
+      </div>
+
+      {/* Bottom-left: reference frame */}
+      <div className="absolute bottom-24 left-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase">
+        <div className="flex items-center gap-2 text-white/40 mb-2">
+          <span className="h-px w-4 bg-white/30" />
+          <span>Reference</span>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Row k="FRAME" v="ICRF / J2000" />
+          <Row k="SOURCE" v="NASA BLUE MARBLE" />
+        </div>
+      </div>
+
+      {/* Bottom-right: observer */}
+      <div className="absolute bottom-24 right-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase text-right">
+        <div className="flex items-center justify-end gap-2 text-white/40 mb-2">
+          <span>Observer</span>
+          <span className="h-px w-4 bg-white/30" />
+        </div>
+        <div className="flex flex-col gap-1 items-end">
+          <Row k="LAT" v="0.000° N" />
+          <Row k="LON" v="0.000° E" />
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function Home() {
   return (
     <div className="relative w-full bg-[#05060f] text-foreground">
@@ -163,24 +237,28 @@ export default function Home() {
           <div className="absolute w-[40rem] h-[40rem] md:w-[54rem] md:h-[54rem] rounded-full border border-dashed border-white/[0.04]" />
         </div>
 
-        {/* Corner telemetry */}
-        <div className="absolute top-24 left-8 z-20 hidden md:flex flex-col gap-1 text-[9px] font-mono text-white/30 tracking-wider">
-          <span>ORBITAL_PHASE: 0.1245</span>
-          <span>SENSORS: ACTIVE</span>
-        </div>
-        <div className="absolute bottom-24 right-8 z-20 hidden md:flex flex-col items-end gap-1 text-[9px] font-mono text-white/30 tracking-wider">
-          <span>COORD: 0.000°N 0.000°E</span>
-          <span>REF: NASA BLUE MARBLE</span>
-        </div>
+        {/* Telemetry HUD */}
+        <TelemetryHUD />
 
         {/* Hero copy */}
         <header className="absolute top-0 left-0 right-0 z-20 px-8 pt-10">
           <div className="flex items-center justify-between">
-            <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
-              GaiaSphere · Observatory
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-white/70 opacity-60 animate-ping" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/80" />
+              </span>
+              <p className="text-[11px] uppercase tracking-[0.45em] text-white/70 font-light">
+                Gaiasphere
+              </p>
+              <span className="h-px w-6 bg-white/20" />
+              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-light">
+                Observatory
+              </p>
+            </div>
           </div>
         </header>
+
 
         <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 text-center">
           <div className="flex items-center gap-4">
