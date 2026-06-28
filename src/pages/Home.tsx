@@ -269,32 +269,22 @@ export default function Home() {
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Link
+              <PanelButton
                 to="/planetary"
-                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
+                primary
+                className="min-w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
               >
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
-                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
-                <span className="relative flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-white/80 rounded-full animate-pulse" />
-                  Enter Observatory
-                </span>
-                <span className="absolute -bottom-1 -left-1 text-[6px] font-mono text-white/25 tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">
-                  REF.GAIA_01
-                </span>
-              </Link>
+                <span className="w-1.5 h-1.5 bg-white/80 rounded-full animate-pulse" />
+                Enter Observatory
+              </PanelButton>
 
-              <Link
+              <PanelButton
                 to="#vision"
-                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
+                primary={false}
+                className="min-w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
               >
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
-                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
-                <span className="relative z-10">Learn More</span>
-                <div className="absolute bottom-3.5 left-8 right-8 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-              </Link>
+                Learn More
+              </PanelButton>
             </div>
           </div>
         </div>
