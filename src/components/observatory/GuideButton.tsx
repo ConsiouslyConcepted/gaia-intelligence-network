@@ -1,4 +1,4 @@
-import { MessageCircle } from "lucide-react";
+import { Telescope } from "lucide-react";
 
 /**
  * Small chat-bubble launcher placed in dashboard top HUDs next to the Commons icon.
@@ -19,7 +19,7 @@ export function GuideButton({ size = 18 }: { size?: number }) {
       title="Observatory Guide"
       aria-label="Open Observatory Guide"
     >
-      <MessageCircle size={size} strokeWidth={1.7} />
+      <Telescope size={size} strokeWidth={1.7} />
     </button>
   );
 }
