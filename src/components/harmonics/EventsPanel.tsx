@@ -6,7 +6,7 @@ import {
   type HarmonicEvent,
   type Severity,
 } from "@/lib/harmonics/anomalies";
-import { SCOPES, getDataset, type Scope } from "@/lib/harmonics/datasets";
+import { SCOPES, type Scope } from "@/lib/harmonics/datasets";
 
 const ALL_SEVERITIES: Severity[] = ["info", "watch", "alert"];
 
