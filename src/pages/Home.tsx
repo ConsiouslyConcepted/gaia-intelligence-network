@@ -42,25 +42,25 @@ const PanelButton = ({
       background:
         "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
       border: primary
-        ? "1.5px solid hsla(220,35%,60%,0.55)"
-        : "1.5px solid hsla(220,35%,60%,0.35)",
+        ? "1.5px solid hsla(45,40%,45%,0.65)"
+        : "1.5px solid hsla(45,40%,45%,0.35)",
       boxShadow: primary
-        ? "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)"
-        : "inset 0 1px 0 hsla(0,0%,100%,0.06), 0 0 16px hsla(210,75%,62%,0.15), 0 8px 24px rgba(0,0,0,0.45)",
+        ? "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(45,40%,45%,0.22), 0 0 64px hsla(45,40%,45%,0.12), 0 12px 40px rgba(0,0,0,0.55)"
+        : "inset 0 1px 0 hsla(0,0%,100%,0.06), 0 0 16px hsla(45,40%,45%,0.12), 0 8px 24px rgba(0,0,0,0.45)",
     }}
   >
     <div
       className="absolute -top-px left-4 right-4 h-px pointer-events-none"
       style={{
         background:
-          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+          "linear-gradient(90deg, transparent 0%, hsla(45,40%,55%,0.45) 25%, hsla(45,40%,60%,0.65) 50%, hsla(45,40%,55%,0.45) 75%, transparent 100%)",
       }}
     />
     <div
       className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
       style={{
         background:
-          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+          "linear-gradient(90deg, transparent, hsla(45,40%,35%,0.12), transparent)",
       }}
     />
     <div
