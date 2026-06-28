@@ -239,9 +239,9 @@ export default function Home() {
               className="mt-6 max-w-[720px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
               style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
             >
-              Explore Earth's nested systems within the observable universe through real-time scientific data,
+              Explore Earth's nested systems and their harmonic relationships within the observable universe through real-time
               <br className="hidden md:block" />
-              systems intelligence, harmonic analysis, and AI-assisted discovery.
+              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
