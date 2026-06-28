@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Volume2, Music2, Orbit } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { OrbitalResonanceField } from "@/components/hgs/OrbitalResonanceField";
 import { ResonancePairDiagram } from "@/components/hgs/ResonancePairDiagram";
 import { LiveCymaticPattern } from "@/components/hgs/LiveCymaticPattern";
@@ -330,6 +331,7 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
 
 
             {/* Commons Data icon — tucked next to the toggle */}
+            <GuideButton />
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-300"

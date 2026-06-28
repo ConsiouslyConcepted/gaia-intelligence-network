@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { Activity, Signal, ArrowRight, Sparkles, Clock, Waves, Orbit, Radio, Sun } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
 import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
@@ -260,6 +261,7 @@ const Index = () => {
 
 
             {/* Commons Data icon — tucked next to the toggle */}
+            <GuideButton />
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"

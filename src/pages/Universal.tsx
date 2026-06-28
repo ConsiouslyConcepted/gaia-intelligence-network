@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import CosmicAddressWorkspace from "@/components/mission-control/CosmicAddressWorkspace";
 
@@ -446,6 +447,7 @@ const Universal = () => {
 
             </div>
 
+            <GuideButton />
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
