@@ -1,8 +1,3 @@
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame, useLoader } from "@react-three/fiber";
-import { Stars } from "@react-three/drei";
-import { TextureLoader } from "three";
-import * as THREE from "three";
 import { Link } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
@@ -24,6 +19,8 @@ import {
   Sigma,
 } from "lucide-react";
 import UniversalOverviewStrip from "@/components/home/UniversalOverviewStrip";
+import earthAsset from "@/assets/earth-marbled.png.asset.json";
+
 
 const PanelButton = ({
   children,
