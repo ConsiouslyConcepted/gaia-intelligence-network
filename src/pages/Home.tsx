@@ -164,8 +164,6 @@ export default function Home() {
           <div className="absolute w-[40rem] h-[40rem] md:w-[54rem] md:h-[54rem] rounded-full border border-dashed border-white/[0.04]" />
         </div>
 
-        {/* Telemetry HUD */}
-        <TelemetryHUD />
 
         {/* Hero copy */}
         <header className="absolute top-0 left-0 right-0 z-20 px-8 pt-10">
