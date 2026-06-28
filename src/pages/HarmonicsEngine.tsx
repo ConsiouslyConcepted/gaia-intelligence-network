@@ -5,10 +5,10 @@ import { NightSkyBackground } from "@/components/NightSkyBackground";
 import { SphericalHarmonics3D } from "@/components/universal/SphericalHarmonics3D";
 import { AssistantPanel } from "@/components/harmonics/AssistantPanel";
 import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
-import CrossLayerWorkspace from "@/components/mission-control/CrossLayerWorkspace";
+
 import { EventsPanel } from "@/components/harmonics/EventsPanel";
 import { ReportsPanel } from "@/components/harmonics/ReportsPanel";
-import { scanAllLayers } from "@/lib/harmonics/anomalies";
+import { scanAllLayers, type HarmonicEvent } from "@/lib/harmonics/anomalies";
 import {
   DATASETS,
   METHODS,
@@ -227,6 +227,7 @@ const HarmonicsEngine = () => {
   const [crossA, setCrossA] = useState<string>(searchParams.get("a") || "imf-bt");
   const [crossB, setCrossB] = useState<string>(searchParams.get("b") || "kp-index");
   const [lm, setLm] = useState<{ l: number; m: number }>({ l: 2, m: 1 });
+  const [selectedEvent, setSelectedEvent] = useState<HarmonicEvent | null>(null);
 
   const dataset = getDataset(datasetId) ?? inScope[0];
   const compare = getDataset(compareId);
@@ -255,13 +256,37 @@ const HarmonicsEngine = () => {
       evidence: e.evidence,
     }));
 
-    if (mode === "cross") {
+    const focusEvent = selectedEvent
+      ? {
+          scope: selectedEvent.scope,
+          dataset: selectedEvent.datasetLabel,
+          kind: selectedEvent.kind,
+          severity: selectedEvent.severity,
+          summary: selectedEvent.summary,
+          evidence: selectedEvent.evidence,
+          score: Number(selectedEvent.score.toFixed(3)),
+          position: Number(selectedEvent.position.toFixed(3)),
+          unit: selectedEvent.unit,
+        }
+      : null;
+
+    const singleSnapshot = () => {
+      const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
+      return {
+        scope,
+        method,
+        dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
+        topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+      };
+    };
+
+    const crossSnapshot = () => {
       const a = getDataset(crossA);
       const b = getDataset(crossB);
-      if (!a || !b) return { mode, events };
+      if (!a || !b) return null;
       const r = compareLayers(a, b);
       return {
-        mode: "cross-layer",
         layerA: { id: a.id, label: a.label, scope: a.scope, provenance: a.provenance, unit: a.unit },
         layerB: { id: b.id, label: b.label, scope: b.scope, provenance: b.provenance, unit: b.unit },
         evidence: r.evidence,
@@ -271,29 +296,35 @@ const HarmonicsEngine = () => {
         topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         sharedPeriods: r.sharedPeriods,
-        events,
       };
+    };
+
+    if (mode === "cross") {
+      return { mode: "cross-layer", ...(crossSnapshot() ?? {}), events, focusEvent };
     }
     if (mode === "events") {
-      return { mode: "events", events: scanAllLayers({ limit: 30 }).map((e) => ({
-        scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
-        summary: e.summary, evidence: e.evidence,
-      })) };
+      return {
+        mode: "events",
+        focusEvent,
+        events: scanAllLayers({ limit: 30 }).map((e) => ({
+          scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
+          summary: e.summary, evidence: e.evidence,
+        })),
+      };
     }
     if (mode === "reports") {
-      return { mode: "reports", events };
+      // Include active analysis context so reports can summarize what the user was just looking at.
+      return {
+        mode: "reports",
+        activeSingle: singleSnapshot(),
+        activeCross: crossSnapshot(),
+        events,
+        focusEvent,
+      };
     }
-    const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
-    return {
-      mode: "single-layer",
-      scope,
-      method,
-      dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
-      topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
-      fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
-      events,
-    };
-  }, [mode, scope, method, dataset, crossA, crossB]);
+    return { mode: "single-layer", ...singleSnapshot(), events, focusEvent };
+  }, [mode, scope, method, dataset, crossA, crossB, selectedEvent]);
+
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
@@ -499,30 +530,34 @@ const HarmonicsEngine = () => {
         )}
 
         {mode === "cross" && (
-          <>
-            <div className="mb-4">
-              <CrossLayerWorkspace />
+          <HudPanel className="p-4">
+            <div className="mb-3">
+              <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
+              <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">Compare nested intelligence systems</div>
+              <p className="text-[10px] text-muted-foreground/70 mt-1 leading-relaxed">
+                Pick two datasets from any scale. The engine aligns, normalizes, runs spectral and lag analysis, and labels the relationship as <span className="text-foreground/85">Measured</span>, <span className="text-foreground/85">Statistical</span>, or <span className="text-foreground/85">Exploratory</span>.
+              </p>
             </div>
-            <HudPanel className="p-4">
-              <div className="mb-3">
-                <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/55">Cross-Layer Harmonic Intelligence</div>
-                <div className="text-[13px] font-semibold tracking-[0.1em] uppercase text-foreground/95">Compare nested intelligence systems</div>
-                <p className="text-[10px] text-muted-foreground/70 mt-1 leading-relaxed">
-                  Pick two datasets from any scale. The engine aligns, normalizes, runs spectral and lag analysis, and labels the relationship as <span className="text-foreground/85">Measured</span>, <span className="text-foreground/85">Statistical</span>, or <span className="text-foreground/85">Exploratory</span>.
-                </p>
-              </div>
-              <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
-            </HudPanel>
-          </>
+            <CrossLayerPanel aId={crossA} bId={crossB} onChange={(a, b) => { setCrossA(a); setCrossB(b); }} />
+          </HudPanel>
         )}
+
 
         {mode === "events" && (
           <HudPanel className="p-4">
             <EventsPanel
-              onSelectDataset={(id, sc) => {
-                setScope(sc);
-                setDatasetId(id);
+              selectedEventId={selectedEvent?.id ?? null}
+              onSelectEvent={(event) => setSelectedEvent(event)}
+              onOpenInSingle={(event) => {
+                setSelectedEvent(event);
+                setScope(event.scope);
+                setDatasetId(event.datasetId);
                 setMode("single");
+                setRightTab("assistant");
+              }}
+              onDiscussWithAssistant={(event) => {
+                setSelectedEvent(event);
+                setRightTab("assistant");
               }}
             />
           </HudPanel>
