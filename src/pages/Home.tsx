@@ -142,23 +142,24 @@ function Earth() {
   return (
     <group>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1.7, 128, 128]} />
+        <sphereGeometry args={[1.3, 128, 128]} />
         <meshStandardMaterial
           map={earthMap}
           bumpMap={bumpMap}
-          bumpScale={0.035}
+          bumpScale={0.03}
           roughness={0.45}
           metalness={0.15}
         />
       </mesh>
       <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.735, 64, 64]} />
+        <sphereGeometry args={[1.327, 64, 64]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.09} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[1.82, 64, 64]} />
+        <sphereGeometry args={[1.39, 64, 64]} />
         <meshBasicMaterial color="#6ab0ff" transparent opacity={0.06} side={THREE.BackSide} />
       </mesh>
+
     </group>
   );
 }
