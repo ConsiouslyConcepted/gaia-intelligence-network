@@ -207,6 +207,7 @@ const Galactic = () => {
 
             </div>
 
+            <GuideButton />
             <button
               onClick={() => navigate("/commons")}
               className="flex items-center justify-center w-10 h-10 rounded-xl transition-all duration-300 hover:bg-foreground/[0.06]"
