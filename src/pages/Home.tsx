@@ -178,25 +178,18 @@ export default function Home() {
         <header className="absolute top-0 left-0 right-0 z-30 px-8 pt-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <span className="relative flex h-1.5 w-1.5">
+              <span className="relative flex h-2 w-2">
                 <span className="absolute inline-flex h-full w-full rounded-full bg-white/70 opacity-60 animate-ping" />
-                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/80" />
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-white/80" />
               </span>
-              <p className="text-[11px] uppercase tracking-[0.45em] text-white/70 font-light">
+              <p className="text-[13px] uppercase tracking-[0.4em] text-white/80 font-light">
                 Gaiasphere
               </p>
               <span className="h-px w-6 bg-white/20" />
-              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-light">
+              <p className="text-[12px] uppercase tracking-[0.35em] text-white/50 font-light">
                 Observatory
               </p>
             </div>
-            <Link
-              to="/planetary"
-              className="group relative flex items-center gap-2.5 px-5 py-2.5 text-[11px] uppercase tracking-[0.3em] text-white/90 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md border border-white/15 hover:border-white/40 rounded-full transition-all duration-300 shadow-[0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
-            >
-              <span>Enter Observatory</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
-            </Link>
           </div>
         </header>
 
