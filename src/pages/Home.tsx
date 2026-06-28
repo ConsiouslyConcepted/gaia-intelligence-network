@@ -163,24 +163,28 @@ export default function Home() {
           <div className="absolute w-[40rem] h-[40rem] md:w-[54rem] md:h-[54rem] rounded-full border border-dashed border-white/[0.04]" />
         </div>
 
-        {/* Corner telemetry */}
-        <div className="absolute top-24 left-8 z-20 hidden md:flex flex-col gap-1 text-[9px] font-mono text-white/30 tracking-wider">
-          <span>ORBITAL_PHASE: 0.1245</span>
-          <span>SENSORS: ACTIVE</span>
-        </div>
-        <div className="absolute bottom-24 right-8 z-20 hidden md:flex flex-col items-end gap-1 text-[9px] font-mono text-white/30 tracking-wider">
-          <span>COORD: 0.000°N 0.000°E</span>
-          <span>REF: NASA BLUE MARBLE</span>
-        </div>
+        {/* Telemetry HUD */}
+        <TelemetryHUD />
 
         {/* Hero copy */}
         <header className="absolute top-0 left-0 right-0 z-20 px-8 pt-10">
           <div className="flex items-center justify-between">
-            <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
-              GaiaSphere · Observatory
-            </p>
+            <div className="flex items-center gap-3">
+              <span className="relative flex h-1.5 w-1.5">
+                <span className="absolute inline-flex h-full w-full rounded-full bg-white/70 opacity-60 animate-ping" />
+                <span className="relative inline-flex rounded-full h-1.5 w-1.5 bg-white/80" />
+              </span>
+              <p className="text-[11px] uppercase tracking-[0.45em] text-white/70 font-light">
+                Gaiasphere
+              </p>
+              <span className="h-px w-6 bg-white/20" />
+              <p className="text-[10px] uppercase tracking-[0.4em] text-white/40 font-light">
+                Observatory
+              </p>
+            </div>
           </div>
         </header>
+
 
         <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 text-center">
           <div className="flex items-center gap-4">
