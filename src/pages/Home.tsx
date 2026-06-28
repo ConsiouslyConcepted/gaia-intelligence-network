@@ -213,20 +213,6 @@ export default function Home() {
           }}
         />
 
-        {/* Orbital rings around the globe */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none lg:justify-end lg:pr-[10%]">
-          <div className="relative w-[26rem] h-[26rem] md:w-[40rem] md:h-[40rem] lg:w-[48rem] lg:h-[48rem]">
-            <div className="absolute inset-0 rounded-full border border-white/[0.06] scale-110" />
-            <div className="absolute inset-0 rounded-full border border-dashed border-white/[0.04] scale-125" />
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[40%] border border-white/[0.08] rounded-[100%] rotate-[25deg]"
-              style={{ boxShadow: "0 0 15px rgba(255,255,255,0.05)" }}
-            />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[30%] border border-white/[0.04] rounded-[100%] rotate-[-15deg]" />
-            <div className="absolute top-[10%] right-[20%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-            <div className="absolute bottom-[18%] left-[10%] w-1 h-1 bg-white/40 rounded-full" />
-          </div>
-        </div>
 
         {/* Header */}
         <header className="absolute top-0 left-0 right-0 z-30 px-8 pt-10">
