@@ -205,7 +205,7 @@ export default function Home() {
         </header>
 
         {/* Hero content */}
-        <div className="relative z-20 h-full w-full max-w-7xl mx-auto px-8 flex flex-col justify-center">
+        <div className="relative z-20 h-full w-full px-8 md:pl-16 lg:pl-24 flex flex-col justify-center">
           <div className="w-full max-w-[720px] text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/15 backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-white/80 animate-pulse" />
