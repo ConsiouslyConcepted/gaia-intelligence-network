@@ -152,7 +152,18 @@ export function EventsPanel({
       ) : (
         <div className="flex flex-col gap-3 px-5 py-5">
           {events.map((e) => (
-            <EventRow key={e.id} event={e} onSelect={onSelectDataset} />
+            <EventRow
+              key={e.id}
+              event={e}
+              selected={selectedEventId === e.id}
+              onSelect={(ev) => {
+                onSelectEvent?.(ev);
+                // back-compat for old callers
+                onSelectDataset?.(ev.datasetId, ev.scope);
+              }}
+              onOpenInSingle={onOpenInSingle}
+              onDiscussWithAssistant={onDiscussWithAssistant}
+            />
           ))}
         </div>
       )}
