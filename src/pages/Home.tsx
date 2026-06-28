@@ -214,11 +214,11 @@ export default function Home() {
               Gaiasphere
             </h1>
 
-            <div className="mt-8 max-w-2xl space-y-1">
-              <p className="text-[15px] md:text-[16px] leading-relaxed text-white/70 font-light">
+            <div className="mt-8 max-w-3xl space-y-1">
+              <p className="text-sm md:text-[15px] leading-relaxed text-white/70 font-light">
                 Explore the nested systems of Earth within the observable universe
               </p>
-              <p className="text-[15px] md:text-[16px] leading-relaxed text-white/70 font-light">
+              <p className="text-sm md:text-[15px] leading-relaxed text-white/70 font-light">
                 through real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
               </p>
             </div>
