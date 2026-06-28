@@ -137,6 +137,80 @@ const NESTED_SCALES = [
   { label: "Observable Universe", scale: "10¹⁰ ly" },
 ];
 
+function TelemetryHUD() {
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => {
+    const id = setInterval(() => setNow(new Date()), 1000);
+    return () => clearInterval(id);
+  }, []);
+
+  const start = Date.UTC(now.getUTCFullYear(), 0, 0);
+  const dayOfYear = (now.getTime() - start) / 86_400_000;
+  const orbitalPhase = (dayOfYear / 365.25).toFixed(4);
+  const utc = now.toISOString().slice(11, 19);
+  const julian = (now.getTime() / 86_400_000 + 2440587.5).toFixed(4);
+
+  const Row = ({ k, v }: { k: string; v: string }) => (
+    <div className="flex items-center gap-2 tabular-nums">
+      <span className="text-white/30">{k}</span>
+      <span className="text-white/60">{v}</span>
+    </div>
+  );
+
+  return (
+    <>
+      {/* Top-left: system identity */}
+      <div className="absolute top-24 left-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase">
+        <div className="flex items-center gap-2 text-white/40 mb-2">
+          <span className="h-px w-4 bg-white/30" />
+          <span>System</span>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Row k="NODE" v="GSPH-01" />
+          <Row k="ORBIT" v={orbitalPhase} />
+          <Row k="SENSORS" v="NOMINAL" />
+        </div>
+      </div>
+
+      {/* Top-right: live UTC clock */}
+      <div className="absolute top-24 right-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase text-right">
+        <div className="flex items-center justify-end gap-2 text-white/40 mb-2">
+          <span>Sync</span>
+          <span className="h-px w-4 bg-white/30" />
+        </div>
+        <div className="flex flex-col gap-1 items-end">
+          <Row k="UTC" v={utc} />
+          <Row k="JD" v={julian} />
+        </div>
+      </div>
+
+      {/* Bottom-left: reference frame */}
+      <div className="absolute bottom-24 left-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase">
+        <div className="flex items-center gap-2 text-white/40 mb-2">
+          <span className="h-px w-4 bg-white/30" />
+          <span>Reference</span>
+        </div>
+        <div className="flex flex-col gap-1">
+          <Row k="FRAME" v="ICRF / J2000" />
+          <Row k="SOURCE" v="NASA BLUE MARBLE" />
+        </div>
+      </div>
+
+      {/* Bottom-right: observer */}
+      <div className="absolute bottom-24 right-8 z-20 hidden md:block text-[9px] font-mono tracking-[0.15em] uppercase text-right">
+        <div className="flex items-center justify-end gap-2 text-white/40 mb-2">
+          <span>Observer</span>
+          <span className="h-px w-4 bg-white/30" />
+        </div>
+        <div className="flex flex-col gap-1 items-end">
+          <Row k="LAT" v="0.000° N" />
+          <Row k="LON" v="0.000° E" />
+        </div>
+      </div>
+    </>
+  );
+}
+
 export default function Home() {
   return (
     <div className="relative w-full bg-[#05060f] text-foreground">
