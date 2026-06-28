@@ -181,6 +181,13 @@ export default function Home() {
                 Observatory
               </p>
             </div>
+            <Link
+              to="/planetary"
+              className="group flex items-center gap-2 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-white/70 hover:text-white border border-white/10 hover:border-white/30 rounded-full transition-colors"
+            >
+              <span>Enter Observatory</span>
+              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+            </Link>
           </div>
         </header>
 
