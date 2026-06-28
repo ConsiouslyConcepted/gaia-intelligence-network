@@ -225,11 +225,15 @@ export default function Home() {
             </h1>
 
             <div className="mt-5 flex items-center gap-4">
-              <span className="h-px w-12 bg-white/40" />
-              <span className="text-[10.5px] uppercase tracking-[0.45em] text-white/65 font-light">
+              <span className="h-px w-12" style={{ backgroundColor: "#C19533", opacity: 0.7 }} />
+              <span
+                className="text-[10.5px] uppercase tracking-[0.45em] font-light"
+                style={{ color: "#C19533" }}
+              >
                 An observatory for nested systems
               </span>
             </div>
+
 
             <p
               className="mt-6 max-w-[560px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
