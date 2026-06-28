@@ -188,29 +188,38 @@ export function EventsPanel({
 
 function EventRow({
   event,
+  selected,
   onSelect,
+  onOpenInSingle,
+  onDiscussWithAssistant,
 }: {
   event: HarmonicEvent;
-  onSelect?: (datasetId: string, scope: Scope) => void;
+  selected?: boolean;
+  onSelect?: (event: HarmonicEvent) => void;
+  onOpenInSingle?: (event: HarmonicEvent) => void;
+  onDiscussWithAssistant?: (event: HarmonicEvent) => void;
 }) {
   const sev = SEVERITY_STYLE[event.severity];
   const positionLabel = formatPosition(event.position, event.unit);
   const sign = event.score >= 0 ? "+" : "−";
+  const kindLabel = EVENT_KIND_LABEL[event.kind];
 
   return (
     <div
-      onClick={() => onSelect?.(event.datasetId, event.scope)}
+      onClick={() => onSelect?.(event)}
       className="group relative flex items-center gap-6 rounded-xl border px-5 py-4 cursor-pointer transition-all duration-300"
       style={{
-        borderColor: "hsla(210,60%,55%,0.10)",
-        background: "hsla(220,30%,8%,0.4)",
-        boxShadow: "inset 0 1px 1px hsla(0,0%,100%,0.04), 0 0 20px hsla(220,40%,2%,0.4)",
+        borderColor: selected ? "hsla(210,80%,65%,0.55)" : "hsla(210,60%,55%,0.10)",
+        background: selected ? "hsla(210,40%,12%,0.55)" : "hsla(220,30%,8%,0.4)",
+        boxShadow: selected
+          ? "inset 0 1px 1px hsla(0,0%,100%,0.08), 0 0 24px hsla(210,80%,60%,0.25)"
+          : "inset 0 1px 1px hsla(0,0%,100%,0.04), 0 0 20px hsla(220,40%,2%,0.4)",
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.30)";
+        if (!selected) e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.30)";
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.10)";
+        if (!selected) e.currentTarget.style.borderColor = "hsla(210,60%,55%,0.10)";
       }}
     >
       {/* Severity chip */}
@@ -234,14 +243,15 @@ function EventRow({
 
       {/* Metadata stack */}
       <div
-        className="flex flex-col gap-1 w-32 shrink-0 border-r pr-6"
+        className="flex flex-col gap-1 w-36 shrink-0 border-r pr-6"
         style={{ borderColor: "hsla(220,15%,25%,0.6)" }}
       >
         <MetaLine label="Scope" value={event.scope} />
+        <MetaLine label="Kind" value={kindLabel} />
         <MetaLine label="Tier" value={event.evidence} bold />
       </div>
 
-      {/* Title + summary */}
+      {/* Title + summary + actions */}
       <div className="flex-1 min-w-0">
         <h3 className="text-foreground/95 font-semibold text-[13px] leading-tight mb-1 truncate">
           {event.datasetLabel}
@@ -249,6 +259,36 @@ function EventRow({
         <p className="text-muted-foreground/75 text-[11px] leading-relaxed line-clamp-2">
           {event.summary}
         </p>
+        {(onOpenInSingle || onDiscussWithAssistant) && (
+          <div className="mt-2 flex flex-wrap gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+            {onOpenInSingle && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onOpenInSingle(event); }}
+                className="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border transition-all"
+                style={{
+                  borderColor: "hsla(210,60%,55%,0.4)",
+                  background: "hsla(210,50%,15%,0.5)",
+                  color: "hsla(210,60%,85%,0.95)",
+                }}
+              >
+                Open in Single Layer
+              </button>
+            )}
+            {onDiscussWithAssistant && (
+              <button
+                onClick={(e) => { e.stopPropagation(); onDiscussWithAssistant(event); }}
+                className="px-2 py-0.5 text-[9px] font-bold uppercase tracking-wider rounded border transition-all"
+                style={{
+                  borderColor: "hsla(45,80%,55%,0.4)",
+                  background: "hsla(45,60%,15%,0.4)",
+                  color: "hsla(45,80%,85%,0.95)",
+                }}
+              >
+                Ask Analyst
+              </button>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Sigma metric */}
@@ -277,6 +317,7 @@ function EventRow({
     </div>
   );
 }
+
 
 function MetaLine({ label, value, bold }: { label: string; value: string; bold?: boolean }) {
   return (
