@@ -240,7 +240,7 @@ export default function Home() {
                 Gaiasphere
               </p>
               <span className="h-px w-6 bg-white/20" />
-              <p className="text-[12px] uppercase tracking-[0.35em] text-white/50 font-light">
+              <p className="text-[12px] uppercase tracking-[0.35em] font-light" style={{ color: "hsla(45,100%,70%,0.85)" }}>
                 Observatory
               </p>
             </div>
