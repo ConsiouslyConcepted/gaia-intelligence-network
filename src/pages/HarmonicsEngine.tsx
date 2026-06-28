@@ -8,7 +8,7 @@ import { CrossLayerPanel } from "@/components/harmonics/CrossLayerPanel";
 
 import { EventsPanel } from "@/components/harmonics/EventsPanel";
 import { ReportsPanel } from "@/components/harmonics/ReportsPanel";
-import { scanAllLayers } from "@/lib/harmonics/anomalies";
+import { scanAllLayers, type HarmonicEvent } from "@/lib/harmonics/anomalies";
 import {
   DATASETS,
   METHODS,
