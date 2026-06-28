@@ -272,7 +272,7 @@ export default function Home() {
               <PanelButton
                 to="/planetary"
                 primary
-                className="w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
+                className="w-[280px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
               >
                 Enter Observatory
               </PanelButton>
@@ -280,7 +280,7 @@ export default function Home() {
               <PanelButton
                 to="#vision"
                 primary
-                className="w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
+                className="w-[280px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
               >
                 Learn More
               </PanelButton>
