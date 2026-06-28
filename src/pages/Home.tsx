@@ -144,8 +144,8 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
         {/* Right: Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[30%] flex items-center justify-center pointer-events-none">
-          <div className="relative w-[95vw] h-[95vw] md:w-[80vh] md:h-[80vh] lg:w-[92vh] lg:h-[92vh] max-w-[1050px] max-h-[1050px]">
+        <div className="absolute inset-0 z-0 lg:left-[48%] flex items-center justify-center pointer-events-none">
+          <div className="relative w-[82vw] h-[82vw] md:w-[62vh] md:h-[62vh] lg:w-[58vh] lg:h-[58vh] max-w-[680px] max-h-[680px]">
             <style>{`
               @keyframes gaia-float { 0%,100% { transform: translate3d(0,0,0); } 50% { transform: translate3d(0,-18px,0); } }
               @keyframes gaia-breath { 0%,100% { transform: scale(1); filter: drop-shadow(0 0 60px rgba(45,138,158,0.35)); } 50% { transform: scale(1.025); filter: drop-shadow(0 0 110px rgba(45,138,158,0.55)); } }
@@ -187,7 +187,7 @@ export default function Home() {
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 75% 50%, transparent 40%, rgba(5,6,15,0.78) 75%), linear-gradient(90deg, rgba(5,6,15,0.92) 0%, transparent 55%)",
+              "radial-gradient(ellipse at 84% 50%, transparent 36%, rgba(5,6,15,0.78) 72%), linear-gradient(90deg, rgba(5,6,15,0.94) 0%, transparent 48%)",
           }}
         />
 
