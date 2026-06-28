@@ -142,23 +142,24 @@ function Earth() {
   return (
     <group>
       <mesh ref={meshRef}>
-        <sphereGeometry args={[1.7, 128, 128]} />
+        <sphereGeometry args={[1.3, 128, 128]} />
         <meshStandardMaterial
           map={earthMap}
           bumpMap={bumpMap}
-          bumpScale={0.035}
+          bumpScale={0.03}
           roughness={0.45}
           metalness={0.15}
         />
       </mesh>
       <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.735, 64, 64]} />
+        <sphereGeometry args={[1.327, 64, 64]} />
         <meshBasicMaterial color="#ffffff" transparent opacity={0.09} />
       </mesh>
       <mesh>
-        <sphereGeometry args={[1.82, 64, 64]} />
+        <sphereGeometry args={[1.39, 64, 64]} />
         <meshBasicMaterial color="#6ab0ff" transparent opacity={0.06} side={THREE.BackSide} />
       </mesh>
+
     </group>
   );
 }
@@ -247,7 +248,7 @@ export default function Home() {
 
         {/* Left hero content */}
         <div className="relative z-20 h-full w-full max-w-7xl px-8 flex flex-col justify-center">
-          <div className="w-full max-w-[760px] translate-y-24 md:translate-y-28 text-left">
+          <div className="w-full max-w-[760px] translate-y-44 md:translate-y-52 text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-white/70 animate-pulse" />
               <span className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-medium">
@@ -255,9 +256,10 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="mt-8 w-full text-left font-wordmark text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-tight uppercase">
+            <h1 className="mt-8 w-full text-left text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-[0.08em] uppercase font-light">
               Gaiasphere
             </h1>
+
 
             <div className="mt-3 w-full text-left space-y-1">
               <p className="text-left text-[13px] md:text-[14px] leading-relaxed text-white/70 font-light">
