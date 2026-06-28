@@ -248,7 +248,7 @@ export default function Home() {
 
         {/* Left hero content */}
         <div className="relative z-20 h-full w-full max-w-7xl px-8 flex flex-col justify-center">
-          <div className="w-full max-w-[760px] translate-y-44 md:translate-y-52 text-left">
+          <div className="w-full max-w-[760px] translate-y-24 md:translate-y-32 text-left">
             <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-xl">
               <span className="w-2 h-2 rounded-full bg-white/70 animate-pulse" />
               <span className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-medium">
