@@ -316,6 +316,13 @@ export const HGSDashboard = ({ onSwitchView }: { onSwitchView?: () => void }) =>
               >
                 Universal
               </button>
+              <button
+                onClick={() => navigate("/harmonics")}
+                className="text-center px-2.5 py-2 xl:px-4 xl:py-2.5 xl:min-w-[120px] whitespace-nowrap rounded-xl text-[11px] font-medium tracking-[0.18em] uppercase transition-all duration-300 border border-transparent hover:bg-foreground/[0.05]"
+                style={{ color: "hsla(45,100%,75%,0.7)" }}
+              >
+                Analysis
+              </button>
 
 
             </div>
