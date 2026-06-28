@@ -123,55 +123,6 @@ const OBSERVATORIES = [
   },
 ];
 
-function Earth() {
-  const meshRef = useRef<THREE.Mesh>(null);
-  const cloudRef = useRef<THREE.Mesh>(null);
-  const [earthMap, bumpMap] = useLoader(TextureLoader, [EARTH_TEX, BUMP_TEX]);
-
-  useFrame((_, dt) => {
-    if (meshRef.current) meshRef.current.rotation.y += dt * 0.05;
-    if (cloudRef.current) cloudRef.current.rotation.y += dt * 0.025;
-  });
-
-  return (
-    <group>
-      <mesh ref={meshRef}>
-        <sphereGeometry args={[1.3, 128, 128]} />
-        <meshStandardMaterial
-          map={earthMap}
-          bumpMap={bumpMap}
-          bumpScale={0.03}
-          roughness={0.45}
-          metalness={0.15}
-        />
-      </mesh>
-      <mesh ref={cloudRef}>
-        <sphereGeometry args={[1.327, 64, 64]} />
-        <meshBasicMaterial color="#ffffff" transparent opacity={0.09} />
-      </mesh>
-      <mesh>
-        <sphereGeometry args={[1.39, 64, 64]} />
-        <meshBasicMaterial color="#6ab0ff" transparent opacity={0.06} side={THREE.BackSide} />
-      </mesh>
-
-    </group>
-  );
-}
-
-function HeroScene() {
-  return (
-    <>
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[6, 4, 6]} intensity={2.6} color="#ffffff" />
-      <directionalLight position={[-5, -2, -4]} intensity={0.5} color="#aaccff" />
-      <pointLight position={[0, 0, 3.2]} intensity={0.4} color="#d6eaff" />
-      <Stars radius={80} depth={40} count={4000} factor={3.2} fade speed={0.3} />
-      <Suspense fallback={null}>
-        <Earth />
-      </Suspense>
-    </>
-  );
-}
 
 const NESTED_SCALES = [
   { label: "Earth", scale: "10³ km" },
