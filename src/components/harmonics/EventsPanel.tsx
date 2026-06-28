@@ -11,8 +11,17 @@ import { SCOPES, type Scope } from "@/lib/harmonics/datasets";
 const ALL_SEVERITIES: Severity[] = ["info", "watch", "alert"];
 
 export function EventsPanel({
+  selectedEventId,
+  onSelectEvent,
+  onOpenInSingle,
+  onDiscussWithAssistant,
+  // legacy callback kept for any older callers
   onSelectDataset,
 }: {
+  selectedEventId?: string | null;
+  onSelectEvent?: (event: HarmonicEvent) => void;
+  onOpenInSingle?: (event: HarmonicEvent) => void;
+  onDiscussWithAssistant?: (event: HarmonicEvent) => void;
   onSelectDataset?: (datasetId: string, scope: Scope) => void;
 }) {
   const [activeScopes, setActiveScopes] = useState<Set<Scope>>(new Set(SCOPES.map((s) => s.id)));
