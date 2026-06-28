@@ -546,10 +546,18 @@ const HarmonicsEngine = () => {
         {mode === "events" && (
           <HudPanel className="p-4">
             <EventsPanel
-              onSelectDataset={(id, sc) => {
-                setScope(sc);
-                setDatasetId(id);
+              selectedEventId={selectedEvent?.id ?? null}
+              onSelectEvent={(event) => setSelectedEvent(event)}
+              onOpenInSingle={(event) => {
+                setSelectedEvent(event);
+                setScope(event.scope);
+                setDatasetId(event.datasetId);
                 setMode("single");
+                setRightTab("assistant");
+              }}
+              onDiscussWithAssistant={(event) => {
+                setSelectedEvent(event);
+                setRightTab("assistant");
               }}
             />
           </HudPanel>
