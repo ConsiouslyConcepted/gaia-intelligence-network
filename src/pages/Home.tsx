@@ -255,11 +255,11 @@ export default function Home() {
               </span>
             </div>
 
-            <h1 className="mt-8 font-wordmark text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-tight uppercase">
+            <h1 className="mt-8 text-left font-wordmark text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-tight uppercase">
               Gaiasphere
             </h1>
 
-            <div className="mt-3 max-w-3xl space-y-1">
+            <div className="mt-3 max-w-2xl text-left space-y-1">
               <p className="text-[13px] md:text-[14px] leading-relaxed text-white/70 font-light">
                 Explore the nested systems of Earth within the observable universe through real-time
               </p>
