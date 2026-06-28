@@ -71,8 +71,6 @@ const PanelButton = ({
   </Link>
 );
 
-const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
-const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
 
 const OBSERVATORIES = [
   {
