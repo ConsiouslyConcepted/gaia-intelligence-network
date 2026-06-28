@@ -144,22 +144,31 @@ export default function Home() {
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
         {/* Right: Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[40%] flex items-center justify-center pointer-events-none">
-          <div className="relative w-[80vw] h-[80vw] md:w-[55vh] md:h-[55vh] lg:w-[60vh] lg:h-[60vh] max-w-[700px] max-h-[700px]">
+        <div className="absolute inset-0 z-0 lg:left-[30%] flex items-center justify-center pointer-events-none">
+          <div className="relative w-[95vw] h-[95vw] md:w-[80vh] md:h-[80vh] lg:w-[92vh] lg:h-[92vh] max-w-[1050px] max-h-[1050px]">
+            <style>{`
+              @keyframes gaia-spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+              @keyframes gaia-float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-14px); } }
+              @keyframes gaia-pulse-glow { 0%,100% { opacity: 0.85; transform: scale(1); } 50% { opacity: 1; transform: scale(1.04); } }
+            `}</style>
             <div
               className="absolute inset-0 rounded-full blur-3xl -z-10"
               style={{
                 background:
-                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.35) 0%, rgba(20,80,120,0.15) 45%, transparent 75%)",
+                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.4) 0%, rgba(20,80,120,0.18) 45%, transparent 75%)",
+                animation: "gaia-pulse-glow 8s ease-in-out infinite",
               }}
             />
-            <img
-              src={earthAsset.url}
-              alt="GaiaSphere"
-              width={1024}
-              height={1024}
-              className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(45,138,158,0.35)]"
-            />
+            <div style={{ animation: "gaia-float 10s ease-in-out infinite" }} className="w-full h-full">
+              <img
+                src={earthAsset.url}
+                alt="GaiaSphere"
+                width={1024}
+                height={1024}
+                className="w-full h-full object-contain drop-shadow-[0_0_80px_rgba(45,138,158,0.45)]"
+                style={{ animation: "gaia-spin 90s linear infinite", transformOrigin: "50% 50%" }}
+              />
+            </div>
           </div>
         </div>
 
