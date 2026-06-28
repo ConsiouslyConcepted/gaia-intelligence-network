@@ -226,7 +226,7 @@ export default function Home() {
                 Gaiasphere
               </p>
               <span className="h-px w-6 bg-white/20" />
-                <p className="text-[12px] uppercase tracking-[0.35em] font-light" style={{ color: "hsla(46,58%,47%,1)", textShadow: "0 0 18px hsla(46,58%,47%,0.45)" }}>
+                <p className="text-[12px] uppercase tracking-[0.35em] font-light" style={{ color: "hsla(190,72%,42%,1)", textShadow: "0 0 18px hsla(190,72%,42%,0.45)" }}>
                   Observatory
                 </p>
             </div>
@@ -244,7 +244,7 @@ export default function Home() {
             </div>
 
             <h1 className="mt-8 w-full text-left text-5xl md:text-6xl lg:text-7xl text-white leading-[0.85] tracking-[-0.04em] font-title font-bold">
-              GAIA<span style={{ color: "hsla(46,58%,47%,0.95)", textShadow: "0 0 26px hsla(46,58%,47%,0.35)" }}>SPHERE</span>
+              GAIA<span style={{ color: "hsla(190,72%,42%,0.95)", textShadow: "0 0 26px hsla(190,72%,42%,0.35)" }}>SPHERE</span>
             </h1>
 
 
@@ -278,13 +278,13 @@ export default function Home() {
         </div>
 
         {/* Scroll indicator */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center" style={{ color: "hsla(46,58%,47%,0.8)" }}>
+        <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center" style={{ color: "hsla(190,72%,42%,0.8)" }}>
           <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
           <div
             className="w-[1px] h-12"
             style={{
               background:
-                "linear-gradient(180deg, hsla(220,35%,60%,0.55) 0%, transparent 100%)",
+                "linear-gradient(180deg, hsla(190,72%,42%,0.75) 0%, transparent 100%)",
             }}
           />
         </div>
