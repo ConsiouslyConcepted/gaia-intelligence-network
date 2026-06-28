@@ -187,7 +187,7 @@ export default function Home() {
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 75% 50%, transparent 40%, rgba(5,6,15,0.78) 75%), linear-gradient(90deg, rgba(5,6,15,0.92) 0%, transparent 55%)",
+              "radial-gradient(ellipse at 84% 50%, transparent 36%, rgba(5,6,15,0.78) 72%), linear-gradient(90deg, rgba(5,6,15,0.94) 0%, transparent 48%)",
           }}
         />
 
