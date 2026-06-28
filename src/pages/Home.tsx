@@ -183,10 +183,10 @@ export default function Home() {
             </div>
             <Link
               to="/planetary"
-              className="group flex items-center gap-2 px-4 py-2 text-[11px] uppercase tracking-[0.35em] text-white/70 hover:text-white border border-white/10 hover:border-white/30 rounded-full transition-colors"
+              className="group relative flex items-center gap-2.5 px-5 py-2.5 text-[11px] uppercase tracking-[0.3em] text-white/90 hover:text-white bg-white/[0.03] hover:bg-white/[0.08] backdrop-blur-md border border-white/15 hover:border-white/40 rounded-full transition-all duration-300 shadow-[0_0_0_1px_rgba(255,255,255,0.05)] hover:shadow-[0_0_20px_rgba(255,255,255,0.12)]"
             >
               <span>Enter Observatory</span>
-              <ArrowRight className="w-3.5 h-3.5 transition-transform group-hover:translate-x-0.5" />
+              <ArrowRight className="w-3.5 h-3.5 transition-transform duration-300 group-hover:translate-x-1" />
             </Link>
           </div>
         </header>
