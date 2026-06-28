@@ -140,37 +140,43 @@ export default function Home() {
   return (
     <div className="relative w-full bg-[#05060f] text-foreground">
       {/* ============ HERO ============ */}
-      <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
-        {/* Right: 3D Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[40%]">
-          <Canvas camera={{ position: [0, 0, 4.2], fov: 46 }} dpr={[1, 2]}>
-            <HeroScene />
-          </Canvas>
-        </div>
+      <section className="relative h-screen w-full overflow-hidden bg-black">
+        {/* Cinematic video background */}
+        <video
+          autoPlay
+          loop
+          muted
+          playsInline
+          preload="auto"
+          className="absolute inset-0 w-full h-full object-cover"
+          style={{ filter: "saturate(1.05) contrast(1.02)" }}
+        >
+          <source src={earthSunrise.url} type="video/mp4" />
+        </video>
 
-        {/* Vignette */}
+        {/* Layered vignettes for legibility */}
         <div
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at 75% 50%, transparent 40%, rgba(5,6,15,0.78) 75%), linear-gradient(90deg, rgba(5,6,15,0.92) 0%, transparent 55%)",
+              "linear-gradient(90deg, rgba(0,0,0,0.85) 0%, rgba(0,0,0,0.55) 35%, rgba(0,0,0,0.15) 60%, transparent 100%)",
           }}
         />
-
-        {/* Orbital rings around the globe */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none lg:justify-end lg:pr-[10%]">
-          <div className="relative w-[26rem] h-[26rem] md:w-[40rem] md:h-[40rem] lg:w-[48rem] lg:h-[48rem]">
-            <div className="absolute inset-0 rounded-full border border-white/[0.06] scale-110" />
-            <div className="absolute inset-0 rounded-full border border-dashed border-white/[0.04] scale-125" />
-            <div
-              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[40%] border border-white/[0.08] rounded-[100%] rotate-[25deg]"
-              style={{ boxShadow: "0 0 15px rgba(255,255,255,0.05)" }}
-            />
-            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[30%] border border-white/[0.04] rounded-[100%] rotate-[-15deg]" />
-            <div className="absolute top-[10%] right-[20%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
-            <div className="absolute bottom-[18%] left-[10%] w-1 h-1 bg-white/40 rounded-full" />
-          </div>
-        </div>
+        <div
+          className="absolute inset-0 z-10 pointer-events-none"
+          style={{
+            background:
+              "linear-gradient(180deg, rgba(0,0,0,0.55) 0%, transparent 25%, transparent 65%, rgba(0,0,0,0.75) 100%)",
+          }}
+        />
+        {/* Subtle scanline texture */}
+        <div
+          className="absolute inset-0 z-10 pointer-events-none opacity-[0.06] mix-blend-overlay"
+          style={{
+            backgroundImage:
+              "repeating-linear-gradient(0deg, transparent 0 2px, rgba(255,255,255,0.5) 2px 3px)",
+          }}
+        />
 
         {/* Header */}
         <header className="absolute top-0 left-0 right-0 z-30 px-8 pt-10">
@@ -180,54 +186,72 @@ export default function Home() {
                 <span className="absolute inline-flex h-full w-full rounded-full bg-white/70 opacity-60 animate-ping" />
                 <span className="relative inline-flex rounded-full h-2 w-2 bg-white/80" />
               </span>
-              <p className="text-[13px] uppercase tracking-[0.4em] text-white/80 font-light">
+              <p className="text-[13px] uppercase tracking-[0.4em] text-white/85 font-light">
                 Gaiasphere
               </p>
-              <span className="h-px w-6 bg-white/20" />
-                <p className="text-[12px] uppercase tracking-[0.35em] font-light" style={{ color: "#C19533" }}>
-                  Observatory
-                </p>
+              <span className="h-px w-6 bg-white/25" />
+              <p
+                className="text-[12px] uppercase tracking-[0.35em] font-light"
+                style={{ color: "#C19533" }}
+              >
+                Observatory
+              </p>
+            </div>
+            <div className="hidden md:flex items-center gap-3 text-[10px] uppercase tracking-[0.35em] text-white/55 font-light">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80 shadow-[0_0_8px_rgba(52,211,153,0.9)]" />
+              <span>Live Feed · Earth Limb</span>
             </div>
           </div>
         </header>
 
-        {/* Left hero content */}
-        <div className="relative z-20 h-full w-full max-w-7xl px-8 flex flex-col justify-center">
-          <div className="w-full max-w-[760px] translate-y-24 md:translate-y-32 text-left">
-            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-xl">
-              <span className="w-2 h-2 rounded-full bg-white/70 animate-pulse" />
-              <span className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-medium">
+        {/* Hero content */}
+        <div className="relative z-20 h-full w-full max-w-7xl mx-auto px-8 flex flex-col justify-center">
+          <div className="w-full max-w-[720px] text-left">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.06] border border-white/15 backdrop-blur-xl">
+              <span className="w-2 h-2 rounded-full bg-white/80 animate-pulse" />
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/75 font-medium">
                 Live Systems Data
               </span>
             </div>
 
-            <h1 className="mt-8 w-full text-left text-5xl md:text-6xl lg:text-7xl text-white leading-[0.85] tracking-[-0.04em] font-title font-bold">
+            <h1
+              className="mt-8 w-full text-left text-6xl md:text-7xl lg:text-[7.5rem] text-white leading-[0.85] tracking-[-0.045em] font-title font-bold"
+              style={{
+                textShadow:
+                  "0 4px 40px rgba(0,0,0,0.6), 0 1px 2px rgba(0,0,0,0.8)",
+              }}
+            >
               GAIA<span style={{ color: "#C19533" }}>SPHERE</span>
             </h1>
 
-
-            <div className="mt-3 w-full text-left space-y-1">
-              <p className="text-left text-[13px] md:text-[14px] leading-relaxed text-white/70 font-light">
-                Explore the nested systems of Earth within the observable universe through real-time
-              </p>
-              <p className="text-left text-[13px] md:text-[14px] leading-relaxed text-white/70 font-light">
-                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
-              </p>
+            <div className="mt-5 flex items-center gap-4">
+              <span className="h-px w-12 bg-white/40" />
+              <span className="text-[10.5px] uppercase tracking-[0.45em] text-white/65 font-light">
+                An observatory for nested systems
+              </span>
             </div>
+
+            <p
+              className="mt-6 max-w-[560px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
+              style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
+            >
+              Explore Earth's nested systems within the observable universe through real-time
+              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+            </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <PanelButton
                 to="/planetary"
                 primary
-                className="w-[280px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
+                className="w-[260px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
               >
                 Enter Observatory
               </PanelButton>
 
               <PanelButton
                 to="#vision"
-                primary
-                className="w-[280px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
+                primary={false}
+                className="w-[260px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold whitespace-nowrap"
               >
                 Learn More
               </PanelButton>
@@ -235,10 +259,20 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Scroll indicator */}
-        <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center text-white/40">
-          <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
+        {/* Bottom telemetry strip */}
+        <div className="absolute bottom-0 left-0 right-0 z-20 pb-8 px-8 flex items-end justify-between text-white/45 font-light">
+          <div className="flex flex-col gap-1 text-[10px] uppercase tracking-[0.35em]">
+            <span className="text-white/40">N 00°00′00″ · E 000°00′00″</span>
+            <span className="text-white/65">Orbital Reference · Earth Limb / Sunrise</span>
+          </div>
+          <div className="flex flex-col items-center text-[10px] uppercase tracking-[0.4em]">
+            <span className="mb-2">Scroll</span>
+            <div className="w-[1px] h-12 bg-gradient-to-b from-white/60 to-transparent" />
+          </div>
+          <div className="hidden md:flex flex-col items-end gap-1 text-[10px] uppercase tracking-[0.35em]">
+            <span className="text-white/40">Frame 01 / 06</span>
+            <span className="text-white/65">Planetary Layer Active</span>
+          </div>
         </div>
       </section>
 
