@@ -660,19 +660,21 @@ export default function Home() {
             Start at Earth or jump to any scale.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
-            <Link
+            <PanelButton
               to="/planetary"
-              className="inline-flex items-center gap-2 rounded-full bg-white text-[#05060f] px-6 py-3 text-[13px] font-medium tracking-wide hover:bg-white/90 transition-all"
+              primary
+              className="px-6 py-3 text-[13px] font-medium tracking-wide"
             >
               Start at Earth
               <ArrowRight className="w-4 h-4" />
-            </Link>
-            <Link
+            </PanelButton>
+            <PanelButton
               to="/universal"
-              className="inline-flex items-center gap-2 rounded-full border border-white/25 px-6 py-3 text-[13px] tracking-wide text-white hover:bg-white/10 transition-all"
+              primary={false}
+              className="px-6 py-3 text-[13px] tracking-wide"
             >
               Universal Observatory
-            </Link>
+            </PanelButton>
           </div>
         </div>
 
