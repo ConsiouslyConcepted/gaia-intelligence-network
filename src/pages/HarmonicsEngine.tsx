@@ -227,6 +227,7 @@ const HarmonicsEngine = () => {
   const [crossA, setCrossA] = useState<string>(searchParams.get("a") || "imf-bt");
   const [crossB, setCrossB] = useState<string>(searchParams.get("b") || "kp-index");
   const [lm, setLm] = useState<{ l: number; m: number }>({ l: 2, m: 1 });
+  const [selectedEvent, setSelectedEvent] = useState<HarmonicEvent | null>(null);
 
   const dataset = getDataset(datasetId) ?? inScope[0];
   const compare = getDataset(compareId);
