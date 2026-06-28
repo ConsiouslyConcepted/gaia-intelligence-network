@@ -171,14 +171,7 @@ export default function Home() {
               }}
             />
             <div style={{ animation: "gaia-float 11s ease-in-out infinite" }} className="w-full h-full">
-              <img
-                src={earthAsset.url}
-                alt="GaiaSphere"
-                width={1024}
-                height={1024}
-                className="w-full h-full object-contain"
-                style={{ animation: "gaia-breath 9s ease-in-out infinite", transformOrigin: "50% 50%" }}
-              />
+              <OrbitingEarth />
             </div>
           </div>
         </div>
