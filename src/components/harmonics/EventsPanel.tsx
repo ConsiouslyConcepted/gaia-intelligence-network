@@ -249,26 +249,3 @@ function formatPosition(pos: number, unit: string): string {
   if (abs >= 1000 && unit === "day") return `${(pos / 365).toFixed(1)} yr`;
   return `${pos.toFixed(1)} ${unit}`;
 }
-
-function buildSparkPath(series: number[] | undefined, focusIdx: number) {
-  if (!series || series.length < 4) return null;
-  const window = 32;
-  const end = Math.min(series.length, focusIdx + 1);
-  const start = Math.max(0, end - window);
-  const data = series.slice(start, end);
-  if (data.length < 2) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const w = 100;
-  const h = 24;
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - min) / range) * h;
-    return [x, y] as const;
-  });
-  const line = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
-  const area = `${line} L${w},${h} L0,${h} Z`;
-  const [mx, my] = pts[pts.length - 1];
-  return { line, area, markerX: mx, markerY: my };
-}
