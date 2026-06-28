@@ -8,85 +8,82 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    /* Sphere palette anchors (sampled from GaiaSphere marble) */
-    /* deep-blue 217 80% 27% · mid-blue 213 73% 47% · cyan 192 80% 56% */
-    /* teal 171 73% 42% · orange 17 85% 56% · coral 351 86% 56% */
-
     /* Cosmic base colors */
-    --background: 222 55% 5%;
-    --foreground: 192 60% 95%;
+    --background: 240 30% 5%;
+    --foreground: 180 100% 95%;
 
-    /* Card surfaces — UNCHANGED (panel + outline preserved) */
+    /* Card surfaces with glassmorphism */
     --card: 240 20% 10%;
-    --card-foreground: 192 60% 95%;
+    --card-foreground: 180 100% 95%;
 
     --popover: 240 25% 8%;
-    --popover-foreground: 192 60% 95%;
+    --popover-foreground: 180 100% 95%;
 
-    /* Primary — Cyan */
-    --primary: 192 80% 56%;
-    --primary-foreground: 222 55% 5%;
+    /* Harmonic primary - Warm Celestial Gold */
+    --primary: 38 70% 58%;
+    --primary-foreground: 240 30% 5%;
 
-    /* Secondary — Bluish-green / Teal */
-    --secondary: 171 73% 42%;
-    --secondary-foreground: 222 55% 5%;
+    /* Secondary - Bioluminescent Emerald */
+    --secondary: 160 80% 45%;
+    --secondary-foreground: 240 30% 5%;
 
     /* Muted states */
-    --muted: 222 25% 14%;
-    --muted-foreground: 192 25% 70%;
+    --muted: 240 20% 15%;
+    --muted-foreground: 180 30% 65%;
 
-    /* Accent — Orange */
-    --accent: 17 85% 56%;
-    --accent-foreground: 222 55% 5%;
+    /* Accent - Golden Coherence */
+    --accent: 45 100% 60%;
+    --accent-foreground: 240 30% 5%;
 
-    /* Destructive — Coral-red */
-    --destructive: 351 86% 56%;
-    --destructive-foreground: 192 60% 95%;
+    /* Destructive - Dissonance Red */
+    --destructive: 0 85% 55%;
+    --destructive-foreground: 180 100% 95%;
 
-    /* Borders — UNCHANGED (panel outline preserved) */
+    /* Borders with subtle glow */
     --border: 220 20% 22%;
     --input: 220 15% 18%;
-    --ring: 192 80% 56%;
+    --ring: 38 70% 58%;
 
     --radius: 0.75rem;
 
-    /* Harmonic frequency colors — sphere palette */
-    --harmonic-violet: 217 80% 32%;   /* deep blue */
-    --harmonic-indigo: 213 73% 47%;   /* mid blue */
-    --harmonic-blue: 213 73% 55%;
-    --harmonic-cyan: 192 80% 56%;
-    --harmonic-green: 171 73% 42%;    /* bluish-green / teal */
-    --harmonic-yellow: 25 90% 62%;    /* warm orange */
-    --harmonic-orange: 17 85% 56%;
-    --harmonic-red: 351 86% 56%;
+    /* Harmonic frequency colors */
+    --harmonic-violet: 270 100% 65%;
+    --harmonic-indigo: 240 100% 65%;
+    --harmonic-blue: 210 100% 60%;
+    --harmonic-cyan: 180 100% 50%;
+    --harmonic-green: 150 80% 50%;
+    --harmonic-yellow: 60 100% 60%;
+    --harmonic-orange: 30 100% 60%;
+    --harmonic-red: 0 100% 60%;
 
     /* Energy states */
-    --coherence-high: 171 73% 48%;
-    --coherence-medium: 192 80% 56%;
-    --coherence-low: 351 86% 56%;
+    --coherence-high: 45 100% 60%;
+    --coherence-medium: 180 100% 50%;
+    --coherence-low: 0 85% 55%;
 
-    /* Sphere wayfinding tints — drawn from the marble palette */
-    --geosphere: 17 85% 56%;        /* orange */
-    --hydrosphere: 213 73% 47%;     /* mid blue */
-    --atmosphere: 192 80% 66%;      /* light cyan */
-    --biosphere: 171 73% 42%;       /* teal */
-    --noosphere: 217 80% 40%;       /* deep blue */
-    --magnetosphere: 351 86% 56%;   /* coral */
-    --crystalsphere: 188 85% 78%;   /* pale cyan */
+    /* Sphere specific colors */
+    --geosphere: 30 100% 50%;
+    --hydrosphere: 200 100% 50%;
+    --atmosphere: 210 80% 60%;
+    --biosphere: 120 70% 50%;
+    --noosphere: 270 100% 65%;
+    
+    --magnetosphere: 300 100% 60%;
+    --crystalsphere: 45 100% 70%;
 
     /* Glows and effects */
-    --glow-primary: 192 80% 56%;
-    --glow-secondary: 171 73% 42%;
-    --glow-accent: 17 85% 56%;
+    --glow-primary: 180 100% 50%;
+    --glow-secondary: 160 80% 45%;
+    --glow-accent: 45 100% 60%;
 
-    --sidebar-background: 222 30% 8%;
-    --sidebar-foreground: 192 50% 88%;
-    --sidebar-primary: 192 80% 56%;
-    --sidebar-primary-foreground: 222 55% 5%;
-    --sidebar-accent: 222 25% 14%;
-    --sidebar-accent-foreground: 192 60% 95%;
-    --sidebar-border: 171 50% 22%;
-    --sidebar-ring: 192 80% 56%;
+    --sidebar-background: 240 25% 8%;
+    --sidebar-foreground: 180 80% 85%;
+    --sidebar-primary: 180 100% 50%;
+    --sidebar-primary-foreground: 240 30% 5%;
+    --sidebar-accent: 240 20% 15%;
+    --sidebar-accent-foreground: 180 100% 95%;
+    --sidebar-border: 180 50% 25%;
+    --sidebar-ring: 180 100% 50%;
   }
 }
 
