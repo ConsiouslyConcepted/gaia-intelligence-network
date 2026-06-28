@@ -174,38 +174,36 @@ export default function Home() {
         </div>
 
         {/* Hero copy */}
-        <div className="relative z-20 flex flex-col h-full">
-          <header className="px-8 pt-10">
-            <div className="flex items-center justify-between">
-              <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
-                GaiaSphere · Observatory
-              </p>
-            </div>
-          </header>
-
-          <div className="flex-1 flex flex-col items-center justify-center px-6 text-center">
-            <div className="flex items-center gap-4">
-              <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/40" />
-              <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/50">
-                Nested Intelligence Observatory
-              </p>
-              <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/40" />
-            </div>
-
-            <h1 className="mt-5 font-wordmark text-5xl md:text-7xl lg:text-8xl font-normal tracking-[0.14em] text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
-              Gaiasphere
-            </h1>
-
-            <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
-              Explore the nested systems of Earth and the observable universe through real-time
-              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+        <header className="absolute top-0 left-0 right-0 z-20 px-8 pt-10">
+          <div className="flex items-center justify-between">
+            <p className="text-[11px] uppercase tracking-[0.45em] text-white/55">
+              GaiaSphere · Observatory
             </p>
           </div>
+        </header>
 
-          <div className="pb-10 flex flex-col items-center text-white/40">
-            <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
-            <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
+        <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 text-center">
+          <div className="flex items-center gap-4">
+            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/40" />
+            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/50">
+              Nested Intelligence Observatory
+            </p>
+            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/40" />
           </div>
+
+          <h1 className="mt-5 font-wordmark text-5xl md:text-7xl lg:text-8xl font-normal tracking-[0.14em] text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
+            Gaiasphere
+          </h1>
+
+          <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
+            Explore the nested systems of Earth and the observable universe through real-time
+            scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+          </p>
+        </div>
+
+        <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center text-white/40">
+          <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
+          <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
         </div>
 
       </section>
