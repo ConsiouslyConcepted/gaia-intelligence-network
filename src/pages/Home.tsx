@@ -262,11 +262,11 @@ export default function Home() {
 
         <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 text-center">
           <div className="flex items-center gap-4">
-            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/40" />
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/50">
+            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/70" />
+            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/85">
               Nested Intelligence Observatory
             </p>
-            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/40" />
+            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/70" />
           </div>
 
           <h1 className="mt-5 font-wordmark text-5xl md:text-7xl lg:text-8xl font-normal tracking-[0.14em] text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
