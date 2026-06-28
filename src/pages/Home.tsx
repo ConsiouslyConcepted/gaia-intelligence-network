@@ -199,7 +199,7 @@ export default function Home() {
           </h1>
 
           <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/70 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
-            Explore the nested systems of Earth and the observable universe through real-time
+            Explore the nested systems of Earth within the observable universe through real-time
             scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
           </p>
         </div>
