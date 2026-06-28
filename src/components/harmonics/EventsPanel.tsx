@@ -6,7 +6,7 @@ import {
   type HarmonicEvent,
   type Severity,
 } from "@/lib/harmonics/anomalies";
-import { SCOPES, getDataset, type Scope } from "@/lib/harmonics/datasets";
+import { SCOPES, type Scope } from "@/lib/harmonics/datasets";
 
 const ALL_SEVERITIES: Severity[] = ["info", "watch", "alert"];
 
@@ -174,8 +174,6 @@ function EventRow({
   onSelect?: (datasetId: string, scope: Scope) => void;
 }) {
   const sev = SEVERITY_STYLE[event.severity];
-  const ds = getDataset(event.datasetId);
-  const sparkPath = useMemo(() => buildSparkPath(ds?.series, event.sampleIndex), [ds, event.sampleIndex]);
   const positionLabel = formatPosition(event.position, event.unit);
 
   return (
@@ -193,7 +191,7 @@ function EventRow({
         }}
       />
 
-      <div className="flex-1 grid grid-cols-12 gap-3 items-center px-5 py-3.5 min-w-0">
+      <div className="flex-1 grid grid-cols-12 gap-4 items-center px-5 py-3.5 min-w-0">
         {/* Metadata column */}
         <div className="col-span-3 min-w-0">
           <div
@@ -210,42 +208,13 @@ function EventRow({
         </div>
 
         {/* Title + summary */}
-        <div className="col-span-5 min-w-0">
+        <div className="col-span-7 min-w-0">
           <h3 className="text-foreground/95 font-semibold text-[12px] tracking-[0.06em] uppercase mb-1 truncate">
             {event.datasetLabel}
           </h3>
           <p className="text-muted-foreground/80 text-[11px] leading-relaxed line-clamp-2">
             {event.summary}
           </p>
-        </div>
-
-        {/* Sparkline */}
-        <div className="col-span-2 hidden md:flex items-center justify-center">
-          <svg
-            className="w-full h-9"
-            viewBox="0 0 100 24"
-            preserveAspectRatio="none"
-            style={{ color: sev.color }}
-          >
-            {sparkPath && (
-              <>
-                <path d={sparkPath.area} fill="currentColor" opacity="0.08" />
-                <path
-                  d={sparkPath.line}
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="1.2"
-                  opacity="0.85"
-                />
-                <circle
-                  cx={sparkPath.markerX}
-                  cy={sparkPath.markerY}
-                  r="1.6"
-                  fill="currentColor"
-                />
-              </>
-            )}
-          </svg>
         </div>
 
         {/* Sigma + position */}
@@ -279,27 +248,4 @@ function formatPosition(pos: number, unit: string): string {
   const abs = Math.abs(pos);
   if (abs >= 1000 && unit === "day") return `${(pos / 365).toFixed(1)} yr`;
   return `${pos.toFixed(1)} ${unit}`;
-}
-
-function buildSparkPath(series: number[] | undefined, focusIdx: number) {
-  if (!series || series.length < 4) return null;
-  const window = 32;
-  const end = Math.min(series.length, focusIdx + 1);
-  const start = Math.max(0, end - window);
-  const data = series.slice(start, end);
-  if (data.length < 2) return null;
-  const min = Math.min(...data);
-  const max = Math.max(...data);
-  const range = max - min || 1;
-  const w = 100;
-  const h = 24;
-  const pts = data.map((v, i) => {
-    const x = (i / (data.length - 1)) * w;
-    const y = h - ((v - min) / range) * h;
-    return [x, y] as const;
-  });
-  const line = pts.map(([x, y], i) => `${i === 0 ? "M" : "L"}${x.toFixed(2)},${y.toFixed(2)}`).join(" ");
-  const area = `${line} L${w},${h} L0,${h} Z`;
-  const [mx, my] = pts[pts.length - 1];
-  return { line, area, markerX: mx, markerY: my };
 }
