@@ -207,7 +207,7 @@ export default function Home() {
               Gaiasphere
             </h1>
 
-            <div className="mt-5 max-w-3xl space-y-1">
+            <div className="mt-3 max-w-3xl space-y-1">
               <p className="text-[13px] md:text-[14px] leading-relaxed text-white/70 font-light">
                 Explore the nested systems of Earth within the observable universe through real-time
               </p>
