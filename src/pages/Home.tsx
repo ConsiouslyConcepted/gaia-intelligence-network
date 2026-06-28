@@ -240,11 +240,11 @@ export default function Home() {
               style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
             >
               <span className="whitespace-nowrap">
-                Explore Earth's nested systems and their harmonic relationships within the observable universe through real-time
+                Explore Earth's nested systems and their harmonic relationships within the observable universe through
               </span>
               <br className="hidden md:block" />
               <span className="whitespace-nowrap">
-                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+                real-time scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
               </span>
             </p>
 
