@@ -2,7 +2,7 @@ import { useMemo, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { ArrowRight, Activity, AlertTriangle, Layers } from "lucide-react";
 
-import { HudPanel } from "./MissionShell";
+import { HudPanel } from "./HudPanel";
 import {
   computeCouplings,
   TIMEFRAMES,
