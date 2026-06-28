@@ -230,17 +230,18 @@ export default function Home() {
                 className="text-[10.5px] uppercase tracking-[0.45em] font-light"
                 style={{ color: "#C19533" }}
               >
-                An observatory for nested systems
+                An observatory of Earths nested systems
               </span>
             </div>
 
 
             <p
-              className="mt-6 max-w-[560px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
+              className="mt-6 max-w-[720px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
               style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
             >
-              Explore Earth's nested systems within the observable universe through real-time
-              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+              Explore Earth's nested systems within the observable universe through real-time scientific data,
+              <br className="hidden md:block" />
+              systems intelligence, harmonic analysis, and AI-assisted discovery.
             </p>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
