@@ -192,16 +192,14 @@ export default function Home() {
               <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/40" />
             </div>
 
-            <h1 className="mt-7 font-wordmark text-6xl md:text-8xl lg:text-9xl font-normal tracking-[0.18em] text-white uppercase drop-shadow-[0_0_40px_rgba(255,255,255,0.25)]">
+            <h1 className="mt-5 font-wordmark text-5xl md:text-7xl lg:text-8xl font-normal tracking-[0.14em] text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
               Gaiasphere
             </h1>
 
-            <div className="mt-8 max-w-2xl p-6 md:p-8 rounded-2xl bg-white/[0.03] backdrop-blur-md border border-white/[0.08]">
-              <p className="text-[14px] md:text-[15px] leading-relaxed text-white/75">
-                Explore the nested systems of Earth and the observable universe through real-time
-                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
-              </p>
-            </div>
+            <p className="mt-6 max-w-2xl text-[15px] leading-relaxed text-white/70 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
+              Explore the nested systems of Earth and the observable universe through real-time
+              scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+            </p>
           </div>
 
           <div className="pb-10 flex flex-col items-center text-white/40">
