@@ -236,7 +236,7 @@ export default function Home() {
 
 
             <p
-              className="mt-6 max-w-[720px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
+              className="mt-6 max-w-[900px] text-[14.5px] md:text-[15.5px] leading-relaxed text-white/85 font-light"
               style={{ textShadow: "0 2px 12px rgba(0,0,0,0.7)" }}
             >
               Explore Earth's nested systems and their harmonic relationships within the observable universe through real-time
