@@ -227,7 +227,7 @@ export default function Home() {
             <div className="mt-5 flex items-center gap-4">
               <span className="h-px w-12" style={{ backgroundColor: "#C19533", opacity: 0.7 }} />
               <span
-                className="text-[10.5px] uppercase tracking-[0.45em] font-light"
+                className="text-[12px] uppercase tracking-[0.4em] font-light whitespace-nowrap"
                 style={{ color: "#C19533" }}
               >
                 A Living Observatory of Earth's Earths nested systems
