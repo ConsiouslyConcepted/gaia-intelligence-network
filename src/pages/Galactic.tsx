@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { MilkyWayMap, GalacticLayer } from "@/components/galactic/MilkyWayMap";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 

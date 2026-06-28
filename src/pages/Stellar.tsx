@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 
 

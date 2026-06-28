@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { NightSkyBackground } from "@/components/NightSkyBackground";
 import CosmicAddressWorkspace from "@/components/mission-control/CosmicAddressWorkspace";
 

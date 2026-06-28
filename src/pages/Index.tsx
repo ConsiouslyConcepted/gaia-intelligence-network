@@ -6,6 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { HGSDashboard } from "@/components/hgs/HGSDashboard";
 import { Activity, Signal, ArrowRight, Sparkles, Clock, Waves, Orbit, Radio, Sun } from "lucide-react";
 import { CommonsIcon } from "@/components/CommonsIcon";
+import { GuideButton } from "@/components/observatory/GuideButton";
 import { WireframeSphereIcon } from "@/components/WireframeSphereIcon";
 import { SphereIntelligenceChip } from "@/components/sphere-intelligence/SphereIntelligenceChip";
 import { SphereSignalRow } from "@/components/sphere-intelligence/SphereSignalRow";
