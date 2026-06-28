@@ -4,6 +4,7 @@ import { Stars } from "@react-three/drei";
 import { TextureLoader } from "three";
 import * as THREE from "three";
 import { Link } from "react-router-dom";
+import { cn } from "@/lib/utils";
 import {
   Globe2,
   Sun,
@@ -22,6 +23,57 @@ import {
   Telescope,
   Sigma,
 } from "lucide-react";
+
+const PanelButton = ({
+  children,
+  primary = true,
+  className = "",
+  ...props
+}: React.ComponentProps<typeof Link> & { primary?: boolean }) => (
+  <Link
+    {...props}
+    className={cn(
+      "group relative inline-flex items-center justify-center rounded-xl backdrop-blur-2xl transition-all duration-300 overflow-hidden",
+      primary ? "text-white/95" : "text-white/70 hover:text-white/95",
+      className
+    )}
+    style={{
+      background:
+        "linear-gradient(145deg, hsla(225,45%,11%,0.95) 0%, hsla(225,50%,7%,0.92) 50%, hsla(228,55%,5%,0.95) 100%)",
+      border: primary
+        ? "1.5px solid hsla(220,35%,60%,0.55)"
+        : "1.5px solid hsla(220,35%,60%,0.35)",
+      boxShadow: primary
+        ? "inset 0 1px 0 hsla(0,0%,100%,0.08), 0 0 32px hsla(210,75%,62%,0.28), 0 0 64px hsla(210,70%,55%,0.18), 0 12px 40px rgba(0,0,0,0.55)"
+        : "inset 0 1px 0 hsla(0,0%,100%,0.06), 0 0 16px hsla(210,75%,62%,0.15), 0 8px 24px rgba(0,0,0,0.45)",
+    }}
+  >
+    <div
+      className="absolute -top-px left-4 right-4 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent 0%, hsla(200,60%,78%,0.55) 25%, hsla(200,60%,85%,0.75) 50%, hsla(200,60%,78%,0.55) 75%, transparent 100%)",
+      }}
+    />
+    <div
+      className="absolute bottom-0 left-6 right-6 h-px pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(90deg, transparent, hsla(210,40%,50%,0.15), transparent)",
+      }}
+    />
+    <div
+      className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none"
+      style={{
+        background:
+          "linear-gradient(145deg, hsla(225,45%,14%,0.98) 0%, hsla(225,50%,10%,0.95) 50%, hsla(228,55%,8%,0.98) 100%)",
+      }}
+    />
+    <span className="relative z-10 inline-flex items-center gap-2">
+      {children}
+    </span>
+  </Link>
+);
 
 const EARTH_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg";
 const BUMP_TEX = "https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png";
@@ -217,32 +269,22 @@ export default function Home() {
             </div>
 
             <div className="mt-10 flex flex-wrap items-center gap-5">
-              <Link
+              <PanelButton
                 to="/planetary"
-                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
+                primary
+                className="min-w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
               >
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
-                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
-                <span className="relative flex items-center gap-3">
-                  <span className="w-1.5 h-1.5 bg-white/80 rounded-full animate-pulse" />
-                  Enter Observatory
-                </span>
-                <span className="absolute -bottom-1 -left-1 text-[6px] font-mono text-white/25 tracking-tighter opacity-0 group-hover:opacity-100 transition-opacity">
-                  REF.GAIA_01
-                </span>
-              </Link>
+                <span className="w-1.5 h-1.5 bg-white/80 rounded-full animate-pulse" />
+                Enter Observatory
+              </PanelButton>
 
-              <Link
+              <PanelButton
                 to="#vision"
-                className="group relative inline-flex items-center justify-center min-w-[220px] h-14 px-8 bg-white/[0.03] backdrop-blur-xl border border-white/20 hover:border-white/40 text-white/70 hover:text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-500 overflow-hidden"
+                primary={false}
+                className="min-w-[220px] h-14 px-8 text-[12px] uppercase tracking-[0.2em] font-semibold"
               >
-                <div className="absolute inset-0 bg-gradient-to-tr from-white/[0.06] via-transparent to-white/[0.04] opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-                <div className="absolute top-0 left-0 w-2 h-2 border-t border-l border-white/60" />
-                <div className="absolute bottom-0 right-0 w-2 h-2 border-b border-r border-white/60" />
-                <span className="relative z-10">Learn More</span>
-                <div className="absolute bottom-3.5 left-8 right-8 h-px bg-white/20 scale-x-0 group-hover:scale-x-100 transition-transform duration-500 origin-center" />
-              </Link>
+                Learn More
+              </PanelButton>
             </div>
           </div>
         </div>
