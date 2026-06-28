@@ -142,9 +142,10 @@ export default function Home() {
   return (
     <div className="relative w-full bg-[#05060f] text-foreground">
       {/* ============ HERO ============ */}
-      <section className="relative h-screen w-full overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <Canvas camera={{ position: [0, 0.3, 4.8], fov: 46 }} dpr={[1, 2]}>
+      <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
+        {/* Right: 3D Earth */}
+        <div className="absolute inset-0 z-0 lg:left-[40%]">
+          <Canvas camera={{ position: [0, 0, 4.2], fov: 46 }} dpr={[1, 2]}>
             <HeroScene />
           </Canvas>
         </div>
@@ -154,19 +155,27 @@ export default function Home() {
           className="absolute inset-0 z-10 pointer-events-none"
           style={{
             background:
-              "radial-gradient(ellipse at center, transparent 35%, rgba(5,6,15,0.65) 100%)",
+              "radial-gradient(ellipse at 75% 50%, transparent 40%, rgba(5,6,15,0.78) 75%), linear-gradient(90deg, rgba(5,6,15,0.92) 0%, transparent 55%)",
           }}
         />
 
-        {/* Orbital rings */}
-        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none">
-          <div className="w-[38rem] h-[38rem] md:w-[52rem] md:h-[52rem] rounded-full border border-white/[0.06]" />
-          <div className="absolute w-[40rem] h-[40rem] md:w-[54rem] md:h-[54rem] rounded-full border border-dashed border-white/[0.04]" />
+        {/* Orbital rings around the globe */}
+        <div className="absolute inset-0 z-10 flex items-center justify-center pointer-events-none lg:justify-end lg:pr-[10%]">
+          <div className="relative w-[26rem] h-[26rem] md:w-[40rem] md:h-[40rem] lg:w-[48rem] lg:h-[48rem]">
+            <div className="absolute inset-0 rounded-full border border-white/[0.06] scale-110" />
+            <div className="absolute inset-0 rounded-full border border-dashed border-white/[0.04] scale-125" />
+            <div
+              className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[140%] h-[40%] border border-white/[0.08] rounded-[100%] rotate-[25deg]"
+              style={{ boxShadow: "0 0 15px rgba(255,255,255,0.05)" }}
+            />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[150%] h-[30%] border border-white/[0.04] rounded-[100%] rotate-[-15deg]" />
+            <div className="absolute top-[10%] right-[20%] w-1.5 h-1.5 bg-white rounded-full shadow-[0_0_10px_rgba(255,255,255,0.8)]" />
+            <div className="absolute bottom-[18%] left-[10%] w-1 h-1 bg-white/40 rounded-full" />
+          </div>
         </div>
 
-
-        {/* Hero copy */}
-        <header className="absolute top-0 left-0 right-0 z-20 px-8 pt-10">
+        {/* Header */}
+        <header className="absolute top-0 left-0 right-0 z-30 px-8 pt-10">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
               <span className="relative flex h-1.5 w-1.5">
@@ -191,31 +200,50 @@ export default function Home() {
           </div>
         </header>
 
+        {/* Left hero content */}
+        <div className="relative z-20 h-full max-w-7xl mx-auto px-8 flex flex-col justify-center">
+          <div className="max-w-2xl">
+            <div className="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-white/[0.04] border border-white/10 backdrop-blur-xl">
+              <span className="w-2 h-2 rounded-full bg-white/70 animate-pulse" />
+              <span className="text-[10px] uppercase tracking-[0.3em] text-white/60 font-medium">
+                Live Systems Data
+              </span>
+            </div>
 
-        <div className="relative z-20 flex flex-col items-center justify-center h-full px-6 text-center">
-          <div className="flex items-center gap-4">
-            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-r from-transparent to-white/70" />
-            <p className="text-[10px] md:text-[11px] uppercase tracking-[0.6em] text-white/85">
-              Nested Intelligence Observatory
-            </p>
-            <div className="h-[1px] w-10 md:w-16 bg-gradient-to-l from-transparent to-white/70" />
+            <h1 className="mt-8 font-wordmark text-6xl md:text-7xl lg:text-8xl text-white leading-[0.85] tracking-tight uppercase">
+              Gaiasphere
+            </h1>
+
+            <div className="relative mt-8 p-6 rounded-2xl bg-white/[0.04] border border-white/10 backdrop-blur-2xl max-w-lg">
+              <div className="absolute -left-1 top-0 bottom-0 w-[2px] bg-gradient-to-b from-transparent via-white/40 to-transparent" />
+              <p className="text-[15px] md:text-[16px] leading-relaxed text-white/70 font-light">
+                Explore the nested systems of Earth within the observable universe through real-time
+                scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
+              </p>
+            </div>
+
+            <div className="mt-10 flex flex-wrap items-center gap-5">
+              <Link
+                to="/planetary"
+                className="px-8 py-4 bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold rounded-lg hover:bg-white/90 transition-colors"
+              >
+                Enter Observatory
+              </Link>
+              <Link
+                to="/mission-control"
+                className="px-8 py-4 border border-white/20 text-white text-[12px] uppercase tracking-[0.2em] font-semibold rounded-lg hover:bg-white/[0.05] transition-colors"
+              >
+                Mission Control
+              </Link>
+            </div>
           </div>
-
-          <h1 className="mt-5 font-wordmark text-5xl md:text-7xl lg:text-8xl font-normal tracking-[0.14em] text-white uppercase drop-shadow-[0_0_35px_rgba(255,255,255,0.2)]">
-            Gaiasphere
-          </h1>
-
-          <p className="mt-3 max-w-2xl text-[15px] leading-relaxed text-white/70 drop-shadow-[0_1px_10px_rgba(0,0,0,0.5)]">
-            Explore the nested systems of Earth within the observable universe through real-time
-            scientific data, systems intelligence, harmonic analysis, and AI-assisted discovery.
-          </p>
         </div>
 
+        {/* Scroll indicator */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center text-white/40">
           <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
           <div className="w-[1px] h-12 bg-gradient-to-b from-white/50 to-transparent" />
         </div>
-
       </section>
 
       {/* ============ VISION ============ */}
