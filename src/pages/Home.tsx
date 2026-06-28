@@ -219,15 +219,17 @@ export default function Home() {
             <div className="mt-10 flex flex-wrap items-center gap-5">
               <Link
                 to="/planetary"
-                className="inline-flex items-center justify-center px-8 py-4 h-12 bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold rounded-full hover:bg-white/90 transition-colors"
+                className="group relative inline-flex items-center justify-center min-w-[210px] h-14 px-8 rounded-full bg-white text-[#05060f] text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-300 hover:scale-[1.02] hover:shadow-[0_0_30px_rgba(255,255,255,0.25)] active:scale-95"
               >
                 Enter Observatory
+                <span className="absolute inset-0 rounded-full border border-white/30 opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
               <Link
                 to="#vision"
-                className="inline-flex items-center justify-center px-8 py-4 h-12 border border-white/25 text-white text-[12px] uppercase tracking-[0.2em] font-semibold rounded-full hover:bg-white/[0.07] transition-colors"
+                className="group relative inline-flex items-center justify-center min-w-[210px] h-14 px-8 rounded-full border border-white/30 bg-white/[0.02] text-white text-[12px] uppercase tracking-[0.2em] font-semibold transition-all duration-300 hover:scale-[1.02] hover:border-white/60 hover:bg-white/[0.07] active:scale-95"
               >
-                Learn More
+                <span className="relative z-10">Learn More</span>
+                <span className="absolute inset-0 rounded-full bg-gradient-to-b from-white/8 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
               </Link>
             </div>
           </div>
