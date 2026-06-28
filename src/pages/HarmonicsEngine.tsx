@@ -256,13 +256,37 @@ const HarmonicsEngine = () => {
       evidence: e.evidence,
     }));
 
-    if (mode === "cross") {
+    const focusEvent = selectedEvent
+      ? {
+          scope: selectedEvent.scope,
+          dataset: selectedEvent.datasetLabel,
+          kind: selectedEvent.kind,
+          severity: selectedEvent.severity,
+          summary: selectedEvent.summary,
+          evidence: selectedEvent.evidence,
+          score: Number(selectedEvent.score.toFixed(3)),
+          position: Number(selectedEvent.position.toFixed(3)),
+          unit: selectedEvent.unit,
+        }
+      : null;
+
+    const singleSnapshot = () => {
+      const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
+      return {
+        scope,
+        method,
+        dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
+        topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
+        fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
+      };
+    };
+
+    const crossSnapshot = () => {
       const a = getDataset(crossA);
       const b = getDataset(crossB);
-      if (!a || !b) return { mode, events };
+      if (!a || !b) return null;
       const r = compareLayers(a, b);
       return {
-        mode: "cross-layer",
         layerA: { id: a.id, label: a.label, scope: a.scope, provenance: a.provenance, unit: a.unit },
         layerB: { id: b.id, label: b.label, scope: b.scope, provenance: b.provenance, unit: b.unit },
         evidence: r.evidence,
@@ -272,29 +296,35 @@ const HarmonicsEngine = () => {
         topPeaksA: r.topPeaksA.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         topPeaksB: r.topPeaksB.map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
         sharedPeriods: r.sharedPeriods,
-        events,
       };
+    };
+
+    if (mode === "cross") {
+      return { mode: "cross-layer", ...(crossSnapshot() ?? {}), events, focusEvent };
     }
     if (mode === "events") {
-      return { mode: "events", events: scanAllLayers({ limit: 30 }).map((e) => ({
-        scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
-        summary: e.summary, evidence: e.evidence,
-      })) };
+      return {
+        mode: "events",
+        focusEvent,
+        events: scanAllLayers({ limit: 30 }).map((e) => ({
+          scope: e.scope, dataset: e.datasetLabel, kind: e.kind, severity: e.severity,
+          summary: e.summary, evidence: e.evidence,
+        })),
+      };
     }
     if (mode === "reports") {
-      return { mode: "reports", events };
+      // Include active analysis context so reports can summarize what the user was just looking at.
+      return {
+        mode: "reports",
+        activeSingle: singleSnapshot(),
+        activeCross: crossSnapshot(),
+        events,
+        focusEvent,
+      };
     }
-    const spec = spectrum(dataset.series, dataset.sampleRate, dataset.unit);
-    return {
-      mode: "single-layer",
-      scope,
-      method,
-      dataset: { id: dataset.id, label: dataset.label, scope: dataset.scope, provenance: dataset.provenance, unit: dataset.unit, knownPeriod: dataset.knownPeriod },
-      topPeaks: spec.peaks.slice(0, 5).map((p) => ({ period: Number(p.period.toFixed(3)), power: p.power })),
-      fundamentalPeriod: spec.fundamental ? Number(spec.fundamental.period.toFixed(3)) : null,
-      events,
-    };
-  }, [mode, scope, method, dataset, crossA, crossB]);
+    return { mode: "single-layer", ...singleSnapshot(), events, focusEvent };
+  }, [mode, scope, method, dataset, crossA, crossB, selectedEvent]);
+
 
   return (
     <div className="relative min-h-screen w-full overflow-hidden bg-background text-foreground">
