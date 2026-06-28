@@ -280,7 +280,13 @@ export default function Home() {
         {/* Scroll indicator */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pb-10 flex flex-col items-center" style={{ color: "hsla(45,44%,54%,0.65)" }}>
           <span className="text-[10px] uppercase tracking-[0.4em] mb-2">Scroll</span>
-          <div className="w-[1px] h-12 bg-gradient-to-b from-[#af9033]/70 to-transparent" />
+          <div
+            className="w-[1px] h-12"
+            style={{
+              background:
+                "linear-gradient(180deg, hsla(220,35%,60%,0.55) 0%, transparent 100%)",
+            }}
+          />
         </div>
       </section>
 
