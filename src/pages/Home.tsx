@@ -143,11 +143,24 @@ export default function Home() {
     <div className="relative w-full bg-[#05060f] text-foreground">
       {/* ============ HERO ============ */}
       <section className="relative h-screen w-full overflow-hidden bg-[#05060f]">
-        {/* Right: 3D Earth */}
-        <div className="absolute inset-0 z-0 lg:left-[40%]">
-          <Canvas camera={{ position: [0, 0, 4.2], fov: 46 }} dpr={[1, 2]}>
-            <HeroScene />
-          </Canvas>
+        {/* Right: Earth */}
+        <div className="absolute inset-0 z-0 lg:left-[40%] flex items-center justify-center pointer-events-none">
+          <div className="relative w-[80vw] h-[80vw] md:w-[55vh] md:h-[55vh] lg:w-[60vh] lg:h-[60vh] max-w-[700px] max-h-[700px]">
+            <div
+              className="absolute inset-0 rounded-full blur-3xl -z-10"
+              style={{
+                background:
+                  "radial-gradient(circle at 50% 50%, rgba(45,138,158,0.35) 0%, rgba(20,80,120,0.15) 45%, transparent 75%)",
+              }}
+            />
+            <img
+              src={earthAsset.url}
+              alt="GaiaSphere"
+              width={644}
+              height={644}
+              className="w-full h-full object-contain drop-shadow-[0_0_60px_rgba(45,138,158,0.35)]"
+            />
+          </div>
         </div>
 
         {/* Vignette */}
