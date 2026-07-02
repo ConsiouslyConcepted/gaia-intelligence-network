@@ -228,9 +228,9 @@ export default function Home() {
               <span className="h-px w-12" style={{ backgroundColor: "#C19533", opacity: 0.7 }} />
               <span
                 className="text-[12px] uppercase tracking-[0.4em] font-light whitespace-nowrap"
-                style={{ color: "#C19533" }}
+                style={{ color: "#ffffff" }}
               >
-                A Living Observatory of Earth's Earths nested systems
+                A Living Observatory of Earth's nested systems
               </span>
             </div>
 
