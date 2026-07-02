@@ -388,7 +388,7 @@ const Stellar = () => {
 
 
       {/* Center stage — simple stellar neighborhood diagram */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-[300px] px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-36 pb-40 lg:pl-[260px] lg:pr-[300px] px-4">
         <div className={cn(
           "pointer-events-auto relative w-full max-w-[760px]",
           layer === "neighborhood"
