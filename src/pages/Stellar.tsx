@@ -292,7 +292,7 @@ const Stellar = () => {
       </div>
 
       {/* Left rail */}
-      <div className="absolute left-4 top-32 bottom-44 z-10 pointer-events-none w-[260px] hidden lg:flex flex-col">
+      <div className="absolute left-4 top-40 bottom-52 z-10 pointer-events-none w-[260px] hidden lg:flex flex-col">
         <HudPanel className="pointer-events-auto flex-1 flex flex-col min-h-0 overflow-hidden">
           {/* Header */}
           <div className="px-4 pt-4 pb-3 flex items-center justify-between border-b border-white/5">
@@ -388,7 +388,7 @@ const Stellar = () => {
 
 
       {/* Center stage — simple stellar neighborhood diagram */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-32 lg:pl-[260px] lg:pr-[300px] px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-36 pb-40 lg:pl-[260px] lg:pr-[300px] px-4">
         <div className={cn(
           "pointer-events-auto relative w-full max-w-[760px]",
           layer === "neighborhood"
@@ -400,7 +400,7 @@ const Stellar = () => {
       </div>
 
       {/* Right rail */}
-      <div className="absolute right-4 top-32 bottom-44 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
+      <div className="absolute right-4 top-40 bottom-52 z-10 pointer-events-auto w-[280px] hidden lg:flex flex-col">
         <HudPanel className="p-4 flex flex-col gap-3 overflow-y-auto flex-1">
           {(() => {
             const info = LAYER_INFO[layer];
