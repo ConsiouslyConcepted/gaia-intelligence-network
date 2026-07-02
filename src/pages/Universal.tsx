@@ -492,7 +492,7 @@ const Universal = () => {
       </div>
 
       {/* Center stage */}
-      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-24 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
+      <div className="absolute inset-0 z-[2] flex items-center justify-center pointer-events-none pt-40 pb-44 lg:pl-[260px] lg:pr-[300px] px-4">
         <div
           className={cn(
             "pointer-events-auto relative",

@@ -230,7 +230,7 @@ export default function Home() {
                 className="text-[12px] uppercase tracking-[0.4em] font-light whitespace-nowrap"
                 style={{ color: "#ffffff" }}
               >
-                A Living Observatory of Earth's nested systems
+                A Living Observatory of Earth's Planetary Systems
               </span>
             </div>
 
