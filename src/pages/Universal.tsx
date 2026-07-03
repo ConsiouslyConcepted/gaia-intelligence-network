@@ -322,13 +322,13 @@ const CyclesView = ({ tick }: { tick: number }) => {
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.72 + (i / (DEWEY_ROWS.length - 1)) * 1.5;
+        const y = -0.68 + (i / (DEWEY_ROWS.length - 1)) * 1.42;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
               const x = -0.88 + (k / 5) * 1.5;
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.032 + Math.min(d.yr, 100) * 0.0007;
+              const size = 0.026 + Math.min(d.yr, 100) * 0.00022;
 
               // live phase: fraction of the current period completed
               const phase = (((fy - epoch) % d.yr) + d.yr) % d.yr / d.yr;
@@ -396,10 +396,10 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-0.9" fontSize="0.04" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-0.94" fontSize="0.038" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-0.85" fontSize="0.024" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-0.88" fontSize="0.022" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
