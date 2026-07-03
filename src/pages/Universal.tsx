@@ -322,17 +322,17 @@ const CyclesView = ({ tick }: { tick: number }) => {
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.68 + (i / (DEWEY_ROWS.length - 1)) * 1.42;
+        const y = -0.7 + (i / (DEWEY_ROWS.length - 1)) * 1.48;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
-              const x = -0.88 + (k / 5) * 1.5;
+              const x = -0.9 + (k / 5) * 1.55;
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.026 + Math.min(d.yr, 100) * 0.00022;
+              const size = 0.034 + Math.min(d.yr, 100) * 0.00028;
 
               // live phase: fraction of the current period completed
               const phase = (((fy - epoch) % d.yr) + d.yr) % d.yr / d.yr;
-              const arcR = size * pulse + 0.018;
+              const arcR = size * pulse + 0.022;
               const arcAngle = phase * Math.PI * 2;
               const ax = x + arcR * Math.sin(arcAngle);
               const ay = y - arcR * Math.cos(arcAngle);
@@ -347,13 +347,13 @@ const CyclesView = ({ tick }: { tick: number }) => {
                 <g key={k}>
                   {/* live phase arc */}
                   <circle cx={x} cy={y} r={arcR}
-                    fill="none" stroke="hsla(200,40%,70%,0.15)" strokeWidth={0.003} />
+                    fill="none" stroke="hsla(200,40%,70%,0.15)" strokeWidth={0.004} />
                   <path d={arcPath}
                     fill="none"
                     stroke={row.emphasis ? "hsla(45,90%,80%,0.9)" : "hsla(190,70%,75%,0.75)"}
-                    strokeWidth={0.006} strokeLinecap="round" />
+                    strokeWidth={0.008} strokeLinecap="round" />
                   {/* phase head marker */}
-                  <circle cx={ax} cy={ay} r={0.008}
+                  <circle cx={ax} cy={ay} r={0.011}
                     fill={row.emphasis ? "hsla(45,95%,88%,1)" : "hsla(190,90%,88%,0.95)"} />
 
                   {/* dot */}
@@ -361,7 +361,7 @@ const CyclesView = ({ tick }: { tick: number }) => {
                     cx={x} cy={y} r={size * pulse}
                     fill={row.emphasis ? "hsla(45,90%,75%,0.9)" : "hsla(200,65%,70%,0.6)"}
                     stroke="hsla(200,50%,80%,0.45)"
-                    strokeWidth={0.002}
+                    strokeWidth={0.003}
                     style={{ cursor: "help" }}
                   >
                     <title>
@@ -370,15 +370,15 @@ const CyclesView = ({ tick }: { tick: number }) => {
                   </circle>
 
                   {/* ratio chip above dot */}
-                  <text x={x} y={y - size * pulse - 0.026} fontSize="0.026" textAnchor="middle"
-                    fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(45,50%,78%,0.55)"}
+                  <text x={x} y={y - size * pulse - 0.032} fontSize="0.034" textAnchor="middle"
+                    fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(45,50%,78%,0.6)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.06em" }}>
                     {ratio}
                   </text>
 
                   {/* period value below dot */}
-                  <text x={x} y={y + size * pulse + 0.05} fontSize="0.032" textAnchor="middle"
-                    fill={row.emphasis ? "hsla(45,90%,88%,0.98)" : "hsla(0,0%,100%,0.72)"}
+                  <text x={x} y={y + size * pulse + 0.062} fontSize="0.042" textAnchor="middle"
+                    fill={row.emphasis ? "hsla(45,90%,88%,0.98)" : "hsla(0,0%,100%,0.78)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.05em" }}>
                     {d.yr < 1 ? d.yr.toFixed(2) : d.yr.toFixed(d.yr < 10 ? 2 : 1)}
                   </text>
@@ -387,8 +387,8 @@ const CyclesView = ({ tick }: { tick: number }) => {
             })}
 
             {/* right-side band label */}
-            <text x={1.4} y={y + 0.012} fontSize="0.032" textAnchor="end"
-              fill={row.emphasis ? "hsla(45,80%,82%,0.85)" : "hsla(200,40%,78%,0.65)"}
+            <text x={1.4} y={y + 0.015} fontSize="0.042" textAnchor="end"
+              fill={row.emphasis ? "hsla(45,80%,82%,0.9)" : "hsla(200,40%,78%,0.72)"}
               style={{ letterSpacing: "0.14em", textTransform: "uppercase" }}>
               {row.label}
             </text>
@@ -396,18 +396,18 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-0.94" fontSize="0.038" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-0.93" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-0.88" fontSize="0.022" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-0.86" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
-      <text x={0.125} y="0.92" fontSize="0.034" fill="hsla(45,70%,75%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x={0.125} y="0.93" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
       {latestSSN !== undefined && (
-        <text x={0.125} y="0.975" fontSize="0.03" fill="hsla(200,70%,80%,0.7)" textAnchor="middle"
+        <text x={0.125} y="0.985" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
           style={{ letterSpacing: "0.18em" }}>
           LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
         </text>
