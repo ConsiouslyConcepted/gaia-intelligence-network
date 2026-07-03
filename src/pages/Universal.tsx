@@ -179,66 +179,235 @@ const AddressView = () => (
 
 
 // ───────── Harmonic Cycles (Dewey table) with cross-references ─────────
-const DEWEY_ROWS: { years: number[]; emphasis?: boolean; note?: string }[] = [
-  { years: [142.0, 213.9, 319.5, 479.3], note: "Gleissberg solar envelope" },
-  { years: [71.0, 106.5, 159.8], note: "Climate / drought clusters" },
-  { years: [35.5, 53.3], note: "Brückner climate cycle" },
-  { years: [17.75], emphasis: true, note: "Foundation · Lunar nodal 18.6 · Saros 18.03" },
-  { years: [5.92, 8.88], note: "ENSO band · sunspot fraction" },
-  { years: [1.97, 2.96, 4.44], note: "QBO 2.2 yr · ENSO 3-5 yr" },
-  { years: [0.66, 0.99, 1.48, 2.22], note: "Annual · biennial" },
-  { years: [0.22, 0.33, 0.49, 0.74, 1.11], note: "Seasonal · lunar 0.075" },
+const FOUNDATION_YR = 17.75;
+
+type CycleDot = {
+  yr: number;
+  driver: string;   // physical/observational driver
+};
+type CycleRow = {
+  label: string;    // right-side band label
+  driver: string;   // one-line description for tooltip fallback
+  dots: CycleDot[];
+  emphasis?: boolean;
+};
+
+const DEWEY_ROWS: CycleRow[] = [
+  {
+    label: "Gleissberg envelope",
+    driver: "Long solar activity envelope modulating sunspot maxima.",
+    dots: [
+      { yr: 142.0, driver: "Gleissberg upper octave" },
+      { yr: 213.9, driver: "Suess / de Vries solar" },
+      { yr: 319.5, driver: "Bray climate cycle" },
+      { yr: 479.3, driver: "Hallstatt millennial solar" },
+    ],
+  },
+  {
+    label: "Climate / drought",
+    driver: "Multi-decadal drought & ocean oscillation clusters.",
+    dots: [
+      { yr: 71.0, driver: "AMO half-cycle" },
+      { yr: 106.5, driver: "Gleissberg lower octave" },
+      { yr: 159.8, driver: "Drought megacycle" },
+    ],
+  },
+  {
+    label: "Brückner climate",
+    driver: "Brückner temperature/precipitation cycle.",
+    dots: [
+      { yr: 35.5, driver: "Brückner cycle" },
+      { yr: 53.3, driver: "Brückner ×3 harmonic" },
+    ],
+  },
+  {
+    label: "Foundation",
+    driver: "17.75 yr · Lunar nodal 18.6 · Saros 18.03 — the anchor of the ladder.",
+    emphasis: true,
+    dots: [
+      { yr: 17.75, driver: "Dewey foundational period" },
+    ],
+  },
+  {
+    label: "ENSO band",
+    driver: "ENSO envelope & sunspot fractional harmonics.",
+    dots: [
+      { yr: 5.92, driver: "Foundation ÷3 · ENSO band" },
+      { yr: 8.88, driver: "Foundation ÷2 · Hale sub-harmonic" },
+    ],
+  },
+  {
+    label: "QBO / ENSO",
+    driver: "Stratospheric QBO and El Niño / La Niña rhythms.",
+    dots: [
+      { yr: 1.97, driver: "QBO ~2.2 yr" },
+      { yr: 2.96, driver: "Foundation ÷6" },
+      { yr: 4.44, driver: "ENSO 3-5 yr band" },
+    ],
+  },
+  {
+    label: "Annual · biennial",
+    driver: "Annual insolation and biennial atmospheric coupling.",
+    dots: [
+      { yr: 0.66, driver: "Semi-annual monsoon" },
+      { yr: 0.99, driver: "Annual insolation" },
+      { yr: 1.48, driver: "Foundation ÷12" },
+      { yr: 2.22, driver: "Biennial oscillation" },
+    ],
+  },
+  {
+    label: "Seasonal · lunar",
+    driver: "Seasonal, lunar-monthly and sub-monthly rhythms.",
+    dots: [
+      { yr: 0.22, driver: "Lunar ~80 d" },
+      { yr: 0.33, driver: "Seasonal quarter" },
+      { yr: 0.49, driver: "Half year" },
+      { yr: 0.74, driver: "9-month gestation" },
+      { yr: 1.11, driver: "Annual +10%" },
+    ],
+  },
 ];
+
+// Nearest small-integer multiplier of foundation (× or ÷), for a compact ratio label.
+function foundationRatio(yr: number): string {
+  const r = yr / FOUNDATION_YR;
+  if (r >= 1) {
+    const n = Math.round(r);
+    const err = Math.abs(r - n) / r;
+    return err < 0.15 ? `×${n}` : `×${r.toFixed(1)}`;
+  }
+  const n = Math.round(1 / r);
+  const err = Math.abs(1 / r - n) * r;
+  return err < 0.15 ? `÷${n}` : `÷${(1 / r).toFixed(1)}`;
+}
+
+// Fractional year for phase computation.
+function fractionalYear(now: Date): number {
+  const y = now.getUTCFullYear();
+  const start = Date.UTC(y, 0, 1);
+  const next = Date.UTC(y + 1, 0, 1);
+  return y + (now.getTime() - start) / (next - start);
+}
+
+// Musical mapping vs foundation (relative frequency = FOUNDATION_YR / yr, fold to octave).
+const INTERVAL_NAMES = [
+  "Unison", "Minor 2nd", "Major 2nd", "Minor 3rd", "Major 3rd", "Perfect 4th",
+  "Tritone", "Perfect 5th", "Minor 6th", "Major 6th", "Minor 7th", "Major 7th", "Octave",
+];
+function nearestInterval(yr: number): string {
+  let ratio = FOUNDATION_YR / yr;
+  while (ratio >= 2) ratio /= 2;
+  while (ratio < 1) ratio *= 2;
+  const semis = 12 * Math.log2(ratio);
+  const idx = Math.max(0, Math.min(12, Math.round(semis)));
+  const cents = Math.round((semis - idx) * 100);
+  return `${INTERVAL_NAMES[idx]} (${cents >= 0 ? "+" : ""}${cents}¢)`;
+}
 
 const CyclesView = ({ tick }: { tick: number }) => {
   const { data: solarCycle } = useNOAASolarCycle();
   const latestSSN = solarCycle?.[solarCycle.length - 1]?.ssn;
-  const W = 2.0;
+
+  // viewBox: wider to give room for right-side labels + ratio column.
+  const VB_X = -1.15;
+  const VB_W = 2.55;
+  const now = new Date();
+  const fy = fractionalYear(now);
+  const epoch = 2000; // arbitrary but consistent phase reference
+
   return (
-    <svg viewBox={`${-W / 2 - 0.08} -1 ${W + 0.16} 2`} className="w-full h-full">
-      <line x1={-W / 2} y1="0" x2={W / 2} y2="0" stroke="hsla(220,30%,50%,0.15)" strokeWidth={0.004} strokeDasharray="0.02 0.015" />
+    <svg viewBox={`${VB_X} -1 ${VB_W} 2`} className="w-full h-full">
+      {/* Foundation baseline */}
+      <line x1={-1.05} y1="0" x2={1.4} y2="0"
+        stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
+
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.78 + (i / (DEWEY_ROWS.length - 1)) * 1.6;
+        const y = -0.72 + (i / (DEWEY_ROWS.length - 1)) * 1.5;
         return (
           <g key={i}>
-            {row.years.map((yr, k) => {
-              const x = -0.78 + (k / 5) * 1.55;
+            {row.dots.map((d, k) => {
+              const x = -0.88 + (k / 5) * 1.5;
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.032 + Math.min(yr, 100) * 0.0007;
+              const size = 0.032 + Math.min(d.yr, 100) * 0.0007;
+
+              // live phase: fraction of the current period completed
+              const phase = (((fy - epoch) % d.yr) + d.yr) % d.yr / d.yr;
+              const arcR = size * pulse + 0.018;
+              const arcAngle = phase * Math.PI * 2;
+              const ax = x + arcR * Math.sin(arcAngle);
+              const ay = y - arcR * Math.cos(arcAngle);
+              const largeArc = phase > 0.5 ? 1 : 0;
+              const arcPath =
+                `M ${x} ${y - arcR} A ${arcR} ${arcR} 0 ${largeArc} 1 ${ax} ${ay}`;
+
+              const ratio = foundationRatio(d.yr);
+              const interval = nearestInterval(d.yr);
+
               return (
                 <g key={k}>
+                  {/* live phase arc */}
+                  <circle cx={x} cy={y} r={arcR}
+                    fill="none" stroke="hsla(200,40%,70%,0.15)" strokeWidth={0.003} />
+                  <path d={arcPath}
+                    fill="none"
+                    stroke={row.emphasis ? "hsla(45,90%,80%,0.9)" : "hsla(190,70%,75%,0.75)"}
+                    strokeWidth={0.006} strokeLinecap="round" />
+                  {/* phase head marker */}
+                  <circle cx={ax} cy={ay} r={0.008}
+                    fill={row.emphasis ? "hsla(45,95%,88%,1)" : "hsla(190,90%,88%,0.95)"} />
+
+                  {/* dot */}
                   <circle
                     cx={x} cy={y} r={size * pulse}
-                    fill={row.emphasis ? "hsla(45,90%,75%,0.85)" : "hsla(200,65%,70%,0.55)"}
-                    stroke="hsla(200,50%,80%,0.4)"
+                    fill={row.emphasis ? "hsla(45,90%,75%,0.9)" : "hsla(200,65%,70%,0.6)"}
+                    stroke="hsla(200,50%,80%,0.45)"
                     strokeWidth={0.002}
-                  />
-                  <text x={x} y={y + 0.07} fontSize="0.034" textAnchor="middle"
-                    fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(0,0%,100%,0.7)"}
+                    style={{ cursor: "help" }}
+                  >
+                    <title>
+                      {`${d.yr} yr — ${d.driver}\nRatio vs 17.75 yr foundation: ${ratio}\nHarmonic interval: ${interval}\nCurrent phase: ${Math.round(phase * 100)}%`}
+                    </title>
+                  </circle>
+
+                  {/* ratio chip above dot */}
+                  <text x={x} y={y - size * pulse - 0.026} fontSize="0.026" textAnchor="middle"
+                    fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(45,50%,78%,0.55)"}
+                    style={{ fontFamily: "monospace", letterSpacing: "0.06em" }}>
+                    {ratio}
+                  </text>
+
+                  {/* period value below dot */}
+                  <text x={x} y={y + size * pulse + 0.05} fontSize="0.032" textAnchor="middle"
+                    fill={row.emphasis ? "hsla(45,90%,88%,0.98)" : "hsla(0,0%,100%,0.72)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.05em" }}>
-                    {yr < 1 ? yr.toFixed(2) : yr.toFixed(yr < 10 ? 2 : 1)}
+                    {d.yr < 1 ? d.yr.toFixed(2) : d.yr.toFixed(d.yr < 10 ? 2 : 1)}
                   </text>
                 </g>
               );
             })}
-            {row.note && (
-              <text x={0.86} y={y + 0.015} fontSize="0.03" textAnchor="start"
-                fill="hsla(200,40%,75%,0.55)"
-                style={{ letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                {row.note}
-              </text>
-            )}
+
+            {/* right-side band label */}
+            <text x={1.4} y={y + 0.012} fontSize="0.032" textAnchor="end"
+              fill={row.emphasis ? "hsla(45,80%,82%,0.85)" : "hsla(200,40%,78%,0.65)"}
+              style={{ letterSpacing: "0.14em", textTransform: "uppercase" }}>
+              {row.label}
+            </text>
           </g>
         );
       })}
-      <text x="0" y="-0.93" fontSize="0.04" fill="hsla(0,0%,100%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+
+      <text x={0.125} y="-0.9" fontSize="0.04" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x="0" y="0.93" fontSize="0.034" fill="hsla(45,70%,75%,0.65)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x={0.125} y="-0.85" fontSize="0.024" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+        Hover a dot · live phase arcs · ratios to 17.75 yr foundation
+      </text>
+
+      <text x={0.125} y="0.92" fontSize="0.034" fill="hsla(45,70%,75%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
       {latestSSN !== undefined && (
-        <text x="0" y="0.985" fontSize="0.03" fill="hsla(200,70%,80%,0.7)" textAnchor="middle"
+        <text x={0.125} y="0.975" fontSize="0.03" fill="hsla(200,70%,80%,0.7)" textAnchor="middle"
           style={{ letterSpacing: "0.18em" }}>
           LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
         </text>
