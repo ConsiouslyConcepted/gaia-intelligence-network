@@ -322,13 +322,13 @@ const CyclesView = ({ tick }: { tick: number }) => {
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.72 + (i / (DEWEY_ROWS.length - 1)) * 1.5;
+        const y = -0.68 + (i / (DEWEY_ROWS.length - 1)) * 1.42;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
               const x = -0.88 + (k / 5) * 1.5;
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.032 + Math.min(d.yr, 100) * 0.0007;
+              const size = 0.026 + Math.min(d.yr, 100) * 0.00022;
 
               // live phase: fraction of the current period completed
               const phase = (((fy - epoch) % d.yr) + d.yr) % d.yr / d.yr;
