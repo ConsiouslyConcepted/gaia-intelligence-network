@@ -396,10 +396,10 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-0.9" fontSize="0.04" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-0.94" fontSize="0.038" fill="hsla(0,0%,100%,0.6)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-0.85" fontSize="0.024" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-0.88" fontSize="0.022" fill="hsla(200,40%,70%,0.5)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
