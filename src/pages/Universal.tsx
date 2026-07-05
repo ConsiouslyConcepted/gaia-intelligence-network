@@ -316,17 +316,18 @@ const CyclesView = ({ tick }: { tick: number }) => {
   const epoch = 2000; // arbitrary but consistent phase reference
 
   return (
-    <svg viewBox={`${VB_X} -1 ${VB_W} 2`} className="w-full h-full">
+    <svg viewBox={`${VB_X} -1.18 ${VB_W} 2.42`} className="w-full h-full">
       {/* Foundation baseline */}
       <line x1={-1.05} y1="0" x2={1.4} y2="0"
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.7 + (i / (DEWEY_ROWS.length - 1)) * 1.48;
+        const y = -0.82 + (i / (DEWEY_ROWS.length - 1)) * 1.78;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
-              const x = -0.9 + (k / 5) * 1.55;
+              const x = -0.95 + (k / 5) * 1.78;
+
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
               const size = 0.034 + Math.min(d.yr, 100) * 0.00028;
 
@@ -396,22 +397,23 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-0.93" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-1.08" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-0.86" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-1.0" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
-      <text x={0.125} y="0.93" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x={0.125} y="1.12" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
       {latestSSN !== undefined && (
-        <text x={0.125} y="0.985" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
+        <text x={0.125} y="1.19" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
           style={{ letterSpacing: "0.18em" }}>
           LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
         </text>
       )}
+
     </svg>
   );
 };
