@@ -316,17 +316,18 @@ const CyclesView = ({ tick }: { tick: number }) => {
   const epoch = 2000; // arbitrary but consistent phase reference
 
   return (
-    <svg viewBox={`${VB_X} -1 ${VB_W} 2`} className="w-full h-full">
+    <svg viewBox={`${VB_X} -1.18 ${VB_W} 2.42`} className="w-full h-full">
       {/* Foundation baseline */}
       <line x1={-1.05} y1="0" x2={1.4} y2="0"
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.7 + (i / (DEWEY_ROWS.length - 1)) * 1.48;
+        const y = -0.82 + (i / (DEWEY_ROWS.length - 1)) * 1.78;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
-              const x = -0.9 + (k / 5) * 1.55;
+              const x = -0.95 + (k / 5) * 1.78;
+
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
               const size = 0.034 + Math.min(d.yr, 100) * 0.00028;
 
