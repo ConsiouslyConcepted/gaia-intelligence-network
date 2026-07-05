@@ -727,7 +727,7 @@ function VariableStarsPanel() {
   };
 
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-3 px-4 py-6 overflow-y-auto">
+    <div className="w-full h-full flex flex-col justify-center gap-3 px-4 pt-2 pb-8 overflow-y-auto">
       <div className="flex items-center justify-between">
         <div className="text-[12px] uppercase tracking-[0.25em] text-muted-foreground/70">Variable star classes</div>
         <div className="flex gap-1 p-1 rounded-lg border border-border/30" style={{ background: "hsla(240,20%,8%,0.5)" }}>
