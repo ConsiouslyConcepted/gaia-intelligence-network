@@ -1188,58 +1188,178 @@ function StellarStage({ layer }: { layer: StellarLayer }) {
   }
 
   // exoplanets
+  const cardBg = "linear-gradient(145deg, hsla(225,45%,12%,0.9), hsla(225,50%,6%,0.92))";
+  const flatBg = "hsla(240,20%,10%,0.6)";
+
+  // TRAPPIST-1 period ratios (relative units, from mean-motion chain 8:5:3:2:3:4:3)
+  const trappist = [
+    { name: "b", ratio: 1.00, size: 5.2, hue: 20 },
+    { name: "c", ratio: 1.28, size: 5.6, hue: 30 },
+    { name: "d", ratio: 1.62, size: 4.2, hue: 45 },
+    { name: "e", ratio: 2.06, size: 4.8, hue: 180 },
+    { name: "f", ratio: 2.66, size: 5.4, hue: 200 },
+    { name: "g", ratio: 3.35, size: 5.8, hue: 210 },
+    { name: "h", ratio: 4.45, size: 4.0, hue: 230 },
+  ];
+  const t1MaxR = 130;
+  const t1MinR = 28;
+  const t1Span = trappist[trappist.length - 1].ratio - trappist[0].ratio;
+  const t1R = (r: number) => t1MinR + ((r - trappist[0].ratio) / t1Span) * (t1MaxR - t1MinR);
+
   return (
-    <div className="w-full h-full flex flex-col justify-center gap-2 px-2 py-1 overflow-y-auto">
-      <div className="text-[10px] uppercase tracking-[0.2em] text-muted-foreground/60 text-center">
-        Exoplanetary systems — NASA Exoplanet Archive
+    <div className="w-full h-full flex flex-col justify-center gap-2 px-3 py-2 overflow-y-auto">
+      {/* Header */}
+      <div className="flex items-center justify-between">
+        <div className="text-[10px] uppercase tracking-[0.25em] text-muted-foreground/70">
+          Exoplanetary systems
+        </div>
+        <div className="flex items-center gap-1.5 text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 font-mono">
+          <span className="w-1.5 h-1.5 rounded-full bg-emerald-400/80" style={{ boxShadow: "0 0 6px hsla(150,80%,60%,0.7)" }} />
+          NASA Exoplanet Archive · live
+        </div>
       </div>
-      <div className="grid grid-cols-3 gap-1.5">
+
+      {/* Metric strip */}
+      <div className="grid grid-cols-6 gap-1.5">
         {[
-          { label: "Confirmed planets", value: "5,800+" },
-          { label: "Planetary systems", value: "4,300+" },
-          { label: "Multi-planet systems", value: "1,000+" },
-          { label: "Habitable-zone candidates", value: "~60" },
-          { label: "Transit method", value: "~75%" },
-          { label: "Radial-velocity", value: "~19%" },
+          { label: "Confirmed", value: "5,800+" },
+          { label: "Systems", value: "4,300+" },
+          { label: "Multi-planet", value: "1,000+" },
+          { label: "HZ candidates", value: "~60" },
+          { label: "Transit", value: "~75%" },
+          { label: "RV", value: "~19%" },
         ].map((c) => (
-          <div key={c.label} className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-            <div className="text-[8px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">{c.label}</div>
-            <div className="text-[13px] font-mono font-semibold text-foreground/90">{c.value}</div>
+          <div key={c.label} className="rounded-lg px-2 py-1.5 border border-border/25" style={{ background: flatBg }}>
+            <div className="text-[7.5px] uppercase tracking-[0.18em] text-muted-foreground/60 truncate">{c.label}</div>
+            <div className="text-[13px] font-mono font-semibold text-foreground/90 mt-0.5">{c.value}</div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-2 mt-1">
-        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Habitable zone</div>
-          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Liquid-water orbits</div>
-          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
-            Sun: ~0.95–1.37 AU · M-dwarf (Proxima): ~0.04–0.08 AU. Zone location scales with stellar luminosity.
+      {/* Habitable zone + TRAPPIST-1 chain */}
+      <div className="grid grid-cols-2 gap-2">
+        {/* Habitable zone diagram */}
+        <div className="rounded-xl p-2.5 border border-border/30" style={{ background: cardBg }}>
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/65">Habitable zone</div>
+            <div className="text-[8px] font-mono text-muted-foreground/50 uppercase tracking-widest">liquid water</div>
+          </div>
+          <svg viewBox="0 0 260 120" className="w-full h-24">
+            {/* baseline */}
+            <line x1="20" y1="60" x2="240" y2="60" stroke="hsla(220,30%,55%,0.15)" strokeDasharray="2 3" />
+            {/* M-dwarf system (Proxima) */}
+            <g>
+              <circle cx="55" cy="60" r="4" fill="hsl(15,85%,60%)" style={{ filter: "drop-shadow(0 0 4px hsl(15,85%,60%))" }} />
+              <ellipse cx="55" cy="60" rx="14" ry="6" fill="none" stroke="hsla(150,70%,55%,0.5)" strokeWidth="2.5" />
+              <circle cx="69" cy="60" r="1.6" fill="hsl(200,70%,70%)" />
+              <text x="55" y="92" fill="hsla(220,20%,75%,0.75)" fontSize="8" fontFamily="monospace" textAnchor="middle">M-DWARF</text>
+              <text x="55" y="102" fill="hsla(220,20%,55%,0.6)" fontSize="7" fontFamily="monospace" textAnchor="middle">0.04–0.08 AU</text>
+            </g>
+            {/* Sun system */}
+            <g>
+              <circle cx="175" cy="60" r="6" fill="hsl(48,95%,70%)" style={{ filter: "drop-shadow(0 0 6px hsl(48,95%,70%))" }} />
+              <ellipse cx="175" cy="60" rx="42" ry="16" fill="none" stroke="hsla(150,70%,55%,0.5)" strokeWidth="2.5" />
+              <circle cx="200" cy="52" r="2" fill="hsl(200,80%,70%)" />
+              <text x="200" y="46" fill="hsla(200,80%,80%,0.8)" fontSize="7" fontFamily="monospace" textAnchor="middle">Earth</text>
+              <text x="175" y="92" fill="hsla(220,20%,75%,0.75)" fontSize="8" fontFamily="monospace" textAnchor="middle">G-TYPE (SUN)</text>
+              <text x="175" y="102" fill="hsla(220,20%,55%,0.6)" fontSize="7" fontFamily="monospace" textAnchor="middle">0.95–1.37 AU</text>
+            </g>
+            {/* legend swatch */}
+            <g transform="translate(20 10)">
+              <rect x="0" y="0" width="8" height="8" fill="hsla(150,70%,55%,0.35)" stroke="hsla(150,70%,55%,0.6)" />
+              <text x="12" y="7" fill="hsla(220,20%,80%,0.75)" fontSize="8" fontFamily="monospace">liquid-water band</text>
+            </g>
+          </svg>
+        </div>
+
+        {/* TRAPPIST-1 resonance chain */}
+        <div className="rounded-xl p-2.5 border border-border/30" style={{ background: cardBg }}>
+          <div className="flex items-center justify-between mb-1">
+            <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/65">Orbital resonance</div>
+            <div className="text-[8px] font-mono text-muted-foreground/50 uppercase tracking-widest">TRAPPIST-1 · 8:5:3:2:3:4:3</div>
+          </div>
+          <svg viewBox="-140 -70 280 140" className="w-full h-24">
+            {/* orbits */}
+            {trappist.map((p, i) => (
+              <circle key={`o-${i}`} cx="0" cy="0" r={t1R(p.ratio)}
+                fill="none" stroke="hsla(220,30%,55%,0.16)" strokeWidth="0.6" />
+            ))}
+            {/* central star */}
+            <circle cx="0" cy="0" r="6" fill="hsl(15,90%,62%)" style={{ filter: "drop-shadow(0 0 6px hsl(15,90%,62%))" }} />
+            {/* planets */}
+            {trappist.map((p, i) => {
+              const angle = (i / trappist.length) * Math.PI * 2 - Math.PI / 2;
+              const r = t1R(p.ratio);
+              const cx = Math.cos(angle) * r;
+              const cy = Math.sin(angle) * r;
+              const color = `hsl(${p.hue},70%,65%)`;
+              return (
+                <g key={p.name}>
+                  <circle cx={cx} cy={cy} r={2.6} fill={color}
+                    style={{ filter: `drop-shadow(0 0 4px ${color})` }} />
+                  <text x={cx} y={cy - 5} fill="hsla(0,0%,100%,0.7)" fontSize="6.5"
+                    fontFamily="monospace" textAnchor="middle">{p.name}</text>
+                </g>
+              );
+            })}
+          </svg>
+        </div>
+      </div>
+
+      {/* Nearest known + system architecture */}
+      <div className="grid grid-cols-2 gap-2">
+        <div className="rounded-xl p-2.5 border border-border/30" style={{ background: cardBg }}>
+          <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/65 mb-1">Nearest known</div>
+          <div className="flex items-baseline gap-2">
+            <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Proxima Centauri b</div>
+          </div>
+          {/* distance bar */}
+          <div className="mt-2 relative h-2">
+            <div className="absolute inset-0 rounded-full" style={{ background: "hsla(240,20%,18%,0.9)" }} />
+            <div className="absolute left-0 top-0 h-full rounded-full"
+              style={{ width: "6%", background: "linear-gradient(90deg, hsl(48,95%,70%), hsl(15,85%,60%))",
+                boxShadow: "0 0 8px hsla(15,85%,60%,0.6)" }} />
+            <div className="absolute left-[6%] -top-1 w-0.5 h-4" style={{ background: "hsla(15,85%,70%,0.9)" }} />
+          </div>
+          <div className="flex justify-between mt-1 text-[7.5px] font-mono text-muted-foreground/55 uppercase tracking-wider">
+            <span>Sun</span>
+            <span className="text-foreground/70">4.24 ly</span>
+            <span>70 ly · nearby field</span>
+          </div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1.5 leading-snug">
+            Terrestrial-mass · M-dwarf habitable zone · 11.2-day period.
           </div>
         </div>
-        <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-          <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">System architecture</div>
-          <div className="text-[11px] font-semibold tracking-[0.08em] uppercase text-foreground/90">Compact · spaced · hierarchical</div>
-          <div className="text-[10px] text-muted-foreground/70 mt-1 leading-snug">
+
+        <div className="rounded-xl p-2.5 border border-border/30" style={{ background: cardBg }}>
+          <div className="text-[9px] uppercase tracking-[0.2em] text-muted-foreground/65 mb-1">System architecture</div>
+          <div className="grid grid-cols-3 gap-1.5 mt-1">
+            {[
+              { label: "Compact", dots: [4,5,6], gap: 6 },
+              { label: "Spaced", dots: [3,5,7], gap: 12 },
+              { label: "Hierarchical", dots: [3,7,4], gap: 10 },
+            ].map((a) => (
+              <div key={a.label} className="rounded-md p-1.5 border border-border/25" style={{ background: flatBg }}>
+                <svg viewBox="0 0 60 26" className="w-full h-6">
+                  <line x1="4" y1="13" x2="56" y2="13" stroke="hsla(48,80%,70%,0.5)" />
+                  <circle cx="4" cy="13" r="2.4" fill="hsl(48,95%,70%)" style={{ filter: "drop-shadow(0 0 3px hsl(48,95%,70%))" }} />
+                  {a.dots.map((d, i) => (
+                    <circle key={i} cx={12 + i * a.gap} cy="13" r={d * 0.5}
+                      fill={`hsl(${200 + i * 15},65%,${60 + i * 4}%)`} />
+                  ))}
+                </svg>
+                <div className="text-[8px] uppercase tracking-[0.15em] text-muted-foreground/70 text-center mt-1">{a.label}</div>
+              </div>
+            ))}
+          </div>
+          <div className="text-[10px] text-muted-foreground/70 mt-1.5 leading-snug">
             Planet count, spacing, and mass ordering record formation and migration history.
           </div>
         </div>
       </div>
-
-      <div className="rounded-lg p-2.5 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Orbital resonance · TRAPPIST-1</div>
-        <div className="text-[10px] text-muted-foreground/75 leading-snug">
-          Seven planets locked in a near-perfect mean-motion chain (period ratios ≈ 8:5:3:2:3:4:3). Integer-ratio resonances stabilize tightly-packed systems and are observed in many multi-planet architectures.
-        </div>
-      </div>
-
-      <div className="rounded-lg p-2 border border-border/25" style={{ background: "hsla(240,20%,10%,0.6)" }}>
-        <div className="text-[9px] uppercase tracking-[0.18em] text-muted-foreground/60 mb-1">Nearest known exoplanet</div>
-        <div className="text-[12px] font-semibold tracking-[0.08em] uppercase text-foreground/85">Proxima Centauri b</div>
-        <div className="text-[10px] text-muted-foreground/70 mt-0.5">Terrestrial-mass · 4.24 ly · orbits in the M-dwarf habitable zone (~11.2-day period).</div>
-      </div>
     </div>
   );
 }
+
 
 export default Stellar;
