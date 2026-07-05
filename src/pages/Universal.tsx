@@ -397,22 +397,23 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-0.93" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-1.08" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-0.86" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-1.0" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
-      <text x={0.125} y="0.93" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x={0.125} y="1.12" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
       {latestSSN !== undefined && (
-        <text x={0.125} y="0.985" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
+        <text x={0.125} y="1.19" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
           style={{ letterSpacing: "0.18em" }}>
           LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
         </text>
       )}
+
     </svg>
   );
 };
