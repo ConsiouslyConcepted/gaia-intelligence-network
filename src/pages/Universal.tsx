@@ -324,7 +324,7 @@ const CyclesView = ({ tick }: { tick: number }) => {
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -1.02 + (i / (DEWEY_ROWS.length - 1)) * 2.08;
+        const y = -0.95 + (i / (DEWEY_ROWS.length - 1)) * 2.08;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
