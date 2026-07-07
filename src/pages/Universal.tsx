@@ -308,32 +308,34 @@ const CyclesView = ({ tick }: { tick: number }) => {
   const { data: solarCycle } = useNOAASolarCycle();
   const latestSSN = solarCycle?.[solarCycle.length - 1]?.ssn;
 
-  // viewBox: wider to give room for right-side labels + ratio column.
-  const VB_X = -1.15;
-  const VB_W = 2.55;
+  // Taller, wider viewBox so rows, labels, and captions have room to breathe.
+  const VB_X = -1.35;
+  const VB_W = 2.95;
+  const VB_Y = -1.32;
+  const VB_H = 2.78;
   const now = new Date();
   const fy = fractionalYear(now);
   const epoch = 2000; // arbitrary but consistent phase reference
 
   return (
-    <svg viewBox={`${VB_X} -1.18 ${VB_W} 2.42`} className="w-full h-full">
+    <svg viewBox={`${VB_X} ${VB_Y} ${VB_W} ${VB_H}`} className="w-full h-full">
       {/* Foundation baseline */}
-      <line x1={-1.05} y1="0" x2={1.4} y2="0"
+      <line x1={-1.2} y1="0" x2={1.6} y2="0"
         stroke="hsla(45,60%,70%,0.25)" strokeWidth={0.004} strokeDasharray="0.024 0.02" />
 
       {DEWEY_ROWS.map((row, i) => {
-        const y = -0.82 + (i / (DEWEY_ROWS.length - 1)) * 1.78;
+        const y = -1.02 + (i / (DEWEY_ROWS.length - 1)) * 2.08;
         return (
           <g key={i}>
             {row.dots.map((d, k) => {
-              const x = -0.95 + (k / 5) * 1.78;
+              const x = -0.95 + k * 0.36;
 
               const pulse = row.emphasis ? 1 + Math.sin(tick * 1.5) * 0.15 : 1;
-              const size = 0.034 + Math.min(d.yr, 100) * 0.00028;
+              const size = 0.032 + Math.min(d.yr, 100) * 0.0002;
 
               // live phase: fraction of the current period completed
               const phase = (((fy - epoch) % d.yr) + d.yr) % d.yr / d.yr;
-              const arcR = size * pulse + 0.022;
+              const arcR = size * pulse + 0.026;
               const arcAngle = phase * Math.PI * 2;
               const ax = x + arcR * Math.sin(arcAngle);
               const ay = y - arcR * Math.cos(arcAngle);
@@ -371,14 +373,14 @@ const CyclesView = ({ tick }: { tick: number }) => {
                   </circle>
 
                   {/* ratio chip above dot */}
-                  <text x={x} y={y - size * pulse - 0.032} fontSize="0.034" textAnchor="middle"
+                  <text x={x} y={y - size * pulse - 0.045} fontSize="0.034" textAnchor="middle"
                     fill={row.emphasis ? "hsla(45,90%,85%,0.95)" : "hsla(45,50%,78%,0.6)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.06em" }}>
                     {ratio}
                   </text>
 
                   {/* period value below dot */}
-                  <text x={x} y={y + size * pulse + 0.062} fontSize="0.042" textAnchor="middle"
+                  <text x={x} y={y + size * pulse + 0.08} fontSize="0.042" textAnchor="middle"
                     fill={row.emphasis ? "hsla(45,90%,88%,0.98)" : "hsla(0,0%,100%,0.78)"}
                     style={{ fontFamily: "monospace", letterSpacing: "0.05em" }}>
                     {d.yr < 1 ? d.yr.toFixed(2) : d.yr.toFixed(d.yr < 10 ? 2 : 1)}
@@ -388,7 +390,7 @@ const CyclesView = ({ tick }: { tick: number }) => {
             })}
 
             {/* right-side band label */}
-            <text x={1.4} y={y + 0.015} fontSize="0.042" textAnchor="end"
+            <text x={1.55} y={y + 0.015} fontSize="0.042" textAnchor="end"
               fill={row.emphasis ? "hsla(45,80%,82%,0.9)" : "hsla(200,40%,78%,0.72)"}
               style={{ letterSpacing: "0.14em", textTransform: "uppercase" }}>
               {row.label}
@@ -397,18 +399,18 @@ const CyclesView = ({ tick }: { tick: number }) => {
         );
       })}
 
-      <text x={0.125} y="-1.08" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
+      <text x={0.125} y="-1.14" fontSize="0.05" fill="hsla(0,0%,100%,0.7)" textAnchor="middle" style={{ letterSpacing: "0.18em" }}>
         DEWEY · COMMON CYCLE PERIODS (years)
       </text>
-      <text x={0.125} y="-1.0" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
+      <text x={0.125} y="-1.05" fontSize="0.028" fill="hsla(200,40%,70%,0.55)" textAnchor="middle" style={{ letterSpacing: "0.24em", textTransform: "uppercase" }}>
         Hover a dot · live phase arcs · ratios to 17.75 yr foundation
       </text>
 
-      <text x={0.125} y="1.12" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
+      <text x={0.125} y="1.2" fontSize="0.042" fill="hsla(45,70%,75%,0.75)" textAnchor="middle" style={{ letterSpacing: "0.15em" }}>
         Foundation 17.75 yr · ratios ×2 ×3 ×5 ×7
       </text>
       {latestSSN !== undefined && (
-        <text x={0.125} y="1.19" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
+        <text x={0.125} y="1.28" fontSize="0.036" fill="hsla(200,70%,80%,0.75)" textAnchor="middle"
           style={{ letterSpacing: "0.18em" }}>
           LIVE · CURRENT SUNSPOT NUMBER {Math.round(latestSSN)} · CYCLE 25
         </text>
